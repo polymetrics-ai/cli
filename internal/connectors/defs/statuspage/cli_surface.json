@@ -1,0 +1,2342 @@
+{
+  "tagline": "Run Statuspage's declared streams and reverse-ETL actions.",
+  "usage": "pm statuspage \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get organizations organization-id permissions user-id",
+        "api get organizations organization-id users",
+        "api get pages page-id",
+        "api get pages page-id component-groups id",
+        "api get pages page-id component-groups id uptime",
+        "api get pages page-id components component-id",
+        "api get pages page-id components component-id uptime",
+        "api get pages page-id incidents active-maintenance",
+        "api get pages page-id incidents incident-id",
+        "api get pages page-id incidents incident-id postmortem",
+        "api get pages page-id incidents incident-id subscribers",
+        "api get pages page-id incidents incident-id subscribers subscriber-id",
+        "api get pages page-id incidents scheduled",
+        "api get pages page-id incidents unresolved",
+        "api get pages page-id incidents upcoming",
+        "api get pages page-id metrics metric-id",
+        "api get pages page-id metrics-providers metrics-provider-id",
+        "api get pages page-id metrics-providers metrics-provider-id metrics",
+        "api get pages page-id page-access-groups page-access-group-id",
+        "api get pages page-id page-access-groups page-access-group-id components",
+        "api get pages page-id page-access-users page-access-user-id",
+        "api get pages page-id page-access-users page-access-user-id components",
+        "api get pages page-id page-access-users page-access-user-id metrics",
+        "api get pages page-id status-embed-config",
+        "api get pages page-id subscribers count",
+        "api get pages page-id subscribers histogram-by-state",
+        "api get pages page-id subscribers subscriber-id",
+        "api get pages page-id subscribers unsubscribed",
+        "component groups list",
+        "components list",
+        "incident templates list",
+        "incidents list",
+        "metrics list",
+        "metrics providers list",
+        "page access groups list",
+        "page access users list",
+        "pages list",
+        "subscribers list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete organizations organization-id users user-id",
+        "api delete pages page-id component-groups id",
+        "api delete pages page-id components component-id",
+        "api delete pages page-id components component-id page-access-groups",
+        "api delete pages page-id components component-id page-access-users",
+        "api delete pages page-id incidents incident-id",
+        "api delete pages page-id incidents incident-id postmortem",
+        "api delete pages page-id incidents incident-id subscribers subscriber-id",
+        "api delete pages page-id metrics metric-id",
+        "api delete pages page-id metrics metric-id data",
+        "api delete pages page-id metrics-providers metrics-provider-id",
+        "api delete pages page-id page-access-groups page-access-group-id",
+        "api delete pages page-id page-access-groups page-access-group-id components",
+        "api delete pages page-id page-access-groups page-access-group-id components component-id",
+        "api delete pages page-id page-access-users page-access-user-id",
+        "api delete pages page-id page-access-users page-access-user-id components",
+        "api delete pages page-id page-access-users page-access-user-id components component-id",
+        "api delete pages page-id page-access-users page-access-user-id metrics",
+        "api delete pages page-id page-access-users page-access-user-id metrics metric-id",
+        "api delete pages page-id subscribers subscriber-id",
+        "api patch pages page-id",
+        "api patch pages page-id component-groups id",
+        "api patch pages page-id components component-id",
+        "api patch pages page-id incidents incident-id",
+        "api patch pages page-id incidents incident-id incident-updates incident-update-id",
+        "api patch pages page-id metrics metric-id",
+        "api patch pages page-id metrics-providers metrics-provider-id",
+        "api patch pages page-id page-access-groups page-access-group-id",
+        "api patch pages page-id page-access-groups page-access-group-id components",
+        "api patch pages page-id page-access-users page-access-user-id",
+        "api patch pages page-id page-access-users page-access-user-id components",
+        "api patch pages page-id page-access-users page-access-user-id metrics",
+        "api patch pages page-id status-embed-config",
+        "api patch pages page-id subscribers subscriber-id",
+        "api post organizations organization-id users",
+        "api post pages page-id component-groups",
+        "api post pages page-id components",
+        "api post pages page-id components component-id page-access-groups",
+        "api post pages page-id components component-id page-access-users",
+        "api post pages page-id incident-templates",
+        "api post pages page-id incidents",
+        "api post pages page-id incidents incident-id subscribers",
+        "api post pages page-id incidents incident-id subscribers subscriber-id resend-confirmation",
+        "api post pages page-id metrics data",
+        "api post pages page-id metrics metric-id data",
+        "api post pages page-id metrics-providers",
+        "api post pages page-id metrics-providers metrics-provider-id metrics",
+        "api post pages page-id page-access-groups",
+        "api post pages page-id page-access-groups page-access-group-id components",
+        "api post pages page-id page-access-users",
+        "api post pages page-id page-access-users page-access-user-id components",
+        "api post pages page-id page-access-users page-access-user-id metrics",
+        "api post pages page-id subscribers",
+        "api post pages page-id subscribers reactivate",
+        "api post pages page-id subscribers resend-confirmation",
+        "api post pages page-id subscribers subscriber-id resend-confirmation",
+        "api post pages page-id subscribers unsubscribe",
+        "api put organizations organization-id permissions user-id",
+        "api put pages page-id",
+        "api put pages page-id component-groups id",
+        "api put pages page-id components component-id",
+        "api put pages page-id incidents incident-id",
+        "api put pages page-id incidents incident-id incident-updates incident-update-id",
+        "api put pages page-id incidents incident-id postmortem",
+        "api put pages page-id incidents incident-id postmortem publish",
+        "api put pages page-id incidents incident-id postmortem revert",
+        "api put pages page-id metrics metric-id",
+        "api put pages page-id metrics-providers metrics-provider-id",
+        "api put pages page-id page-access-groups page-access-group-id",
+        "api put pages page-id page-access-groups page-access-group-id components",
+        "api put pages page-id page-access-users page-access-user-id",
+        "api put pages page-id page-access-users page-access-user-id components",
+        "api put pages page-id page-access-users page-access-user-id metrics",
+        "api put pages page-id status-embed-config"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete organizations organization-id users user-id",
+      "summary": "Documented DELETE /organizations/{organization_id}/users/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete organizations organization-id users user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/organizations/{organization_id}/users/{user_id}"
+        }
+      ],
+      "operation": "statuspage.delete.organizations-organization-id-users-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id component-groups id",
+      "summary": "Documented DELETE /pages/{page_id}/component-groups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id component-groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/component-groups/{id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-component-groups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id components component-id",
+      "summary": "Documented DELETE /pages/{page_id}/components/{component_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id components component-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/components/{component_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-components-component-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id components component-id page-access-groups",
+      "summary": "Documented DELETE /pages/{page_id}/components/{component_id}/page_access_groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id components component-id page-access-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/components/{component_id}/page_access_groups"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-components-component-id-page-access-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id components component-id page-access-users",
+      "summary": "Documented DELETE /pages/{page_id}/components/{component_id}/page_access_users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id components component-id page-access-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/components/{component_id}/page_access_users"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-components-component-id-page-access-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id incidents incident-id",
+      "summary": "Documented DELETE /pages/{page_id}/incidents/{incident_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id incidents incident-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/incidents/{incident_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-incidents-incident-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id incidents incident-id postmortem",
+      "summary": "Documented DELETE /pages/{page_id}/incidents/{incident_id}/postmortem (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id incidents incident-id postmortem --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/incidents/{incident_id}/postmortem"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-incidents-incident-id-postmortem",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id incidents incident-id subscribers subscriber-id",
+      "summary": "Documented DELETE /pages/{page_id}/incidents/{incident_id}/subscribers/{subscriber_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id incidents incident-id subscribers subscriber-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/incidents/{incident_id}/subscribers/{subscriber_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-incidents-incident-id-subscribers-subscriber-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id metrics metric-id",
+      "summary": "Documented DELETE /pages/{page_id}/metrics/{metric_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id metrics metric-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/metrics/{metric_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-metrics-metric-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id metrics metric-id data",
+      "summary": "Documented DELETE /pages/{page_id}/metrics/{metric_id}/data (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id metrics metric-id data --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/metrics/{metric_id}/data"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-metrics-metric-id-data",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete pages page-id metrics-providers metrics-provider-id",
+      "summary": "Documented DELETE /pages/{page_id}/metrics_providers/{metrics_provider_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id metrics-providers metrics-provider-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-metrics-providers-metrics-provider-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id page-access-groups page-access-group-id",
+      "summary": "Documented DELETE /pages/{page_id}/page_access_groups/{page_access_group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id page-access-groups page-access-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-page-access-groups-page-access-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id page-access-groups page-access-group-id components",
+      "summary": "Documented DELETE /pages/{page_id}/page_access_groups/{page_access_group_id}/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id page-access-groups page-access-group-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-page-access-groups-page-access-group-id-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id page-access-groups page-access-group-id components component-id",
+      "summary": "Documented DELETE /pages/{page_id}/page_access_groups/{page_access_group_id}/components/{component_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id page-access-groups page-access-group-id components component-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components/{component_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-page-access-groups-page-access-group-id-components-component-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id page-access-users page-access-user-id",
+      "summary": "Documented DELETE /pages/{page_id}/page_access_users/{page_access_user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id page-access-users page-access-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-page-access-users-page-access-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id page-access-users page-access-user-id components",
+      "summary": "Documented DELETE /pages/{page_id}/page_access_users/{page_access_user_id}/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id page-access-users page-access-user-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-page-access-users-page-access-user-id-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id page-access-users page-access-user-id components component-id",
+      "summary": "Documented DELETE /pages/{page_id}/page_access_users/{page_access_user_id}/components/{component_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id page-access-users page-access-user-id components component-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components/{component_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-page-access-users-page-access-user-id-components-component-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id page-access-users page-access-user-id metrics",
+      "summary": "Documented DELETE /pages/{page_id}/page_access_users/{page_access_user_id}/metrics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id page-access-users page-access-user-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-page-access-users-page-access-user-id-metrics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id page-access-users page-access-user-id metrics metric-id",
+      "summary": "Documented DELETE /pages/{page_id}/page_access_users/{page_access_user_id}/metrics/{metric_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id page-access-users page-access-user-id metrics metric-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics/{metric_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-page-access-users-page-access-user-id-metrics-metric-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api delete pages page-id subscribers subscriber-id",
+      "summary": "Documented DELETE /pages/{page_id}/subscribers/{subscriber_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api delete pages page-id subscribers subscriber-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/pages/{page_id}/subscribers/{subscriber_id}"
+        }
+      ],
+      "operation": "statuspage.delete.pages-page-id-subscribers-subscriber-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api get organizations organization-id permissions user-id",
+      "summary": "Documented GET /organizations/{organization_id}/permissions/{user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get organizations organization-id permissions user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/permissions/{user_id}"
+        }
+      ],
+      "operation": "statuspage.get.organizations-organization-id-permissions-user-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id users",
+      "summary": "Documented GET /organizations/{organization_id}/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get organizations organization-id users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/users"
+        }
+      ],
+      "operation": "statuspage.get.organizations-organization-id-users",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id",
+      "summary": "Documented GET /pages/{page_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id component-groups id",
+      "summary": "Documented GET /pages/{page_id}/component-groups/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id component-groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/component-groups/{id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-component-groups-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id component-groups id uptime",
+      "summary": "Documented GET /pages/{page_id}/component-groups/{id}/uptime (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id component-groups id uptime --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/component-groups/{id}/uptime"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-component-groups-id-uptime",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id components component-id",
+      "summary": "Documented GET /pages/{page_id}/components/{component_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id components component-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/components/{component_id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-components-component-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id components component-id uptime",
+      "summary": "Documented GET /pages/{page_id}/components/{component_id}/uptime (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id components component-id uptime --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/components/{component_id}/uptime"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-components-component-id-uptime",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id incidents active-maintenance",
+      "summary": "Documented GET /pages/{page_id}/incidents/active_maintenance (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id incidents active-maintenance --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incidents/active_maintenance"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-incidents-active-maintenance",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id incidents incident-id",
+      "summary": "Documented GET /pages/{page_id}/incidents/{incident_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id incidents incident-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incidents/{incident_id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-incidents-incident-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id incidents incident-id postmortem",
+      "summary": "Documented GET /pages/{page_id}/incidents/{incident_id}/postmortem (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id incidents incident-id postmortem --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incidents/{incident_id}/postmortem"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-incidents-incident-id-postmortem",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id incidents incident-id subscribers",
+      "summary": "Documented GET /pages/{page_id}/incidents/{incident_id}/subscribers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id incidents incident-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incidents/{incident_id}/subscribers"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-incidents-incident-id-subscribers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id incidents incident-id subscribers subscriber-id",
+      "summary": "Documented GET /pages/{page_id}/incidents/{incident_id}/subscribers/{subscriber_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id incidents incident-id subscribers subscriber-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incidents/{incident_id}/subscribers/{subscriber_id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-incidents-incident-id-subscribers-subscriber-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id incidents scheduled",
+      "summary": "Documented GET /pages/{page_id}/incidents/scheduled (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id incidents scheduled --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incidents/scheduled"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-incidents-scheduled",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id incidents unresolved",
+      "summary": "Documented GET /pages/{page_id}/incidents/unresolved (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id incidents unresolved --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incidents/unresolved"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-incidents-unresolved",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id incidents upcoming",
+      "summary": "Documented GET /pages/{page_id}/incidents/upcoming (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id incidents upcoming --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incidents/upcoming"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-incidents-upcoming",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id metrics metric-id",
+      "summary": "Documented GET /pages/{page_id}/metrics/{metric_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id metrics metric-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/metrics/{metric_id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-metrics-metric-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id metrics-providers metrics-provider-id",
+      "summary": "Documented GET /pages/{page_id}/metrics_providers/{metrics_provider_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id metrics-providers metrics-provider-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-metrics-providers-metrics-provider-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id metrics-providers metrics-provider-id metrics",
+      "summary": "Documented GET /pages/{page_id}/metrics_providers/{metrics_provider_id}/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id metrics-providers metrics-provider-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}/metrics"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-metrics-providers-metrics-provider-id-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id page-access-groups page-access-group-id",
+      "summary": "Documented GET /pages/{page_id}/page_access_groups/{page_access_group_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id page-access-groups page-access-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-page-access-groups-page-access-group-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id page-access-groups page-access-group-id components",
+      "summary": "Documented GET /pages/{page_id}/page_access_groups/{page_access_group_id}/components (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id page-access-groups page-access-group-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-page-access-groups-page-access-group-id-components",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id page-access-users page-access-user-id",
+      "summary": "Documented GET /pages/{page_id}/page_access_users/{page_access_user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id page-access-users page-access-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-page-access-users-page-access-user-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id page-access-users page-access-user-id components",
+      "summary": "Documented GET /pages/{page_id}/page_access_users/{page_access_user_id}/components (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id page-access-users page-access-user-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-page-access-users-page-access-user-id-components",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id page-access-users page-access-user-id metrics",
+      "summary": "Documented GET /pages/{page_id}/page_access_users/{page_access_user_id}/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id page-access-users page-access-user-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-page-access-users-page-access-user-id-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id status-embed-config",
+      "summary": "Documented GET /pages/{page_id}/status_embed_config (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id status-embed-config --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/status_embed_config"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-status-embed-config",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id subscribers count",
+      "summary": "Documented GET /pages/{page_id}/subscribers/count (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id subscribers count --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/subscribers/count"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-subscribers-count",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id subscribers histogram-by-state",
+      "summary": "Documented GET /pages/{page_id}/subscribers/histogram_by_state (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id subscribers histogram-by-state --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/subscribers/histogram_by_state"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-subscribers-histogram-by-state",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id subscribers subscriber-id",
+      "summary": "Documented GET /pages/{page_id}/subscribers/{subscriber_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id subscribers subscriber-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/subscribers/{subscriber_id}"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-subscribers-subscriber-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pages page-id subscribers unsubscribed",
+      "summary": "Documented GET /pages/{page_id}/subscribers/unsubscribed (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api get pages page-id subscribers unsubscribed --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/subscribers/unsubscribed"
+        }
+      ],
+      "operation": "statuspage.get.pages-page-id-subscribers-unsubscribed",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch pages page-id",
+      "summary": "Documented PATCH /pages/{page_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id component-groups id",
+      "summary": "Documented PATCH /pages/{page_id}/component-groups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id component-groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/component-groups/{id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-component-groups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id components component-id",
+      "summary": "Documented PATCH /pages/{page_id}/components/{component_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id components component-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/components/{component_id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-components-component-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id incidents incident-id",
+      "summary": "Documented PATCH /pages/{page_id}/incidents/{incident_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id incidents incident-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/incidents/{incident_id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-incidents-incident-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id incidents incident-id incident-updates incident-update-id",
+      "summary": "Documented PATCH /pages/{page_id}/incidents/{incident_id}/incident_updates/{incident_update_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id incidents incident-id incident-updates incident-update-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/incidents/{incident_id}/incident_updates/{incident_update_id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-incidents-incident-id-incident-updates-incident-update-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id metrics metric-id",
+      "summary": "Documented PATCH /pages/{page_id}/metrics/{metric_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id metrics metric-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/metrics/{metric_id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-metrics-metric-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id metrics-providers metrics-provider-id",
+      "summary": "Documented PATCH /pages/{page_id}/metrics_providers/{metrics_provider_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id metrics-providers metrics-provider-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-metrics-providers-metrics-provider-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id page-access-groups page-access-group-id",
+      "summary": "Documented PATCH /pages/{page_id}/page_access_groups/{page_access_group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id page-access-groups page-access-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-page-access-groups-page-access-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id page-access-groups page-access-group-id components",
+      "summary": "Documented PATCH /pages/{page_id}/page_access_groups/{page_access_group_id}/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id page-access-groups page-access-group-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-page-access-groups-page-access-group-id-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id page-access-users page-access-user-id",
+      "summary": "Documented PATCH /pages/{page_id}/page_access_users/{page_access_user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id page-access-users page-access-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-page-access-users-page-access-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id page-access-users page-access-user-id components",
+      "summary": "Documented PATCH /pages/{page_id}/page_access_users/{page_access_user_id}/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id page-access-users page-access-user-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-page-access-users-page-access-user-id-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id page-access-users page-access-user-id metrics",
+      "summary": "Documented PATCH /pages/{page_id}/page_access_users/{page_access_user_id}/metrics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id page-access-users page-access-user-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-page-access-users-page-access-user-id-metrics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id status-embed-config",
+      "summary": "Documented PATCH /pages/{page_id}/status_embed_config (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id status-embed-config --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/status_embed_config"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-status-embed-config",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api patch pages page-id subscribers subscriber-id",
+      "summary": "Documented PATCH /pages/{page_id}/subscribers/{subscriber_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api patch pages page-id subscribers subscriber-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/pages/{page_id}/subscribers/{subscriber_id}"
+        }
+      ],
+      "operation": "statuspage.patch.pages-page-id-subscribers-subscriber-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post organizations organization-id users",
+      "summary": "Documented POST /organizations/{organization_id}/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post organizations organization-id users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organization_id}/users"
+        }
+      ],
+      "operation": "statuspage.post.organizations-organization-id-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id component-groups",
+      "summary": "Documented POST /pages/{page_id}/component-groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id component-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/component-groups"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-component-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id components",
+      "summary": "Documented POST /pages/{page_id}/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/components"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id components component-id page-access-groups",
+      "summary": "Documented POST /pages/{page_id}/components/{component_id}/page_access_groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id components component-id page-access-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/components/{component_id}/page_access_groups"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-components-component-id-page-access-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id components component-id page-access-users",
+      "summary": "Documented POST /pages/{page_id}/components/{component_id}/page_access_users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id components component-id page-access-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/components/{component_id}/page_access_users"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-components-component-id-page-access-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id incident-templates",
+      "summary": "Documented POST /pages/{page_id}/incident_templates (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id incident-templates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/incident_templates"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-incident-templates",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id incidents",
+      "summary": "Documented POST /pages/{page_id}/incidents (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id incidents --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/incidents"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-incidents",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id incidents incident-id subscribers",
+      "summary": "Documented POST /pages/{page_id}/incidents/{incident_id}/subscribers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id incidents incident-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/incidents/{incident_id}/subscribers"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-incidents-incident-id-subscribers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id incidents incident-id subscribers subscriber-id resend-confirmation",
+      "summary": "Documented POST /pages/{page_id}/incidents/{incident_id}/subscribers/{subscriber_id}/resend_confirmation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id incidents incident-id subscribers subscriber-id resend-confirmation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/incidents/{incident_id}/subscribers/{subscriber_id}/resend_confirmation"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-incidents-incident-id-subscribers-subscriber-id-resend-confirmation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id metrics data",
+      "summary": "Documented POST /pages/{page_id}/metrics/data (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id metrics data --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/metrics/data"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-metrics-data",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pages page-id metrics metric-id data",
+      "summary": "Documented POST /pages/{page_id}/metrics/{metric_id}/data (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id metrics metric-id data --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/metrics/{metric_id}/data"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-metrics-metric-id-data",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pages page-id metrics-providers",
+      "summary": "Documented POST /pages/{page_id}/metrics_providers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id metrics-providers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/metrics_providers"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-metrics-providers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id metrics-providers metrics-provider-id metrics",
+      "summary": "Documented POST /pages/{page_id}/metrics_providers/{metrics_provider_id}/metrics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id metrics-providers metrics-provider-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}/metrics"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-metrics-providers-metrics-provider-id-metrics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id page-access-groups",
+      "summary": "Documented POST /pages/{page_id}/page_access_groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id page-access-groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/page_access_groups"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-page-access-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id page-access-groups page-access-group-id components",
+      "summary": "Documented POST /pages/{page_id}/page_access_groups/{page_access_group_id}/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id page-access-groups page-access-group-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-page-access-groups-page-access-group-id-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id page-access-users",
+      "summary": "Documented POST /pages/{page_id}/page_access_users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id page-access-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/page_access_users"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-page-access-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id page-access-users page-access-user-id components",
+      "summary": "Documented POST /pages/{page_id}/page_access_users/{page_access_user_id}/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id page-access-users page-access-user-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-page-access-users-page-access-user-id-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id page-access-users page-access-user-id metrics",
+      "summary": "Documented POST /pages/{page_id}/page_access_users/{page_access_user_id}/metrics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id page-access-users page-access-user-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-page-access-users-page-access-user-id-metrics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id subscribers",
+      "summary": "Documented POST /pages/{page_id}/subscribers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id subscribers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/subscribers"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-subscribers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id subscribers reactivate",
+      "summary": "Documented POST /pages/{page_id}/subscribers/reactivate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id subscribers reactivate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/subscribers/reactivate"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-subscribers-reactivate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id subscribers resend-confirmation",
+      "summary": "Documented POST /pages/{page_id}/subscribers/resend_confirmation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id subscribers resend-confirmation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/subscribers/resend_confirmation"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-subscribers-resend-confirmation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id subscribers subscriber-id resend-confirmation",
+      "summary": "Documented POST /pages/{page_id}/subscribers/{subscriber_id}/resend_confirmation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id subscribers subscriber-id resend-confirmation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/subscribers/{subscriber_id}/resend_confirmation"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-subscribers-subscriber-id-resend-confirmation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post pages page-id subscribers unsubscribe",
+      "summary": "Documented POST /pages/{page_id}/subscribers/unsubscribe (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api post pages page-id subscribers unsubscribe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pages/{page_id}/subscribers/unsubscribe"
+        }
+      ],
+      "operation": "statuspage.post.pages-page-id-subscribers-unsubscribe",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put organizations organization-id permissions user-id",
+      "summary": "Documented PUT /organizations/{organization_id}/permissions/{user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put organizations organization-id permissions user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/organizations/{organization_id}/permissions/{user_id}"
+        }
+      ],
+      "operation": "statuspage.put.organizations-organization-id-permissions-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id",
+      "summary": "Documented PUT /pages/{page_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id component-groups id",
+      "summary": "Documented PUT /pages/{page_id}/component-groups/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id component-groups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/component-groups/{id}"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-component-groups-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id components component-id",
+      "summary": "Documented PUT /pages/{page_id}/components/{component_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id components component-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/components/{component_id}"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-components-component-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id incidents incident-id",
+      "summary": "Documented PUT /pages/{page_id}/incidents/{incident_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id incidents incident-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/incidents/{incident_id}"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-incidents-incident-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id incidents incident-id incident-updates incident-update-id",
+      "summary": "Documented PUT /pages/{page_id}/incidents/{incident_id}/incident_updates/{incident_update_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id incidents incident-id incident-updates incident-update-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/incidents/{incident_id}/incident_updates/{incident_update_id}"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-incidents-incident-id-incident-updates-incident-update-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id incidents incident-id postmortem",
+      "summary": "Documented PUT /pages/{page_id}/incidents/{incident_id}/postmortem (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id incidents incident-id postmortem --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/incidents/{incident_id}/postmortem"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-incidents-incident-id-postmortem",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id incidents incident-id postmortem publish",
+      "summary": "Documented PUT /pages/{page_id}/incidents/{incident_id}/postmortem/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id incidents incident-id postmortem publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/incidents/{incident_id}/postmortem/publish"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-incidents-incident-id-postmortem-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id incidents incident-id postmortem revert",
+      "summary": "Documented PUT /pages/{page_id}/incidents/{incident_id}/postmortem/revert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id incidents incident-id postmortem revert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/incidents/{incident_id}/postmortem/revert"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-incidents-incident-id-postmortem-revert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id metrics metric-id",
+      "summary": "Documented PUT /pages/{page_id}/metrics/{metric_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id metrics metric-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/metrics/{metric_id}"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-metrics-metric-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id metrics-providers metrics-provider-id",
+      "summary": "Documented PUT /pages/{page_id}/metrics_providers/{metrics_provider_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id metrics-providers metrics-provider-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/metrics_providers/{metrics_provider_id}"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-metrics-providers-metrics-provider-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id page-access-groups page-access-group-id",
+      "summary": "Documented PUT /pages/{page_id}/page_access_groups/{page_access_group_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id page-access-groups page-access-group-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-page-access-groups-page-access-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id page-access-groups page-access-group-id components",
+      "summary": "Documented PUT /pages/{page_id}/page_access_groups/{page_access_group_id}/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id page-access-groups page-access-group-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/page_access_groups/{page_access_group_id}/components"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-page-access-groups-page-access-group-id-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id page-access-users page-access-user-id",
+      "summary": "Documented PUT /pages/{page_id}/page_access_users/{page_access_user_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id page-access-users page-access-user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-page-access-users-page-access-user-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id page-access-users page-access-user-id components",
+      "summary": "Documented PUT /pages/{page_id}/page_access_users/{page_access_user_id}/components (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id page-access-users page-access-user-id components --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/components"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-page-access-users-page-access-user-id-components",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id page-access-users page-access-user-id metrics",
+      "summary": "Documented PUT /pages/{page_id}/page_access_users/{page_access_user_id}/metrics (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id page-access-users page-access-user-id metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/page_access_users/{page_access_user_id}/metrics"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-page-access-users-page-access-user-id-metrics",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api put pages page-id status-embed-config",
+      "summary": "Documented PUT /pages/{page_id}/status_embed_config (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage api put pages page-id status-embed-config --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/pages/{page_id}/status_embed_config"
+        }
+      ],
+      "operation": "statuspage.put.pages-page-id-status-embed-config",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "component groups list",
+      "summary": "Run the component groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "component_groups",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage component groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/component-groups"
+        }
+      ]
+    },
+    {
+      "path": "components list",
+      "summary": "Run the components ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "components",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage components list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/components"
+        }
+      ]
+    },
+    {
+      "path": "incident templates list",
+      "summary": "Run the incident templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "incident_templates",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage incident templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incident_templates"
+        }
+      ]
+    },
+    {
+      "path": "incidents list",
+      "summary": "Run the incidents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "incidents",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage incidents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/incidents"
+        }
+      ]
+    },
+    {
+      "path": "metrics list",
+      "summary": "Run the metrics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "metrics",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage metrics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/metrics"
+        }
+      ]
+    },
+    {
+      "path": "metrics providers list",
+      "summary": "Run the metrics providers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "metrics_providers",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage metrics providers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/metrics_providers"
+        }
+      ]
+    },
+    {
+      "path": "page access groups list",
+      "summary": "Run the page access groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "page_access_groups",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage page access groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/page_access_groups"
+        }
+      ]
+    },
+    {
+      "path": "page access users list",
+      "summary": "Run the page access users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "page_access_users",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage page access users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/page_access_users"
+        }
+      ]
+    },
+    {
+      "path": "pages list",
+      "summary": "Run the pages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pages",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage pages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages"
+        }
+      ]
+    },
+    {
+      "path": "subscribers list",
+      "summary": "Run the subscribers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscribers",
+      "source_url": "https://developer.statuspage.io/",
+      "examples": [
+        "pm statuspage subscribers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pages/{page_id}/subscribers"
+        }
+      ]
+    }
+  ]
+}

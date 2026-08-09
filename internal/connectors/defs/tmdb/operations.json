@@ -1,0 +1,336 @@
+{
+  "operations": [
+    {
+      "id": "tmdb.post.3-account-account-id-favorite",
+      "kind": "rest_write",
+      "summary": "POST /3/account/{account_id}/favorite",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/account/{account_id}/favorite",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-account-account-id-watchlist",
+      "kind": "rest_write",
+      "summary": "POST /3/account/{account_id}/watchlist",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/account/{account_id}/watchlist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.get.3-authentication",
+      "kind": "rest_read",
+      "summary": "GET /3/authentication",
+      "description": "API-key validation probe, already represented by connector check rather than a syncable stream",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/3/authentication",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.get.3-authentication-guest-session-new",
+      "kind": "rest_read",
+      "summary": "GET /3/authentication/guest_session/new",
+      "description": "creates an authentication guest session token, not a data stream",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/3/authentication/guest_session/new",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.delete.3-authentication-session",
+      "kind": "rest_write",
+      "summary": "DELETE /3/authentication/session",
+      "description": "authentication session lifecycle endpoint, not a data write action for ETL",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/3/authentication/session",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-authentication-session-convert-4",
+      "kind": "rest_write",
+      "summary": "POST /3/authentication/session/convert/4",
+      "description": "authentication session lifecycle endpoint, not a data write action for ETL",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/authentication/session/convert/4",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-authentication-session-new",
+      "kind": "rest_write",
+      "summary": "POST /3/authentication/session/new",
+      "description": "authentication session lifecycle endpoint, not a data write action for ETL",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/authentication/session/new",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.get.3-authentication-token-new",
+      "kind": "rest_read",
+      "summary": "GET /3/authentication/token/new",
+      "description": "creates an authentication request token, not a data stream",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/3/authentication/token/new",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-authentication-token-validate-with-login",
+      "kind": "rest_write",
+      "summary": "POST /3/authentication/token/validate_with_login",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/authentication/token/validate_with_login",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.get.3-configuration-primary-translations",
+      "kind": "rest_read",
+      "summary": "GET /3/configuration/primary_translations",
+      "description": "static scalar reference list of translation codes rather than object records",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/3/configuration/primary_translations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-list",
+      "kind": "rest_write",
+      "summary": "POST /3/list",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.delete.3-list-list-id",
+      "kind": "rest_write",
+      "summary": "DELETE /3/list/{list_id}",
+      "description": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/3/list/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-list-list-id-add-item",
+      "kind": "rest_write",
+      "summary": "POST /3/list/{list_id}/add_item",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/list/{list_id}/add_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-list-list-id-clear",
+      "kind": "rest_write",
+      "summary": "POST /3/list/{list_id}/clear",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/list/{list_id}/clear",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-list-list-id-remove-item",
+      "kind": "rest_write",
+      "summary": "POST /3/list/{list_id}/remove_item",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/list/{list_id}/remove_item",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-movie-movie-id-rating",
+      "kind": "rest_write",
+      "summary": "POST /3/movie/{movie_id}/rating",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/movie/{movie_id}/rating",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.delete.3-movie-movie-id-rating",
+      "kind": "rest_write",
+      "summary": "DELETE /3/movie/{movie_id}/rating",
+      "description": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/3/movie/{movie_id}/rating",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-tv-series-id-rating",
+      "kind": "rest_write",
+      "summary": "POST /3/tv/{series_id}/rating",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/tv/{series_id}/rating",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.delete.3-tv-series-id-rating",
+      "kind": "rest_write",
+      "summary": "DELETE /3/tv/{series_id}/rating",
+      "description": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/3/tv/{series_id}/rating",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.post.3-tv-series-id-season-season-number-episode-episode-number-rating",
+      "kind": "rest_write",
+      "summary": "POST /3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
+      "description": "TMDb mutation requires user session/account state or creates authentication/list/rating side effects beyond this read-only API-key connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "tmdb.delete.3-tv-series-id-season-season-number-episode-episode-number-rating",
+      "kind": "rest_write",
+      "summary": "DELETE /3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
+      "description": "TMDb delete/removal mutation changes user session/list/rating state and is not exposed by this read-only connector",
+      "source_url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

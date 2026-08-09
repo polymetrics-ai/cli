@@ -1,33 +1,33 @@
 {
-  "api": "Fulcrum REST API v2 (https://api.fulcrumapp.com/api/v2)",
+  "api": "Fulcrum REST API v2 (https://api.fulcrumapp.com/api/v2); provider artifact version: OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
   "docs": "https://docs.fulcrumapp.com/reference",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only; the full Fulcrum surface (photos, videos, signatures, memberships, roles, webhooks, memberships) is out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (147 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "fulcrum-artifact-2026-08-09",
+      "url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "kind": "openapi",
+      "version": "3.1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/api/v2/forms.json",
-      "covered_by": {
-        "stream": "forms"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v2/records.json",
-      "covered_by": {
-        "stream": "records"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v2/projects.json",
-      "covered_by": {
-        "stream": "projects"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/api/v2/choice_lists.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/choice_lists.json]"
+      },
       "covered_by": {
         "stream": "choice_lists"
       }
@@ -35,64 +35,3310 @@
     {
       "method": "GET",
       "path": "/api/v2/classification_sets.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/classification_sets.json]"
+      },
       "covered_by": {
         "stream": "classification_sets"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v2/photos.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v2/photos.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v2/videos.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v2/videos.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v2/signatures.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v2/signatures.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/api/v2/forms.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/forms.json]"
+      },
+      "covered_by": {
+        "stream": "forms"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/memberships.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v2/memberships.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/memberships.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v2/memberships.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v2/roles.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v2/roles.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/api/v2/photos.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/photos.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v2/photos.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v2/webhooks.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v2/webhooks.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/api/v2/projects.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/projects.json]"
+      },
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/records.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/records.json]"
+      },
+      "covered_by": {
+        "stream": "records"
       }
     },
     {
       "method": "POST",
       "path": "/api/v2/records.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/api/v2/records.json is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[POST /api/v2/records.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "/api/v2/records.json is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/roles.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/roles.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v2/roles.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/signatures.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/signatures.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v2/signatures.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/videos.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/videos.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v2/videos.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhooks.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.1.0; Fulcrum REST API v2 (provider-owned `v2` branch)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "existing-surface[GET /api/v2/webhooks.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/api/v2/webhooks.json is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/attachments",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/attachments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/attachments",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/attachments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/attachments/copy_all",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/attachments/copy_all\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/attachments/finalize",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/attachments/finalize\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/attachments/{attachment_id}",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/attachments/{attachment_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/attachments/{attachment_id}",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/attachments/{attachment_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/tracks.geojson",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/tracks.geojson\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/tracks.gpx",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/tracks.gpx\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/tracks.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/tracks.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/tracks.kml",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/tracks.kml\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/audio/upload.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/upload.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/{audio_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/{audio_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/{audio_id}.mp4",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/{audio_id}.mp4\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/{audio_id}/track.geojson",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/{audio_id}/track.geojson\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/{audio_id}/track.gpx",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/{audio_id}/track.gpx\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/{audio_id}/track.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/{audio_id}/track.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audio/{audio_id}/track.kml",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audio/{audio_id}/track.kml\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audit_logs.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audit_logs.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/audit_logs/{audit_log_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/audit_logs/{audit_log_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/authorizations.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/authorizations.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/authorizations.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/authorizations.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/authorizations/{authorization_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/authorizations/{authorization_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/authorizations/{authorization_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/authorizations/{authorization_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/authorizations/{authorization_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/authorizations/{authorization_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/batch.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/batch.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/batch.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/batch.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/batch/{batch_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/batch/{batch_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/batch/{batch_id}/operations.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/batch/{batch_id}/operations.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/batch/{batch_id}/start.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/batch/{batch_id}/start.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/changesets.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/changesets.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/changesets.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/changesets.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/changesets/{changeset_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/changesets/{changeset_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/changesets/{changeset_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/changesets/{changeset_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/changesets/{changeset_id}/close.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/changesets/{changeset_id}/close.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/choice_lists.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/choice_lists.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/choice_lists.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/choice_lists.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/choice_lists/{choice_list_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/choice_lists/{choice_list_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/choice_lists/{choice_list_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/choice_lists/{choice_list_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/choice_lists/{choice_list_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/choice_lists/{choice_list_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/classification_sets.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/classification_sets.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/classification_sets.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/classification_sets.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/classification_sets/{classification_set_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/classification_sets/{classification_set_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/classification_sets/{classification_set_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/classification_sets/{classification_set_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/classification_sets/{classification_set_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/classification_sets/{classification_set_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/forms.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/forms.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/forms.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/forms.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/forms/{form_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/forms/{form_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/forms/{form_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/forms/{form_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/forms/{form_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/forms/{form_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/forms/{form_id}/history.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/forms/{form_id}/history.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/groups.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/groups.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/groups.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/groups.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/groups/change_permissions.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/groups/change_permissions.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/groups/{group_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/groups/{group_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/groups/{group_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/groups/{group_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/groups/{group_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/groups/{group_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/groups/{group_id}/{resource}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/groups/{group_id}/{resource}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/layers.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/layers.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/layers.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/layers.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/layers/{layer_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/layers/{layer_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/layers/{layer_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/layers/{layer_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/layers/{layer_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/layers/{layer_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/memberships.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/memberships.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/memberships.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/memberships.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/memberships/change_permissions.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/memberships/change_permissions.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/memberships/{membership_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/memberships/{membership_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/memberships/{membership_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/memberships/{membership_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/memberships/{membership_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/memberships/{membership_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/permissions.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/permissions.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/photos.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/photos.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/photos.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/photos.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/photos/{photo_id}.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/photos/{photo_id}.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/photos/{photo_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/photos/{photo_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/photos/{photo_id}/large.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/photos/{photo_id}/large.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/photos/{photo_id}/large.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/photos/{photo_id}/large.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/photos/{photo_id}/thumbnail.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/photos/{photo_id}/thumbnail.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/photos/{photo_id}/thumbnail.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/photos/{photo_id}/thumbnail.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/projects.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/projects.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/projects.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/projects.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/projects/{project_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/projects/{project_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/projects/{project_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/projects/{project_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/projects/{project_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/projects/{project_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/query",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/query\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/query",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/query\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/records.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/records.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/records.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/records.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/records/history.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/records/history.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/records/{record_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/records/{record_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/records/{record_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/records/{record_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v2/records/{record_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/records/{record_id}.json\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/records/{record_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/records/{record_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/records/{record_id}/history.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/records/{record_id}/history.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/report_templates.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/report_templates.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/report_templates.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/report_templates.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/report_templates/{id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/report_templates/{id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/report_templates/{id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/report_templates/{id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/report_templates/{id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/report_templates/{id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/reports.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/reports.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/reports/{report_id}.pdf",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/reports/{report_id}.pdf\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/roles.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/roles.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/signatures.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/signatures.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/signatures.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/signatures.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/signatures/{signature_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/signatures/{signature_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/signatures/{signature_id}.png",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/signatures/{signature_id}.png\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/signatures/{signature_id}/thumbnail.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/signatures/{signature_id}/thumbnail.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/signatures/{signature_id}/thumbnail.png",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/signatures/{signature_id}/thumbnail.png\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sketches.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/sketches.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/sketches.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/sketches.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sketches/{sketch_id}.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/sketches/{sketch_id}.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sketches/{sketch_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/sketches/{sketch_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sketches/{sketch_id}/large.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/sketches/{sketch_id}/large.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sketches/{sketch_id}/large.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/sketches/{sketch_id}/large.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sketches/{sketch_id}/thumbnail.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/sketches/{sketch_id}/thumbnail.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/sketches/{sketch_id}/thumbnail.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/sketches/{sketch_id}/thumbnail.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/users.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/users.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/tracks.geojson",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/tracks.geojson\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/tracks.gpx",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/tracks.gpx\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/tracks.kml",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/tracks.kml\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/videos/upload.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/upload.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}.mp4",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}.mp4\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/medium.mp4",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/medium.mp4\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/small.mp4",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/small.mp4\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/thumbnail_huge.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/thumbnail_huge.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/thumbnail_huge_square.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/thumbnail_huge_square.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/thumbnail_large.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/thumbnail_large.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/thumbnail_large_square.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/thumbnail_large_square.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/thumbnail_medium.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/thumbnail_medium.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/thumbnail_medium_square.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/thumbnail_medium_square.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/thumbnail_small.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/thumbnail_small.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/thumbnail_small_square.jpg",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/thumbnail_small_square.jpg\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/track.geojson",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/track.geojson\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/track.gpx",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/track.gpx\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/track.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/track.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/videos/{video_id}/track.kml",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/videos/{video_id}/track.kml\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/webhooks.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/webhooks.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/webhooks.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/webhooks/{webhook_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/webhooks/{webhook_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/webhooks/{webhook_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/webhooks/{webhook_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/webhooks/{webhook_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/webhooks/{webhook_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workflows.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/workflows.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/workflows.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/workflows.json\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/workflows/{workflow_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/workflows/{workflow_id}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v2/workflows/{workflow_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/workflows/{workflow_id}.json\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v2/workflows/{workflow_id}.json",
+      "provenance": {
+        "artifact": "fulcrum-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "196f5b899615e92fd74e5e76c4df12248d51d29d1d2cc6024e0411d4905421c5",
+        "coordinate": "paths[\"/v2/workflows/{workflow_id}.json\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

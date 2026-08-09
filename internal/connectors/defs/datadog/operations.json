@@ -1,0 +1,2990 @@
+{
+  "operations": [
+    {
+      "id": "datadog.get.operation",
+      "kind": "rest_read",
+      "summary": "GET /",
+      "description": "publishes Datadog's own outbound IP address ranges for firewall allow-listing (a static, non-account-scoped reference document), not Datadog account/organization data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-api-key-key",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/api_key/{key}",
+      "description": "single-API-key detail is a strict subset of the api_keys stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/api_key/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-application-key",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/application_key",
+      "description": "creates an application key SCOPED TO THE CALLING USER (no name-only account-level equivalent to api_key's create); mints a new personal credential on behalf of whichever identity the connector authenticates as, an identity-management action rather than an account-data mutation",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/application_key",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-application-key-key",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/application_key/{key}",
+      "description": "single-application-key detail is a strict subset of the application_keys stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/application_key/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-application-key-key",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/application_key/{key}",
+      "description": "renames a personal application key; identity-management action, not an account-data mutation",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/application_key/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-application-key-key",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/application_key/{key}",
+      "description": "revokes a personal application key; identity-management action, not an account-data mutation",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/application_key/{key}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-check-run",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/check_run",
+      "description": "service-check-ingestion endpoint (submits a check-status telemetry event); a telemetry write with no corresponding catalog read shape, out of scope for a configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/check_run",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-daily-custom-reports",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/daily_custom_reports",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/daily_custom_reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-daily-custom-reports-report-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/daily_custom_reports/{report_id}",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/daily_custom_reports/{report_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.patch.api-v1-dashboard",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/dashboard",
+      "description": "restores previously soft-deleted dashboards by id list within a limited recovery window; a narrow admin-recovery action with no corresponding read state this bundle tracks (deleted dashboards are absent from the dashboards stream, so there is nothing to select a record from for this action)",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/dashboard",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-dashboard",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/dashboard",
+      "description": "bulk-deletes MULTIPLE dashboards by id list in one call; delete_dashboard already covers the single-dashboard case with the same real effect, per-item risk framing, and idempotent-delete semantics this dialect models well; the bulk variant's higher blast radius has no corresponding single-call safety rail in this dialect",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/dashboard",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-dashboard-lists-manual-list-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/dashboard/lists/manual/{list_id}",
+      "description": "single-dashboard-list detail is a strict subset of the dashboard_lists stream's already-read per-list fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/dashboard/lists/manual/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-dashboard-public",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/dashboard/public",
+      "description": "creates a PUBLIC, unauthenticated shareable dashboard URL; a distinct higher-risk sharing feature from ordinary dashboard CRUD, not implemented in this pass",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/dashboard/public",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-dashboard-public-token",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/dashboard/public/{token}",
+      "description": "reads a public-dashboard-sharing configuration; see the public-dashboard creation exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/dashboard/public/{token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-dashboard-public-token",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/dashboard/public/{token}",
+      "description": "mutates a public-dashboard-sharing configuration; see the public-dashboard creation exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/dashboard/public/{token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-dashboard-public-token",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/dashboard/public/{token}",
+      "description": "manages public-dashboard-sharing revocation; see the public-dashboard creation exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/dashboard/public/{token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-dashboard-public-token-invitation",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/dashboard/public/{token}/invitation",
+      "description": "reads public-dashboard email invitations; see the public-dashboard creation exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/dashboard/public/{token}/invitation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-dashboard-public-token-invitation",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/dashboard/public/{token}/invitation",
+      "description": "sends a public-dashboard email invitation; see the public-dashboard creation exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/dashboard/public/{token}/invitation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-dashboard-public-token-invitation",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/dashboard/public/{token}/invitation",
+      "description": "manages public-dashboard email invitations; see the public-dashboard creation exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/dashboard/public/{token}/invitation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-dashboard-dashboard-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/dashboard/{dashboard_id}",
+      "description": "single-dashboard detail (full widget definitions) is a strict superset only in widget-body detail of the dashboards stream's own per-record fields; the catalog-level dashboards stream already reads every dashboard's identity/metadata, and reading each dashboard's full widget body individually is a per-parent-id fan-out this bundle does not need for catalog-level sync parity",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/dashboard/{dashboard_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-distribution-points",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/distribution_points",
+      "description": "metrics-ingestion endpoint (submits distribution-point metric payloads); a telemetry write with no corresponding catalog read shape, out of scope for a configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/distribution_points",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-downtime-cancel-by-scope",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/downtime/cancel/by_scope",
+      "description": "cancels every downtime matching a scope string in one call; cancel_downtime already covers the single-downtime-by-id case with the same real effect and a clearer per-record risk framing",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/downtime/cancel/by_scope",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-downtime-downtime-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/downtime/{downtime_id}",
+      "description": "single-downtime detail is a strict subset of the downtimes stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/downtime/{downtime_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-events",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events",
+      "description": "the real endpoint requires BOTH start and end as mandatory POSIX-timestamp query parameters; end has no fixed/derivable value (the real use is always \"now\") and the engine's template Vars environment has no resolvable \"current time\" reference (grep confirms no time.Now()-equivalent anywhere in engine/{interpolate,read}.go, the same gap documented for datascope's windowed streams) — ENGINE_GAP, not a scoping choice",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-events-event-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/events/{event_id}",
+      "description": "single-event detail depends on first reading the events list, which is itself excluded above (ENGINE_GAP: no resolvable current-time reference for the required end parameter)",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-graph-snapshot",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/graph/snapshot",
+      "description": "renders and returns a graph image (PNG) snapshot URL for a metric query; an image-rendering utility, not a structured JSON list/detail record",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/graph/snapshot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-host-host-name-mute",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/host/{host_name}/mute",
+      "description": "mutes ALL monitors for a host by hostname (a host-scoped alert-suppression action with its own recovery-timeout semantics), a materially different shape from create_downtime's scope-list model; not implemented this pass",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/host/{host_name}/mute",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-host-host-name-unmute",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/host/{host_name}/unmute",
+      "description": "reverses the host-mute action above; excluded for the same reason (action not implemented)",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/host/{host_name}/unmute",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-hosts-totals",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/hosts/totals",
+      "description": "a bare active/total host count already derivable by counting the hosts stream's own records; no independent record shape",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/hosts/totals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-aws",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/aws",
+      "description": "cloud-provider integration credential management (AWS account role ARN), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/aws",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-aws",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/aws",
+      "description": "cloud-provider integration credential management (AWS account role ARN), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/aws",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-integration-aws",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/integration/aws",
+      "description": "cloud-provider integration credential management (AWS account role ARN), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/integration/aws",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-aws",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/aws",
+      "description": "cloud-provider integration credential management (AWS account role ARN), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/aws",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-aws-available-namespace-rules",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/aws/available_namespace_rules",
+      "description": "AWS integration configuration metadata, not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/aws/available_namespace_rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-aws-event-bridge",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/aws/event_bridge",
+      "description": "cloud-provider integration wiring (EventBridge source), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/aws/event_bridge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-aws-event-bridge",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/aws/event_bridge",
+      "description": "cloud-provider integration wiring (EventBridge source), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/aws/event_bridge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-aws-event-bridge",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/aws/event_bridge",
+      "description": "cloud-provider integration wiring (EventBridge source), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/aws/event_bridge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-aws-filtering",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/aws/filtering",
+      "description": "AWS integration tag-filter configuration, not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/aws/filtering",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-aws-filtering",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/aws/filtering",
+      "description": "AWS integration tag-filter configuration, not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/aws/filtering",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-aws-filtering",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/aws/filtering",
+      "description": "AWS integration tag-filter configuration, not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/aws/filtering",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-integration-aws-generate-new-external-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/integration/aws/generate_new_external_id",
+      "description": "rotates the AWS integration's cross-account trust external id; integration-credential management, not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/integration/aws/generate_new_external_id",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-aws-logs",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/aws/logs",
+      "description": "AWS Logs integration wiring (Lambda ARN), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/aws/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-aws-logs",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/aws/logs",
+      "description": "AWS Logs integration wiring (Lambda ARN), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/aws/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-aws-logs",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/aws/logs",
+      "description": "AWS Logs integration wiring (Lambda ARN), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/aws/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-aws-logs-check-async",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/aws/logs/check_async",
+      "description": "async permission-check utility for AWS Logs integration wiring, not a data resource",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/aws/logs/check_async",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-aws-logs-services",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/aws/logs/services",
+      "description": "static catalog of AWS-log-ready service names, not account data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/aws/logs/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-aws-logs-services",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/aws/logs/services",
+      "description": "AWS Logs integration wiring (enable log collection per service), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/aws/logs/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-aws-logs-services-async",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/aws/logs/services_async",
+      "description": "async permission-check utility for AWS Logs integration wiring, not a data resource",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/aws/logs/services_async",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-azure",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/azure",
+      "description": "cloud-provider integration credential management (Azure tenant/client secret), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/azure",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-azure",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/azure",
+      "description": "cloud-provider integration credential management (Azure tenant/client secret), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/azure",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-integration-azure",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/integration/azure",
+      "description": "cloud-provider integration credential management (Azure tenant/client secret), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/integration/azure",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-azure",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/azure",
+      "description": "cloud-provider integration credential management (Azure tenant/client secret), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/azure",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-azure-host-filters",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/azure/host_filters",
+      "description": "Azure integration host-filter configuration, not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/azure/host_filters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-gcp",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/gcp",
+      "description": "cloud-provider integration credential management (GCP service account key), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/gcp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-gcp",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/gcp",
+      "description": "cloud-provider integration credential management (GCP service account key), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/gcp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-integration-gcp",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/integration/gcp",
+      "description": "cloud-provider integration credential management (GCP service account key), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/integration/gcp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-gcp",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/gcp",
+      "description": "cloud-provider integration credential management (GCP service account key), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/gcp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-pagerduty-configuration-services",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/pagerduty/configuration/services",
+      "description": "third-party integration wiring (PagerDuty service objects), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/pagerduty/configuration/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-pagerduty-configuration-services-service-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/pagerduty/configuration/services/{service_name}",
+      "description": "third-party integration wiring (PagerDuty service objects), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/pagerduty/configuration/services/{service_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-integration-pagerduty-configuration-services-service-name",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/integration/pagerduty/configuration/services/{service_name}",
+      "description": "third-party integration wiring (PagerDuty service objects), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/integration/pagerduty/configuration/services/{service_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-pagerduty-configuration-services-service-name",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/pagerduty/configuration/services/{service_name}",
+      "description": "third-party integration wiring (PagerDuty service objects), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/pagerduty/configuration/services/{service_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-slack-configuration-accounts-account-name-channels",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/slack/configuration/accounts/{account_name}/channels",
+      "description": "third-party integration wiring (Slack channel routing), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-slack-configuration-accounts-account-name-channels",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/slack/configuration/accounts/{account_name}/channels",
+      "description": "third-party integration wiring (Slack channel routing), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-slack-configuration-accounts-account-name-channels-channel-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/slack/configuration/accounts/{account_name}/channels/{channel_name}",
+      "description": "third-party integration wiring (Slack channel routing), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels/{channel_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.patch.api-v1-integration-slack-configuration-accounts-account-name-channels-channel-name",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/integration/slack/configuration/accounts/{account_name}/channels/{channel_name}",
+      "description": "third-party integration wiring (Slack channel routing), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels/{channel_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-slack-configuration-accounts-account-name-channels-channel-name",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/slack/configuration/accounts/{account_name}/channels/{channel_name}",
+      "description": "third-party integration wiring (Slack channel routing), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/slack/configuration/accounts/{account_name}/channels/{channel_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-webhooks-configuration-custom-variables",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/webhooks/configuration/custom-variables",
+      "description": "third-party integration wiring (webhook custom template variables), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/webhooks/configuration/custom-variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-webhooks-configuration-custom-variables-custom-variable-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/webhooks/configuration/custom-variables/{custom_variable_name}",
+      "description": "third-party integration wiring (webhook custom template variables), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/webhooks/configuration/custom-variables/{custom_variable_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-integration-webhooks-configuration-custom-variables-custom-variable-name",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/integration/webhooks/configuration/custom-variables/{custom_variable_name}",
+      "description": "third-party integration wiring (webhook custom template variables), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/integration/webhooks/configuration/custom-variables/{custom_variable_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-webhooks-configuration-custom-variables-custom-variable-name",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/webhooks/configuration/custom-variables/{custom_variable_name}",
+      "description": "third-party integration wiring (webhook custom template variables), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/webhooks/configuration/custom-variables/{custom_variable_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-integration-webhooks-configuration-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/integration/webhooks/configuration/webhooks",
+      "description": "registers an outbound webhook URL of the caller's choosing as part of THIRD-PARTY INTEGRATION configuration (distinct product area from ordinary connector writes), not implemented this pass",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/integration/webhooks/configuration/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-integration-webhooks-configuration-webhooks-webhook-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/integration/webhooks/configuration/webhooks/{webhook_name}",
+      "description": "third-party integration wiring (webhook registration), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/integration/webhooks/configuration/webhooks/{webhook_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-integration-webhooks-configuration-webhooks-webhook-name",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/integration/webhooks/configuration/webhooks/{webhook_name}",
+      "description": "third-party integration wiring (webhook registration), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/integration/webhooks/configuration/webhooks/{webhook_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-integration-webhooks-configuration-webhooks-webhook-name",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/integration/webhooks/configuration/webhooks/{webhook_name}",
+      "description": "third-party integration wiring (webhook registration), not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/integration/webhooks/configuration/webhooks/{webhook_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-logs-queries-list",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/logs-queries/list",
+      "description": "full-text log SEARCH (a query surface with its own filter/facet grammar and huge result volumes), a fundamentally different shape from this bundle's catalog/config-resource streams; log data ingestion/search is out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/logs-queries/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-logs-config-index-order",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/logs/config/index-order",
+      "description": "log-pipeline administration surface (index processing order); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/logs/config/index-order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-logs-config-index-order",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/logs/config/index-order",
+      "description": "log-pipeline administration surface (index processing order); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/logs/config/index-order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-logs-config-indexes",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/logs/config/indexes",
+      "description": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/logs/config/indexes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-logs-config-indexes",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/logs/config/indexes",
+      "description": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/logs/config/indexes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-logs-config-indexes-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/logs/config/indexes/{name}",
+      "description": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/logs/config/indexes/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-logs-config-indexes-name",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/logs/config/indexes/{name}",
+      "description": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/logs/config/indexes/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-logs-config-indexes-name",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/logs/config/indexes/{name}",
+      "description": "log-pipeline administration surface (index definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/logs/config/indexes/{name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-logs-config-pipeline-order",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/logs/config/pipeline-order",
+      "description": "log-pipeline administration surface (pipeline processing order); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/logs/config/pipeline-order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-logs-config-pipeline-order",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/logs/config/pipeline-order",
+      "description": "log-pipeline administration surface (pipeline processing order); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/logs/config/pipeline-order",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-logs-config-pipelines",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/logs/config/pipelines",
+      "description": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/logs/config/pipelines",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-logs-config-pipelines",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/logs/config/pipelines",
+      "description": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/logs/config/pipelines",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-logs-config-pipelines-pipeline-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/logs/config/pipelines/{pipeline_id}",
+      "description": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/logs/config/pipelines/{pipeline_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-logs-config-pipelines-pipeline-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/logs/config/pipelines/{pipeline_id}",
+      "description": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/logs/config/pipelines/{pipeline_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-logs-config-pipelines-pipeline-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/logs/config/pipelines/{pipeline_id}",
+      "description": "log-pipeline administration surface (processing-pipeline definitions); out of scope for this pass, see Known limits",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/logs/config/pipelines/{pipeline_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-metrics",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/metrics",
+      "description": "lists every ACTIVE METRIC NAME reporting in the last 24h — a potentially enormous, high-cardinality, constantly-changing set (unlike this bundle's bounded config-resource streams: monitors, dashboards, SLOs, etc.); metrics catalog/timeseries data is a fundamentally different product surface (Datadog's dedicated Metrics product), out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-metrics-metric-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/metrics/{metric_name}",
+      "description": "single-metric metadata depends on first enumerating metric names, which is itself excluded above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/metrics/{metric_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-metrics-metric-name",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/metrics/{metric_name}",
+      "description": "mutates a single metric's metadata (unit, description); depends on the excluded metrics-catalog surface above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/metrics/{metric_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-monitor-can-delete",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/monitor/can_delete",
+      "description": "a pre-flight eligibility check (whether given monitor ids can be safely deleted), not a data resource; delete_monitor's own request/response already reports the real outcome of an actual delete attempt",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/monitor/can_delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-monitor-groups-search",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/monitor/groups/search",
+      "description": "monitor GROUP search (multi-alert monitor group state), a distinct, more specialized query surface than the monitors stream's own catalog listing",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/monitor/groups/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-monitor-search",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/monitor/search",
+      "description": "monitor search-by-query is a filtered view over the same records the monitors stream already reads in full",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/monitor/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-monitor-validate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/monitor/validate",
+      "description": "validates a monitor definition WITHOUT creating it (a dry-run utility), not a data mutation; create_monitor's own request already validates server-side on the real create call",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/monitor/validate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-monitor-monitor-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/monitor/{monitor_id}",
+      "description": "single-monitor detail is a strict subset of the monitors stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/monitor/{monitor_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-monitor-monitor-id-downtimes",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/monitor/{monitor_id}/downtimes",
+      "description": "per-monitor downtime lookup is a filtered view of the same records the downtimes stream already reads in full (each downtime record carries its own monitor_id/monitor_tags)",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/monitor/{monitor_id}/downtimes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-monitor-monitor-id-validate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/monitor/{monitor_id}/validate",
+      "description": "validates an existing monitor's current definition without mutating it (a dry-run utility), not a data mutation",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/monitor/{monitor_id}/validate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-monthly-custom-reports",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/monthly_custom_reports",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/monthly_custom_reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-monthly-custom-reports-report-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/monthly_custom_reports/{report_id}",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/monthly_custom_reports/{report_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-notebooks-notebook-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/notebooks/{notebook_id}",
+      "description": "single-notebook detail (full cell content) is a strict superset only in cell-body detail of the notebooks stream's own per-record catalog fields; reading every notebook's full cell content individually is a per-parent-id fan-out this bundle does not need for catalog-level sync parity",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/notebooks/{notebook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-org",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/org",
+      "description": "creates a new CHILD ORGANIZATION under a multi-org account; a rare account-hierarchy administration action, not ordinary connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/org",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-org-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/org/{public_id}",
+      "description": "single-organization detail is a strict subset of the organizations stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/org/{public_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-org-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/org/{public_id}",
+      "description": "mutates organization-level billing/SAML/security settings; account-admin scope, not ordinary connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/org/{public_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-org-public-id-downgrade",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/org/{public_id}/downgrade",
+      "description": "irreversibly spins off/downgrades a child organization's subscription tier; a rare, high-impact account-hierarchy action outside this connector's scope",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/org/{public_id}/downgrade",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-org-public-id-idp-metadata",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/org/{public_id}/idp_metadata",
+      "description": "uploads SAML identity-provider metadata for the organization; security/identity-administration action, not connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/org/{public_id}/idp_metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-query",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/query",
+      "description": "queries TIMESERIES METRIC DATA POINTS (raw numeric telemetry over a time range) — an analytics/query surface, not a catalog resource; fundamentally different from this bundle's bounded config-resource streams",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-search",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/search",
+      "description": "full-text search across metrics/tags/hosts; a search surface, not an independent catalog resource, and depends on the excluded metrics-catalog surface above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.patch.api-v1-security-analytics-signals-signal-id-add-to-incident",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/security_analytics/signals/{signal_id}/add_to_incident",
+      "description": "Security Monitoring is a separate, dedicated Datadog product surface (signal triage workflow, mostly v2-only) with no corresponding read/catalog stream in this bundle; out of scope for this configuration-focused connector — see docs.md's Known limits for the v1-vs-v2 scope boundary",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/security_analytics/signals/{signal_id}/add_to_incident",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.patch.api-v1-security-analytics-signals-signal-id-assignee",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/security_analytics/signals/{signal_id}/assignee",
+      "description": "Security Monitoring triage action; see the add_to_incident exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/security_analytics/signals/{signal_id}/assignee",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.patch.api-v1-security-analytics-signals-signal-id-state",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/security_analytics/signals/{signal_id}/state",
+      "description": "Security Monitoring triage action; see the add_to_incident exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/security_analytics/signals/{signal_id}/state",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-series",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/series",
+      "description": "metrics-ingestion endpoint (submits metric data points); a telemetry write with no corresponding catalog read shape, out of scope for a configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/series",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-slo-bulk-delete",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/slo/bulk_delete",
+      "description": "bulk-deletes SLO TIMEFRAMES across multiple SLO ids in one call; delete_slo already covers the single-SLO-by-id case with the same real effect and a clearer per-record risk framing",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/slo/bulk_delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-slo-can-delete",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/slo/can_delete",
+      "description": "a pre-flight eligibility check (whether given SLO ids can be safely deleted), not a data resource",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/slo/can_delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-slo-correction",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/slo/correction",
+      "description": "creates an SLO correction (excludes a time window from an SLO's error-budget calculation); no dialect-expressible write action implemented this pass, a candidate for a future increment",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/slo/correction",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-slo-correction-slo-correction-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/slo/correction/{slo_correction_id}",
+      "description": "single-SLO-correction detail is a strict subset of the slo_corrections stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/slo/correction/{slo_correction_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.patch.api-v1-slo-correction-slo-correction-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/slo/correction/{slo_correction_id}",
+      "description": "updates an SLO correction; see the create exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/slo/correction/{slo_correction_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-slo-correction-slo-correction-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/slo/correction/{slo_correction_id}",
+      "description": "deletes an SLO correction; see the create exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/slo/correction/{slo_correction_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-slo-search",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/slo/search",
+      "description": "SLO search-by-query is a filtered view over the same records the slo stream already reads in full",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/slo/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-slo-slo-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/slo/{slo_id}",
+      "description": "single-SLO detail is a strict subset of the slo stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/slo/{slo_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-slo-slo-id-corrections",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/slo/{slo_id}/corrections",
+      "description": "per-SLO correction lookup is a filtered view of the same records the slo_corrections stream already reads in full (each correction record carries its own slo_id)",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/slo/{slo_id}/corrections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-slo-slo-id-history",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/slo/{slo_id}/history",
+      "description": "SLO error-budget/status HISTORY (a timeseries-shaped analytics resource keyed by time range), a fundamentally different shape from this bundle's bounded config-resource streams",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/slo/{slo_id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-ci-batch-batch-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/ci/batch/{batch_id}",
+      "description": "CI/CD-triggered test-batch run RESULTS (a run-history resource keyed by an opaque batch id from a CI pipeline invocation), not a catalog resource this bundle's synthetics_tests stream already covers",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/ci/batch/{batch_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-synthetics-private-locations",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/synthetics/private-locations",
+      "description": "provisions a customer-hosted Synthetics private-location worker; infrastructure-provisioning action, not ordinary connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/synthetics/private-locations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-private-locations-location-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/private-locations/{location_id}",
+      "description": "reads a customer-hosted Synthetics private-location worker's config (may include connection secrets); infrastructure-scoped, not ordinary connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/private-locations/{location_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-synthetics-private-locations-location-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/synthetics/private-locations/{location_id}",
+      "description": "mutates a customer-hosted Synthetics private-location worker's config; infrastructure action, not ordinary connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/synthetics/private-locations/{location_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-synthetics-private-locations-location-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/synthetics/private-locations/{location_id}",
+      "description": "de-provisions a customer-hosted Synthetics private-location worker; infrastructure action, not ordinary connector data",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/synthetics/private-locations/{location_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-settings-default-locations",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/settings/default_locations",
+      "description": "the account's default-location LIST is a strict subset of the synthetics_locations stream's already-read location catalog",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/settings/default_locations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-tests-api-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/tests/api/{public_id}",
+      "description": "single-API-test detail is a strict subset of the synthetics_tests stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/tests/api/{public_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-synthetics-tests-browser",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/synthetics/tests/browser",
+      "description": "Browser tests require a recorded step sequence authored through Datadog's own visual test recorder; there is no practical way to construct one via a declarative record body, unlike API tests' plain HTTP-request config — no dialect-expressible write for this test type",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/synthetics/tests/browser",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-tests-browser-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/tests/browser/{public_id}",
+      "description": "single-browser-test detail is a strict subset of the synthetics_tests stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/tests/browser/{public_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-synthetics-tests-browser-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/synthetics/tests/browser/{public_id}",
+      "description": "mutates a browser test's recorded step sequence; see the browser-test-creation exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/synthetics/tests/browser/{public_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-tests-browser-public-id-results",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/tests/browser/{public_id}/results",
+      "description": "browser-test RUN RESULTS (a run-history/results resource with its own pass/fail timeline), a fundamentally different shape from the synthetics_tests catalog stream",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/tests/browser/{public_id}/results",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-tests-browser-public-id-results-result-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/tests/browser/{public_id}/results/{result_id}",
+      "description": "single browser-test run result; see the results-list exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/tests/browser/{public_id}/results/{result_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-synthetics-tests-delete",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/synthetics/tests/delete",
+      "description": "bulk-deletes MULTIPLE Synthetics tests by id list in one call; no corresponding single-test delete write is implemented this pass because delete affects the actively-scheduled probe (a live-monitoring side effect not yet modeled for this resource, unlike create/update)",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/synthetics/tests/delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-synthetics-tests-mobile",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/synthetics/tests/mobile",
+      "description": "Mobile tests require a recorded step sequence authored through Datadog's mobile app testing tooling; same shape gap as browser tests above, no dialect-expressible write",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/synthetics/tests/mobile",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-tests-mobile-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/tests/mobile/{public_id}",
+      "description": "single-mobile-test detail is a strict subset of the synthetics_tests stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/tests/mobile/{public_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-synthetics-tests-mobile-public-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/synthetics/tests/mobile/{public_id}",
+      "description": "mutates a mobile test's recorded step sequence; see the mobile-test-creation exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/synthetics/tests/mobile/{public_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-tests-search",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/tests/search",
+      "description": "Synthetics test search-by-query is a filtered view over the same records the synthetics_tests stream already reads in full",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/tests/search",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-synthetics-tests-trigger",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/synthetics/tests/trigger",
+      "description": "triggers an on-demand, out-of-schedule Synthetics test run; a run-control action for a resource whose catalog (not run-history) is this bundle's scope, no dialect-expressible write implemented this pass",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/synthetics/tests/trigger",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-synthetics-tests-trigger-ci",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/synthetics/tests/trigger/ci",
+      "description": "triggers Synthetics test runs specifically from a CI/CD pipeline context (extra CI-provenance metadata in the request); see the generic trigger exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/synthetics/tests/trigger/ci",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-synthetics-tests-uptimes",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/synthetics/tests/uptimes",
+      "description": "fetches aggregate UPTIME METRICS for multiple tests over a time range; an analytics/metrics resource, not a catalog resource",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/synthetics/tests/uptimes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-tests-public-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/tests/{public_id}",
+      "description": "generic single-test detail (any test type) is a strict subset of the synthetics_tests stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/tests/{public_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.patch.api-v1-synthetics-tests-public-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/synthetics/tests/{public_id}",
+      "description": "generic partial-update-by-type endpoint; update_synthetics_api_test already covers the API-test case this bundle models, and browser/mobile test mutation is out of scope per the type-specific exclusions above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/synthetics/tests/{public_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-tests-public-id-results",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/tests/{public_id}/results",
+      "description": "API-test RUN RESULTS (a run-history/results resource with its own pass/fail timeline), a fundamentally different shape from the synthetics_tests catalog stream",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/tests/{public_id}/results",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-tests-public-id-results-result-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/tests/{public_id}/results/{result_id}",
+      "description": "single API-test run result; see the results-list exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/tests/{public_id}/results/{result_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-synthetics-tests-public-id-status",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/synthetics/tests/{public_id}/status",
+      "description": "pauses/resumes a test's ACTIVE PROBING SCHEDULE; a run-control toggle for a resource whose catalog (not schedule-state control) is this bundle's current write scope",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/synthetics/tests/{public_id}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-synthetics-variables",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/synthetics/variables",
+      "description": "creates a Synthetics global variable; some variable values are marked secure/secret-shaped at the API's own discretion (is_fido/is_totp/secure flags), and this bundle does not yet model a write-only-credential write action for this resource type, unlike SSH-tunnel's documented precedent in the dbt bundle — candidate for a future increment",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/synthetics/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-synthetics-variables-variable-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/synthetics/variables/{variable_id}",
+      "description": "single-variable detail is a strict subset of the synthetics_variables stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/synthetics/variables/{variable_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-synthetics-variables-variable-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/synthetics/variables/{variable_id}",
+      "description": "updates a Synthetics global variable; see the create exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/synthetics/variables/{variable_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-synthetics-variables-variable-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/synthetics/variables/{variable_id}",
+      "description": "deletes a Synthetics global variable; see the create exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/synthetics/variables/{variable_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-tags-hosts",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/tags/hosts",
+      "description": "the real response is a map of TAG NAME to an ARRAY OF HOSTNAMES (`{\"tags\": {\"\u003ctag\u003e\": [\"host1\", \"host2\"]}}`) — an object whose VALUES are arrays, not objects; the engine's records.keyed_object flag explodes a keyed object's OBJECT-valued entries into records and does not apply when values are arrays, and there is no other declarative shape for a tag-to-hostnames map — ENGINE_GAP, not a scoping choice",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/tags/hosts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-tags-hosts-host-name",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/tags/hosts/{host_name}",
+      "description": "single-host tag lookup is a scalar array response (list of tag strings for one host), a narrower view of the same excluded host-tags surface above; no independent catalog shape",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/tags/hosts/{host_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.api-v1-tags-hosts-host-name",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/tags/hosts/{host_name}",
+      "description": "adds tags to a single host; see the host-tags catalog exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/tags/hosts/{host_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.put.api-v1-tags-hosts-host-name",
+      "kind": "rest_write",
+      "summary": "PUT /api/v1/tags/hosts/{host_name}",
+      "description": "replaces tags on a single host; see the host-tags catalog exclusion above",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/v1/tags/hosts/{host_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.delete.api-v1-tags-hosts-host-name",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/tags/hosts/{host_name}",
+      "description": "mutates tags for a single host; depends on the excluded host-tags catalog surface above for any meaningful record-shaped read/write pairing",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/tags/hosts/{host_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-analyzed-logs",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/analyzed_logs",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/analyzed_logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-audit-logs",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/audit_logs",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/audit_logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-aws-lambda",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/aws_lambda",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/aws_lambda",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-billable-summary",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/billable-summary",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/billable-summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-ci-app",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/ci-app",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/ci-app",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-cspm",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/cspm",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/cspm",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-cws",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/cws",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/cws",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-dbm",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/dbm",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/dbm",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-fargate",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/fargate",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/fargate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-hosts",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/hosts",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/hosts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-hourly-attribution",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/hourly-attribution",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/hourly-attribution",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-incident-management",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/incident-management",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/incident-management",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-indexed-spans",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/indexed-spans",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/indexed-spans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-ingested-spans",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/ingested-spans",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/ingested-spans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-iot",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/iot",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/iot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-logs",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/logs",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-logs-by-retention",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/logs-by-retention",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/logs-by-retention",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-logs-by-index",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/logs_by_index",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/logs_by_index",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-monthly-attribution",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/monthly-attribution",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/monthly-attribution",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-network-flows",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/network_flows",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/network_flows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-network-hosts",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/network_hosts",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/network_hosts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-online-archive",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/online-archive",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/online-archive",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-profiling",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/profiling",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/profiling",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-rum",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/rum",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/rum",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-rum-sessions",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/rum_sessions",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/rum_sessions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-sds",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/sds",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/sds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-snmp",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/snmp",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/snmp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-summary",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/summary",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/summary",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-synthetics",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/synthetics",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/synthetics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-synthetics-api",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/synthetics_api",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/synthetics_api",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-synthetics-browser",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/synthetics_browser",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/synthetics_browser",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-timeseries",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/timeseries",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/timeseries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-usage-top-avg-metrics",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/usage/top_avg_metrics",
+      "description": "Usage Metering/billing-attribution surface (hourly/monthly consumption-by-product reporting) is a separate billing-analytics product area, a fundamentally different shape from this bundle's bounded config-resource streams; out of scope for this configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/usage/top_avg_metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-user-user-handle",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/user/{user_handle}",
+      "description": "single-user detail is a strict subset of the users stream's already-read per-record fields",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/user/{user_handle}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.get.api-v1-validate",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/validate",
+      "description": "credential validation is already exercised by this bundle's own check.path (GET /api/v1/dashboard); an equivalent auth-only ping, not an independent data resource",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/validate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "datadog.post.v1-input",
+      "kind": "rest_write",
+      "summary": "POST /v1/input",
+      "description": "log-ingestion endpoint (accepts arbitrary externally-supplied log payloads for injection into the organization's log pipeline); a data-ingestion write with no corresponding read/catalog shape, out of scope for a configuration-focused connector",
+      "source_url": "https://raw.githubusercontent.com/DataDog/datadog-api-client-go/master/.generator/schemas/v1/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/input",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,1156 @@
+{
+  "operations": [
+    {
+      "id": "bluetally.post.accessories",
+      "kind": "rest_write",
+      "summary": "POST /accessories",
+      "description": "ENGINE_GAP: create-accessory sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/accessories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.accessories-id",
+      "kind": "rest_read",
+      "summary": "GET /accessories/{id}",
+      "description": "single-accessory lookup by id; fully covered by the accessories list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accessories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.accessories-id",
+      "kind": "rest_write",
+      "summary": "PUT /accessories/{id}",
+      "description": "ENGINE_GAP: update-accessory sends every field as a query-string parameter, same gap as create-accessory",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/accessories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.accessories-id",
+      "kind": "rest_write",
+      "summary": "DELETE /accessories/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/accessories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.assets",
+      "kind": "rest_write",
+      "summary": "POST /assets",
+      "description": "ENGINE_GAP: create-asset sends every field as a query-string parameter (OpenAPI parameters[].in == query, no requestBody); the engine's write dialect only supports json/form/none request bodies, so this mutation cannot be expressed without silently diverging from BlueTally's real wire contract",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.assets-id",
+      "kind": "rest_read",
+      "summary": "GET /assets/{id}",
+      "description": "single-asset lookup by id; fully covered by the assets list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/assets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.assets-id",
+      "kind": "rest_write",
+      "summary": "PUT /assets/{id}",
+      "description": "ENGINE_GAP: update-asset sends every field as a query-string parameter, same gap as create-asset",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/assets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.assets-id",
+      "kind": "rest_write",
+      "summary": "DELETE /assets/{id}",
+      "description": "ENGINE_GAP: delete-asset accepts an optional tenant_id query parameter only, but is grouped with the rest of this resource's write surface, which is blocked by the same query-parameter body gap; a path-only delete with no query support beyond tenant_id is possible in principle but is deferred alongside its sibling create/update actions to keep the resource's write semantics consistent (all-or-nothing per resource)",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/assets/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.audits",
+      "kind": "rest_write",
+      "summary": "POST /audits",
+      "description": "ENGINE_GAP: create-audit sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/audits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.audits-id",
+      "kind": "rest_read",
+      "summary": "GET /audits/{id}",
+      "description": "single-audit lookup by id; fully covered by the audits list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/audits/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.audits-id",
+      "kind": "rest_write",
+      "summary": "PUT /audits/{id}",
+      "description": "ENGINE_GAP: update-audit sends every field as a query-string parameter, same gap as create-audit",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/audits/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.audits-id",
+      "kind": "rest_write",
+      "summary": "DELETE /audits/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/audits/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.categories",
+      "kind": "rest_write",
+      "summary": "POST /categories",
+      "description": "ENGINE_GAP: create-category sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.categories-id",
+      "kind": "rest_read",
+      "summary": "GET /categories/{id}",
+      "description": "single-category lookup by id; fully covered by the categories list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/categories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.categories-id",
+      "kind": "rest_write",
+      "summary": "PUT /categories/{id}",
+      "description": "ENGINE_GAP: update-category sends every field as a query-string parameter, same gap as create-category",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/categories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.categories-id",
+      "kind": "rest_write",
+      "summary": "DELETE /categories/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/categories/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.checkin-accessory",
+      "kind": "rest_write",
+      "summary": "POST /checkin/accessory",
+      "description": "ENGINE_GAP: check-in-accessory sends every field as a query-string parameter, same gap as the resource create/update actions; check-in/check-out are stateful inventory-movement actions layered atop the CRUD resources, not additional data resources",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkin/accessory",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.checkin-asset",
+      "kind": "rest_write",
+      "summary": "POST /checkin/asset",
+      "description": "ENGINE_GAP: check-in-asset sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkin/asset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.checkin-component",
+      "kind": "rest_write",
+      "summary": "POST /checkin/component",
+      "description": "ENGINE_GAP: check-in-component sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkin/component",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.checkin-license",
+      "kind": "rest_write",
+      "summary": "POST /checkin/license",
+      "description": "ENGINE_GAP: check-in-license sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkin/license",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.checkout-accessory",
+      "kind": "rest_write",
+      "summary": "POST /checkout/accessory",
+      "description": "ENGINE_GAP: check-out-accessory sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkout/accessory",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.checkout-asset",
+      "kind": "rest_write",
+      "summary": "POST /checkout/asset",
+      "description": "ENGINE_GAP: check-out-asset sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkout/asset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.checkout-component",
+      "kind": "rest_write",
+      "summary": "POST /checkout/component",
+      "description": "ENGINE_GAP: check-out-component sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkout/component",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.checkout-consumable",
+      "kind": "rest_write",
+      "summary": "POST /checkout/consumable",
+      "description": "ENGINE_GAP: check-out-consumable sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkout/consumable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.checkout-license",
+      "kind": "rest_write",
+      "summary": "POST /checkout/license",
+      "description": "ENGINE_GAP: check-out-license sends every field as a query-string parameter; see checkin/accessory for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/checkout/license",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.components",
+      "kind": "rest_write",
+      "summary": "POST /components",
+      "description": "ENGINE_GAP: create-component sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/components",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.components-id",
+      "kind": "rest_read",
+      "summary": "GET /components/{id}",
+      "description": "single-component lookup by id; fully covered by the components list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/components/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.components-id",
+      "kind": "rest_write",
+      "summary": "PUT /components/{id}",
+      "description": "ENGINE_GAP: update-component sends every field as a query-string parameter, same gap as create-component",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/components/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.components-id",
+      "kind": "rest_write",
+      "summary": "DELETE /components/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/components/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.consumables",
+      "kind": "rest_write",
+      "summary": "POST /consumables",
+      "description": "ENGINE_GAP: create-consumable sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.consumables-id",
+      "kind": "rest_read",
+      "summary": "GET /consumables/{id}",
+      "description": "single-consumable lookup by id; fully covered by the consumables list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumables/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.consumables-id",
+      "kind": "rest_write",
+      "summary": "PUT /consumables/{id}",
+      "description": "ENGINE_GAP: update-consumable sends every field as a query-string parameter, same gap as create-consumable",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/consumables/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.consumables-id",
+      "kind": "rest_write",
+      "summary": "DELETE /consumables/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/consumables/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.departments",
+      "kind": "rest_write",
+      "summary": "POST /departments",
+      "description": "ENGINE_GAP: create-department sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/departments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.departments-id",
+      "kind": "rest_read",
+      "summary": "GET /departments/{id}",
+      "description": "single-department lookup by id; fully covered by the departments list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/departments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.departments-id",
+      "kind": "rest_write",
+      "summary": "PUT /departments/{id}",
+      "description": "ENGINE_GAP: update-department sends every field as a query-string parameter, same gap as create-department",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/departments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.departments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /departments/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/departments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.depreciations",
+      "kind": "rest_write",
+      "summary": "POST /depreciations",
+      "description": "ENGINE_GAP: create-depreciation sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/depreciations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.depreciations-id",
+      "kind": "rest_read",
+      "summary": "GET /depreciations/{id}",
+      "description": "single-depreciation lookup by id; fully covered by the depreciations list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/depreciations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.depreciations-id",
+      "kind": "rest_write",
+      "summary": "PUT /depreciations/{id}",
+      "description": "ENGINE_GAP: update-depreciation sends every field as a query-string parameter, same gap as create-depreciation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/depreciations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.depreciations-id",
+      "kind": "rest_write",
+      "summary": "DELETE /depreciations/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/depreciations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.employees",
+      "kind": "rest_write",
+      "summary": "POST /employees",
+      "description": "ENGINE_GAP: create-employee sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/employees",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.employees-id",
+      "kind": "rest_read",
+      "summary": "GET /employees/{id}",
+      "description": "single-employee lookup by id; fully covered by the employees list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/employees/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.employees-id",
+      "kind": "rest_write",
+      "summary": "PUT /employees/{id}",
+      "description": "ENGINE_GAP: update-employee sends every field as a query-string parameter, same gap as create-employee",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/employees/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.employees-id",
+      "kind": "rest_write",
+      "summary": "DELETE /employees/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/employees/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.licenses",
+      "kind": "rest_write",
+      "summary": "POST /licenses",
+      "description": "ENGINE_GAP: create-license sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/licenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.licenses-id",
+      "kind": "rest_read",
+      "summary": "GET /licenses/{id}",
+      "description": "single-license lookup by id; fully covered by the licenses list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/licenses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.licenses-id",
+      "kind": "rest_write",
+      "summary": "PUT /licenses/{id}",
+      "description": "ENGINE_GAP: update-license sends every field as a query-string parameter, same gap as create-license",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/licenses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.licenses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /licenses/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/licenses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.locations",
+      "kind": "rest_write",
+      "summary": "POST /locations",
+      "description": "ENGINE_GAP: create-location sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/locations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.locations-id",
+      "kind": "rest_read",
+      "summary": "GET /locations/{id}",
+      "description": "single-location lookup by id; fully covered by the locations list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/locations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.locations-id",
+      "kind": "rest_write",
+      "summary": "PUT /locations/{id}",
+      "description": "ENGINE_GAP: update-location sends every field as a query-string parameter, same gap as create-location",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/locations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.locations-id",
+      "kind": "rest_write",
+      "summary": "DELETE /locations/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/locations/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.maintenances",
+      "kind": "rest_write",
+      "summary": "POST /maintenances",
+      "description": "ENGINE_GAP: create-maintenance sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/maintenances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.maintenances-id",
+      "kind": "rest_read",
+      "summary": "GET /maintenances/{id}",
+      "description": "single-maintenance lookup by id; fully covered by the maintenances list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/maintenances/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.maintenances-id",
+      "kind": "rest_write",
+      "summary": "PUT /maintenances/{id}",
+      "description": "ENGINE_GAP: update-maintenance sends every field as a query-string parameter, same gap as create-maintenance",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/maintenances/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.maintenances-id",
+      "kind": "rest_write",
+      "summary": "DELETE /maintenances/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/maintenances/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.manufacturers",
+      "kind": "rest_write",
+      "summary": "POST /manufacturers",
+      "description": "ENGINE_GAP: create-manufacturer sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/manufacturers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.manufacturers-id",
+      "kind": "rest_read",
+      "summary": "GET /manufacturers/{id}",
+      "description": "single-manufacturer lookup by id; fully covered by the manufacturers list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/manufacturers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.manufacturers-id",
+      "kind": "rest_write",
+      "summary": "PUT /manufacturers/{id}",
+      "description": "ENGINE_GAP: update-manufacturer sends every field as a query-string parameter, same gap as create-manufacturer",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/manufacturers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.manufacturers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /manufacturers/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/manufacturers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.products",
+      "kind": "rest_write",
+      "summary": "POST /products",
+      "description": "ENGINE_GAP: create-product sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.products-id",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}",
+      "description": "single-product lookup by id; fully covered by the products list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.products-id",
+      "kind": "rest_write",
+      "summary": "PUT /products/{id}",
+      "description": "ENGINE_GAP: update-product sends every field as a query-string parameter, same gap as create-product",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.products-id",
+      "kind": "rest_write",
+      "summary": "DELETE /products/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.statuses",
+      "kind": "rest_write",
+      "summary": "POST /statuses",
+      "description": "ENGINE_GAP: create-status sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/statuses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.statuses-id",
+      "kind": "rest_read",
+      "summary": "GET /statuses/{id}",
+      "description": "single-status lookup by id; fully covered by the statuses list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/statuses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.statuses-id",
+      "kind": "rest_write",
+      "summary": "PUT /statuses/{id}",
+      "description": "ENGINE_GAP: update-status sends every field as a query-string parameter, same gap as create-status",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/statuses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.statuses-id",
+      "kind": "rest_write",
+      "summary": "DELETE /statuses/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/statuses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.post.suppliers",
+      "kind": "rest_write",
+      "summary": "POST /suppliers",
+      "description": "ENGINE_GAP: create-supplier sends every field as a query-string parameter; see assets POST for the full explanation",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppliers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.get.suppliers-id",
+      "kind": "rest_read",
+      "summary": "GET /suppliers/{id}",
+      "description": "single-supplier lookup by id; fully covered by the suppliers list stream",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/suppliers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.put.suppliers-id",
+      "kind": "rest_write",
+      "summary": "PUT /suppliers/{id}",
+      "description": "ENGINE_GAP: update-supplier sends every field as a query-string parameter, same gap as create-supplier",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/suppliers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "bluetally.delete.suppliers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /suppliers/{id}",
+      "description": "ENGINE_GAP: deferred alongside its sibling create/update actions for this resource; see assets DELETE for the consistent-per-resource rationale",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/suppliers/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

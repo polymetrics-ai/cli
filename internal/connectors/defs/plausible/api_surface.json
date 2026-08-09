@@ -1,67 +1,258 @@
 {
-  "api": "Plausible Analytics Stats API v1",
+  "api": "Plausible Analytics Stats API v1; provider artifact version: Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
   "docs": "https://plausible.io/docs/stats-api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; the full Plausible API surface (goals API, funnels, realtime visitors, custom events breakdown for every property dimension, CSV exports, site provisioning/management) is out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (4 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "plausible-artifact-2026-08-09",
+      "url": "https://plausible.io/docs/stats-api-v1",
+      "kind": "html_reference",
+      "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/api/v1/stats/aggregate",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "https://plausible.io/docs/stats-api-v1#GET /api/v1/stats/aggregate"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stats/breakdown",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "https://plausible.io/docs/stats-api-v1#GET /api/v1/stats/breakdown"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stats/realtime/visitors",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "https://plausible.io/docs/stats-api-v1#GET /api/v1/stats/realtime/visitors"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/stats/timeseries",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "https://plausible.io/docs/stats-api-v1#GET /api/v1/stats/timeseries"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/sites",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "existing-surface[GET /v1/sites]"
+      },
       "covered_by": {
         "stream": "sites"
       }
     },
     {
+      "method": "POST",
+      "path": "/v1/sites",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "existing-surface[POST /v1/sites]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "/v1/sites is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/sites",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "existing-surface[DELETE /v1/sites]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "/v1/sites is a destructive/admin mutation and is not exposed as a reverse-ETL action in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v1/stats/aggregate",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "existing-surface[GET /v1/stats/aggregate]"
+      },
       "covered_by": {
         "stream": "aggregate"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/stats/timeseries",
-      "covered_by": {
-        "stream": "timeseries"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v1/stats/breakdown",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "existing-surface[GET /v1/stats/breakdown]"
+      },
       "covered_by": {
         "stream": "breakdown"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/stats/realtime/visitors",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v1/stats/realtime/visitors is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      "path": "/v1/stats/goal/breakdown",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "existing-surface[GET /v1/stats/goal/breakdown]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v1/stats/goal/breakdown is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/stats/goal/breakdown",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v1/stats/goal/breakdown is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      "path": "/v1/stats/realtime/visitors",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "existing-surface[GET /v1/stats/realtime/visitors]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/v1/stats/realtime/visitors is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/sites",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/v1/sites is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/sites",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "/v1/sites is a destructive/admin mutation and is not exposed as a reverse-ETL action in this bundle"
+      "method": "GET",
+      "path": "/v1/stats/timeseries",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "plausible-artifact-2026-08-09",
+        "source_url": "https://plausible.io/docs/stats-api-v1",
+        "source_kind": "html_reference",
+        "version": "Plausible Stats API v1 (legacy); provider docs last updated 2026-05-12",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0a54af53eccf959a4e31c80fc9f345f1215122b25933cd967ada57bfe767c7cd",
+        "coordinate": "existing-surface[GET /v1/stats/timeseries]"
+      },
+      "covered_by": {
+        "stream": "timeseries"
       }
     }
   ]

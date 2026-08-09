@@ -1,0 +1,128 @@
+{
+  "tagline": "Run Exchange Rates API's declared streams and reverse-ETL actions.",
+  "usage": "pm exchange-rates \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get date",
+        "api get symbols",
+        "convert list",
+        "fluctuation list",
+        "latest list",
+        "timeseries list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get date",
+      "summary": "Documented GET /{date} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://exchangeratesapi.io/documentation/",
+      "examples": [
+        "pm exchange-rates api get date --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{date}"
+        }
+      ],
+      "operation": "exchange-rates.get.date",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get symbols",
+      "summary": "Documented GET /symbols (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://exchangeratesapi.io/documentation/",
+      "examples": [
+        "pm exchange-rates api get symbols --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/symbols"
+        }
+      ],
+      "operation": "exchange-rates.get.symbols",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "convert list",
+      "summary": "Run the convert ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "convert",
+      "source_url": "https://exchangeratesapi.io/documentation/",
+      "examples": [
+        "pm exchange-rates convert list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/convert"
+        }
+      ]
+    },
+    {
+      "path": "fluctuation list",
+      "summary": "Run the fluctuation ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fluctuation",
+      "source_url": "https://exchangeratesapi.io/documentation/",
+      "examples": [
+        "pm exchange-rates fluctuation list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fluctuation"
+        }
+      ]
+    },
+    {
+      "path": "latest list",
+      "summary": "Run the latest ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "latest",
+      "source_url": "https://exchangeratesapi.io/documentation/",
+      "examples": [
+        "pm exchange-rates latest list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/latest"
+        }
+      ]
+    },
+    {
+      "path": "timeseries list",
+      "summary": "Run the timeseries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "timeseries",
+      "source_url": "https://exchangeratesapi.io/documentation/",
+      "examples": [
+        "pm exchange-rates timeseries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/timeseries"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "batch": "batch-020-pypi-angle-retry",
+  "manifest": "batches/batch-018-reference-machine-manifest.json",
+  "outcomes": [
+    {
+      "connector": "pypi",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-020-pypi-angle-retry-materialize.json"
+    }
+  ]
+}

@@ -1,0 +1,3603 @@
+{
+  "operations": [
+    {
+      "id": "apify-dataset.get.v2-actor-builds",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-builds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-builds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-builds-buildid",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-builds/{buildId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-builds/{buildId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-builds-buildid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-builds/{buildId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-builds/{buildId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-builds-buildid-abort",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-builds/{buildId}/abort",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-builds/{buildId}/abort",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-builds-buildid-log",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-builds/{buildId}/log",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-builds/{buildId}/log",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-builds-buildid-openapi-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-builds/{buildId}/openapi.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-builds/{buildId}/openapi.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-runs-runid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-runs/{runId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-runs/{runId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-runs-runid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-runs/{runId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-runs/{runId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-abort",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/abort",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/abort",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-charge",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/charge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/charge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-dataset",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/dataset",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/dataset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-runs-runid-dataset",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-runs/{runId}/dataset",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-runs/{runId}/dataset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-runs-runid-dataset",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-runs/{runId}/dataset",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-runs/{runId}/dataset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-dataset-items",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/dataset/items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/dataset/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-dataset-items",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/dataset/items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/dataset/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-dataset-statistics",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/dataset/statistics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/dataset/statistics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-key-value-store",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/key-value-store",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/key-value-store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-runs-runid-key-value-store",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-runs/{runId}/key-value-store",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-runs/{runId}/key-value-store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-runs-runid-key-value-store",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-runs/{runId}/key-value-store",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-runs/{runId}/key-value-store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-key-value-store-keys",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/key-value-store/keys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/key-value-store/keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-key-value-store-records",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/key-value-store/records",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/key-value-store/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-key-value-store-records-recordkey",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/key-value-store/records/{recordKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-key-value-store-records-recordkey",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/key-value-store/records/{recordKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-runs-runid-key-value-store-records-recordkey",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-runs/{runId}/key-value-store/records/{recordKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-runs/{runId}/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-runs-runid-key-value-store-records-recordkey",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-runs/{runId}/key-value-store/records/{recordKey}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-runs/{runId}/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-log",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/log",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/log",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-metamorph",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/metamorph",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/metamorph",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-reboot",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/reboot",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/reboot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-request-queue",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/request-queue",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/request-queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-runs-runid-request-queue",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-runs/{runId}/request-queue",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-runs/{runId}/request-queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-runs-runid-request-queue",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-runs/{runId}/request-queue",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-runs/{runId}/request-queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-request-queue-head",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/request-queue/head",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/request-queue/head",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-request-queue-head-lock",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/request-queue/head/lock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/request-queue/head/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-request-queue-requests",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/request-queue/requests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-request-queue-requests",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/request-queue/requests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-request-queue-requests-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/request-queue/requests/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-runs-runid-request-queue-requests-batch",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-runs/{runId}/request-queue/requests/batch",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-request-queue-requests-unlock",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/request-queue/requests/unlock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests/unlock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-runs-runid-request-queue-requests-requestid",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-runs/{runId}/request-queue/requests/{requestId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-runs-runid-request-queue-requests-requestid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-runs/{runId}/request-queue/requests/{requestId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-runs-runid-request-queue-requests-requestid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-runs/{runId}/request-queue/requests/{requestId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-runs-runid-request-queue-requests-requestid-lock",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-runs/{runId}/request-queue/requests/{requestId}/lock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests/{requestId}/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-runs-runid-request-queue-requests-requestid-lock",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-runs/{runId}/request-queue/requests/{requestId}/lock",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-runs/{runId}/request-queue/requests/{requestId}/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-runs-runid-resurrect",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-runs/{runId}/resurrect",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-runs/{runId}/resurrect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-tasks-actortaskid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-tasks/{actorTaskId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-tasks/{actorTaskId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-tasks-actortaskid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-tasks/{actorTaskId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-tasks/{actorTaskId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-input",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/input",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/input",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-tasks-actortaskid-input",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-tasks/{actorTaskId}/input",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-tasks/{actorTaskId}/input",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-run-sync",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/run-sync",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/run-sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-run-sync",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/run-sync",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/run-sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-run-sync-get-dataset-items",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/run-sync-get-dataset-items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/run-sync-get-dataset-items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-run-sync-get-dataset-items",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/run-sync-get-dataset-items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/run-sync-get-dataset-items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs-last-abort",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs/last/abort",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/abort",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-dataset",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/dataset",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/dataset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-tasks-actortaskid-runs-last-dataset",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-tasks/{actorTaskId}/runs/last/dataset",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/dataset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-tasks-actortaskid-runs-last-dataset",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-tasks/{actorTaskId}/runs/last/dataset",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/dataset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-dataset-items",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/dataset/items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/dataset/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs-last-dataset-items",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs/last/dataset/items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/dataset/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-dataset-statistics",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/dataset/statistics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/dataset/statistics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-key-value-store",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/key-value-store",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/key-value-store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-tasks-actortaskid-runs-last-key-value-store",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-tasks/{actorTaskId}/runs/last/key-value-store",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/key-value-store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-tasks-actortaskid-runs-last-key-value-store",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-tasks/{actorTaskId}/runs/last/key-value-store",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/key-value-store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-key-value-store-keys",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/keys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-key-value-store-records",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-key-value-store-records-recordkey",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records/{recordKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs-last-key-value-store-records-recordkey",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records/{recordKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-tasks-actortaskid-runs-last-key-value-store-records-recordkey",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records/{recordKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-tasks-actortaskid-runs-last-key-value-store-records-recordkey",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records/{recordKey}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-log",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/log",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/log",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs-last-metamorph",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs/last/metamorph",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/metamorph",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs-last-reboot",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs/last/reboot",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/reboot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-request-queue",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/request-queue",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-tasks-actortaskid-runs-last-request-queue",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-tasks/{actorTaskId}/runs/last/request-queue",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-tasks-actortaskid-runs-last-request-queue",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-tasks/{actorTaskId}/runs/last/request-queue",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-request-queue-head",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/head",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/head",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs-last-request-queue-head-lock",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/head/lock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/head/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-request-queue-requests",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs-last-request-queue-requests",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs-last-request-queue-requests-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-tasks-actortaskid-runs-last-request-queue-requests-batch",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/batch",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actor-tasks-actortaskid-runs-last-request-queue-requests-unlock",
+      "kind": "rest_write",
+      "summary": "POST /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/unlock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/unlock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-runs-last-request-queue-requests-requestid",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-tasks-actortaskid-runs-last-request-queue-requests-requestid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-tasks-actortaskid-runs-last-request-queue-requests-requestid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actor-tasks-actortaskid-runs-last-request-queue-requests-requestid-lock",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}/lock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actor-tasks-actortaskid-runs-last-request-queue-requests-requestid-lock",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}/lock",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actor-tasks/{actorTaskId}/runs/last/request-queue/requests/{requestId}/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actor-tasks-actortaskid-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /v2/actor-tasks/{actorTaskId}/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actor-tasks/{actorTaskId}/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actors-actorid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actors/{actorId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actors/{actorId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-builds",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/builds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/builds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-builds",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/builds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/builds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-builds-default",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/builds/default",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/builds/default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-builds-buildid",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/builds/{buildId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/builds/{buildId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-builds-buildid-abort",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/builds/{buildId}/abort",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/builds/{buildId}/abort",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-builds-buildid-openapi-json",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/builds/{buildId}/openapi.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/builds/{buildId}/openapi.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-run-sync",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/run-sync",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/run-sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-run-sync",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/run-sync",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/run-sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-run-sync-get-dataset-items",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/run-sync-get-dataset-items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/run-sync-get-dataset-items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-run-sync-get-dataset-items",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/run-sync-get-dataset-items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/run-sync-get-dataset-items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-last-abort",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/last/abort",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/last/abort",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-dataset",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/dataset",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/dataset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actors-actorid-runs-last-dataset",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actors/{actorId}/runs/last/dataset",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actors/{actorId}/runs/last/dataset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid-runs-last-dataset",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}/runs/last/dataset",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}/runs/last/dataset",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-dataset-items",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/dataset/items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/dataset/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-last-dataset-items",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/last/dataset/items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/last/dataset/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-dataset-statistics",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/dataset/statistics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/dataset/statistics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-key-value-store",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/key-value-store",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/key-value-store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actors-actorid-runs-last-key-value-store",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actors/{actorId}/runs/last/key-value-store",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actors/{actorId}/runs/last/key-value-store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid-runs-last-key-value-store",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}/runs/last/key-value-store",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}/runs/last/key-value-store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-key-value-store-keys",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/key-value-store/keys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/key-value-store/keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-key-value-store-records",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/key-value-store/records",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/key-value-store/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-key-value-store-records-recordkey",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/key-value-store/records/{recordKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-last-key-value-store-records-recordkey",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/last/key-value-store/records/{recordKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/last/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actors-actorid-runs-last-key-value-store-records-recordkey",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actors/{actorId}/runs/last/key-value-store/records/{recordKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actors/{actorId}/runs/last/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid-runs-last-key-value-store-records-recordkey",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}/runs/last/key-value-store/records/{recordKey}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}/runs/last/key-value-store/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-log",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/log",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/log",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-last-metamorph",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/last/metamorph",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/last/metamorph",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-last-reboot",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/last/reboot",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/last/reboot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-request-queue",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/request-queue",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actors-actorid-runs-last-request-queue",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actors/{actorId}/runs/last/request-queue",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid-runs-last-request-queue",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}/runs/last/request-queue",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-request-queue-head",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/request-queue/head",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/head",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-last-request-queue-head-lock",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/last/request-queue/head/lock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/head/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-request-queue-requests",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/request-queue/requests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-last-request-queue-requests",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/last/request-queue/requests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-last-request-queue-requests-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/last/request-queue/requests/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid-runs-last-request-queue-requests-batch",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}/runs/last/request-queue/requests/batch",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-last-request-queue-requests-unlock",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/last/request-queue/requests/unlock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests/unlock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-last-request-queue-requests-requestid",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actors-actorid-runs-last-request-queue-requests-requestid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid-runs-last-request-queue-requests-requestid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actors-actorid-runs-last-request-queue-requests-requestid-lock",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}/lock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid-runs-last-request-queue-requests-requestid-lock",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}/lock",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}/runs/last/request-queue/requests/{requestId}/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-runs-runid",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/runs/{runId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/runs/{runId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-runid-abort",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/{runId}/abort",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/{runId}/abort",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-runid-metamorph",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/{runId}/metamorph",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/{runId}/metamorph",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-runs-runid-resurrect",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/runs/{runId}/resurrect",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/runs/{runId}/resurrect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-validate-input",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/validate-input",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/validate-input",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-versions",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/versions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/versions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-versions",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/versions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/versions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-versions-versionnumber",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/versions/{versionNumber}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-versions-versionnumber",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/versions/{versionNumber}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actors-actorid-versions-versionnumber",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actors/{actorId}/versions/{versionNumber}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid-versions-versionnumber",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}/versions/{versionNumber}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-versions-versionnumber-env-vars",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/versions/{versionNumber}/env-vars",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}/env-vars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-versions-versionnumber-env-vars",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/versions/{versionNumber}/env-vars",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}/env-vars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-versions-versionnumber-env-vars-envvarname",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/versions/{versionNumber}/env-vars/{envVarName}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}/env-vars/{envVarName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-actors-actorid-versions-versionnumber-env-vars-envvarname",
+      "kind": "rest_write",
+      "summary": "POST /v2/actors/{actorId}/versions/{versionNumber}/env-vars/{envVarName}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}/env-vars/{envVarName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-actors-actorid-versions-versionnumber-env-vars-envvarname",
+      "kind": "rest_write",
+      "summary": "PUT /v2/actors/{actorId}/versions/{versionNumber}/env-vars/{envVarName}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}/env-vars/{envVarName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-actors-actorid-versions-versionnumber-env-vars-envvarname",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/actors/{actorId}/versions/{versionNumber}/env-vars/{envVarName}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/actors/{actorId}/versions/{versionNumber}/env-vars/{envVarName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-actors-actorid-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /v2/actors/{actorId}/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/actors/{actorId}/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-browser-info",
+      "kind": "rest_read",
+      "summary": "GET /v2/browser-info",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/browser-info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-browser-info",
+      "kind": "rest_write",
+      "summary": "POST /v2/browser-info",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/browser-info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-browser-info",
+      "kind": "rest_write",
+      "summary": "PUT /v2/browser-info",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/browser-info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-browser-info",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/browser-info",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/browser-info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-datasets",
+      "kind": "rest_read",
+      "summary": "GET /v2/datasets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/datasets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-datasets",
+      "kind": "rest_write",
+      "summary": "POST /v2/datasets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/datasets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-datasets-datasetid",
+      "kind": "rest_read",
+      "summary": "GET /v2/datasets/{datasetId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/datasets/{datasetId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-datasets-datasetid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/datasets/{datasetId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/datasets/{datasetId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-datasets-datasetid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/datasets/{datasetId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/datasets/{datasetId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-datasets-datasetid-items",
+      "kind": "rest_read",
+      "summary": "GET /v2/datasets/{datasetId}/items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/datasets/{datasetId}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.head.v2-datasets-datasetid-items",
+      "kind": "composite",
+      "summary": "HEAD /v2/datasets/{datasetId}/items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "HEAD /v2/datasets/{datasetId}/items"
+        ]
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-datasets-datasetid-items",
+      "kind": "rest_write",
+      "summary": "POST /v2/datasets/{datasetId}/items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/datasets/{datasetId}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-datasets-datasetid-statistics",
+      "kind": "rest_read",
+      "summary": "GET /v2/datasets/{datasetId}/statistics",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/datasets/{datasetId}/statistics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-key-value-stores",
+      "kind": "rest_read",
+      "summary": "GET /v2/key-value-stores",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/key-value-stores",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-key-value-stores",
+      "kind": "rest_write",
+      "summary": "POST /v2/key-value-stores",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/key-value-stores",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-key-value-stores-storeid",
+      "kind": "rest_read",
+      "summary": "GET /v2/key-value-stores/{storeId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/key-value-stores/{storeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-key-value-stores-storeid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/key-value-stores/{storeId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/key-value-stores/{storeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-key-value-stores-storeid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/key-value-stores/{storeId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/key-value-stores/{storeId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-key-value-stores-storeid-keys",
+      "kind": "rest_read",
+      "summary": "GET /v2/key-value-stores/{storeId}/keys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/key-value-stores/{storeId}/keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-key-value-stores-storeid-records",
+      "kind": "rest_read",
+      "summary": "GET /v2/key-value-stores/{storeId}/records",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/key-value-stores/{storeId}/records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-key-value-stores-storeid-records-recordkey",
+      "kind": "rest_read",
+      "summary": "GET /v2/key-value-stores/{storeId}/records/{recordKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/key-value-stores/{storeId}/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.head.v2-key-value-stores-storeid-records-recordkey",
+      "kind": "composite",
+      "summary": "HEAD /v2/key-value-stores/{storeId}/records/{recordKey}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "HEAD /v2/key-value-stores/{storeId}/records/{recordKey}"
+        ]
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-key-value-stores-storeid-records-recordkey",
+      "kind": "rest_write",
+      "summary": "POST /v2/key-value-stores/{storeId}/records/{recordKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/key-value-stores/{storeId}/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-key-value-stores-storeid-records-recordkey",
+      "kind": "rest_write",
+      "summary": "PUT /v2/key-value-stores/{storeId}/records/{recordKey}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/key-value-stores/{storeId}/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-key-value-stores-storeid-records-recordkey",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/key-value-stores/{storeId}/records/{recordKey}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/key-value-stores/{storeId}/records/{recordKey}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-logs-buildorrunid",
+      "kind": "rest_read",
+      "summary": "GET /v2/logs/{buildOrRunId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/logs/{buildOrRunId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-request-queues",
+      "kind": "rest_read",
+      "summary": "GET /v2/request-queues",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/request-queues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-request-queues",
+      "kind": "rest_write",
+      "summary": "POST /v2/request-queues",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/request-queues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-request-queues-queueid",
+      "kind": "rest_read",
+      "summary": "GET /v2/request-queues/{queueId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/request-queues/{queueId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-request-queues-queueid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/request-queues/{queueId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/request-queues/{queueId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-request-queues-queueid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/request-queues/{queueId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/request-queues/{queueId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-request-queues-queueid-head",
+      "kind": "rest_read",
+      "summary": "GET /v2/request-queues/{queueId}/head",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/request-queues/{queueId}/head",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-request-queues-queueid-head-lock",
+      "kind": "rest_write",
+      "summary": "POST /v2/request-queues/{queueId}/head/lock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/request-queues/{queueId}/head/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-request-queues-queueid-requests",
+      "kind": "rest_read",
+      "summary": "GET /v2/request-queues/{queueId}/requests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/request-queues/{queueId}/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-request-queues-queueid-requests",
+      "kind": "rest_write",
+      "summary": "POST /v2/request-queues/{queueId}/requests",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/request-queues/{queueId}/requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-request-queues-queueid-requests-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/request-queues/{queueId}/requests/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/request-queues/{queueId}/requests/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-request-queues-queueid-requests-batch",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/request-queues/{queueId}/requests/batch",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/request-queues/{queueId}/requests/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-request-queues-queueid-requests-unlock",
+      "kind": "rest_write",
+      "summary": "POST /v2/request-queues/{queueId}/requests/unlock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/request-queues/{queueId}/requests/unlock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-request-queues-queueid-requests-requestid",
+      "kind": "rest_read",
+      "summary": "GET /v2/request-queues/{queueId}/requests/{requestId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/request-queues/{queueId}/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-request-queues-queueid-requests-requestid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/request-queues/{queueId}/requests/{requestId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/request-queues/{queueId}/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-request-queues-queueid-requests-requestid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/request-queues/{queueId}/requests/{requestId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/request-queues/{queueId}/requests/{requestId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-request-queues-queueid-requests-requestid-lock",
+      "kind": "rest_write",
+      "summary": "PUT /v2/request-queues/{queueId}/requests/{requestId}/lock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/request-queues/{queueId}/requests/{requestId}/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-request-queues-queueid-requests-requestid-lock",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/request-queues/{queueId}/requests/{requestId}/lock",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/request-queues/{queueId}/requests/{requestId}/lock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-schedules",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedules",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-schedules",
+      "kind": "rest_write",
+      "summary": "POST /v2/schedules",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/schedules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-schedules-scheduleid",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedules/{scheduleId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedules/{scheduleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-schedules-scheduleid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/schedules/{scheduleId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/schedules/{scheduleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-schedules-scheduleid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/schedules/{scheduleId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/schedules/{scheduleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-schedules-scheduleid-log",
+      "kind": "rest_read",
+      "summary": "GET /v2/schedules/{scheduleId}/log",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/schedules/{scheduleId}/log",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-store",
+      "kind": "rest_read",
+      "summary": "GET /v2/store",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/store",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-tools-decode-and-verify",
+      "kind": "rest_write",
+      "summary": "POST /v2/tools/decode-and-verify",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tools/decode-and-verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-tools-encode-and-sign",
+      "kind": "rest_write",
+      "summary": "POST /v2/tools/encode-and-sign",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tools/encode-and-sign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-users-me",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-users-me-limits",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/me/limits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/me/limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-users-me-limits",
+      "kind": "rest_write",
+      "summary": "PUT /v2/users/me/limits",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/users/me/limits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-users-me-usage-monthly",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/me/usage/monthly",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/me/usage/monthly",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-users-userid",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{userId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-webhook-dispatches",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhook-dispatches",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhook-dispatches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-webhook-dispatches-dispatchid",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhook-dispatches/{dispatchId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhook-dispatches/{dispatchId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /v2/webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-webhooks-webhookid",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhooks/{webhookId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.put.v2-webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "PUT /v2/webhooks/{webhookId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.delete.v2-webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/webhooks/{webhookId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.get.v2-webhooks-webhookid-dispatches",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhooks/{webhookId}/dispatches",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhooks/{webhookId}/dispatches",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "apify-dataset.post.v2-webhooks-webhookid-test",
+      "kind": "rest_write",
+      "summary": "POST /v2/webhooks/{webhookId}/test",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.apify.com/api/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/webhooks/{webhookId}/test",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

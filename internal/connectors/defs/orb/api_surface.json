@@ -1,12 +1,3132 @@
 {
-  "api": "Orb API v1 (https://api.withorb.com/v1)",
+  "api": "Orb API v1 (https://api.withorb.com/v1); provider artifact version: Orb API Reference v1.0 (OpenAPI 3.1.0)",
   "docs": "https://docs.withorb.com/reference/api-reference",
-  "reviewed_at": "2026-07-02",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only; legacy exposes no write actions and this bundle adds none",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (145 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "orb-artifact-2026-08-09",
+      "url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+      "kind": "openapi",
+      "version": "3.1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v1/customers", "covered_by": { "stream": "customers" } },
-    { "method": "GET", "path": "/v1/subscriptions", "covered_by": { "stream": "subscriptions" } },
-    { "method": "GET", "path": "/v1/plans", "covered_by": { "stream": "plans" } },
-    { "method": "GET", "path": "/v1/invoices", "covered_by": { "stream": "invoices" } }
+    {
+      "method": "GET",
+      "path": "/alerts",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/alerts/customer_id/{customer_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts/customer_id/{customer_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/alerts/external_customer_id/{external_customer_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts/external_customer_id/{external_customer_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/alerts/plan_id/{plan_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts/plan_id/{plan_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/alerts/subscription_id/{subscription_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts/subscription_id/{subscription_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/alerts/{alert_configuration_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts/{alert_configuration_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/alerts/{alert_configuration_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts/{alert_configuration_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/alerts/{alert_configuration_id}/disable",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts/{alert_configuration_id}/disable\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/alerts/{alert_configuration_id}/enable",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts/{alert_configuration_id}/enable\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/alerts/{alert_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/alerts/{alert_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coupons",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/coupons\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/coupons",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/coupons\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coupons/{coupon_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/coupons/{coupon_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/coupons/{coupon_id}/archive",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/coupons/{coupon_id}/archive\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/coupons/{coupon_id}/subscriptions",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/coupons/{coupon_id}/subscriptions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_blocks/{block_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/credit_blocks/{block_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/credit_blocks/{block_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/credit_blocks/{block_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_blocks/{block_id}/invoices",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/credit_blocks/{block_id}/invoices\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_notes",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/credit_notes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_notes",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/credit_notes\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_notes/{credit_note_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/credit_notes/{credit_note_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/external_customer_id/{external_customer_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/external_customer_id/{external_customer_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/external_customer_id/{external_customer_id}/costs",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}/costs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/external_customer_id/{external_customer_id}/credits",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}/credits\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/external_customer_id/{external_customer_id}/credits/ledger",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}/credits/ledger\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/external_customer_id/{external_customer_id}/credits/ledger_entry",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}/credits/ledger_entry\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/external_customer_id/{external_customer_id}/credits/top_ups",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}/credits/top_ups\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/external_customer_id/{external_customer_id}/credits/top_ups",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}/credits/top_ups\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/external_customer_id/{external_customer_id}/credits/top_ups/{top_up_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}/credits/top_ups/{top_up_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/external_customer_id/{external_customer_id}/portal_sessions",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}/portal_sessions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/external_customer_id/{external_customer_id}/sync_payment_methods_from_gateway\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/{customer_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/balance_transactions",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/balance_transactions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/balance_transactions",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/balance_transactions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/costs",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/costs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/credits",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/credits\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/credits/ledger",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/credits/ledger\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/credits/ledger_entry",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/credits/ledger_entry\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/credits/top_ups",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/credits/top_ups\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/credits/top_ups",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/credits/top_ups\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/credits/top_ups/{top_up_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/credits/top_ups/{top_up_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/portal_sessions",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/portal_sessions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/sync_payment_methods_from_gateway",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/customers/{customer_id}/sync_payment_methods_from_gateway\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dimensional_price_groups",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/dimensional_price_groups\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dimensional_price_groups",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/dimensional_price_groups\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/dimensional_price_groups/external_dimensional_price_group_id/{external_dimensional_price_group_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dimensional_price_groups/{dimensional_price_group_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/dimensional_price_groups/{dimensional_price_group_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/dimensional_price_groups/{dimensional_price_group_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/dimensional_price_groups/{dimensional_price_group_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/backfills",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/events/backfills\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/backfills",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/events/backfills\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/backfills/{backfill_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/events/backfills/{backfill_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/backfills/{backfill_id}/close",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/events/backfills/{backfill_id}/close\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/backfills/{backfill_id}/revert",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/events/backfills/{backfill_id}/revert\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/search",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/events/search\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/volume",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/events/volume\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/events/{event_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/events/{event_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/events/{event_id}/deprecate",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/events/{event_id}/deprecate\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ingest",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/ingest\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoice_line_items",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoice_line_items\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/summary",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/summary\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/summary/{invoice_id}/issue",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/summary/{invoice_id}/issue\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/upcoming",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/upcoming\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{invoice_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/{invoice_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{invoice_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/{invoice_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{invoice_id}/invoice_line_items/{line_item_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/{invoice_id}/invoice_line_items/{line_item_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/issue",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/{invoice_id}/issue\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/mark_paid",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/{invoice_id}/mark_paid\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/pay",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/{invoice_id}/pay\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/regenerate_invoice_pdf",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/{invoice_id}/regenerate_invoice_pdf\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/regenerate_receipt_pdf",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/{invoice_id}/regenerate_receipt_pdf\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{invoice_id}/void",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/invoices/{invoice_id}/void\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/items\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/items\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items/{item_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/items/{item_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/items/{item_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/items/{item_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items/{item_id}/archive",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/items/{item_id}/archive\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/license_types",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/license_types\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/license_types",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/license_types\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/license_types/{license_type_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/license_types/{license_type_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licenses",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/licenses\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/licenses",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/licenses\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licenses/external_license_id/{external_license_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/licenses/external_license_id/{external_license_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licenses/external_licenses/{external_license_id}/usage",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/licenses/external_licenses/{external_license_id}/usage\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licenses/usage",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/licenses/usage\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licenses/{license_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/licenses/{license_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/licenses/{license_id}/deactivate",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/licenses/{license_id}/deactivate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/licenses/{license_id}/usage",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/licenses/{license_id}/usage\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metrics",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/metrics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/metrics",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/metrics\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/metrics/{metric_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/metrics/{metric_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/metrics/{metric_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/metrics/{metric_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ping",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/ping\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plans",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans/external_plan_id/{external_plan_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/external_plan_id/{external_plan_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plans/external_plan_id/{external_plan_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/external_plan_id/{external_plan_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plans/external_plan_id/{external_plan_id}/set_default_version",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/external_plan_id/{external_plan_id}/set_default_version\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plans/external_plan_id/{external_plan_id}/versions",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/external_plan_id/{external_plan_id}/versions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans/external_plan_id/{external_plan_id}/versions/{version}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/external_plan_id/{external_plan_id}/versions/{version}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/{plan_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/plans/{plan_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/{plan_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}/migrations",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/{plan_id}/migrations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}/migrations/{migration_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/{plan_id}/migrations/{migration_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/migrations/{migration_id}/cancel",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/{plan_id}/migrations/{migration_id}/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/set_default_version",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/{plan_id}/set_default_version\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/plans/{plan_id}/versions",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/{plan_id}/versions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/plans/{plan_id}/versions/{version}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/plans/{plan_id}/versions/{version}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prices",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/prices\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/prices",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/prices\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/prices/evaluate",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/prices/evaluate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/prices/evaluate_preview_events",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/prices/evaluate_preview_events\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prices/external_price_id/{external_price_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/prices/external_price_id/{external_price_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/prices/external_price_id/{external_price_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/prices/external_price_id/{external_price_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/prices/{price_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/prices/{price_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/prices/{price_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/prices/{price_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/prices/{price_id}/evaluate",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/prices/{price_id}/evaluate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription_changes",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscription_changes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription_changes/{subscription_change_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscription_changes/{subscription_change_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscription_changes/{subscription_change_id}/apply",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscription_changes/{subscription_change_id}/apply\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscription_changes/{subscription_change_id}/cancel",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscription_changes/{subscription_change_id}/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/cancel",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/{subscription_id}/costs",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/costs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/price_intervals",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/price_intervals\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/redeem_coupon",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/redeem_coupon\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/{subscription_id}/schedule",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/schedule\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/schedule_plan_change",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/schedule_plan_change\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/trigger_phase",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/trigger_phase\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/unschedule_cancellation",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/unschedule_cancellation\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/unschedule_fixed_fee_quantity_updates",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/unschedule_fixed_fee_quantity_updates\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/unschedule_pending_plan_changes",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/unschedule_pending_plan_changes\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/update_fixed_fee_quantity",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/update_fixed_fee_quantity\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/subscriptions/{subscription_id}/update_trial",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/update_trial\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscriptions/{subscription_id}/usage",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "paths[\"/subscriptions/{subscription_id}/usage\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/customers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "Orb API Reference v1.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "existing-surface[GET /v1/customers]"
+      },
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/invoices",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "Orb API Reference v1.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "existing-surface[GET /v1/invoices]"
+      },
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/plans",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "Orb API Reference v1.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "existing-surface[GET /v1/plans]"
+      },
+      "covered_by": {
+        "stream": "plans"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/subscriptions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "orb-artifact-2026-08-09",
+        "source_url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "source_kind": "openapi",
+        "version": "Orb API Reference v1.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1",
+        "coordinate": "existing-surface[GET /v1/subscriptions]"
+      },
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    }
   ]
 }

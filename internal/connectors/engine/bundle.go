@@ -692,13 +692,30 @@ type SurfaceProvenanceAlternative struct {
 // SurfaceCoverage names the executable connector surface that covers an endpoint.
 type SurfaceCoverage struct {
 	Stream string `json:"stream,omitempty"`
-	Write  string `json:"write,omitempty"`
+	// Streams names every ETL stream an endpoint backs when several stream
+	// contracts intentionally share one documented provider request.
+	Streams []string `json:"streams,omitempty"`
+	Write   string   `json:"write,omitempty"`
 	// Writes names every write action an endpoint backs when it backs more than
 	// one. A provider documents one path per operation, but a bundle may model
 	// several distinct write contracts over that one path.
 	Writes      []string `json:"writes,omitempty"`
 	DirectRead  string   `json:"direct_read,omitempty"`
 	DirectReads []string `json:"direct_reads,omitempty"`
+}
+
+// StreamTargets returns every ETL stream a coverage entry names, singular and
+// plural together, so callers do not need to distinguish their spellings.
+func (c *SurfaceCoverage) StreamTargets() []string {
+	if c == nil {
+		return nil
+	}
+	targets := make([]string, 0, len(c.Streams)+1)
+	if c.Stream != "" {
+		targets = append(targets, c.Stream)
+	}
+	targets = append(targets, c.Streams...)
+	return targets
 }
 
 // WriteTargets returns every write action a coverage entry names, singular and

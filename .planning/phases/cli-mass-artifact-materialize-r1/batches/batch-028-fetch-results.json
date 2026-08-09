@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-exact-existing-surface-manifest.json",
+  "fetched": [
+    {
+      "connector": "bigmailer",
+      "source_url": "https://docs.bigmailer.io/llms.txt",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/bigmailer.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "bluetally",
+      "source_url": "https://developer.bluetally.com/llms.txt",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/bluetally.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "brex",
+      "source_url": "https://developer.brex.com/openapi/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/brex.txt",
+      "status": "failed",
+      "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued"
+    },
+    {
+      "connector": "buzzsprout",
+      "source_url": "https://github.com/buzzsprout/buzzsprout-api",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/buzzsprout.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "campayn",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/campayn.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "capsule-crm",
+      "source_url": "https://developer.capsulecrm.com/v2",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/capsule-crm.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "cimis",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/cimis.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "convertkit",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/convertkit.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "customerly",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/customerly.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "emailoctopus",
+      "source_url": "https://emailoctopus.com/api-documentation",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/emailoctopus.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "exchange-rates",
+      "source_url": "https://exchangeratesapi.io/documentation/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/exchange-rates.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "firehydrant",
+      "source_url": "https://docs.firehydrant.com/reference/firehydrant-api",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/firehydrant.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "gitlab",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v2.yaml",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/gitlab.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "gnews",
+      "source_url": "https://docs.gnews.io/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/gnews.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "mailchimp",
+      "source_url": "https://us20.api.mailchimp.com/schema/3.0/Swagger.json",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/mailchimp.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "marketstack",
+      "source_url": "https://docs.apilayer.com/marketstack/docs/api-endpoints-v1",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/marketstack.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "news-api",
+      "source_url": "https://newsapi.org/docs/endpoints",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/news-api.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "nutshell",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/nutshell.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "pexels-api",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/pexels-api.txt",
+      "status": "failed",
+      "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued"
+    },
+    {
+      "connector": "postmarkapp",
+      "source_url": "https://postmarkapp.com/developer",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/postmarkapp.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "printify",
+      "source_url": "https://developers.printify.com/openapi.json",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/printify.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "recurly",
+      "source_url": "https://github.com/recurly/recurly-client-go/blob/main/openapi/api.yaml",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/recurly.txt",
+      "status": "failed",
+      "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued"
+    },
+    {
+      "connector": "rki-covid",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/rki-covid.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "searxng",
+      "source_url": "https://docs.searxng.org/dev/search_api.html",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/searxng.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "senseforce",
+      "source_url": "https://manual.senseforce.io/manual/sf-platform/public-api/endpoints.md",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/senseforce.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "shopwired",
+      "source_url": "https://shopwired.readme.io/llms.txt",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/shopwired.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "smaily",
+      "source_url": "https://smaily.com/help/api/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/smaily.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "statuspage",
+      "source_url": "https://developer.statuspage.io/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/statuspage.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "survey-sparrow",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/survey-sparrow.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "surveymonkey",
+      "source_url": "https://api.surveymonkey.com/v3/docs",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/surveymonkey.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "survicate",
+      "source_url": "https://developers.survicate.com/data-export/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/survicate.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "tickettailor",
+      "source_url": "https://developers.tickettailor.com/docs/api/ticket-tailor-api",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/tickettailor.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "uppromote",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/uppromote.txt",
+      "status": "retrieved",
+      "reason": null
+    },
+    {
+      "connector": "weatherstack",
+      "source_url": "https://docs.apilayer.com/weatherstack/docs/api-documentation",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-028-artifacts/weatherstack.txt",
+      "status": "retrieved",
+      "reason": null
+    }
+  ]
+}

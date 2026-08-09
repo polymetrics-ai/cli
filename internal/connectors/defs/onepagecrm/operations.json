@@ -1,0 +1,115 @@
+{
+  "operations": [
+    {
+      "id": "onepagecrm.get.attachments-s3-form",
+      "kind": "rest_read",
+      "summary": "GET /attachments/s3_form",
+      "description": "Pre-authorized S3 upload form endpoint; supports binary attachment upload workflow rather than a durable syncable CRM object.",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/attachments/s3_form",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "onepagecrm.post.change-auth-key",
+      "kind": "rest_write",
+      "summary": "POST /change_auth_key",
+      "description": "Rotates the current API key and returns new credential material; credential rotation is outside connector write actions.",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/change_auth_key",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "onepagecrm.post.companies-company-id-logo",
+      "kind": "rest_write",
+      "summary": "POST /companies/{company_id}/logo",
+      "description": "Company logo upload/update accepts image payloads; binary media mutations are not modeled by this JSON write bundle.",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/companies/{company_id}/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "onepagecrm.patch.companies-company-id-logo",
+      "kind": "rest_write",
+      "summary": "PATCH /companies/{company_id}/logo",
+      "description": "Company logo upload/update accepts image payloads; binary media mutations are not modeled by this JSON write bundle.",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/companies/{company_id}/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "onepagecrm.delete.contacts-delete",
+      "kind": "rest_write",
+      "summary": "DELETE /contacts/delete",
+      "description": "Bulk contact delete has no path id and the OpenAPI operation has no JSON request body or query dialect in writes.json; not exposed as a broad delete action.",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/contacts/delete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "onepagecrm.post.contacts-contact-id-contact-photo",
+      "kind": "rest_write",
+      "summary": "POST /contacts/{contact_id}/contact_photo",
+      "description": "Photo/logo upload/update accepts base64 image payloads; binary media mutations are not modeled by this JSON write bundle.",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts/{contact_id}/contact_photo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "onepagecrm.put.contacts-contact-id-contact-photo",
+      "kind": "rest_write",
+      "summary": "PUT /contacts/{contact_id}/contact_photo",
+      "description": "Photo/logo upload/update accepts base64 image payloads; binary media mutations are not modeled by this JSON write bundle.",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/contacts/{contact_id}/contact_photo",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

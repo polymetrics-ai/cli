@@ -1,30 +1,921 @@
 {
-  "api": "Watchmode REST API v1 (https://api.watchmode.com/v1)",
+  "api": "Watchmode REST API v1 (https://api.watchmode.com/v1); provider artifact version: OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
   "docs": "https://api.watchmode.com/docs",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every practical GET list/detail endpoint documented by the official Watchmode API (verified against the official @watchmode/api-client v1.0.1 TypeScript SDK's generated route table, which mirrors the interactive API Explorer at api.watchmode.com/docs) is now covered_by a stream. Watchmode publishes no write/mutation endpoints at all (it is a read-only media metadata API) other than a GET-based user-feedback endpoint (title/{id}/incorrect-data), so capabilities.write stays false and this bundle ships no writes.json.",
+  "reviewed_at": "2026-08-08",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (23 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "watchmode-artifact-2026-08-08",
+      "url": "https://api.watchmode.com/openapi.json",
+      "kind": "openapi",
+      "version": "3.0.3",
+      "retrieved_at": "2026-08-08",
+      "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v1/search/", "covered_by": { "stream": "search" } },
-    { "method": "GET", "path": "/v1/sources/", "covered_by": { "stream": "sources" } },
-    { "method": "GET", "path": "/v1/regions/", "covered_by": { "stream": "regions" } },
-    { "method": "GET", "path": "/v1/networks/", "covered_by": { "stream": "networks" } },
-    { "method": "GET", "path": "/v1/genres/", "covered_by": { "stream": "genres" } },
-    { "method": "GET", "path": "/v1/list-titles/", "covered_by": { "stream": "titles" } },
-    { "method": "GET", "path": "/v1/releases/", "covered_by": { "stream": "releases" } },
-    { "method": "GET", "path": "/v1/title/{title_id}/details/", "covered_by": { "stream": "title_details" } },
-    { "method": "GET", "path": "/v1/title/{title_id}/sources/", "covered_by": { "stream": "title_sources" } },
-    { "method": "GET", "path": "/v1/title/{title_id}/seasons/", "covered_by": { "stream": "title_seasons" } },
-    { "method": "GET", "path": "/v1/title/{title_id}/episodes/", "covered_by": { "stream": "title_episodes" } },
-    { "method": "GET", "path": "/v1/title/{title_id}/cast-crew/", "covered_by": { "stream": "title_cast_crew" } },
-    { "method": "GET", "path": "/v1/person/{person_id}/", "covered_by": { "stream": "person_details" } },
-    { "method": "GET", "path": "/v1/autocomplete-search/", "excluded": { "category": "non_data_endpoint", "reason": "typeahead/autocomplete helper for building a search UI, not a syncable object stream" } },
-    { "method": "GET", "path": "/v1/status/", "excluded": { "category": "non_data_endpoint", "reason": "account API-quota/usage snapshot, not a syncable object stream" } },
-    { "method": "GET", "path": "/v1/title/{title_id}/incorrect-data/", "excluded": { "category": "non_data_endpoint", "reason": "a GET-shaped user-feedback submission endpoint (reports incorrect metadata for a title via query parameters); it is a write-like side effect (email dispatch to Watchmode's team per SDK docs), not a stream to sync, and its only mutation shape is a same-request GET the dialect has no write action verb for" } },
-    { "method": "GET", "path": "/v1/title-release-dates/", "excluded": { "category": "requires_elevated_scope", "reason": "advanced release-dates feed is gated to paid Watchmode plans only (theatrical + streaming release dates); the free/base API key this connector is provisioned with returns 401 for this endpoint" } },
-    { "method": "GET", "path": "/v1/changes/new_titles/", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: response body is a bare JSON array of scalar title-id integers (`{\"titles\": [123, 456], ...}`), not an array of objects; connsdk.RecordsAt (and records.keyed_object, which only explodes object-valued map entries) both silently drop every element of a scalar-typed array, so no declarative stream shape can represent this endpoint's real wire response without either fabricating object structure the API doesn't return or emitting zero records; also gated to paid Watchmode plans (401 on this connector's free-tier key)" } },
-    { "method": "GET", "path": "/v1/changes/new_people/", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical bare-scalar-array response shape as changes/new_titles (`{\"people\": [123, 456], ...}`) with no declarative fan-out-of-scalars mechanism; also paid-plan-gated" } },
-    { "method": "GET", "path": "/v1/changes/titles_sources_changed/", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical bare-scalar-array response shape (`{\"titles\": [123, 456], ...}`) as changes/new_titles; also paid-plan-gated" } },
-    { "method": "GET", "path": "/v1/changes/titles_details_changed/", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical bare-scalar-array response shape as changes/new_titles; also paid-plan-gated" } },
-    { "method": "GET", "path": "/v1/changes/titles_episodes_changed/", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: identical bare-scalar-array response shape as changes/new_titles; also paid-plan-gated" } }
+    {
+      "method": "GET",
+      "path": "/autocomplete-search",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/autocomplete-search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changes/new_people",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/new_people\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changes/new_titles",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/new_titles\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changes/titles_details_changed",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/titles_details_changed\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changes/titles_episodes_changed",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/titles_episodes_changed\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/changes/titles_sources_changed",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/changes/titles_sources_changed\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/genres",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/genres\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/list-titles",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/list-titles\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/networks",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/networks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/person/{person_id}",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/person/{person_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/regions",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/regions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/releases",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/releases\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sources",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/sources\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/status\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/title-release-dates",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title-release-dates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/cast-crew",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/cast-crew\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/details",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/details\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/episodes",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/episodes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/episodes/{episode_id}",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/episodes/{episode_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/incorrect-data",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/incorrect-data\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/seasons",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/seasons\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/title/{title_id}/sources",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "paths[\"/title/{title_id}/sources\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/autocomplete-search/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/autocomplete-search/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "typeahead/autocomplete helper for building a search UI, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/changes/new_people/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/new_people/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: identical bare-scalar-array response shape as changes/new_titles (`{\"people\": [123, 456], ...}`) with no declarative fan-out-of-scalars mechanism; also paid-plan-gated",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/changes/new_titles/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/new_titles/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: response body is a bare JSON array of scalar title-id integers (`{\"titles\": [123, 456], ...}`), not an array of objects; connsdk.RecordsAt (and records.keyed_object, which only explodes object-valued map entries) both silently drop every element of a scalar-typed array, so no declarative stream shape can represent this endpoint's real wire response without either fabricating object structure the API doesn't return or emitting zero records; also gated to paid Watchmode plans (401 on this connector's free-tier key)",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/changes/titles_details_changed/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/titles_details_changed/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: identical bare-scalar-array response shape as changes/new_titles; also paid-plan-gated",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/changes/titles_episodes_changed/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/titles_episodes_changed/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: identical bare-scalar-array response shape as changes/new_titles; also paid-plan-gated",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/changes/titles_sources_changed/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/changes/titles_sources_changed/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: identical bare-scalar-array response shape (`{\"titles\": [123, 456], ...}`) as changes/new_titles; also paid-plan-gated",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/genres/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/genres/]"
+      },
+      "covered_by": {
+        "stream": "genres"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/list-titles/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/list-titles/]"
+      },
+      "covered_by": {
+        "stream": "titles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/networks/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/networks/]"
+      },
+      "covered_by": {
+        "stream": "networks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/person/{person_id}/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/person/{person_id}/]"
+      },
+      "covered_by": {
+        "stream": "person_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/regions/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/regions/]"
+      },
+      "covered_by": {
+        "stream": "regions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/releases/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/releases/]"
+      },
+      "covered_by": {
+        "stream": "releases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/search/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/search/]"
+      },
+      "covered_by": {
+        "stream": "search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/sources/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/sources/]"
+      },
+      "covered_by": {
+        "stream": "sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/status/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/status/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "account API-quota/usage snapshot, not a syncable object stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/title-release-dates/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title-release-dates/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "advanced release-dates feed is gated to paid Watchmode plans only (theatrical + streaming release dates); the free/base API key this connector is provisioned with returns 401 for this endpoint",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/title/{title_id}/cast-crew/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/cast-crew/]"
+      },
+      "covered_by": {
+        "stream": "title_cast_crew"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/title/{title_id}/details/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/details/]"
+      },
+      "covered_by": {
+        "stream": "title_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/title/{title_id}/episodes/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/episodes/]"
+      },
+      "covered_by": {
+        "stream": "title_episodes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/title/{title_id}/incorrect-data/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/incorrect-data/]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "a GET-shaped user-feedback submission endpoint (reports incorrect metadata for a title via query parameters); it is a write-like side effect (email dispatch to Watchmode's team per SDK docs), not a stream to sync, and its only mutation shape is a same-request GET the dialect has no write action verb for",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/title/{title_id}/seasons/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/seasons/]"
+      },
+      "covered_by": {
+        "stream": "title_seasons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/title/{title_id}/sources/",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "watchmode-artifact-2026-08-08",
+        "source_url": "https://api.watchmode.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.3; Watchmode API info.version 1.1.7",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9e306e252b816d5ec68aa65473eab846e845ffc40e3cdeb4d9da9cadb05a7f48",
+        "coordinate": "existing-surface[GET /v1/title/{title_id}/sources/]"
+      },
+      "covered_by": {
+        "stream": "title_sources"
+      }
+    }
   ]
 }

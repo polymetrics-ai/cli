@@ -1,0 +1,4265 @@
+{
+  "operations": [
+    {
+      "id": "close-com.get.activity-call",
+      "kind": "rest_read",
+      "summary": "GET /activity/call/",
+      "description": "typed Call-activity listing; the base activities stream (GET /activity/) already returns every activity type including calls with a shared field envelope",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/call/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.activity-call",
+      "kind": "rest_write",
+      "summary": "POST /activity/call/",
+      "description": "logs an external call event; telephony-integration write, no demonstrated demand distinct from ordinary activity sync",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activity/call/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-call-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/call/{id}/",
+      "description": "single-call-activity detail already reachable via the call-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/call/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.activity-call-id",
+      "kind": "rest_write",
+      "summary": "PUT /activity/call/{id}/",
+      "description": "updates a call activity's disposition/notes; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/activity/call/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-call-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/call/{id}/",
+      "description": "deletes a call activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/call/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-created",
+      "kind": "rest_read",
+      "summary": "GET /activity/created/",
+      "description": "typed Created-activity listing; a system-generated audit-trail subtype already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/created/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-created-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/created/{id}/",
+      "description": "single-created-activity detail already reachable via the created-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/created/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-custom",
+      "kind": "rest_read",
+      "summary": "GET /activity/custom/",
+      "description": "typed Custom-Activity-instance listing; requires a specific custom_activity_type_id filter to be useful and the underlying custom activity TYPE definitions themselves (GET /custom_activity/) are out of scope below, so instances of an undefined type have no stable schema to declare",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/custom/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.activity-custom",
+      "kind": "rest_write",
+      "summary": "POST /activity/custom/",
+      "description": "creates a custom-activity-type instance; deferred alongside the custom-activity-type read decision above",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activity/custom/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-custom-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/custom/{id}/",
+      "description": "single-custom-activity detail already reachable via the custom-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/custom/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.activity-custom-id",
+      "kind": "rest_write",
+      "summary": "PUT /activity/custom/{id}/",
+      "description": "updates a custom-activity instance; deferred alongside the custom-activity-type decision",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/activity/custom/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-custom-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/custom/{id}/",
+      "description": "deletes a custom-activity instance; deferred alongside the custom-activity-type decision",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/custom/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-email",
+      "kind": "rest_read",
+      "summary": "GET /activity/email/",
+      "description": "typed Email-activity listing; already visible in the base activities stream's shared envelope",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/email/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.activity-email",
+      "kind": "rest_write",
+      "summary": "POST /activity/email/",
+      "description": "creates/logs an email activity; email-sending write, no demonstrated demand distinct from ordinary activity sync",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activity/email/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-email-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/email/{id}/",
+      "description": "single-email-activity detail already reachable via the email-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/email/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.activity-email-id",
+      "kind": "rest_write",
+      "summary": "PUT /activity/email/{id}/",
+      "description": "updates an email activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/activity/email/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-email-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/email/{id}/",
+      "description": "deletes an email activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/email/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-emailthread",
+      "kind": "rest_read",
+      "summary": "GET /activity/emailthread/",
+      "description": "typed EmailThread-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/emailthread/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-emailthread-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/emailthread/{id}/",
+      "description": "single-emailthread-activity detail already reachable via the emailthread-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/emailthread/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-emailthread-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/emailthread/{id}/",
+      "description": "deletes an email thread activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/emailthread/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-form-submission",
+      "kind": "rest_read",
+      "summary": "GET /activity/form_submission/",
+      "description": "typed FormSubmission-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/form_submission/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-form-submission-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/form_submission/{id}/",
+      "description": "single-form_submission-activity detail already reachable via the form_submission-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/form_submission/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-form-submission-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/form_submission/{id}/",
+      "description": "deletes a form-submission activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/form_submission/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-import-update",
+      "kind": "rest_read",
+      "summary": "GET /activity/import_update/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/import_update/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-import-update-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/import_update/{id}/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/import_update/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-import-update-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/import_update/{id}/",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/import_update/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-lead-merge",
+      "kind": "rest_read",
+      "summary": "GET /activity/lead_merge/",
+      "description": "typed LeadMerge-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/lead_merge/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-lead-merge-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/lead_merge/{id}/",
+      "description": "single-lead_merge-activity detail already reachable via the lead_merge-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/lead_merge/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-meeting",
+      "kind": "rest_read",
+      "summary": "GET /activity/meeting/",
+      "description": "typed Meeting-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/meeting/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-meeting-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/meeting/{id}/",
+      "description": "single-meeting-activity detail already reachable via the meeting-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/meeting/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.activity-meeting-id",
+      "kind": "rest_write",
+      "summary": "PUT /activity/meeting/{id}/",
+      "description": "updates a meeting activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/activity/meeting/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-meeting-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/meeting/{id}/",
+      "description": "deletes a meeting activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/meeting/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.activity-meeting-id-integration",
+      "kind": "rest_write",
+      "summary": "POST /activity/meeting/{id}/integration/",
+      "description": "creates/updates a third-party calendar-integration link on a meeting; integration-config write, not ordinary record data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activity/meeting/{id}/integration/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-note",
+      "kind": "rest_read",
+      "summary": "GET /activity/note/",
+      "description": "typed Note-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/note/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.activity-note",
+      "kind": "rest_write",
+      "summary": "POST /activity/note/",
+      "description": "creates a note activity; no demonstrated write demand distinct from ordinary activity sync",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activity/note/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-note-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/note/{id}/",
+      "description": "single-note-activity detail already reachable via the note-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/note/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.activity-note-id",
+      "kind": "rest_write",
+      "summary": "PUT /activity/note/{id}/",
+      "description": "updates a note activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/activity/note/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-note-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/note/{id}/",
+      "description": "deletes a note activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/note/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-sms",
+      "kind": "rest_read",
+      "summary": "GET /activity/sms/",
+      "description": "typed SMS-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/sms/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.activity-sms",
+      "kind": "rest_write",
+      "summary": "POST /activity/sms/",
+      "description": "sends/logs an SMS activity; messaging write, no demonstrated demand distinct from ordinary activity sync",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activity/sms/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-sms-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/sms/{id}/",
+      "description": "single-sms-activity detail already reachable via the sms-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/sms/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.activity-sms-id",
+      "kind": "rest_write",
+      "summary": "PUT /activity/sms/{id}/",
+      "description": "updates an SMS activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/activity/sms/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-sms-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/sms/{id}/",
+      "description": "deletes an SMS activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/sms/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-status-change-lead",
+      "kind": "rest_read",
+      "summary": "GET /activity/status_change/lead/",
+      "description": "typed LeadStatusChange-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/status_change/lead/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.activity-status-change-lead",
+      "kind": "rest_write",
+      "summary": "POST /activity/status_change/lead/",
+      "description": "creates a lead status-change activity record directly; the update_lead write already changes status_id and generates this activity as a side effect on the real Close backend",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activity/status_change/lead/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-status-change-lead-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/status_change/lead/{id}/",
+      "description": "single-status_change_lead-activity detail already reachable via the status_change_lead-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/status_change/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-status-change-lead-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/status_change/lead/{id}/",
+      "description": "deletes a lead status-change activity record; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/status_change/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-status-change-opportunity",
+      "kind": "rest_read",
+      "summary": "GET /activity/status_change/opportunity/",
+      "description": "typed OpportunityStatusChange-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/status_change/opportunity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.activity-status-change-opportunity",
+      "kind": "rest_write",
+      "summary": "POST /activity/status_change/opportunity/",
+      "description": "creates an opportunity status-change activity record directly; update_opportunity's status_id write already generates this as a side effect",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activity/status_change/opportunity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-status-change-opportunity-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/status_change/opportunity/{id}/",
+      "description": "single-status_change_opportunity-activity detail already reachable via the status_change_opportunity-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/status_change/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-status-change-opportunity-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/status_change/opportunity/{id}/",
+      "description": "deletes an opportunity status-change activity record; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/status_change/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-task-completed",
+      "kind": "rest_read",
+      "summary": "GET /activity/task_completed/",
+      "description": "typed TaskCompleted-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/task_completed/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-task-completed-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/task_completed/{id}/",
+      "description": "single-task_completed-activity detail already reachable via the task_completed-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/task_completed/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-task-completed-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/task_completed/{id}/",
+      "description": "deletes a task-completed activity record; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/task_completed/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-whatsapp-message",
+      "kind": "rest_read",
+      "summary": "GET /activity/whatsapp_message/",
+      "description": "typed WhatsAppMessage-activity listing; already visible in the base activities stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/whatsapp_message/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.activity-whatsapp-message",
+      "kind": "rest_write",
+      "summary": "POST /activity/whatsapp_message/",
+      "description": "sends/logs a WhatsApp message activity; messaging write, no demonstrated demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/activity/whatsapp_message/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.activity-whatsapp-message-id",
+      "kind": "rest_read",
+      "summary": "GET /activity/whatsapp_message/{id}/",
+      "description": "single-whatsapp_message-activity detail already reachable via the whatsapp_message-activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activity/whatsapp_message/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.activity-whatsapp-message-id",
+      "kind": "rest_write",
+      "summary": "PUT /activity/whatsapp_message/{id}/",
+      "description": "updates a WhatsApp message activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/activity/whatsapp_message/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.activity-whatsapp-message-id",
+      "kind": "rest_write",
+      "summary": "DELETE /activity/whatsapp_message/{id}/",
+      "description": "deletes a WhatsApp message activity; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activity/whatsapp_message/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.blocked-phone-number",
+      "kind": "rest_read",
+      "summary": "GET /blocked_phone_number/",
+      "description": "call-blocking configuration listing; account-security feature, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/blocked_phone_number/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.blocked-phone-number",
+      "kind": "rest_write",
+      "summary": "POST /blocked_phone_number/",
+      "description": "blocks a phone number; account-security configuration write, no demonstrated demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/blocked_phone_number/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.blocked-phone-number-settings",
+      "kind": "rest_read",
+      "summary": "GET /blocked_phone_number/settings/",
+      "description": "call-blocking settings; account-security configuration, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/blocked_phone_number/settings/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.blocked-phone-number-settings",
+      "kind": "rest_write",
+      "summary": "PUT /blocked_phone_number/settings/",
+      "description": "updates call-blocking settings; account-security configuration write, no demonstrated demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/blocked_phone_number/settings/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.blocked-phone-number-id",
+      "kind": "rest_read",
+      "summary": "GET /blocked_phone_number/{id}/",
+      "description": "single-blocked_phone_number detail already reachable via the blocked_phone_numbers stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/blocked_phone_number/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.blocked-phone-number-id",
+      "kind": "rest_write",
+      "summary": "PUT /blocked_phone_number/{id}/",
+      "description": "updates a blocked-phone-number entry; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/blocked_phone_number/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.blocked-phone-number-id",
+      "kind": "rest_write",
+      "summary": "DELETE /blocked_phone_number/{id}/",
+      "description": "unblocks a phone number; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/blocked_phone_number/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.bulk-action-delete",
+      "kind": "rest_read",
+      "summary": "GET /bulk_action/delete/",
+      "description": "bulk-action job listing; asynchronous batch-operation metadata, not a per-record data resource",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_action/delete/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.bulk-action-delete",
+      "kind": "rest_write",
+      "summary": "POST /bulk_action/delete/",
+      "description": "initiates an irreversible bulk delete of every record matching a saved search in one call",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bulk_action/delete/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.bulk-action-delete-id",
+      "kind": "rest_read",
+      "summary": "GET /bulk_action/delete/{id}/",
+      "description": "single-bulk_action_delete-job detail already reachable via the bulk_action_delete-jobs stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_action/delete/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.bulk-action-edit",
+      "kind": "rest_read",
+      "summary": "GET /bulk_action/edit/",
+      "description": "bulk-action job listing; asynchronous batch-operation metadata, not a per-record data resource",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_action/edit/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.bulk-action-edit",
+      "kind": "rest_write",
+      "summary": "POST /bulk_action/edit/",
+      "description": "initiates a bulk field edit across every record matching a saved search in one call",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bulk_action/edit/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.bulk-action-edit-id",
+      "kind": "rest_read",
+      "summary": "GET /bulk_action/edit/{id}/",
+      "description": "single-bulk_action_edit-job detail already reachable via the bulk_action_edit-jobs stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_action/edit/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.bulk-action-email",
+      "kind": "rest_read",
+      "summary": "GET /bulk_action/email/",
+      "description": "bulk-action job listing; asynchronous batch-operation metadata",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_action/email/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.bulk-action-email",
+      "kind": "rest_write",
+      "summary": "POST /bulk_action/email/",
+      "description": "initiates a bulk email send; messaging campaign write, no demonstrated demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bulk_action/email/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.bulk-action-email-id",
+      "kind": "rest_read",
+      "summary": "GET /bulk_action/email/{id}/",
+      "description": "single-bulk_action_email-job detail already reachable via the bulk_action_email-jobs stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_action/email/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.bulk-action-sequence-subscription",
+      "kind": "rest_read",
+      "summary": "GET /bulk_action/sequence_subscription/",
+      "description": "bulk-action job listing; asynchronous batch-operation metadata",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_action/sequence_subscription/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.bulk-action-sequence-subscription",
+      "kind": "rest_write",
+      "summary": "POST /bulk_action/sequence_subscription/",
+      "description": "bulk-subscribes many contacts to a sequence; sequence-automation write, no demonstrated demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bulk_action/sequence_subscription/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.bulk-action-sequence-subscription-id",
+      "kind": "rest_read",
+      "summary": "GET /bulk_action/sequence_subscription/{id}/",
+      "description": "single-bulk_action_sequence_subscription-job detail already reachable via the bulk_action_sequence_subscription-jobs stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk_action/sequence_subscription/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.comment",
+      "kind": "rest_read",
+      "summary": "GET /comment/",
+      "description": "internal team-collaboration comment listing; narrow collaboration-note resource, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/comment/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.comment",
+      "kind": "rest_write",
+      "summary": "POST /comment/",
+      "description": "creates a collaboration comment; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/comment/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.comment-id",
+      "kind": "rest_read",
+      "summary": "GET /comment/{id}/",
+      "description": "single-comment detail already reachable via the comments stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/comment/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.comment-id",
+      "kind": "rest_write",
+      "summary": "PUT /comment/{id}/",
+      "description": "updates a comment; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/comment/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.comment-id",
+      "kind": "rest_write",
+      "summary": "DELETE /comment/{id}/",
+      "description": "deletes a comment; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/comment/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.comment-thread",
+      "kind": "rest_read",
+      "summary": "GET /comment_thread/",
+      "description": "comment-thread listing; layered over the comment resource already out of scope above",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/comment_thread/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.comment-thread-id",
+      "kind": "rest_read",
+      "summary": "GET /comment_thread/{id}/",
+      "description": "single-comment_thread detail already reachable via the comment_threads stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/comment_thread/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.connected-account",
+      "kind": "rest_read",
+      "summary": "GET /connected_account/",
+      "description": "lists connected email/calendar/Zoom OAuth integrations; exposes third-party account-linkage metadata requiring elevated integration-management scope",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/connected_account/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.connected-account-id",
+      "kind": "rest_read",
+      "summary": "GET /connected_account/{id}/",
+      "description": "single-connected_account detail already reachable via the connected_accounts stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/connected_account/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.contact-id",
+      "kind": "rest_read",
+      "summary": "GET /contact/{id}/",
+      "description": "single-contact detail already reachable via the contacts stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contact/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-activity",
+      "kind": "rest_read",
+      "summary": "GET /custom_activity/",
+      "description": "custom-activity-TYPE-definition listing (org-level schema, not activity instances); no demonstrated read demand distinct from the base activities stream's own type discrimination",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_activity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-activity",
+      "kind": "rest_write",
+      "summary": "POST /custom_activity/",
+      "description": "creates a new custom-activity type; workspace-schema-configuration action, no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_activity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-activity-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_activity/{id}/",
+      "description": "single-custom_activity-type detail already reachable via the custom_activity-types stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_activity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-activity-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_activity/{id}/",
+      "description": "updates a custom-activity type; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_activity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-activity-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_activity/{id}/",
+      "description": "irreversibly deletes a custom-activity type and every activity instance of it",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_activity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-activity",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/activity/",
+      "description": "activity-level custom-field definitions; narrower analogue of the covered lead/contact/opportunity custom-field streams, deferred since activity custom fields are keyed per custom-activity-type (itself out of scope above)",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/activity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-field-activity",
+      "kind": "rest_write",
+      "summary": "POST /custom_field/activity/",
+      "description": "creates an activity custom-field definition; workspace-schema-configuration action, no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_field/activity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-activity-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/activity/{id}/",
+      "description": "single-custom_field_activity detail already reachable via the custom_field_activitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/activity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-field-activity-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_field/activity/{id}/",
+      "description": "updates an activity custom-field definition; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_field/activity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-field-activity-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_field/activity/{id}/",
+      "description": "irreversibly deletes an activity custom-field definition and all its recorded values",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_field/activity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-field-contact",
+      "kind": "rest_write",
+      "summary": "POST /custom_field/contact/",
+      "description": "creates a new contact custom-field DEFINITION; no demonstrated write demand alongside the read-only custom_fields_contact stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_field/contact/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/contact/{id}/",
+      "description": "single-custom_field_contact detail already reachable via the custom_field_contacts stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/contact/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-field-contact-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_field/contact/{id}/",
+      "description": "updates a contact custom-field definition; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_field/contact/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-field-contact-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_field/contact/{id}/",
+      "description": "irreversibly deletes a contact custom-field definition and all its recorded values",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_field/contact/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-custom-object-type",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/custom_object_type/",
+      "description": "custom-field definitions scoped to a specific Custom Object Type; Custom Objects themselves are out of scope below, so this is deferred with them",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/custom_object_type/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-field-custom-object-type",
+      "kind": "rest_write",
+      "summary": "POST /custom_field/custom_object_type/",
+      "description": "creates a custom-object custom-field definition; deferred alongside Custom Objects",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_field/custom_object_type/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-custom-object-type-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/custom_object_type/{id}/",
+      "description": "single-custom_field_custom_object_type detail already reachable via the custom_field_custom_object_types stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/custom_object_type/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-field-custom-object-type-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_field/custom_object_type/{id}/",
+      "description": "updates a custom-object custom-field definition; deferred alongside Custom Objects",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_field/custom_object_type/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-field-custom-object-type-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_field/custom_object_type/{id}/",
+      "description": "deletes a custom-object custom-field definition; deferred alongside Custom Objects",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_field/custom_object_type/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-field-lead",
+      "kind": "rest_write",
+      "summary": "POST /custom_field/lead/",
+      "description": "creates a new lead custom-field DEFINITION (workspace schema change); no demonstrated write demand alongside the read-only custom_fields_lead stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_field/lead/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-lead-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/lead/{id}/",
+      "description": "single-custom_field_lead detail already reachable via the custom_field_leads stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-field-lead-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_field/lead/{id}/",
+      "description": "updates a lead custom-field definition; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_field/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-field-lead-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_field/lead/{id}/",
+      "description": "irreversibly deletes a lead custom-field definition and all its recorded values",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_field/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-field-opportunity",
+      "kind": "rest_write",
+      "summary": "POST /custom_field/opportunity/",
+      "description": "creates a new opportunity custom-field DEFINITION; no demonstrated write demand alongside the read-only custom_fields_opportunity stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_field/opportunity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-opportunity-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/opportunity/{id}/",
+      "description": "single-custom_field_opportunity detail already reachable via the custom_field_opportunitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-field-opportunity-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_field/opportunity/{id}/",
+      "description": "updates an opportunity custom-field definition; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_field/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-field-opportunity-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_field/opportunity/{id}/",
+      "description": "irreversibly deletes an opportunity custom-field definition and all its recorded values",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_field/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-shared",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/shared/",
+      "description": "shared (cross-object) custom-field definition listing; narrower variant of the per-object custom-field streams already covered, no demonstrated additional read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/shared/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-field-shared",
+      "kind": "rest_write",
+      "summary": "POST /custom_field/shared/",
+      "description": "creates a shared custom-field definition; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_field/shared/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-shared-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/shared/{id}/",
+      "description": "single-custom_field_shared detail already reachable via the custom_field_shareds stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/shared/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-field-shared-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_field/shared/{id}/",
+      "description": "updates a shared custom-field definition; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_field/shared/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-field-shared-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_field/shared/{id}/",
+      "description": "irreversibly deletes a shared custom-field definition and all its recorded values across every associated object type",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_field/shared/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-field-shared-scf-id-association",
+      "kind": "rest_write",
+      "summary": "POST /custom_field/shared/{scf_id}/association/",
+      "description": "associates a shared custom field with an object type; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_field/shared/{scf_id}/association/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-shared-scf-id-association-object-type",
+      "kind": "rest_read",
+      "summary": "GET /custom_field/shared/{scf_id}/association/{object_type}/",
+      "description": "fetches a shared custom-field association; workspace-schema-configuration read, no demonstrated demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-field-shared-scf-id-association-object-type",
+      "kind": "rest_write",
+      "summary": "PUT /custom_field/shared/{scf_id}/association/{object_type}/",
+      "description": "updates a shared custom-field association; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-field-shared-scf-id-association-object-type",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_field/shared/{scf_id}/association/{object_type}/",
+      "description": "disassociates a shared custom field; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_field/shared/{scf_id}/association/{object_type}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-field-schema-object-type",
+      "kind": "rest_read",
+      "summary": "GET /custom_field_schema/{object_type}/",
+      "description": "retrieves the full custom-field SCHEMA (layout/ordering) for an object type; a workspace-configuration view over fields already covered individually via custom_field/\u003cobject\u003e",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_field_schema/{object_type}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-field-schema-object-type",
+      "kind": "rest_write",
+      "summary": "PUT /custom_field_schema/{object_type}/",
+      "description": "reorders/reconfigures a custom-field schema layout; workspace-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_field_schema/{object_type}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-object",
+      "kind": "rest_read",
+      "summary": "GET /custom_object/",
+      "description": "Custom Object instances are entirely user-defined shapes (a distinct schema per organization's own Custom Object Type configuration); no single dialect-expressible record_schema can be declared without per-organization introspection",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_object/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-object",
+      "kind": "rest_write",
+      "summary": "POST /custom_object/",
+      "description": "creates a Custom Object instance; deferred alongside the read decision above (undefined per-org schema)",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_object/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-object-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_object/{id}/",
+      "description": "single-custom_object detail already reachable via the custom_objects stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_object/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-object-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_object/{id}/",
+      "description": "updates a Custom Object instance; deferred alongside Custom Objects",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_object/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-object-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_object/{id}/",
+      "description": "deletes a Custom Object instance; deferred alongside Custom Objects",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_object/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-object-type",
+      "kind": "rest_read",
+      "summary": "GET /custom_object_type/",
+      "description": "Custom Object TYPE definitions (org-level schema); no demonstrated read demand distinct from the (also out-of-scope) instances themselves",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_object_type/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.custom-object-type",
+      "kind": "rest_write",
+      "summary": "POST /custom_object_type/",
+      "description": "creates a new Custom Object Type; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/custom_object_type/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.custom-object-type-id",
+      "kind": "rest_read",
+      "summary": "GET /custom_object_type/{id}/",
+      "description": "single-custom_object_type detail already reachable via the custom_object_types stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_object_type/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.custom-object-type-id",
+      "kind": "rest_write",
+      "summary": "PUT /custom_object_type/{id}/",
+      "description": "updates a Custom Object Type; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/custom_object_type/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.custom-object-type-id",
+      "kind": "rest_write",
+      "summary": "DELETE /custom_object_type/{id}/",
+      "description": "irreversibly deletes a Custom Object Type and every instance of it",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/custom_object_type/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.dialer",
+      "kind": "rest_read",
+      "summary": "GET /dialer/",
+      "description": "Power Dialer session listing; a premium telephony-add-on feature not enabled on every Close plan",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dialer/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.dialer-id",
+      "kind": "rest_read",
+      "summary": "GET /dialer/{id}/",
+      "description": "single-dialer detail already reachable via the dialers stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dialer/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.email-template",
+      "kind": "rest_read",
+      "summary": "GET /email_template/",
+      "description": "email-template listing; outbound-messaging configuration object, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/email_template/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.email-template",
+      "kind": "rest_write",
+      "summary": "POST /email_template/",
+      "description": "creates an email template; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/email_template/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.email-template-id",
+      "kind": "rest_read",
+      "summary": "GET /email_template/{id}/",
+      "description": "single-email_template detail already reachable via the email_templates stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/email_template/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.email-template-id",
+      "kind": "rest_write",
+      "summary": "PUT /email_template/{id}/",
+      "description": "updates an email template; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/email_template/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.email-template-id",
+      "kind": "rest_write",
+      "summary": "DELETE /email_template/{id}/",
+      "description": "deletes an email template; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/email_template/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.email-template-id-render",
+      "kind": "rest_read",
+      "summary": "GET /email_template/{id}/render/",
+      "description": "renders an email template against a lead/contact for preview; a computed-preview action, not a data listing",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/email_template/{id}/render/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.enrich-field",
+      "kind": "rest_write",
+      "summary": "POST /enrich_field/",
+      "description": "AI-powered field enrichment is a paid Close add-on feature with per-call billing; an imperative enrichment action, not ordinary record sync",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/enrich_field/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.event",
+      "kind": "rest_read",
+      "summary": "GET /event/",
+      "description": "30-day rolling audit-event log; a short-retention change-feed, not a stable syncable data resource (a scheduled sync could easily miss events between runs with no replay guarantee)",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/event/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.event-id",
+      "kind": "rest_read",
+      "summary": "GET /event/{id}/",
+      "description": "single-event detail already reachable via the events stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/event/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.export",
+      "kind": "rest_read",
+      "summary": "GET /export/",
+      "description": "lists asynchronous bulk-export JOBS (metadata about a background CSV/export process), not the exported data itself",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/export/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.export-lead",
+      "kind": "rest_read",
+      "summary": "GET /export/lead/",
+      "description": "lists lead-export job metadata, not lead records themselves (already covered by the leads stream)",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/export/lead/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.export-lead",
+      "kind": "rest_write",
+      "summary": "POST /export/lead/",
+      "description": "initiates an asynchronous bulk lead export job; the leads stream already provides equivalent data via ordinary paginated GET",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/export/lead/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.export-lead-id",
+      "kind": "rest_read",
+      "summary": "GET /export/lead/{id}/",
+      "description": "single lead-export job status/metadata, not record data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/export/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.export-opportunity",
+      "kind": "rest_read",
+      "summary": "GET /export/opportunity/",
+      "description": "lists opportunity-export job metadata, not opportunity records themselves (already covered by the opportunities stream)",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/export/opportunity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.export-opportunity",
+      "kind": "rest_write",
+      "summary": "POST /export/opportunity/",
+      "description": "initiates an asynchronous bulk opportunity export job; the opportunities stream already provides equivalent data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/export/opportunity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.export-opportunity-id",
+      "kind": "rest_read",
+      "summary": "GET /export/opportunity/{id}/",
+      "description": "single opportunity-export job status/metadata, not record data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/export/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.export-id",
+      "kind": "rest_read",
+      "summary": "GET /export/{id}/",
+      "description": "single export job status/metadata, not record data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/export/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.files-upload",
+      "kind": "rest_write",
+      "summary": "POST /files/upload/",
+      "description": "generates a signed S3 POST policy for a subsequent raw multipart file upload; no dialect-expressible binary-upload flow",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/files/upload/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.form",
+      "kind": "rest_read",
+      "summary": "GET /form/",
+      "description": "lead-capture web-form configuration listing; no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/form/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.form-id",
+      "kind": "rest_read",
+      "summary": "GET /form/{id}/",
+      "description": "single-form detail already reachable via the forms stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/form/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.group",
+      "kind": "rest_write",
+      "summary": "POST /group/",
+      "description": "creates a new user group; no demonstrated write demand alongside the read-only groups stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/group/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.group-group-id-member",
+      "kind": "rest_write",
+      "summary": "POST /group/{group_id}/member/",
+      "description": "adds a user to a group; access-control/membership-management action, admin-scoped",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/group/{group_id}/member/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.group-group-id-member-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /group/{group_id}/member/{user_id}/",
+      "description": "removes a user from a group; access-control/membership-management action, admin-scoped",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/group/{group_id}/member/{user_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.group-id",
+      "kind": "rest_read",
+      "summary": "GET /group/{id}/",
+      "description": "single-group detail already reachable via the groups stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/group/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.group-id",
+      "kind": "rest_write",
+      "summary": "PUT /group/{id}/",
+      "description": "updates a group's name/membership; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/group/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.group-id",
+      "kind": "rest_write",
+      "summary": "DELETE /group/{id}/",
+      "description": "deletes a group; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/group/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.integration-link",
+      "kind": "rest_read",
+      "summary": "GET /integration_link/",
+      "description": "third-party integration-link listing (e.g. linked external records); narrow integration-metadata resource, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration_link/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.integration-link",
+      "kind": "rest_write",
+      "summary": "POST /integration_link/",
+      "description": "creates an integration link; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/integration_link/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.integration-link-id",
+      "kind": "rest_read",
+      "summary": "GET /integration_link/{id}/",
+      "description": "single-integration_link detail already reachable via the integration_links stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration_link/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.integration-link-id",
+      "kind": "rest_write",
+      "summary": "PUT /integration_link/{id}/",
+      "description": "updates an integration link; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/integration_link/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.integration-link-id",
+      "kind": "rest_write",
+      "summary": "DELETE /integration_link/{id}/",
+      "description": "deletes an integration link; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/integration_link/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.lead-merge",
+      "kind": "rest_write",
+      "summary": "POST /lead/merge/",
+      "description": "irreversibly merges two leads into one, permanently discarding the duplicate's identity",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/lead/merge/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.lead-id",
+      "kind": "rest_read",
+      "summary": "GET /lead/{id}/",
+      "description": "single-lead detail already reachable via the leads stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.me",
+      "kind": "rest_read",
+      "summary": "GET /me/",
+      "description": "returns the authenticated user's own profile; a subset of the same fields already reachable via the users stream's own record for that user",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/me/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.membership",
+      "kind": "rest_write",
+      "summary": "POST /membership/",
+      "description": "creates an organization membership (invites/adds a user to the org); billing-seat-consuming admin action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/membership/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.membership",
+      "kind": "rest_write",
+      "summary": "PUT /membership/",
+      "description": "bulk-updates memberships; admin-scoped access-control action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/membership/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.membership-id",
+      "kind": "rest_write",
+      "summary": "PUT /membership/{id}/",
+      "description": "updates a membership's role/permissions; admin-scoped access-control action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/membership/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.membership-id",
+      "kind": "rest_write",
+      "summary": "DELETE /membership/{id}/",
+      "description": "irreversibly removes a user's membership/access to the organization; billing-seat/access-revocation admin action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/membership/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.membership-id-pinned-views",
+      "kind": "rest_read",
+      "summary": "GET /membership/{id}/pinned_views/",
+      "description": "per-user pinned-smart-view UI preference; not organizational data, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/membership/{id}/pinned_views/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.membership-id-pinned-views",
+      "kind": "rest_write",
+      "summary": "PUT /membership/{id}/pinned_views/",
+      "description": "updates a per-user UI preference; not organizational data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/membership/{id}/pinned_views/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.opportunity-id",
+      "kind": "rest_read",
+      "summary": "GET /opportunity/{id}/",
+      "description": "single-opportunity detail already reachable via the opportunitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.organization-id",
+      "kind": "rest_read",
+      "summary": "GET /organization/{id}/",
+      "description": "organization-level billing/plan/legal settings; admin-scoped account configuration, not per-record CRM data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/organization/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.organization-id",
+      "kind": "rest_write",
+      "summary": "PUT /organization/{id}/",
+      "description": "updates organization-wide billing/plan/legal settings; admin-scoped, blanket account-level mutation",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/organization/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.outcome",
+      "kind": "rest_read",
+      "summary": "GET /outcome/",
+      "description": "call/SMS disposition-outcome configuration listing; narrow taxonomy resource, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/outcome/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.outcome",
+      "kind": "rest_write",
+      "summary": "POST /outcome/",
+      "description": "creates a disposition outcome; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/outcome/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.outcome-id",
+      "kind": "rest_read",
+      "summary": "GET /outcome/{id}/",
+      "description": "single-outcome detail already reachable via the outcomes stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/outcome/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.outcome-id",
+      "kind": "rest_write",
+      "summary": "PUT /outcome/{id}/",
+      "description": "updates a disposition outcome; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/outcome/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.outcome-id",
+      "kind": "rest_write",
+      "summary": "DELETE /outcome/{id}/",
+      "description": "deletes a disposition outcome; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/outcome/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.phone-number",
+      "kind": "rest_read",
+      "summary": "GET /phone_number/",
+      "description": "organization's provisioned telephony phone-number inventory; telephony-admin-scoped resource, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/phone_number/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.phone-number-request-internal",
+      "kind": "rest_write",
+      "summary": "POST /phone_number/request/internal/",
+      "description": "provisions a new phone number, a billing-consuming telephony-admin action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/phone_number/request/internal/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.phone-number-id",
+      "kind": "rest_read",
+      "summary": "GET /phone_number/{id}/",
+      "description": "single-phone_number detail already reachable via the phone_numbers stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/phone_number/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.phone-number-id",
+      "kind": "rest_write",
+      "summary": "PUT /phone_number/{id}/",
+      "description": "reconfigures a provisioned phone number; telephony-admin action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/phone_number/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.phone-number-id",
+      "kind": "rest_write",
+      "summary": "DELETE /phone_number/{id}/",
+      "description": "irreversibly releases a provisioned phone number",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/phone_number/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.pipeline",
+      "kind": "rest_write",
+      "summary": "POST /pipeline/",
+      "description": "creates a new pipeline; workspace-schema-configuration action, no demonstrated write demand alongside the read-only pipelines stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/pipeline/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.pipeline-id",
+      "kind": "rest_read",
+      "summary": "GET /pipeline/{id}/",
+      "description": "single-pipeline detail already reachable via the pipelines stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pipeline/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.pipeline-id",
+      "kind": "rest_write",
+      "summary": "PUT /pipeline/{id}/",
+      "description": "updates a pipeline's stages/name; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/pipeline/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.pipeline-id",
+      "kind": "rest_write",
+      "summary": "DELETE /pipeline/{id}/",
+      "description": "irreversibly deletes a pipeline and detaches every opportunity that referenced its statuses",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/pipeline/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.playbook",
+      "kind": "rest_read",
+      "summary": "GET /playbook/",
+      "description": "sales-playbook (guided sequence) configuration listing; no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/playbook/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.playbook",
+      "kind": "rest_write",
+      "summary": "POST /playbook/",
+      "description": "creates a playbook; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/playbook/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.playbook-id",
+      "kind": "rest_read",
+      "summary": "GET /playbook/{id}/",
+      "description": "single-playbook detail already reachable via the playbooks stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/playbook/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.playbook-id",
+      "kind": "rest_write",
+      "summary": "PUT /playbook/{id}/",
+      "description": "updates a playbook; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/playbook/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.playbook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /playbook/{id}/",
+      "description": "deletes a playbook; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/playbook/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.playbook-id-archive",
+      "kind": "rest_write",
+      "summary": "POST /playbook/{id}/archive/",
+      "description": "archives a playbook; narrow status-toggle action, no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/playbook/{id}/archive/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.playbook-id-unarchive",
+      "kind": "rest_write",
+      "summary": "POST /playbook/{id}/unarchive/",
+      "description": "unarchives a playbook; narrow status-toggle action, no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/playbook/{id}/unarchive/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.report-activity",
+      "kind": "rest_write",
+      "summary": "POST /report/activity/",
+      "description": "generates an aggregated activity-metrics report document, not a listing of underlying activity records (already covered by the activities stream)",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/report/activity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.report-activity-metrics",
+      "kind": "rest_read",
+      "summary": "GET /report/activity/metrics/",
+      "description": "lists the predefined metric NAMES usable in activity reports; report-configuration metadata, not record data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/report/activity/metrics/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.report-custom-org-id",
+      "kind": "rest_read",
+      "summary": "GET /report/custom/{org_id}/",
+      "description": "generates a custom Explorer report document, not a record listing",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/report/custom/{org_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.report-funnel-opportunity-stages",
+      "kind": "rest_write",
+      "summary": "POST /report/funnel/opportunity/stages/",
+      "description": "generates an aggregated funnel-by-stage report document, not a record listing",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/report/funnel/opportunity/stages/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.report-funnel-opportunity-totals",
+      "kind": "rest_write",
+      "summary": "POST /report/funnel/opportunity/totals/",
+      "description": "generates an aggregated funnel-totals report document, not a record listing",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/report/funnel/opportunity/totals/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.report-sent-emails-org-id",
+      "kind": "rest_read",
+      "summary": "GET /report/sent_emails/{org_id}/",
+      "description": "generates an aggregated sent-emails report document, not a record listing",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/report/sent_emails/{org_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.report-statuses-lead-org-id",
+      "kind": "rest_read",
+      "summary": "GET /report/statuses/lead/{org_id}/",
+      "description": "generates an aggregated lead status-change report document; the underlying events are already covered by the activities stream's LeadStatusChange activity type",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/report/statuses/lead/{org_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.report-statuses-opportunity-org-id",
+      "kind": "rest_read",
+      "summary": "GET /report/statuses/opportunity/{org_id}/",
+      "description": "generates an aggregated opportunity status-change report document; the underlying events are already covered by the activities stream's OpportunityStatusChange activity type",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/report/statuses/opportunity/{org_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.role",
+      "kind": "rest_write",
+      "summary": "POST /role/",
+      "description": "creates a new permission role; access-control-configuration admin action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/role/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.role-id",
+      "kind": "rest_read",
+      "summary": "GET /role/{id}/",
+      "description": "single-role detail already reachable via the roles stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/role/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.role-id",
+      "kind": "rest_write",
+      "summary": "PUT /role/{id}/",
+      "description": "updates a permission role's grants; access-control-configuration admin action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/role/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.role-id",
+      "kind": "rest_write",
+      "summary": "DELETE /role/{id}/",
+      "description": "deletes a permission role; access-control-configuration admin action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/role/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.saved-search",
+      "kind": "rest_read",
+      "summary": "GET /saved_search/",
+      "description": "Smart View (saved search query) listing; a per-user UI configuration object, not CRM record data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/saved_search/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.saved-search",
+      "kind": "rest_write",
+      "summary": "POST /saved_search/",
+      "description": "creates a Smart View; per-user UI configuration, no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/saved_search/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.saved-search-id",
+      "kind": "rest_read",
+      "summary": "GET /saved_search/{id}/",
+      "description": "single-saved_search detail already reachable via the saved_searchs stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/saved_search/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.saved-search-id",
+      "kind": "rest_write",
+      "summary": "PUT /saved_search/{id}/",
+      "description": "updates a Smart View; per-user UI configuration",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/saved_search/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.saved-search-id",
+      "kind": "rest_write",
+      "summary": "DELETE /saved_search/{id}/",
+      "description": "deletes a Smart View; per-user UI configuration",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/saved_search/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.scheduling-link",
+      "kind": "rest_read",
+      "summary": "GET /scheduling_link/",
+      "description": "user meeting-scheduling-link configuration listing; no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scheduling_link/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.scheduling-link",
+      "kind": "rest_write",
+      "summary": "POST /scheduling_link/",
+      "description": "creates a scheduling link; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/scheduling_link/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.scheduling-link-integration",
+      "kind": "rest_write",
+      "summary": "POST /scheduling_link/integration/",
+      "description": "creates/updates a scheduling link via an external OAuth calendar integration; third-party-integration-scoped action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/scheduling_link/integration/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.scheduling-link-integration-source-id",
+      "kind": "rest_write",
+      "summary": "DELETE /scheduling_link/integration/{source_id}/",
+      "description": "deletes an OAuth-integration-backed scheduling link; third-party-integration-scoped action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/scheduling_link/integration/{source_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.scheduling-link-id",
+      "kind": "rest_read",
+      "summary": "GET /scheduling_link/{id}/",
+      "description": "single-scheduling_link detail already reachable via the scheduling_links stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scheduling_link/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.scheduling-link-id",
+      "kind": "rest_write",
+      "summary": "PUT /scheduling_link/{id}/",
+      "description": "updates a scheduling link; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/scheduling_link/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.scheduling-link-id",
+      "kind": "rest_write",
+      "summary": "DELETE /scheduling_link/{id}/",
+      "description": "deletes a scheduling link; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/scheduling_link/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.send-as",
+      "kind": "rest_read",
+      "summary": "GET /send_as/",
+      "description": "Send-As email-alias association listing; narrow email-configuration resource, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/send_as/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.send-as",
+      "kind": "rest_write",
+      "summary": "POST /send_as/",
+      "description": "creates a Send-As association; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/send_as/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.send-as",
+      "kind": "rest_write",
+      "summary": "DELETE /send_as/",
+      "description": "deletes a Send-As association by allowed user; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/send_as/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.send-as-bulk",
+      "kind": "rest_write",
+      "summary": "POST /send_as/bulk/",
+      "description": "bulk-edits Send-As associations; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/send_as/bulk/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.send-as-id",
+      "kind": "rest_read",
+      "summary": "GET /send_as/{id}/",
+      "description": "single-send_as detail already reachable via the send_ass stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/send_as/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.send-as-id",
+      "kind": "rest_write",
+      "summary": "DELETE /send_as/{id}/",
+      "description": "deletes a Send-As association by id; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/send_as/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.sequence",
+      "kind": "rest_read",
+      "summary": "GET /sequence/",
+      "description": "email/SMS drip-sequence configuration listing; sales-automation configuration object, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequence/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.sequence",
+      "kind": "rest_write",
+      "summary": "POST /sequence/",
+      "description": "creates a sequence; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequence/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.sequence-id",
+      "kind": "rest_read",
+      "summary": "GET /sequence/{id}/",
+      "description": "single-sequence detail already reachable via the sequences stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequence/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.sequence-id",
+      "kind": "rest_write",
+      "summary": "PUT /sequence/{id}/",
+      "description": "updates a sequence; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sequence/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.sequence-id",
+      "kind": "rest_write",
+      "summary": "DELETE /sequence/{id}/",
+      "description": "deletes a sequence; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sequence/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.sequence-subscription",
+      "kind": "rest_read",
+      "summary": "GET /sequence_subscription/",
+      "description": "sequence-subscription listing; sales-automation state, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequence_subscription/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.sequence-subscription",
+      "kind": "rest_write",
+      "summary": "POST /sequence_subscription/",
+      "description": "subscribes a contact to a sequence; sales-automation-trigger action, not ordinary record sync",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequence_subscription/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.sequence-subscription-id",
+      "kind": "rest_read",
+      "summary": "GET /sequence_subscription/{id}/",
+      "description": "single-sequence_subscription detail already reachable via the sequence_subscriptions stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequence_subscription/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.sequence-subscription-id",
+      "kind": "rest_write",
+      "summary": "PUT /sequence_subscription/{id}/",
+      "description": "updates a sequence subscription; sales-automation action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sequence_subscription/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.sequence-subscription-id",
+      "kind": "rest_write",
+      "summary": "DELETE /sequence_subscription/{id}/",
+      "description": "unsubscribes/deletes a sequence subscription; sales-automation action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sequence_subscription/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.shared-scheduling-link",
+      "kind": "rest_read",
+      "summary": "GET /shared_scheduling_link/",
+      "description": "team-shared scheduling-link configuration listing; no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shared_scheduling_link/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.shared-scheduling-link",
+      "kind": "rest_write",
+      "summary": "POST /shared_scheduling_link/",
+      "description": "creates a shared scheduling link; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/shared_scheduling_link/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.shared-scheduling-link-id",
+      "kind": "rest_read",
+      "summary": "GET /shared_scheduling_link/{id}/",
+      "description": "single-shared_scheduling_link detail already reachable via the shared_scheduling_links stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shared_scheduling_link/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.shared-scheduling-link-id",
+      "kind": "rest_write",
+      "summary": "PUT /shared_scheduling_link/{id}/",
+      "description": "updates a shared scheduling link; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/shared_scheduling_link/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.shared-scheduling-link-id",
+      "kind": "rest_write",
+      "summary": "DELETE /shared_scheduling_link/{id}/",
+      "description": "deletes a shared scheduling link; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/shared_scheduling_link/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.shared-scheduling-link-association",
+      "kind": "rest_write",
+      "summary": "POST /shared_scheduling_link_association/",
+      "description": "maps a shared scheduling link to a user; configuration action, no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/shared_scheduling_link_association/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.shared-scheduling-link-association-unmap",
+      "kind": "rest_write",
+      "summary": "POST /shared_scheduling_link_association/unmap/",
+      "description": "unmaps a shared scheduling link from a user; configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/shared_scheduling_link_association/unmap/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.sms-template",
+      "kind": "rest_read",
+      "summary": "GET /sms_template/",
+      "description": "SMS-template listing; outbound-messaging configuration, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms_template/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.sms-template",
+      "kind": "rest_write",
+      "summary": "POST /sms_template/",
+      "description": "creates an SMS template; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sms_template/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.sms-template-id",
+      "kind": "rest_read",
+      "summary": "GET /sms_template/{id}/",
+      "description": "single-sms_template detail already reachable via the sms_templates stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms_template/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.sms-template-id",
+      "kind": "rest_write",
+      "summary": "PUT /sms_template/{id}/",
+      "description": "updates an SMS template; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sms_template/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.sms-template-id",
+      "kind": "rest_write",
+      "summary": "DELETE /sms_template/{id}/",
+      "description": "deletes an SMS template; no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sms_template/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.status-lead",
+      "kind": "rest_write",
+      "summary": "POST /status/lead/",
+      "description": "creates a new lead status; workspace-schema-configuration action, no demonstrated write demand alongside the read-only lead_statuses stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/status/lead/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.status-lead-id",
+      "kind": "rest_read",
+      "summary": "GET /status/lead/{id}/",
+      "description": "single-status_lead detail already reachable via the status_leads stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/status/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.status-lead-id",
+      "kind": "rest_write",
+      "summary": "PUT /status/lead/{id}/",
+      "description": "renames a lead status; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/status/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.status-lead-id",
+      "kind": "rest_write",
+      "summary": "DELETE /status/lead/{id}/",
+      "description": "irreversibly deletes a lead status; every lead currently on it loses a valid status_id",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/status/lead/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.status-opportunity",
+      "kind": "rest_write",
+      "summary": "POST /status/opportunity/",
+      "description": "creates a new opportunity status; workspace-schema-configuration action, no demonstrated write demand alongside the read-only opportunity_statuses stream",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/status/opportunity/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.status-opportunity-id",
+      "kind": "rest_read",
+      "summary": "GET /status/opportunity/{id}/",
+      "description": "single-status_opportunity detail already reachable via the status_opportunitys stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/status/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.status-opportunity-id",
+      "kind": "rest_write",
+      "summary": "PUT /status/opportunity/{id}/",
+      "description": "renames an opportunity status; workspace-schema-configuration action",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/status/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.status-opportunity-id",
+      "kind": "rest_write",
+      "summary": "DELETE /status/opportunity/{id}/",
+      "description": "irreversibly deletes an opportunity status; every opportunity currently on it loses a valid status_id",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/status/opportunity/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.task",
+      "kind": "rest_write",
+      "summary": "PUT /task/",
+      "description": "bulk-updates every task matching a filter in one call; no per-record targeting, higher blast radius than the covered single-task update_task write",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/task/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.task-id",
+      "kind": "rest_read",
+      "summary": "GET /task/{id}/",
+      "description": "single-task detail already reachable via the tasks stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/task/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.unsubscribe-email",
+      "kind": "rest_read",
+      "summary": "GET /unsubscribe/email/",
+      "description": "unsubscribed-email-address listing; email-compliance configuration, no demonstrated read demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/unsubscribe/email/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.unsubscribe-email",
+      "kind": "rest_write",
+      "summary": "POST /unsubscribe/email/",
+      "description": "unsubscribes an email address; email-compliance action, no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/unsubscribe/email/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.unsubscribe-email-email-address",
+      "kind": "rest_write",
+      "summary": "DELETE /unsubscribe/email/{email_address}/",
+      "description": "resubscribes an email address; email-compliance action, no demonstrated write demand",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/unsubscribe/email/{email_address}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.user-availability",
+      "kind": "rest_read",
+      "summary": "GET /user/availability/",
+      "description": "per-user live availability-status listing; a real-time presence signal, not stable syncable record data",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user/availability/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.user-id",
+      "kind": "rest_read",
+      "summary": "GET /user/{id}/",
+      "description": "single-user detail already reachable via the users stream's listing; no separate stream needed for one extra fetch shape",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/user/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.webhook",
+      "kind": "rest_read",
+      "summary": "GET /webhook/",
+      "description": "webhook subscription management; push-delivery configuration, not a pollable data resource this connector's pull-sync model reads",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhook/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.post.webhook",
+      "kind": "rest_write",
+      "summary": "POST /webhook/",
+      "description": "creates a webhook subscription; not applicable to this connector's pull-sync model",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhook/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.get.webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /webhook/{id}/",
+      "description": "webhook subscription detail; not applicable to this connector's pull-sync model",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhook/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.put.webhook-id",
+      "kind": "rest_write",
+      "summary": "PUT /webhook/{id}/",
+      "description": "updates a webhook subscription; not applicable to this connector's pull-sync model",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/webhook/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "close-com.delete.webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhook/{id}/",
+      "description": "deletes a webhook subscription; not applicable to this connector's pull-sync model",
+      "source_url": "https://developer.close.com/openapi/api-endpoints.yaml",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhook/{id}/",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

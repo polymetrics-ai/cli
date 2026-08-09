@@ -1,75 +1,1575 @@
 {
-  "api": "Shippo REST API (https://docs.goshippo.com/docs/intro)",
+  "api": "Shippo REST API (https://docs.goshippo.com/docs/intro); provider artifact version: Shippo external API OpenAPI 3.1.0; info.version 2018-02-08",
   "docs": "https://docs.goshippo.com/docs/intro",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (addresses, parcels, shipments, transactions); the full Shippo surface (rates, tracking, refunds, customs items, batches, orders) is out of scope outside this connector's current declared surface. Shippo is read-only in legacy (Capabilities.Write is false) so no writes.json is shipped.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (73 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "shippo-artifact-2026-08-09",
+      "url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+      "kind": "openapi",
+      "version": "3.1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/addresses",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/addresses\"].get"
+      },
       "covered_by": {
         "stream": "addresses"
       }
     },
     {
+      "method": "POST",
+      "path": "/addresses",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/addresses\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/addresses/{AddressId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/addresses/{AddressId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/addresses/{AddressId}/validate",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/addresses/{AddressId}/validate\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/batches\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/batches/{BatchId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/batches/{BatchId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches/{BatchId}/add_shipments",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/batches/{BatchId}/add_shipments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches/{BatchId}/purchase",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/batches/{BatchId}/purchase\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/batches/{BatchId}/remove_shipments",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/batches/{BatchId}/remove_shipments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carrier_accounts",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/carrier_accounts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/carrier_accounts",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/carrier_accounts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carrier_accounts/reg-status",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/carrier_accounts/reg-status\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/carrier_accounts/register/new",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/carrier_accounts/register/new\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carrier_accounts/{CarrierAccountId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/carrier_accounts/{CarrierAccountId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/carrier_accounts/{CarrierAccountId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/carrier_accounts/{CarrierAccountId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carrier_accounts/{CarrierAccountObjectId}/signin/initiate",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/carrier_accounts/{CarrierAccountObjectId}/signin/initiate\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customs/declarations",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/customs/declarations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customs/declarations",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/customs/declarations\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customs/declarations/{CustomsDeclarationId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/customs/declarations/{CustomsDeclarationId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customs/items",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/customs/items\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customs/items",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/customs/items\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customs/items/{CustomsItemId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/customs/items/{CustomsItemId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/live-rates",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/live-rates\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/live-rates/settings/parcel-template",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/live-rates/settings/parcel-template\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/live-rates/settings/parcel-template",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/live-rates/settings/parcel-template\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/live-rates/settings/parcel-template",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/live-rates/settings/parcel-template\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/manifests",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/manifests\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/manifests",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/manifests\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/manifests/{ManifestId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/manifests/{ManifestId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/orders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/orders",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/orders\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/orders/{OrderId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/orders/{OrderId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/parcel-templates",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/parcel-templates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/parcel-templates/{CarrierParcelTemplateToken}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/parcel-templates/{CarrierParcelTemplateToken}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
       "method": "GET",
       "path": "/parcels",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/parcels\"].get"
+      },
       "covered_by": {
         "stream": "parcels"
       }
     },
     {
+      "method": "POST",
+      "path": "/parcels",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/parcels\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/parcels/{ParcelId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/parcels/{ParcelId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/pickups",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/pickups\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rates/{RateId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/rates/{RateId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/refunds",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "Shippo external API OpenAPI 3.1.0; info.version 2018-02-08",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "existing-surface[GET /refunds]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/refunds",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/refunds\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/refunds/",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/refunds/\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/refunds/{RefundId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/refunds/{RefundId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/service-groups",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/service-groups\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/service-groups",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/service-groups\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/service-groups",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/service-groups\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/service-groups/{ServiceGroupId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/service-groups/{ServiceGroupId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/shipments",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/shipments\"].get"
+      },
       "covered_by": {
         "stream": "shipments"
       }
     },
     {
+      "method": "POST",
+      "path": "/shipments",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/shipments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy connector never implemented shipment creation; not implemented in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipments/{ShipmentId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/shipments/{ShipmentId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipments/{ShipmentId}/rates",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/shipments/{ShipmentId}/rates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shipments/{ShipmentId}/rates/{CurrencyCode}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/shipments/{ShipmentId}/rates/{CurrencyCode}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shippo-accounts",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/shippo-accounts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shippo-accounts",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/shippo-accounts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shippo-accounts/{ShippoAccountId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/shippo-accounts/{ShippoAccountId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shippo-accounts/{ShippoAccountId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/shippo-accounts/{ShippoAccountId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tracks",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/tracks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracks/{Carrier}/{TrackingNumber}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/tracks/{Carrier}/{TrackingNumber}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tracks/{carrier}/{tracking_number}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "Shippo external API OpenAPI 3.1.0; info.version 2018-02-08",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "existing-surface[GET /tracks/{carrier}/{tracking_number}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
       "method": "GET",
       "path": "/transactions",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/transactions\"].get"
+      },
       "covered_by": {
         "stream": "transactions"
       }
     },
     {
       "method": "POST",
-      "path": "/shipments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented shipment creation; not implemented in this bundle"
+      "path": "/transactions",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/transactions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy connector never implemented label purchasing; not implemented in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/transactions/{TransactionId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/transactions/{TransactionId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/user-parcel-templates",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/user-parcel-templates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/transactions",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented label purchasing; not implemented in this bundle"
+      "path": "/user-parcel-templates",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/user-parcel-templates\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/tracks/{carrier}/{tracking_number}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/user-parcel-templates/{UserParcelTemplateObjectId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/user-parcel-templates/{UserParcelTemplateObjectId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/user-parcel-templates/{UserParcelTemplateObjectId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/user-parcel-templates/{UserParcelTemplateObjectId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/user-parcel-templates/{UserParcelTemplateObjectId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/user-parcel-templates/{UserParcelTemplateObjectId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/refunds",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/webhooks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/webhooks",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/webhooks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/customs/items",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope"
+      "path": "/webhooks/{webhookId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/webhooks/{webhookId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/webhooks/{webhookId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/webhooks/{webhookId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/webhooks/{webhookId}",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "paths[\"/webhooks/{webhookId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "batch#POST",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "webhooks[\"batch\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+        "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "track#POST",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "webhooks[\"track\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+        "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "transaction#POST",
+      "provenance": {
+        "artifact": "shippo-artifact-2026-08-09",
+        "source_url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9",
+        "coordinate": "webhooks[\"transaction\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+        "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
       }
     }
   ]

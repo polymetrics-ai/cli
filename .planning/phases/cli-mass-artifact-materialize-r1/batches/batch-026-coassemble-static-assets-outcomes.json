@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "batch": "batch-026-coassemble-static-assets-retry",
+  "manifest": "batches/batch-023-root-manifest.json",
+  "source_materialize": "batches/batch-026-coassemble-static-assets-materialize.json",
+  "outcomes": [
+    {
+      "connector": "coassemble",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-026-coassemble-static-assets-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 3 operation(s), below the ledger's 52"
+    }
+  ]
+}

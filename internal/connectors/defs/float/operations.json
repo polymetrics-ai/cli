@@ -1,0 +1,1544 @@
+{
+  "operations": [
+    {
+      "id": "float.get.accounts",
+      "kind": "rest_read",
+      "summary": "GET /accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/accounts.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.accounts-account-id",
+      "kind": "rest_read",
+      "summary": "GET /accounts/{account_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/accounts.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/accounts/{account_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.allocations",
+      "kind": "rest_read",
+      "summary": "GET /allocations",
+      "description": "scheduling/allocation data not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/allocations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.clients",
+      "kind": "rest_write",
+      "summary": "POST /clients",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/clients.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/clients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.clients-client-id",
+      "kind": "rest_read",
+      "summary": "GET /clients/{client_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/clients.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/clients/{client_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.clients-client-id",
+      "kind": "rest_write",
+      "summary": "PATCH /clients/{client_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/clients.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/clients/{client_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.clients-client-id",
+      "kind": "rest_write",
+      "summary": "DELETE /clients/{client_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/clients.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/clients/{client_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.currencies",
+      "kind": "rest_read",
+      "summary": "GET /currencies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/currencies.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/currencies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.currencies",
+      "kind": "rest_write",
+      "summary": "POST /currencies",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/currencies.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/currencies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.currencies-currency-id",
+      "kind": "rest_read",
+      "summary": "GET /currencies/{currency_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/currencies.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/currencies/{currency_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.currencies-currency-id",
+      "kind": "rest_write",
+      "summary": "PATCH /currencies/{currency_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/currencies.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/currencies/{currency_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.currencies-currency-id",
+      "kind": "rest_write",
+      "summary": "DELETE /currencies/{currency_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/currencies.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/currencies/{currency_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.deleted-logged-time",
+      "kind": "rest_read",
+      "summary": "GET /deleted/logged-time",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/deleted.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deleted/logged-time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.deleted-tasks",
+      "kind": "rest_read",
+      "summary": "GET /deleted/tasks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/deleted.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deleted/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.deleted-timeoffs",
+      "kind": "rest_read",
+      "summary": "GET /deleted/timeoffs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/deleted.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deleted/timeoffs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.departments",
+      "kind": "rest_write",
+      "summary": "POST /departments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/departments.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/departments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.departments-department-id",
+      "kind": "rest_read",
+      "summary": "GET /departments/{department_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/departments.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/departments/{department_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.departments-department-id",
+      "kind": "rest_write",
+      "summary": "PATCH /departments/{department_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/departments.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/departments/{department_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.departments-department-id",
+      "kind": "rest_write",
+      "summary": "DELETE /departments/{department_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/departments.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/departments/{department_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.holidays",
+      "kind": "rest_read",
+      "summary": "GET /holidays",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/holidays.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/holidays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.holidays",
+      "kind": "rest_write",
+      "summary": "POST /holidays",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/holidays.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/holidays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.holidays-holiday-id",
+      "kind": "rest_read",
+      "summary": "GET /holidays/{holiday_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/holidays.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/holidays/{holiday_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.holidays-holiday-id",
+      "kind": "rest_write",
+      "summary": "PATCH /holidays/{holiday_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/holidays.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/holidays/{holiday_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.holidays-holiday-id",
+      "kind": "rest_write",
+      "summary": "DELETE /holidays/{holiday_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/holidays.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/holidays/{holiday_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.logged-time",
+      "kind": "rest_read",
+      "summary": "GET /logged-time",
+      "description": "timesheet data not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/logged-time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.logged-time",
+      "kind": "rest_write",
+      "summary": "POST /logged-time",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/logged-time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.logged-time-logged-time-id",
+      "kind": "rest_read",
+      "summary": "GET /logged-time/{logged_time_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/logged-time/{logged_time_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.logged-time-logged-time-id",
+      "kind": "rest_write",
+      "summary": "PATCH /logged-time/{logged_time_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/logged-time/{logged_time_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.logged-time-logged-time-id",
+      "kind": "rest_write",
+      "summary": "DELETE /logged-time/{logged_time_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/logged-time/{logged_time_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.milestones",
+      "kind": "rest_read",
+      "summary": "GET /milestones",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/milestones.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.milestones",
+      "kind": "rest_write",
+      "summary": "POST /milestones",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/milestones.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/milestones",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.milestones-milestone-id",
+      "kind": "rest_read",
+      "summary": "GET /milestones/{milestone_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/milestones.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/milestones/{milestone_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.milestones-milestone-id",
+      "kind": "rest_write",
+      "summary": "PATCH /milestones/{milestone_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/milestones.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/milestones/{milestone_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.milestones-milestone-id",
+      "kind": "rest_write",
+      "summary": "DELETE /milestones/{milestone_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/milestones.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/milestones/{milestone_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.people",
+      "kind": "rest_write",
+      "summary": "POST /people",
+      "description": "legacy connector never implemented people writes; not implemented in this bundle",
+      "source_url": "https://developer.float.com/paths/people.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/people",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.people-people-id",
+      "kind": "rest_read",
+      "summary": "GET /people/{people_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/people.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/people/{people_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.people-people-id",
+      "kind": "rest_write",
+      "summary": "PATCH /people/{people_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/people.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/people/{people_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.people-people-id",
+      "kind": "rest_write",
+      "summary": "DELETE /people/{people_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/people.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/people/{people_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.phases",
+      "kind": "rest_read",
+      "summary": "GET /phases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/phases.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/phases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.phases",
+      "kind": "rest_write",
+      "summary": "POST /phases",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/phases.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/phases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.phases-phase-id",
+      "kind": "rest_read",
+      "summary": "GET /phases/{phase_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/phases.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/phases/{phase_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.phases-phase-id",
+      "kind": "rest_write",
+      "summary": "PATCH /phases/{phase_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/phases.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/phases/{phase_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.phases-phase-id",
+      "kind": "rest_write",
+      "summary": "DELETE /phases/{phase_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/phases.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/phases/{phase_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.project-expenses",
+      "kind": "rest_read",
+      "summary": "GET /project-expenses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project-expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.project-expenses",
+      "kind": "rest_write",
+      "summary": "POST /project-expenses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/project-expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.project-expenses-project-expense-id",
+      "kind": "rest_read",
+      "summary": "GET /project-expenses/{project_expense_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project-expenses/{project_expense_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.project-expenses-project-expense-id",
+      "kind": "rest_write",
+      "summary": "PATCH /project-expenses/{project_expense_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/project-expenses/{project_expense_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.project-expenses-project-expense-id",
+      "kind": "rest_write",
+      "summary": "DELETE /project-expenses/{project_expense_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/project-expenses/{project_expense_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.project-stages",
+      "kind": "rest_read",
+      "summary": "GET /project-stages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/project-stages.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project-stages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.project-stages",
+      "kind": "rest_write",
+      "summary": "POST /project-stages",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/project-stages.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/project-stages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.project-stages-id",
+      "kind": "rest_read",
+      "summary": "GET /project-stages/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/project-stages.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project-stages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.project-stages-id",
+      "kind": "rest_write",
+      "summary": "PATCH /project-stages/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/project-stages.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/project-stages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.project-stages-id",
+      "kind": "rest_write",
+      "summary": "DELETE /project-stages/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/project-stages.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/project-stages/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.project-tasks",
+      "kind": "rest_read",
+      "summary": "GET /project-tasks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project-tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.project-tasks",
+      "kind": "rest_write",
+      "summary": "POST /project-tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/project-tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.project-tasks-merge",
+      "kind": "rest_write",
+      "summary": "POST /project-tasks/merge",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/project-tasks/merge",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.project-tasks-project-task-id",
+      "kind": "rest_read",
+      "summary": "GET /project-tasks/{project_task_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project-tasks/{project_task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.project-tasks-project-task-id",
+      "kind": "rest_write",
+      "summary": "PATCH /project-tasks/{project_task_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/project-tasks/{project_task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.project-tasks-project-task-id",
+      "kind": "rest_write",
+      "summary": "DELETE /project-tasks/{project_task_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/project-tasks/{project_task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.project-templates",
+      "kind": "rest_read",
+      "summary": "GET /project-templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/project-templates.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project-templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.project-templates-project-template-id",
+      "kind": "rest_read",
+      "summary": "GET /project-templates/{project_template_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/project-templates.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/project-templates/{project_template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.projects",
+      "kind": "rest_write",
+      "summary": "POST /projects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/projects.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.projects-from-template-project-template-id",
+      "kind": "rest_write",
+      "summary": "POST /projects/from-template/{project_template_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/project-templates.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/projects/from-template/{project_template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.projects-project-id",
+      "kind": "rest_read",
+      "summary": "GET /projects/{project_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/projects.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/projects/{project_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.projects-project-id",
+      "kind": "rest_write",
+      "summary": "PATCH /projects/{project_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/projects.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/projects/{project_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.projects-project-id",
+      "kind": "rest_write",
+      "summary": "DELETE /projects/{project_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/projects.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/projects/{project_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.public-holidays",
+      "kind": "rest_read",
+      "summary": "GET /public-holidays",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/publicholidays.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/public-holidays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.public-holidays-public-holiday-id",
+      "kind": "rest_read",
+      "summary": "GET /public-holidays/{public_holiday_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/publicholidays.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/public-holidays/{public_holiday_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.rate-cards",
+      "kind": "rest_read",
+      "summary": "GET /rate-cards",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rate-cards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.rate-cards",
+      "kind": "rest_write",
+      "summary": "POST /rate-cards",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/rate-cards",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.rate-cards-rate-card-id",
+      "kind": "rest_read",
+      "summary": "GET /rate-cards/{rate_card_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/rate-cards/{rate_card_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.rate-cards-rate-card-id",
+      "kind": "rest_write",
+      "summary": "PATCH /rate-cards/{rate_card_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/rate-cards/{rate_card_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.rate-cards-rate-card-id",
+      "kind": "rest_write",
+      "summary": "DELETE /rate-cards/{rate_card_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/rate-cards/{rate_card_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.reports-people",
+      "kind": "rest_read",
+      "summary": "GET /reports/people",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/reports.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/people",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.reports-projects",
+      "kind": "rest_read",
+      "summary": "GET /reports/projects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/reports.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reports/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.roles",
+      "kind": "rest_read",
+      "summary": "GET /roles",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/roles.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.roles",
+      "kind": "rest_write",
+      "summary": "POST /roles",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/roles.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/roles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.roles-role-id",
+      "kind": "rest_read",
+      "summary": "GET /roles/{role_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/roles.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/roles/{role_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.roles-role-id",
+      "kind": "rest_write",
+      "summary": "PATCH /roles/{role_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/roles.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/roles/{role_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.roles-role-id",
+      "kind": "rest_write",
+      "summary": "DELETE /roles/{role_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/roles.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/roles/{role_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.status",
+      "kind": "rest_read",
+      "summary": "GET /status",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/statuses.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.status",
+      "kind": "rest_write",
+      "summary": "POST /status",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/statuses.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.status-status-id",
+      "kind": "rest_read",
+      "summary": "GET /status/{status_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/statuses.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/status/{status_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.status-status-id",
+      "kind": "rest_write",
+      "summary": "PATCH /status/{status_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/statuses.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/status/{status_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.status-status-id",
+      "kind": "rest_write",
+      "summary": "DELETE /status/{status_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/statuses.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/status/{status_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.statuses",
+      "kind": "rest_read",
+      "summary": "GET /statuses",
+      "description": "not modeled by legacy; not implemented in this bundle",
+      "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/statuses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.tasks",
+      "kind": "rest_write",
+      "summary": "POST /tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/tasks.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.tasks-task-id",
+      "kind": "rest_read",
+      "summary": "GET /tasks/{task_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/tasks.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tasks/{task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.tasks-task-id",
+      "kind": "rest_write",
+      "summary": "PATCH /tasks/{task_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/tasks.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/tasks/{task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.tasks-task-id",
+      "kind": "rest_write",
+      "summary": "DELETE /tasks/{task_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/tasks.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tasks/{task_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.timeoff-types",
+      "kind": "rest_read",
+      "summary": "GET /timeoff-types",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/timeoff-types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.timeoff-types",
+      "kind": "rest_write",
+      "summary": "POST /timeoff-types",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/timeoff-types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.timeoff-types-timeoff-type-id",
+      "kind": "rest_read",
+      "summary": "GET /timeoff-types/{timeoff_type_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/timeoff-types/{timeoff_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.timeoff-types-timeoff-type-id",
+      "kind": "rest_write",
+      "summary": "PATCH /timeoff-types/{timeoff_type_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/timeoff-types/{timeoff_type_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.timeoffs",
+      "kind": "rest_read",
+      "summary": "GET /timeoffs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/timeoffs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.post.timeoffs",
+      "kind": "rest_write",
+      "summary": "POST /timeoffs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/timeoffs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.get.timeoffs-timeoff-id",
+      "kind": "rest_read",
+      "summary": "GET /timeoffs/{timeoff_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/timeoffs/{timeoff_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.patch.timeoffs-timeoff-id",
+      "kind": "rest_write",
+      "summary": "PATCH /timeoffs/{timeoff_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/timeoffs/{timeoff_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "float.delete.timeoffs-timeoff-id",
+      "kind": "rest_write",
+      "summary": "DELETE /timeoffs/{timeoff_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/timeoffs/{timeoff_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,26 +1,48 @@
 {
-  "api": "ShopWired REST API v1",
+  "api": "ShopWired REST API v1; provider artifact version: ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
   "docs": "https://shopwired.readme.io/reference",
-  "reviewed_at": "2026-07-04",
-  "scope": "ShopWired ReadMe API reference endpoints under https://api.ecommerceapi.uk/v1. GET list/detail/search endpoints are streams; count endpoints are excluded as aggregate metadata; JSON POST/PUT/PATCH/DELETE operations are write actions.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 237 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: ShopWired ReadMe API reference endpoints under https://api.ecommerceapi.uk/v1. GET list/detail/search endpoints are streams; count endpoints are excluded as aggregate metadata; JSON POST/PUT/PATCH/DELETE operations are write actions.",
+  "artifacts": [
+    {
+      "id": "shopwired-artifact-2026-08-09",
+      "url": "https://shopwired.readme.io/llms.txt",
+      "kind": "html_reference",
+      "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+      "retrieved_at": "2026-08-09",
+      "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/app",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /app]"
+      },
       "covered_by": {
         "stream": "app"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/app/data",
-      "covered_by": {
-        "write": "deletes_all_app_data"
-      }
-    },
-    {
       "method": "GET",
       "path": "/app/data",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /app/data]"
+      },
       "covered_by": {
         "stream": "data"
       }
@@ -28,13 +50,47 @@
     {
       "method": "POST",
       "path": "/app/data",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /app/data]"
+      },
       "covered_by": {
         "write": "create_new_app_data"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/app/data",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /app/data]"
+      },
+      "covered_by": {
+        "write": "deletes_all_app_data"
+      }
+    },
+    {
       "method": "GET",
       "path": "/blog-categories",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /blog-categories]"
+      },
       "covered_by": {
         "stream": "blog_categories"
       }
@@ -42,6 +98,15 @@
     {
       "method": "POST",
       "path": "/blog-categories",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /blog-categories]"
+      },
       "covered_by": {
         "write": "create_blog_category"
       }
@@ -49,21 +114,36 @@
     {
       "method": "GET",
       "path": "/blog-categories/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/blog-categories/{id}",
-      "covered_by": {
-        "write": "delete_blog_category"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /blog-categories/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/blog-categories/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /blog-categories/{id}]"
+      },
       "covered_by": {
         "stream": "blog_category"
       }
@@ -71,13 +151,47 @@
     {
       "method": "PUT",
       "path": "/blog-categories/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /blog-categories/{id}]"
+      },
       "covered_by": {
         "write": "update_blog_category"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/blog-categories/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /blog-categories/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_blog_category"
+      }
+    },
+    {
       "method": "GET",
       "path": "/blog-posts",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /blog-posts]"
+      },
       "covered_by": {
         "stream": "blog_posts"
       }
@@ -85,6 +199,15 @@
     {
       "method": "POST",
       "path": "/blog-posts",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /blog-posts]"
+      },
       "covered_by": {
         "write": "create_blog_post"
       }
@@ -92,21 +215,36 @@
     {
       "method": "GET",
       "path": "/blog-posts/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/blog-posts/{id}",
-      "covered_by": {
-        "write": "delete_blog_post"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /blog-posts/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/blog-posts/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /blog-posts/{id}]"
+      },
       "covered_by": {
         "stream": "blog_post"
       }
@@ -114,13 +252,47 @@
     {
       "method": "PUT",
       "path": "/blog-posts/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /blog-posts/{id}]"
+      },
       "covered_by": {
         "write": "update_blog_post"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/blog-posts/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /blog-posts/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_blog_post"
+      }
+    },
+    {
       "method": "GET",
       "path": "/blog-tags",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /blog-tags]"
+      },
       "covered_by": {
         "stream": "blog_tags"
       }
@@ -128,6 +300,15 @@
     {
       "method": "POST",
       "path": "/blog-tags",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /blog-tags]"
+      },
       "covered_by": {
         "write": "create_blog_tag"
       }
@@ -135,21 +316,36 @@
     {
       "method": "GET",
       "path": "/blog-tags/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/blog-tags/{id}",
-      "covered_by": {
-        "write": "delete_blog_tag"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /blog-tags/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/blog-tags/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /blog-tags/{id}]"
+      },
       "covered_by": {
         "stream": "blog_tag"
       }
@@ -157,13 +353,47 @@
     {
       "method": "PUT",
       "path": "/blog-tags/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /blog-tags/{id}]"
+      },
       "covered_by": {
         "write": "update_blog_tag"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/blog-tags/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /blog-tags/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_blog_tag"
+      }
+    },
+    {
       "method": "GET",
       "path": "/brands",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /brands]"
+      },
       "covered_by": {
         "stream": "brands"
       }
@@ -171,6 +401,15 @@
     {
       "method": "POST",
       "path": "/brands",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /brands]"
+      },
       "covered_by": {
         "write": "create_brand"
       }
@@ -178,21 +417,36 @@
     {
       "method": "GET",
       "path": "/brands/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/brands/{id}",
-      "covered_by": {
-        "write": "delete_brand"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /brands/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/brands/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /brands/{id}]"
+      },
       "covered_by": {
         "stream": "brand"
       }
@@ -200,13 +454,47 @@
     {
       "method": "PUT",
       "path": "/brands/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /brands/{id}]"
+      },
       "covered_by": {
         "write": "update_brand"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/brands/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /brands/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_brand"
+      }
+    },
+    {
       "method": "GET",
       "path": "/business",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /business]"
+      },
       "covered_by": {
         "stream": "business"
       }
@@ -214,6 +502,15 @@
     {
       "method": "GET",
       "path": "/business/features",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /business/features]"
+      },
       "covered_by": {
         "stream": "features"
       }
@@ -221,6 +518,15 @@
     {
       "method": "POST",
       "path": "/business/features/change-status",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /business/features/change-status]"
+      },
       "covered_by": {
         "write": "change_business_feature_status"
       }
@@ -228,6 +534,15 @@
     {
       "method": "GET",
       "path": "/categories",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /categories]"
+      },
       "covered_by": {
         "stream": "categories"
       }
@@ -235,6 +550,15 @@
     {
       "method": "POST",
       "path": "/categories",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /categories]"
+      },
       "covered_by": {
         "write": "create_category"
       }
@@ -242,21 +566,36 @@
     {
       "method": "GET",
       "path": "/categories/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/categories/{id}",
-      "covered_by": {
-        "write": "delete_category_by_id"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /categories/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/categories/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /categories/{id}]"
+      },
       "covered_by": {
         "stream": "category"
       }
@@ -264,34 +603,95 @@
     {
       "method": "PUT",
       "path": "/categories/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /categories/{id}]"
+      },
       "covered_by": {
         "write": "update_category_by_id"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/categories/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /categories/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_category_by_id"
+      }
+    },
+    {
       "method": "POST",
       "path": "/choice-set-values",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /choice-set-values]"
+      },
       "covered_by": {
         "write": "create_choice_set_value"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/choice-set-values/{id}",
-      "covered_by": {
-        "write": "delete_choice_set_value"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/choice-set-values/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /choice-set-values/{id}]"
+      },
       "covered_by": {
         "write": "update_choice_set_value"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/choice-set-values/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /choice-set-values/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_choice_set_value"
+      }
+    },
+    {
       "method": "GET",
       "path": "/choice-sets",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /choice-sets]"
+      },
       "covered_by": {
         "stream": "choice_sets"
       }
@@ -299,20 +699,31 @@
     {
       "method": "POST",
       "path": "/choice-sets",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /choice-sets]"
+      },
       "covered_by": {
         "write": "create_choice_set"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/choice-sets/{id}",
-      "covered_by": {
-        "write": "delete_choice_set"
-      }
-    },
-    {
       "method": "GET",
       "path": "/choice-sets/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /choice-sets/{id}]"
+      },
       "covered_by": {
         "stream": "choice_set"
       }
@@ -320,13 +731,47 @@
     {
       "method": "PUT",
       "path": "/choice-sets/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /choice-sets/{id}]"
+      },
       "covered_by": {
         "write": "update_choice_set"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/choice-sets/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /choice-sets/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_choice_set"
+      }
+    },
+    {
       "method": "GET",
       "path": "/collect-locations",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /collect-locations]"
+      },
       "covered_by": {
         "stream": "collect_locations"
       }
@@ -334,14 +779,36 @@
     {
       "method": "GET",
       "path": "/collect-locations/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /collect-locations/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/collect-locations/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /collect-locations/{id}]"
+      },
       "covered_by": {
         "stream": "collect_location"
       }
@@ -349,22 +816,57 @@
     {
       "method": "GET",
       "path": "/countries",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /countries]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/countries/{id}",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /countries/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/custom-fields",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /custom-fields]"
+      },
       "covered_by": {
         "stream": "custom_fields"
       }
@@ -372,6 +874,15 @@
     {
       "method": "POST",
       "path": "/custom-fields",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /custom-fields]"
+      },
       "covered_by": {
         "write": "create_custom_field"
       }
@@ -379,21 +890,36 @@
     {
       "method": "GET",
       "path": "/custom-fields/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/custom-fields/{id}",
-      "covered_by": {
-        "write": "delete_custom_field"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /custom-fields/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/custom-fields/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /custom-fields/{id}]"
+      },
       "covered_by": {
         "stream": "custom_field"
       }
@@ -401,13 +927,47 @@
     {
       "method": "PUT",
       "path": "/custom-fields/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /custom-fields/{id}]"
+      },
       "covered_by": {
         "write": "update_custom_field"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/custom-fields/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /custom-fields/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_custom_field"
+      }
+    },
+    {
       "method": "GET",
       "path": "/customers",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /customers]"
+      },
       "covered_by": {
         "stream": "customers"
       }
@@ -415,6 +975,15 @@
     {
       "method": "POST",
       "path": "/customers",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /customers]"
+      },
       "covered_by": {
         "write": "create_customer"
       }
@@ -422,14 +991,36 @@
     {
       "method": "GET",
       "path": "/customers/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /customers/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/customers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /customers/{id}]"
+      },
       "covered_by": {
         "stream": "customer"
       }
@@ -437,6 +1028,15 @@
     {
       "method": "GET",
       "path": "/digital-files",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /digital-files]"
+      },
       "covered_by": {
         "stream": "digital_files"
       }
@@ -444,6 +1044,15 @@
     {
       "method": "POST",
       "path": "/digital-files",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /digital-files]"
+      },
       "covered_by": {
         "write": "create_digital_file"
       }
@@ -451,21 +1060,36 @@
     {
       "method": "GET",
       "path": "/digital-files/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/digital-files/{id}",
-      "covered_by": {
-        "write": "delete_digital_file"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /digital-files/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/digital-files/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /digital-files/{id}]"
+      },
       "covered_by": {
         "stream": "digital_file"
       }
@@ -473,13 +1097,47 @@
     {
       "method": "PUT",
       "path": "/digital-files/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /digital-files/{id}]"
+      },
       "covered_by": {
         "write": "update_digital_file"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/digital-files/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /digital-files/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_digital_file"
+      }
+    },
+    {
       "method": "GET",
       "path": "/events",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /events]"
+      },
       "covered_by": {
         "stream": "events"
       }
@@ -487,14 +1145,36 @@
     {
       "method": "GET",
       "path": "/events/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /events/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/events/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /events/{id}]"
+      },
       "covered_by": {
         "stream": "event"
       }
@@ -502,6 +1182,15 @@
     {
       "method": "GET",
       "path": "/filter-groups",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /filter-groups]"
+      },
       "covered_by": {
         "stream": "filter_groups"
       }
@@ -509,6 +1198,15 @@
     {
       "method": "POST",
       "path": "/filter-groups",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /filter-groups]"
+      },
       "covered_by": {
         "write": "create_filter_group"
       }
@@ -516,21 +1214,36 @@
     {
       "method": "GET",
       "path": "/filter-groups/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/filter-groups/{id}",
-      "covered_by": {
-        "write": "delete_filter_group"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /filter-groups/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/filter-groups/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /filter-groups/{id}]"
+      },
       "covered_by": {
         "stream": "filter_group"
       }
@@ -538,13 +1251,47 @@
     {
       "method": "PUT",
       "path": "/filter-groups/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /filter-groups/{id}]"
+      },
       "covered_by": {
         "write": "update_filter_group"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/filter-groups/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /filter-groups/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_filter_group"
+      }
+    },
+    {
       "method": "GET",
       "path": "/gift-vouchers",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /gift-vouchers]"
+      },
       "covered_by": {
         "stream": "gift_vouchers"
       }
@@ -552,6 +1299,15 @@
     {
       "method": "POST",
       "path": "/gift-vouchers",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /gift-vouchers]"
+      },
       "covered_by": {
         "write": "create_gift_card"
       }
@@ -559,21 +1315,36 @@
     {
       "method": "GET",
       "path": "/gift-vouchers/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/gift-vouchers/{id}",
-      "covered_by": {
-        "write": "delete_gift_card"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /gift-vouchers/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/gift-vouchers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /gift-vouchers/{id}]"
+      },
       "covered_by": {
         "stream": "gift_voucher"
       }
@@ -581,13 +1352,47 @@
     {
       "method": "PUT",
       "path": "/gift-vouchers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /gift-vouchers/{id}]"
+      },
       "covered_by": {
         "write": "update_gift_card"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/gift-vouchers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /gift-vouchers/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_gift_card"
+      }
+    },
+    {
       "method": "GET",
       "path": "/incomplete-orders",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /incomplete-orders]"
+      },
       "covered_by": {
         "stream": "incomplete_orders"
       }
@@ -595,14 +1400,36 @@
     {
       "method": "GET",
       "path": "/incomplete-orders/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /incomplete-orders/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/incomplete-orders/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /incomplete-orders/{id}]"
+      },
       "covered_by": {
         "stream": "incomplete_order"
       }
@@ -610,6 +1437,15 @@
     {
       "method": "GET",
       "path": "/newsletter-subscribers",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /newsletter-subscribers]"
+      },
       "covered_by": {
         "stream": "newsletter_subscribers"
       }
@@ -617,6 +1453,15 @@
     {
       "method": "GET",
       "path": "/newsletter-subscribers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /newsletter-subscribers/{id}]"
+      },
       "covered_by": {
         "stream": "newsletter_subscriber"
       }
@@ -624,6 +1469,15 @@
     {
       "method": "GET",
       "path": "/nexuses",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /nexuses]"
+      },
       "covered_by": {
         "stream": "nexuses"
       }
@@ -631,27 +1485,63 @@
     {
       "method": "POST",
       "path": "/nexuses",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /nexuses]"
+      },
       "covered_by": {
         "write": "create_business_nexus"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/nexuses/{id}",
-      "covered_by": {
-        "write": "delete_business_nexus"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/nexuses/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /nexuses/{id}]"
+      },
       "covered_by": {
         "write": "update_business_nexus"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/nexuses/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /nexuses/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_business_nexus"
+      }
+    },
+    {
       "method": "GET",
       "path": "/offers",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /offers]"
+      },
       "covered_by": {
         "stream": "offers"
       }
@@ -659,6 +1549,15 @@
     {
       "method": "POST",
       "path": "/offers",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /offers]"
+      },
       "covered_by": {
         "write": "create_offer"
       }
@@ -666,21 +1565,36 @@
     {
       "method": "GET",
       "path": "/offers/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/offers/{id}",
-      "covered_by": {
-        "write": "delete_offer"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /offers/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/offers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /offers/{id}]"
+      },
       "covered_by": {
         "stream": "offer"
       }
@@ -688,13 +1602,47 @@
     {
       "method": "PUT",
       "path": "/offers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /offers/{id}]"
+      },
       "covered_by": {
         "write": "update_offer"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/offers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /offers/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_offer"
+      }
+    },
+    {
       "method": "GET",
       "path": "/order-statuses",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /order-statuses]"
+      },
       "covered_by": {
         "stream": "order_statuses"
       }
@@ -702,6 +1650,15 @@
     {
       "method": "POST",
       "path": "/order-statuses",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /order-statuses]"
+      },
       "covered_by": {
         "write": "create_order_status"
       }
@@ -709,6 +1666,15 @@
     {
       "method": "DELETE",
       "path": "/order-statuses/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /order-statuses/{id}]"
+      },
       "covered_by": {
         "write": "delete_order_status"
       }
@@ -716,6 +1682,15 @@
     {
       "method": "GET",
       "path": "/orders",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /orders]"
+      },
       "covered_by": {
         "stream": "orders"
       }
@@ -723,6 +1698,15 @@
     {
       "method": "POST",
       "path": "/orders",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /orders]"
+      },
       "covered_by": {
         "write": "create_order"
       }
@@ -730,35 +1714,84 @@
     {
       "method": "GET",
       "path": "/orders/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /orders/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/orders/search",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /orders/search]"
+      },
       "covered_by": {
         "stream": "search"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/orders/{id}",
-      "covered_by": {
-        "write": "delete_order"
-      }
-    },
-    {
       "method": "GET",
       "path": "/orders/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /orders/{id}]"
+      },
       "covered_by": {
         "stream": "order"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/orders/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /orders/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_order"
+      }
+    },
+    {
       "method": "POST",
       "path": "/orders/{id}/comments",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /orders/{id}/comments]"
+      },
       "covered_by": {
         "write": "create_an_order_admin_comment"
       }
@@ -766,6 +1799,15 @@
     {
       "method": "DELETE",
       "path": "/orders/{id}/comments/{comment_id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /orders/{id}/comments/{comment_id}]"
+      },
       "covered_by": {
         "write": "delete_an_order_admin_comment"
       }
@@ -773,6 +1815,15 @@
     {
       "method": "POST",
       "path": "/orders/{id}/dispatch-pre-order",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /orders/{id}/dispatch-pre-order]"
+      },
       "covered_by": {
         "write": "request_a_pre_order_be_dispatched"
       }
@@ -780,6 +1831,15 @@
     {
       "method": "POST",
       "path": "/orders/{id}/status",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /orders/{id}/status]"
+      },
       "covered_by": {
         "write": "update_an_order_s_status"
       }
@@ -787,6 +1847,15 @@
     {
       "method": "POST",
       "path": "/orders/{order_id}/refunds",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /orders/{order_id}/refunds]"
+      },
       "covered_by": {
         "write": "create_refund"
       }
@@ -794,6 +1863,15 @@
     {
       "method": "GET",
       "path": "/pages",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /pages]"
+      },
       "covered_by": {
         "stream": "pages"
       }
@@ -801,6 +1879,15 @@
     {
       "method": "POST",
       "path": "/pages",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /pages]"
+      },
       "covered_by": {
         "write": "create_page"
       }
@@ -808,21 +1895,36 @@
     {
       "method": "GET",
       "path": "/pages/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/pages/{id}",
-      "covered_by": {
-        "write": "delete_page"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /pages/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/pages/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /pages/{id}]"
+      },
       "covered_by": {
         "stream": "page"
       }
@@ -830,13 +1932,47 @@
     {
       "method": "PUT",
       "path": "/pages/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /pages/{id}]"
+      },
       "covered_by": {
         "write": "update_page"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/pages/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /pages/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_page"
+      }
+    },
+    {
       "method": "GET",
       "path": "/payment-methods",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /payment-methods]"
+      },
       "covered_by": {
         "stream": "payment_methods"
       }
@@ -844,6 +1980,15 @@
     {
       "method": "GET",
       "path": "/products",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products]"
+      },
       "covered_by": {
         "stream": "products"
       }
@@ -851,6 +1996,15 @@
     {
       "method": "POST",
       "path": "/products",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products]"
+      },
       "covered_by": {
         "write": "create_product"
       }
@@ -858,14 +2012,36 @@
     {
       "method": "GET",
       "path": "/products/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
       "path": "/products/prices",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/prices]"
+      },
       "covered_by": {
         "write": "update_prices"
       }
@@ -873,20 +2049,31 @@
     {
       "method": "GET",
       "path": "/products/search",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/search]"
+      },
       "covered_by": {
         "stream": "search_2"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{id}",
-      "covered_by": {
-        "write": "delete_product"
-      }
-    },
-    {
       "method": "GET",
       "path": "/products/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{id}]"
+      },
       "covered_by": {
         "stream": "product"
       }
@@ -894,13 +2081,47 @@
     {
       "method": "PUT",
       "path": "/products/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{id}]"
+      },
       "covered_by": {
         "write": "update_product"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product"
+      }
+    },
+    {
       "method": "GET",
       "path": "/products/{id}/bulk-prices",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{id}/bulk-prices]"
+      },
       "covered_by": {
         "stream": "bulk_prices"
       }
@@ -908,20 +2129,31 @@
     {
       "method": "POST",
       "path": "/products/{id}/bulk-prices",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/{id}/bulk-prices]"
+      },
       "covered_by": {
         "write": "create_bulk_price"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{product_id}/bulk-prices/{id}",
-      "covered_by": {
-        "write": "delete_bulk_price"
-      }
-    },
-    {
       "method": "GET",
       "path": "/products/{product_id}/bulk-prices/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/bulk-prices/{id}]"
+      },
       "covered_by": {
         "stream": "bulk_price"
       }
@@ -929,13 +2161,47 @@
     {
       "method": "PUT",
       "path": "/products/{product_id}/bulk-prices/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{product_id}/bulk-prices/{id}]"
+      },
       "covered_by": {
         "write": "update_bulk_price"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{product_id}/bulk-prices/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{product_id}/bulk-prices/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_bulk_price"
+      }
+    },
+    {
       "method": "GET",
       "path": "/products/{product_id}/choices",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/choices]"
+      },
       "covered_by": {
         "stream": "choices"
       }
@@ -943,20 +2209,31 @@
     {
       "method": "POST",
       "path": "/products/{product_id}/choices",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/{product_id}/choices]"
+      },
       "covered_by": {
         "write": "assign_product_choice"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{product_id}/choices/{id}",
-      "covered_by": {
-        "write": "delete_product_choice"
-      }
-    },
-    {
       "method": "GET",
       "path": "/products/{product_id}/choices/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/choices/{id}]"
+      },
       "covered_by": {
         "stream": "choice"
       }
@@ -964,13 +2241,47 @@
     {
       "method": "PUT",
       "path": "/products/{product_id}/choices/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{product_id}/choices/{id}]"
+      },
       "covered_by": {
         "write": "update_product_choice"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{product_id}/choices/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{product_id}/choices/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product_choice"
+      }
+    },
+    {
       "method": "GET",
       "path": "/products/{product_id}/customization-fields",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/customization-fields]"
+      },
       "covered_by": {
         "stream": "customization_fields"
       }
@@ -978,27 +2289,63 @@
     {
       "method": "POST",
       "path": "/products/{product_id}/customization-fields",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/{product_id}/customization-fields]"
+      },
       "covered_by": {
         "write": "create_product_customization_field"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{product_id}/customization-fields/{id}",
-      "covered_by": {
-        "write": "delete_product_customization_field"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/products/{product_id}/customization-fields/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{product_id}/customization-fields/{id}]"
+      },
       "covered_by": {
         "write": "update_product_customization_field"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{product_id}/customization-fields/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{product_id}/customization-fields/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product_customization_field"
+      }
+    },
+    {
       "method": "GET",
       "path": "/products/{product_id}/extras",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/extras]"
+      },
       "covered_by": {
         "stream": "extras"
       }
@@ -1006,27 +2353,63 @@
     {
       "method": "POST",
       "path": "/products/{product_id}/extras",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/{product_id}/extras]"
+      },
       "covered_by": {
         "write": "create_product_extra"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{product_id}/extras/{id}",
-      "covered_by": {
-        "write": "delete_product_extra"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/products/{product_id}/extras/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{product_id}/extras/{id}]"
+      },
       "covered_by": {
         "write": "update_product_extra"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{product_id}/extras/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{product_id}/extras/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product_extra"
+      }
+    },
+    {
       "method": "GET",
       "path": "/products/{product_id}/images",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/images]"
+      },
       "covered_by": {
         "stream": "images"
       }
@@ -1034,48 +2417,111 @@
     {
       "method": "POST",
       "path": "/products/{product_id}/images",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/{product_id}/images]"
+      },
       "covered_by": {
         "write": "create_product_image"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{product_id}/images/{id}",
-      "covered_by": {
-        "write": "delete_product_image"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/products/{product_id}/images/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{product_id}/images/{id}]"
+      },
       "covered_by": {
         "write": "update_product_image"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{product_id}/images/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{product_id}/images/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product_image"
+      }
+    },
+    {
       "method": "POST",
       "path": "/products/{product_id}/option-values",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/{product_id}/option-values]"
+      },
       "covered_by": {
         "write": "create_product_option_value"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{product_id}/option-values/{id}",
-      "covered_by": {
-        "write": "delete_product_option_value"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/products/{product_id}/option-values/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{product_id}/option-values/{id}]"
+      },
       "covered_by": {
         "write": "update_product_option_value"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{product_id}/option-values/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{product_id}/option-values/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product_option_value"
+      }
+    },
+    {
       "method": "GET",
       "path": "/products/{product_id}/options",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/options]"
+      },
       "covered_by": {
         "stream": "options"
       }
@@ -1083,20 +2529,31 @@
     {
       "method": "POST",
       "path": "/products/{product_id}/options",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/{product_id}/options]"
+      },
       "covered_by": {
         "write": "create_product_option"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{product_id}/options/{id}",
-      "covered_by": {
-        "write": "delete_product_option"
-      }
-    },
-    {
       "method": "GET",
       "path": "/products/{product_id}/options/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/options/{id}]"
+      },
       "covered_by": {
         "stream": "option"
       }
@@ -1104,13 +2561,47 @@
     {
       "method": "PUT",
       "path": "/products/{product_id}/options/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{product_id}/options/{id}]"
+      },
       "covered_by": {
         "write": "update_product_option"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{product_id}/options/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{product_id}/options/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product_option"
+      }
+    },
+    {
       "method": "GET",
       "path": "/products/{product_id}/reviews",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/reviews]"
+      },
       "covered_by": {
         "stream": "reviews"
       }
@@ -1118,27 +2609,63 @@
     {
       "method": "POST",
       "path": "/products/{product_id}/reviews",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/{product_id}/reviews]"
+      },
       "covered_by": {
         "write": "create_product_review"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{product_id}/reviews/{id}",
-      "covered_by": {
-        "write": "delete_product_review"
-      }
-    },
-    {
       "method": "PUT",
       "path": "/products/{product_id}/reviews/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{product_id}/reviews/{id}]"
+      },
       "covered_by": {
         "write": "update_product_review"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{product_id}/reviews/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{product_id}/reviews/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product_review"
+      }
+    },
+    {
       "method": "GET",
       "path": "/products/{product_id}/variations",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/variations]"
+      },
       "covered_by": {
         "stream": "variations"
       }
@@ -1146,20 +2673,31 @@
     {
       "method": "POST",
       "path": "/products/{product_id}/variations",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /products/{product_id}/variations]"
+      },
       "covered_by": {
         "write": "create_product_variation"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{product_id}/variations/{id}",
-      "covered_by": {
-        "write": "delete_product_variation"
-      }
-    },
-    {
       "method": "GET",
       "path": "/products/{product_id}/variations/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /products/{product_id}/variations/{id}]"
+      },
       "covered_by": {
         "stream": "variation"
       }
@@ -1167,13 +2705,47 @@
     {
       "method": "PUT",
       "path": "/products/{product_id}/variations/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /products/{product_id}/variations/{id}]"
+      },
       "covered_by": {
         "write": "update_product_variation"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{product_id}/variations/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /products/{product_id}/variations/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product_variation"
+      }
+    },
+    {
       "method": "GET",
       "path": "/redirects",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /redirects]"
+      },
       "covered_by": {
         "stream": "redirects"
       }
@@ -1181,6 +2753,15 @@
     {
       "method": "POST",
       "path": "/redirects",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /redirects]"
+      },
       "covered_by": {
         "write": "create_redirect"
       }
@@ -1188,28 +2769,68 @@
     {
       "method": "GET",
       "path": "/redirects/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /redirects/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/redirects/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /redirects/{id}]"
+      },
+      "covered_by": {
+        "stream": "redirect"
       }
     },
     {
       "method": "DELETE",
       "path": "/redirects/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /redirects/{id}]"
+      },
       "covered_by": {
         "write": "delete_redirect"
       }
     },
     {
       "method": "GET",
-      "path": "/redirects/{id}",
-      "covered_by": {
-        "stream": "redirect"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/sales",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /sales]"
+      },
       "covered_by": {
         "stream": "sales"
       }
@@ -1217,6 +2838,15 @@
     {
       "method": "POST",
       "path": "/sales",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /sales]"
+      },
       "covered_by": {
         "write": "create_sale"
       }
@@ -1224,21 +2854,36 @@
     {
       "method": "GET",
       "path": "/sales/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/sales/{id}",
-      "covered_by": {
-        "write": "delete_sale"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /sales/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/sales/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /sales/{id}]"
+      },
       "covered_by": {
         "stream": "sale"
       }
@@ -1246,13 +2891,47 @@
     {
       "method": "PUT",
       "path": "/sales/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /sales/{id}]"
+      },
       "covered_by": {
         "write": "update_sale"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/sales/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /sales/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_sale"
+      }
+    },
+    {
       "method": "GET",
       "path": "/shipping-rates",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shipping-rates]"
+      },
       "covered_by": {
         "stream": "shipping_rates"
       }
@@ -1260,20 +2939,31 @@
     {
       "method": "POST",
       "path": "/shipping-rates",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /shipping-rates]"
+      },
       "covered_by": {
         "write": "create_shipping_rate"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/shipping-rates/{id}",
-      "covered_by": {
-        "write": "delete_shipping_rate"
-      }
-    },
-    {
       "method": "GET",
       "path": "/shipping-rates/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shipping-rates/{id}]"
+      },
       "covered_by": {
         "stream": "shipping_rate"
       }
@@ -1281,13 +2971,47 @@
     {
       "method": "PUT",
       "path": "/shipping-rates/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /shipping-rates/{id}]"
+      },
       "covered_by": {
         "write": "update_shipping_rate"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/shipping-rates/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /shipping-rates/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_shipping_rate"
+      }
+    },
+    {
       "method": "GET",
       "path": "/shipping-zones",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shipping-zones]"
+      },
       "covered_by": {
         "stream": "shipping_zones"
       }
@@ -1295,6 +3019,15 @@
     {
       "method": "POST",
       "path": "/shipping-zones",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /shipping-zones]"
+      },
       "covered_by": {
         "write": "create_shipping_zone"
       }
@@ -1302,21 +3035,36 @@
     {
       "method": "GET",
       "path": "/shipping-zones/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/shipping-zones/{country-id}",
-      "covered_by": {
-        "write": "delete_shipping_zone"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shipping-zones/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/shipping-zones/{country-id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shipping-zones/{country-id}]"
+      },
       "covered_by": {
         "stream": "shipping_zone"
       }
@@ -1324,13 +3072,47 @@
     {
       "method": "PUT",
       "path": "/shipping-zones/{country-id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /shipping-zones/{country-id}]"
+      },
       "covered_by": {
         "write": "update_shipping_zone"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/shipping-zones/{country-id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /shipping-zones/{country-id}]"
+      },
+      "covered_by": {
+        "write": "delete_shipping_zone"
+      }
+    },
+    {
       "method": "GET",
       "path": "/shopwired-payments/disputes",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shopwired-payments/disputes]"
+      },
       "covered_by": {
         "stream": "disputes"
       }
@@ -1338,14 +3120,36 @@
     {
       "method": "GET",
       "path": "/shopwired-payments/disputes/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shopwired-payments/disputes/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/shopwired-payments/disputes/{dispute_id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shopwired-payments/disputes/{dispute_id}]"
+      },
       "covered_by": {
         "stream": "dispute"
       }
@@ -1353,6 +3157,15 @@
     {
       "method": "GET",
       "path": "/shopwired-payments/payouts",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shopwired-payments/payouts]"
+      },
       "covered_by": {
         "stream": "payouts"
       }
@@ -1360,14 +3173,36 @@
     {
       "method": "GET",
       "path": "/shopwired-payments/payouts/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shopwired-payments/payouts/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/shopwired-payments/payouts/{payout_id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shopwired-payments/payouts/{payout_id}]"
+      },
       "covered_by": {
         "stream": "payout"
       }
@@ -1375,6 +3210,15 @@
     {
       "method": "GET",
       "path": "/shopwired-payments/transactions",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shopwired-payments/transactions]"
+      },
       "covered_by": {
         "stream": "transactions"
       }
@@ -1382,14 +3226,36 @@
     {
       "method": "GET",
       "path": "/shopwired-payments/transactions/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shopwired-payments/transactions/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/shopwired-payments/transactions/{transaction_id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /shopwired-payments/transactions/{transaction_id}]"
+      },
       "covered_by": {
         "stream": "transaction"
       }
@@ -1397,6 +3263,15 @@
     {
       "method": "GET",
       "path": "/stock",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /stock]"
+      },
       "covered_by": {
         "stream": "stock"
       }
@@ -1404,6 +3279,15 @@
     {
       "method": "POST",
       "path": "/stock",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /stock]"
+      },
       "covered_by": {
         "write": "update_stock"
       }
@@ -1411,6 +3295,15 @@
     {
       "method": "GET",
       "path": "/stock-requests",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /stock-requests]"
+      },
       "covered_by": {
         "stream": "stock_requests"
       }
@@ -1418,20 +3311,31 @@
     {
       "method": "POST",
       "path": "/stock/return",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /stock/return]"
+      },
       "covered_by": {
         "write": "return_stock"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/theme-assets/{theme_id}",
-      "covered_by": {
-        "write": "delete_theme_asset"
-      }
-    },
-    {
       "method": "GET",
       "path": "/theme-assets/{theme_id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /theme-assets/{theme_id}]"
+      },
       "covered_by": {
         "stream": "theme_assets"
       }
@@ -1439,13 +3343,47 @@
     {
       "method": "POST",
       "path": "/theme-assets/{theme_id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /theme-assets/{theme_id}]"
+      },
       "covered_by": {
         "write": "create_or_update_theme_asset"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/theme-assets/{theme_id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /theme-assets/{theme_id}]"
+      },
+      "covered_by": {
+        "write": "delete_theme_asset"
+      }
+    },
+    {
       "method": "GET",
       "path": "/themes",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /themes]"
+      },
       "covered_by": {
         "stream": "themes"
       }
@@ -1453,14 +3391,36 @@
     {
       "method": "GET",
       "path": "/themes/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /themes/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/themes/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /themes/{id}]"
+      },
       "covered_by": {
         "stream": "theme"
       }
@@ -1468,6 +3428,15 @@
     {
       "method": "PUT",
       "path": "/themes/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /themes/{id}]"
+      },
       "covered_by": {
         "write": "update_theme"
       }
@@ -1475,6 +3444,15 @@
     {
       "method": "GET",
       "path": "/trade-customer-product-prices",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /trade-customer-product-prices]"
+      },
       "covered_by": {
         "stream": "trade_customer_product_prices"
       }
@@ -1482,6 +3460,15 @@
     {
       "method": "POST",
       "path": "/trade-customer-product-prices",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /trade-customer-product-prices]"
+      },
       "covered_by": {
         "write": "create_trade_customer_product_price"
       }
@@ -1489,6 +3476,15 @@
     {
       "method": "POST",
       "path": "/trade-customer-product-prices/bulk",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /trade-customer-product-prices/bulk]"
+      },
       "covered_by": {
         "write": "bulk_trade_customer_product_prices"
       }
@@ -1496,21 +3492,36 @@
     {
       "method": "GET",
       "path": "/trade-customer-product-prices/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/trade-customer-product-prices/{id}",
-      "covered_by": {
-        "write": "delete_trade_customer_product_price"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /trade-customer-product-prices/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/trade-customer-product-prices/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /trade-customer-product-prices/{id}]"
+      },
       "covered_by": {
         "stream": "trade_customer_product_price"
       }
@@ -1518,13 +3529,47 @@
     {
       "method": "PUT",
       "path": "/trade-customer-product-prices/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /trade-customer-product-prices/{id}]"
+      },
       "covered_by": {
         "write": "update_trade_customer_product_price"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/trade-customer-product-prices/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /trade-customer-product-prices/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_trade_customer_product_price"
+      }
+    },
+    {
       "method": "GET",
       "path": "/trade-groups",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /trade-groups]"
+      },
       "covered_by": {
         "stream": "trade_groups"
       }
@@ -1532,20 +3577,31 @@
     {
       "method": "POST",
       "path": "/trade-groups",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /trade-groups]"
+      },
       "covered_by": {
         "write": "create_trade_group"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/trade-groups/{id}",
-      "covered_by": {
-        "write": "delete_trade_group"
-      }
-    },
-    {
       "method": "GET",
       "path": "/trade-groups/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /trade-groups/{id}]"
+      },
       "covered_by": {
         "stream": "trade_group"
       }
@@ -1553,13 +3609,47 @@
     {
       "method": "PUT",
       "path": "/trade-groups/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /trade-groups/{id}]"
+      },
       "covered_by": {
         "write": "update_trade_group"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/trade-groups/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /trade-groups/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_trade_group"
+      }
+    },
+    {
       "method": "GET",
       "path": "/vouchers",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /vouchers]"
+      },
       "covered_by": {
         "stream": "vouchers"
       }
@@ -1567,6 +3657,15 @@
     {
       "method": "POST",
       "path": "/vouchers",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /vouchers]"
+      },
       "covered_by": {
         "write": "create_voucher"
       }
@@ -1574,21 +3673,36 @@
     {
       "method": "GET",
       "path": "/vouchers/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/vouchers/{id}",
-      "covered_by": {
-        "write": "delete_voucher"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /vouchers/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/vouchers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /vouchers/{id}]"
+      },
       "covered_by": {
         "stream": "voucher"
       }
@@ -1596,13 +3710,47 @@
     {
       "method": "PUT",
       "path": "/vouchers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /vouchers/{id}]"
+      },
       "covered_by": {
         "write": "update_voucher"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/vouchers/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /vouchers/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_voucher"
+      }
+    },
+    {
       "method": "GET",
       "path": "/webhooks",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /webhooks]"
+      },
       "covered_by": {
         "stream": "webhooks"
       }
@@ -1610,6 +3758,15 @@
     {
       "method": "POST",
       "path": "/webhooks",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /webhooks]"
+      },
       "covered_by": {
         "write": "create_a_webhook"
       }
@@ -1617,21 +3774,36 @@
     {
       "method": "GET",
       "path": "/webhooks/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/webhooks/{id}",
-      "covered_by": {
-        "write": "delete_a_webhook"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /webhooks/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/webhooks/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /webhooks/{id}]"
+      },
       "covered_by": {
         "stream": "webhook"
       }
@@ -1639,13 +3811,47 @@
     {
       "method": "PUT",
       "path": "/webhooks/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /webhooks/{id}]"
+      },
       "covered_by": {
         "write": "update_a_webhook"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/webhooks/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[DELETE /webhooks/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_a_webhook"
+      }
+    },
+    {
       "method": "POST",
       "path": "/webhooks/{id}/verify",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /webhooks/{id}/verify]"
+      },
       "covered_by": {
         "write": "verify_a_webhook"
       }
@@ -1653,6 +3859,15 @@
     {
       "method": "GET",
       "path": "/wishlists",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /wishlists]"
+      },
       "covered_by": {
         "stream": "wishlists"
       }
@@ -1660,6 +3875,15 @@
     {
       "method": "POST",
       "path": "/wishlists",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /wishlists]"
+      },
       "covered_by": {
         "write": "create_a_wishlist"
       }
@@ -1667,14 +3891,36 @@
     {
       "method": "GET",
       "path": "/wishlists/count",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "count endpoint returns aggregate metadata rather than list/detail records"
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /wishlists/count]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "count endpoint returns aggregate metadata rather than list/detail records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/wishlists/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[GET /wishlists/{id}]"
+      },
       "covered_by": {
         "stream": "wishlist"
       }
@@ -1682,6 +3928,15 @@
     {
       "method": "PUT",
       "path": "/wishlists/{id}",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[PUT /wishlists/{id}]"
+      },
       "covered_by": {
         "write": "update_a_wishlist"
       }
@@ -1689,6 +3944,15 @@
     {
       "method": "POST",
       "path": "/wishlists/{id}/modify",
+      "provenance": {
+        "artifact": "shopwired-artifact-2026-08-09",
+        "source_url": "https://shopwired.readme.io/llms.txt",
+        "source_kind": "html_reference",
+        "version": "ShopWired API v1.0; 237 current provider individual OpenAPI 3.1.0 operation blocks",
+        "retrieved_at": "2026-08-09",
+        "sha256": "ffc8b906478a2455b4800a5af7a392bc04791134e0276f29fe0786a1c4aed284",
+        "coordinate": "existing-complete-surface[POST /wishlists/{id}/modify]"
+      },
       "covered_by": {
         "write": "modify_a_wishlist"
       }

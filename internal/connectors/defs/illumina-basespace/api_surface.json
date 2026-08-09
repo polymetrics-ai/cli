@@ -1,12 +1,1330 @@
 {
-  "api": "Illumina BaseSpace v1pre3 REST API",
+  "api": "Illumina BaseSpace v1pre3 REST API; provider artifact version: BaseSpace V2 API Reference",
   "docs": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion generated from 62 documented v1pre3 method/path entries plus legacy user-scoped list endpoints. Documented GET endpoints are streams and direct POST/PUT/DELETE endpoints are write actions.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (63 documented operations across 3 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "illumina-basespace-artifact-2026-08-09",
+      "url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "kind": "html_reference",
+      "version": "BaseSpace V2 API Reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c"
+    },
+    {
+      "id": "illumina-basespace-artifact-ref-4088529c15a03b89-e86a800c904e7752",
+      "url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/v1-api-reference",
+      "kind": "html_reference",
+      "version": "BaseSpace V2 API Reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "4088529c15a03b89ce058d39d6366ddd73f8719769270a86fe2b8be567a4b45c"
+    },
+    {
+      "id": "illumina-basespace-artifact-ref-310d462e19abb65e-bf0278a872629fbc",
+      "url": "https://developer.basespace.illumina.com/public/scripts/jquery/jquery.json-dates.js",
+      "kind": "html_reference",
+      "version": "BaseSpace V2 API Reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "310d462e19abb65e9925a893d60ce4f8ad003d6ee5f0457bfde20882bd1d9c89"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/applications",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /applications"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /applications/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{id}/qcthresholds",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /applications/{id}/qcthresholds"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/applications/{id}/qcthresholds",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#PUT /applications/{id}/qcthresholds"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{id}/settings",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /applications/{id}/settings"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{id}/workflowdependencies",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /applications/{id}/workflowdependencies"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/applications/{id}/workflowdependencies",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#PUT /applications/{id}/workflowdependencies"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{id}/workflows",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /applications/{id}/workflows"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appsessions",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /appsessions"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appsessions/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /appsessions/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/appsessions/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /appsessions/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/appsessions/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#DELETE /appsessions/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appsessions/{id}/comments",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /appsessions/{id}/comments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appsessions/{id}/logfiles",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /appsessions/{id}/logfiles"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appsessions/{id}/properties",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /appsessions/{id}/properties"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/appsessions/{id}/properties",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /appsessions/{id}/properties"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appsessions/{id}/properties/{name}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /appsessions/{id}/properties/{name}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/appsessions/{id}/properties/{name}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#DELETE /appsessions/{id}/properties/{name}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/appsessions/{id}/properties/{name}/items",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /appsessions/{id}/properties/{name}/items"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/appsessions/{id}/stop",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /appsessions/{id}/stop"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/biosamples",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /biosamples"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/biosamples/bulkupdate",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /biosamples/bulkupdate"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/biosamples/{biosampleid}/labrequeues",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /biosamples/{biosampleid}/labrequeues"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/biosamples/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /biosamples/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/biosamples/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /biosamples/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/biosamples/{id}/libraries",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /biosamples/{id}/libraries"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/biosamples/{id}/runlanesummaries",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /biosamples/{id}/runlanesummaries"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasets",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /datasets"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasets/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /datasets/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/datasets/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /datasets/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasets/{id}/comments",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /datasets/{id}/comments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasets/{id}/files",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /datasets/{id}/files"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/datasettypes/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /datasettypes/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/instrumentstatistics",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /instrumentstatistics"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/labrequeues",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /labrequeues"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/labrequeues/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /labrequeues/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/laneqcthresholds",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /laneqcthresholds"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/laneqcthresholds",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#PUT /laneqcthresholds"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lanes/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /lanes/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lanes/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /lanes/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lanes/{id}/comments",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /lanes/{id}/comments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/libraries",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /libraries"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/libraries/{libraryid}/labrequeues",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /libraries/{libraryid}/labrequeues"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/librarypools/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /librarypools/{id}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/librarypools/{id}/libraries",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /librarypools/{id}/libraries"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/librarypools/{poolid}/labrequeues",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /librarypools/{poolid}/labrequeues"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/preprequests/{preprequestid}/labrequeues",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /preprequests/{preprequestid}/labrequeues"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /projects/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/datasets",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /projects/{id}/datasets"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/runs/{id}/files",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /runs/{id}/files"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trash",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /trash"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/trash",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#DELETE /trash"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/trash/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /trash/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/trash/{id}/restorefromtrash",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /trash/{id}/restorefromtrash"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/current",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /users/current"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/current/subscription",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /users/current/subscription"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/current/usage",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /users/current/usage"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/current/workgroups",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /users/current/workgroups"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /users/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/users/{id}/settings",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /users/{id}/settings"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/users/{id}/settings",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#POST /users/{id}/settings"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1pre3/applications",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/applications]"
+      },
       "covered_by": {
         "stream": "applications"
       }
@@ -14,6 +1332,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/applications/{application_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/applications/{application_id}]"
+      },
       "covered_by": {
         "stream": "application"
       }
@@ -21,6 +1349,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/applications/{application_id}/qcthresholds",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/applications/{application_id}/qcthresholds]"
+      },
       "covered_by": {
         "stream": "application_qcthresholds"
       }
@@ -28,6 +1366,16 @@
     {
       "method": "PUT",
       "path": "/v1pre3/applications/{application_id}/qcthresholds",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[PUT /v1pre3/applications/{application_id}/qcthresholds]"
+      },
       "covered_by": {
         "write": "update_applications_id_qcthresholds"
       }
@@ -35,6 +1383,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/applications/{application_id}/settings",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/applications/{application_id}/settings]"
+      },
       "covered_by": {
         "stream": "application_settings"
       }
@@ -42,6 +1400,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/applications/{application_id}/workflowdependencies",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/applications/{application_id}/workflowdependencies]"
+      },
       "covered_by": {
         "stream": "application_workflowdependencies"
       }
@@ -49,6 +1417,16 @@
     {
       "method": "PUT",
       "path": "/v1pre3/applications/{application_id}/workflowdependencies",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[PUT /v1pre3/applications/{application_id}/workflowdependencies]"
+      },
       "covered_by": {
         "write": "update_applications_id_workflowdependencies"
       }
@@ -56,6 +1434,16 @@
     {
       "method": "POST",
       "path": "/v1pre3/applications/{application_id}/workflows",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/applications/{application_id}/workflows]"
+      },
       "covered_by": {
         "write": "applications_id_workflows"
       }
@@ -63,20 +1451,33 @@
     {
       "method": "GET",
       "path": "/v1pre3/appsessions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/appsessions]"
+      },
       "covered_by": {
         "stream": "appsessions_all"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/v1pre3/appsessions/{appsession_id}",
-      "covered_by": {
-        "write": "delete_appsessions_id"
-      }
-    },
-    {
       "method": "GET",
       "path": "/v1pre3/appsessions/{appsession_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/appsessions/{appsession_id}]"
+      },
       "covered_by": {
         "stream": "appsession"
       }
@@ -84,13 +1485,50 @@
     {
       "method": "POST",
       "path": "/v1pre3/appsessions/{appsession_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/appsessions/{appsession_id}]"
+      },
       "covered_by": {
         "write": "appsessions_id"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/v1pre3/appsessions/{appsession_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[DELETE /v1pre3/appsessions/{appsession_id}]"
+      },
+      "covered_by": {
+        "write": "delete_appsessions_id"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v1pre3/appsessions/{appsession_id}/comments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/appsessions/{appsession_id}/comments]"
+      },
       "covered_by": {
         "stream": "appsession_comments"
       }
@@ -98,6 +1536,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/appsessions/{appsession_id}/logfiles",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/appsessions/{appsession_id}/logfiles]"
+      },
       "covered_by": {
         "stream": "appsessions_logfiles"
       }
@@ -105,6 +1553,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/appsessions/{appsession_id}/properties",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/appsessions/{appsession_id}/properties]"
+      },
       "covered_by": {
         "stream": "appsession_properties"
       }
@@ -112,27 +1570,67 @@
     {
       "method": "POST",
       "path": "/v1pre3/appsessions/{appsession_id}/properties",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/appsessions/{appsession_id}/properties]"
+      },
       "covered_by": {
         "write": "appsessions_id_properties"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/appsessions/{appsession_id}/properties/{name}]"
+      },
+      "covered_by": {
+        "stream": "appsession_property"
+      }
+    },
+    {
       "method": "DELETE",
       "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[DELETE /v1pre3/appsessions/{appsession_id}/properties/{name}]"
+      },
       "covered_by": {
         "write": "delete_appsessions_id_properties_name"
       }
     },
     {
       "method": "GET",
-      "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}",
-      "covered_by": {
-        "stream": "appsession_property"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}/items",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/appsessions/{appsession_id}/properties/{name}/items]"
+      },
       "covered_by": {
         "stream": "appsession_property_items"
       }
@@ -140,6 +1638,16 @@
     {
       "method": "POST",
       "path": "/v1pre3/appsessions/{appsession_id}/stop",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/appsessions/{appsession_id}/stop]"
+      },
       "covered_by": {
         "write": "appsessions_id_stop"
       }
@@ -147,6 +1655,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/biosamples",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/biosamples]"
+      },
       "covered_by": {
         "stream": "biosamples"
       }
@@ -154,20 +1672,33 @@
     {
       "method": "POST",
       "path": "/v1pre3/biosamples/bulkupdate",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/biosamples/bulkupdate]"
+      },
       "covered_by": {
         "write": "biosamples_bulkupdate"
       }
     },
     {
       "method": "GET",
-      "path": "/v1pre3/biosamples/{biosample_id}/labrequeues",
-      "covered_by": {
-        "stream": "biosample_labrequeues"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v1pre3/biosamples/{biosample_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/biosamples/{biosample_id}]"
+      },
       "covered_by": {
         "stream": "biosample"
       }
@@ -175,13 +1706,50 @@
     {
       "method": "POST",
       "path": "/v1pre3/biosamples/{biosample_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/biosamples/{biosample_id}]"
+      },
       "covered_by": {
         "write": "biosamples_id"
       }
     },
     {
       "method": "GET",
+      "path": "/v1pre3/biosamples/{biosample_id}/labrequeues",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/biosamples/{biosample_id}/labrequeues]"
+      },
+      "covered_by": {
+        "stream": "biosample_labrequeues"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1pre3/biosamples/{biosample_id}/libraries",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/biosamples/{biosample_id}/libraries]"
+      },
       "covered_by": {
         "stream": "biosample_libraries"
       }
@@ -189,6 +1757,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/biosamples/{biosample_id}/runlanesummaries",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/biosamples/{biosample_id}/runlanesummaries]"
+      },
       "covered_by": {
         "stream": "biosample_runlane_summaries"
       }
@@ -196,6 +1774,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/datasets",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/datasets]"
+      },
       "covered_by": {
         "stream": "datasets_all"
       }
@@ -203,6 +1791,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/datasets/{dataset_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/datasets/{dataset_id}]"
+      },
       "covered_by": {
         "stream": "dataset"
       }
@@ -210,6 +1808,16 @@
     {
       "method": "POST",
       "path": "/v1pre3/datasets/{dataset_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/datasets/{dataset_id}]"
+      },
       "covered_by": {
         "write": "datasets_id"
       }
@@ -217,6 +1825,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/datasets/{dataset_id}/comments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/datasets/{dataset_id}/comments]"
+      },
       "covered_by": {
         "stream": "dataset_comments"
       }
@@ -224,6 +1842,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/datasets/{dataset_id}/files",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/datasets/{dataset_id}/files]"
+      },
       "covered_by": {
         "stream": "dataset_files"
       }
@@ -231,6 +1859,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/datasettypes/{datasettype_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/datasettypes/{datasettype_id}]"
+      },
       "covered_by": {
         "stream": "datasettype"
       }
@@ -238,6 +1876,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/instrumentstatistics",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/instrumentstatistics]"
+      },
       "covered_by": {
         "stream": "instrumentstatistics"
       }
@@ -245,6 +1893,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/labrequeues",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/labrequeues]"
+      },
       "covered_by": {
         "stream": "labrequeues"
       }
@@ -252,6 +1910,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/labrequeues/{labrequeue_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/labrequeues/{labrequeue_id}]"
+      },
       "covered_by": {
         "stream": "labrequeue"
       }
@@ -259,6 +1927,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/laneqcthresholds",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/laneqcthresholds]"
+      },
       "covered_by": {
         "stream": "laneqcthresholds"
       }
@@ -266,6 +1944,16 @@
     {
       "method": "PUT",
       "path": "/v1pre3/laneqcthresholds",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[PUT /v1pre3/laneqcthresholds]"
+      },
       "covered_by": {
         "write": "update_laneqcthresholds"
       }
@@ -273,6 +1961,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/lanes/{lane_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/lanes/{lane_id}]"
+      },
       "covered_by": {
         "stream": "lane"
       }
@@ -280,6 +1978,16 @@
     {
       "method": "POST",
       "path": "/v1pre3/lanes/{lane_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/lanes/{lane_id}]"
+      },
       "covered_by": {
         "write": "lanes_id"
       }
@@ -287,6 +1995,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/lanes/{lane_id}/comments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/lanes/{lane_id}/comments]"
+      },
       "covered_by": {
         "stream": "lane_comments"
       }
@@ -294,6 +2012,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/libraries",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/libraries]"
+      },
       "covered_by": {
         "stream": "libraries"
       }
@@ -301,6 +2029,16 @@
     {
       "method": "POST",
       "path": "/v1pre3/libraries/{library_id}/labrequeues",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/libraries/{library_id}/labrequeues]"
+      },
       "covered_by": {
         "write": "libraries_libraryid_labrequeues"
       }
@@ -308,6 +2046,16 @@
     {
       "method": "POST",
       "path": "/v1pre3/librarypools/{librarypool_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/librarypools/{librarypool_id}]"
+      },
       "covered_by": {
         "write": "librarypools_id"
       }
@@ -315,6 +2063,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/librarypools/{librarypool_id}/libraries",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/librarypools/{librarypool_id}/libraries]"
+      },
       "covered_by": {
         "stream": "librarypool_libraries"
       }
@@ -322,6 +2080,16 @@
     {
       "method": "POST",
       "path": "/v1pre3/librarypools/{pool_id}/labrequeues",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/librarypools/{pool_id}/labrequeues]"
+      },
       "covered_by": {
         "write": "librarypools_poolid_labrequeues"
       }
@@ -329,6 +2097,16 @@
     {
       "method": "POST",
       "path": "/v1pre3/preprequests/{preprequest_id}/labrequeues",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/preprequests/{preprequest_id}/labrequeues]"
+      },
       "covered_by": {
         "write": "preprequests_preprequestid_labrequeues"
       }
@@ -336,6 +2114,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/projects/{project_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/projects/{project_id}]"
+      },
       "covered_by": {
         "stream": "project"
       }
@@ -343,6 +2131,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/projects/{project_id}/datasets",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/projects/{project_id}/datasets]"
+      },
       "covered_by": {
         "stream": "project_datasets"
       }
@@ -350,27 +2148,67 @@
     {
       "method": "GET",
       "path": "/v1pre3/runs/{run_id}/files",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/runs/{run_id}/files]"
+      },
       "covered_by": {
         "stream": "run_files"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1pre3/trash",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/trash]"
+      },
+      "covered_by": {
+        "stream": "trash"
+      }
+    },
+    {
       "method": "DELETE",
       "path": "/v1pre3/trash",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[DELETE /v1pre3/trash]"
+      },
       "covered_by": {
         "write": "delete_trash"
       }
     },
     {
       "method": "GET",
-      "path": "/v1pre3/trash",
-      "covered_by": {
-        "stream": "trash"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v1pre3/trash/{trash_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/trash/{trash_id}]"
+      },
       "covered_by": {
         "stream": "trash_2"
       }
@@ -378,6 +2216,16 @@
     {
       "method": "POST",
       "path": "/v1pre3/trash/{trash_id}/restorefromtrash",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/trash/{trash_id}/restorefromtrash]"
+      },
       "covered_by": {
         "write": "trash_id_restorefromtrash"
       }
@@ -385,6 +2233,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/users/current",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/current]"
+      },
       "covered_by": {
         "stream": "current_user"
       }
@@ -392,6 +2250,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/users/current/subscription",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/current/subscription]"
+      },
       "covered_by": {
         "stream": "current_user_subscription"
       }
@@ -399,6 +2267,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/users/current/usage",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/current/usage]"
+      },
       "covered_by": {
         "stream": "current_user_usage"
       }
@@ -406,6 +2284,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/users/current/workgroups",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/current/workgroups]"
+      },
       "covered_by": {
         "stream": "current_user_workgroups"
       }
@@ -413,6 +2301,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/users/{user_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/{user_id}]"
+      },
       "covered_by": {
         "stream": "user"
       }
@@ -420,6 +2318,16 @@
     {
       "method": "GET",
       "path": "/v1pre3/users/{user_id}/settings",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/{user_id}/settings]"
+      },
       "covered_by": {
         "stream": "user_settings"
       }
@@ -427,41 +2335,50 @@
     {
       "method": "POST",
       "path": "/v1pre3/users/{user_id}/settings",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[POST /v1pre3/users/{user_id}/settings]"
+      },
       "covered_by": {
         "write": "users_id_settings"
       }
     },
     {
       "method": "GET",
-      "path": "/v1pre3/workgroups/{workgroup_id}",
+      "path": "/v1pre3/users/{user}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/{user}]"
+      },
       "covered_by": {
-        "stream": "workgroup"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1pre3/users/{user}/projects",
-      "covered_by": {
-        "stream": "projects"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1pre3/users/{user}/runs",
-      "covered_by": {
-        "stream": "runs"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1pre3/users/{user}/samples",
-      "covered_by": {
-        "stream": "samples"
+        "stream": "configured_user"
       }
     },
     {
       "method": "GET",
       "path": "/v1pre3/users/{user}/appsessions",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/{user}/appsessions]"
+      },
       "covered_by": {
         "stream": "appsessions"
       }
@@ -469,15 +2386,128 @@
     {
       "method": "GET",
       "path": "/v1pre3/users/{user}/datasets",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/{user}/datasets]"
+      },
       "covered_by": {
         "stream": "datasets"
       }
     },
     {
       "method": "GET",
-      "path": "/v1pre3/users/{user}",
+      "path": "/v1pre3/users/{user}/projects",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/{user}/projects]"
+      },
       "covered_by": {
-        "stream": "configured_user"
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user}/runs",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/{user}/runs]"
+      },
+      "covered_by": {
+        "stream": "runs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/users/{user}/samples",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/users/{user}/samples]"
+      },
+      "covered_by": {
+        "stream": "samples"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1pre3/workgroups/{workgroup_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "existing-surface[GET /v1pre3/workgroups/{workgroup_id}]"
+      },
+      "covered_by": {
+        "stream": "workgroup"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/trash",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /v2/trash"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workgroups/{id}",
+      "provenance": {
+        "artifact": "illumina-basespace-artifact-2026-08-09",
+        "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+        "source_kind": "html_reference",
+        "version": "BaseSpace V2 API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d84f8d5cfade4dcdf71bf3bc5d988de3a1693ccde6c8216e4b470da1298bfb4c",
+        "coordinate": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference#GET /workgroups/{id}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

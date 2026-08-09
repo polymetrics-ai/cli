@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "batch": "batch-012",
+  "source": "official primary artifact retrieval",
+  "retrievals": [
+    {
+      "connector": "adjust",
+      "status": "fetched",
+      "evidence": "  500068"
+    },
+    {
+      "connector": "alpha-vantage",
+      "status": "fetched",
+      "evidence": " 1045341"
+    },
+    {
+      "connector": "amazon-sqs",
+      "status": "fetched",
+      "evidence": "   14282"
+    },
+    {
+      "connector": "ashby",
+      "status": "fetched",
+      "evidence": "  419331"
+    },
+    {
+      "connector": "assemblyai",
+      "status": "fetched",
+      "evidence": "  262232"
+    },
+    {
+      "connector": "awin-advertiser",
+      "status": "fetched",
+      "evidence": "  459097"
+    },
+    {
+      "connector": "aws-cloudtrail",
+      "status": "fetched",
+      "evidence": "   19193"
+    },
+    {
+      "connector": "bamboo-hr",
+      "status": "fetched",
+      "evidence": "  519059"
+    },
+    {
+      "connector": "braze",
+      "status": "fetched",
+      "evidence": "   49988"
+    },
+    {
+      "connector": "bunny-inc",
+      "status": "fetched",
+      "evidence": "  138549"
+    },
+    {
+      "connector": "churnkey",
+      "status": "fetched",
+      "evidence": "   14897"
+    },
+    {
+      "connector": "dynamodb",
+      "status": "fetched",
+      "evidence": "   23190"
+    },
+    {
+      "connector": "fillout",
+      "status": "fetched",
+      "evidence": "  461842"
+    },
+    {
+      "connector": "freshchat",
+      "status": "fetched",
+      "evidence": "  684060"
+    },
+    {
+      "connector": "mixpanel",
+      "status": "fetched",
+      "evidence": "  364952"
+    },
+    {
+      "connector": "notion",
+      "status": "fetched",
+      "evidence": "  394611"
+    },
+    {
+      "connector": "retailexpress-by-maropost",
+      "status": "fetched",
+      "evidence": "    6801"
+    },
+    {
+      "connector": "segment",
+      "status": "fetched",
+      "evidence": "   16441"
+    }
+  ]
+}

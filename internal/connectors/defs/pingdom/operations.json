@@ -1,0 +1,449 @@
+{
+  "operations": [
+    {
+      "id": "pingdom.get.alerting-contacts-contactid",
+      "kind": "rest_read",
+      "summary": "GET /alerting/contacts/{contactid}",
+      "description": "single-contact detail; identical record shape to the alerting_contacts list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/alerting/contacts/{contactid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.alerting-teams-teamid",
+      "kind": "rest_read",
+      "summary": "GET /alerting/teams/{teamid}",
+      "description": "single-team detail; identical record shape to the alerting_teams list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/alerting/teams/{teamid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.analysis-checkid",
+      "kind": "rest_read",
+      "summary": "GET /analysis/{checkid}",
+      "description": "root-cause-analysis report list for one check, a read-only diagnostic report rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analysis/{checkid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.analysis-checkid-analysisid",
+      "kind": "rest_read",
+      "summary": "GET /analysis/{checkid}/{analysisid}",
+      "description": "raw root-cause-analysis result for one analysis id, a read-only diagnostic report rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/analysis/{checkid}/{analysisid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.put.checks",
+      "kind": "rest_write",
+      "summary": "PUT /checks",
+      "description": "bulk pause/change-resolution for multiple checks by an id-list request body, not a single-record mutation; update_check already covers the per-check equivalent",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/checks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.delete.checks",
+      "kind": "rest_write",
+      "summary": "DELETE /checks",
+      "description": "bulk delete of multiple checks by an id-list request body; delete_check already covers the safer per-check equivalent, no bulk-destructive action added",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/checks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.checks-checkid",
+      "kind": "rest_read",
+      "summary": "GET /checks/{checkid}",
+      "description": "single-check detail; identical record shape to the checks list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/checks/{checkid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.delete.maintenance",
+      "kind": "rest_write",
+      "summary": "DELETE /maintenance",
+      "description": "bulk delete of multiple maintenance windows by an id-list request body; delete_maintenance already covers the safer per-window equivalent",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/maintenance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.delete.maintenance-occurrences",
+      "kind": "rest_write",
+      "summary": "DELETE /maintenance.occurrences",
+      "description": "bulk delete of multiple already-materialized occurrences of a recurring maintenance window by an id-list body; deleting the parent window via delete_maintenance is the practical lifecycle action",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/maintenance.occurrences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.maintenance-occurrences-id",
+      "kind": "rest_read",
+      "summary": "GET /maintenance.occurrences/{id}",
+      "description": "single-occurrence detail; identical record shape to the maintenance_occurrences list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/maintenance.occurrences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.put.maintenance-occurrences-id",
+      "kind": "rest_write",
+      "summary": "PUT /maintenance.occurrences/{id}",
+      "description": "adjusts the from/to window of one already-materialized recurring-maintenance occurrence; a narrow per-occurrence edit of a business object already covered at the parent-window level by create_maintenance/delete_maintenance",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/maintenance.occurrences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.delete.maintenance-occurrences-id",
+      "kind": "rest_write",
+      "summary": "DELETE /maintenance.occurrences/{id}",
+      "description": "deletes one already-materialized occurrence of a recurring maintenance window; deleting the parent window via delete_maintenance is the practical lifecycle action, not a per-occurrence exception carve-out",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/maintenance.occurrences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.maintenance-id",
+      "kind": "rest_read",
+      "summary": "GET /maintenance/{id}",
+      "description": "single-maintenance-window detail; identical record shape to the maintenance list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/maintenance/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.put.maintenance-id",
+      "kind": "rest_write",
+      "summary": "PUT /maintenance/{id}",
+      "description": "modifies an existing maintenance window's schedule/assigned-checks in place; create_maintenance/delete_maintenance cover the practical create-and-replace lifecycle, an in-place partial-update action was deprioritized for this pass",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/maintenance/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.results-checkid",
+      "kind": "rest_read",
+      "summary": "GET /results/{checkid}",
+      "description": "raw per-probe test-result history for one check, a high-volume diagnostic report rather than a stable business object; Pass B breadth-vs-cost triage",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/results/{checkid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.single",
+      "kind": "rest_read",
+      "summary": "GET /single",
+      "description": "performs a single ad-hoc network test on demand and returns its result inline; an on-demand action, not a syncable record read",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/single",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.summary-average-checkid",
+      "kind": "rest_read",
+      "summary": "GET /summary.average/{checkid}",
+      "description": "aggregated average-response-time/uptime report for one check over a time range, a computed reporting rollup rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/summary.average/{checkid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.summary-hoursofday-checkid",
+      "kind": "rest_read",
+      "summary": "GET /summary.hoursofday/{checkid}",
+      "description": "aggregated average-response-time-per-hour-of-day report for one check, a computed reporting rollup rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/summary.hoursofday/{checkid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.summary-outage-checkid",
+      "kind": "rest_read",
+      "summary": "GET /summary.outage/{checkid}",
+      "description": "status-change/outage history report for one check, a computed reporting rollup rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/summary.outage/{checkid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.summary-performance-checkid",
+      "kind": "rest_read",
+      "summary": "GET /summary.performance/{checkid}",
+      "description": "sub-interval performance report for one check over a time range, a computed reporting rollup rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/summary.performance/{checkid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.summary-probes-checkid",
+      "kind": "rest_read",
+      "summary": "GET /summary.probes/{checkid}",
+      "description": "list of probes that performed tests for one check over a time range, a computed reporting rollup rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/summary.probes/{checkid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.post.tms-check",
+      "kind": "rest_write",
+      "summary": "POST /tms/check",
+      "description": "creates a new transaction (browser-script) check from a multi-step script definition; the script-authoring payload shape is out of scope for this pass, unlike the simpler single-host uptime check create_check already covers",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tms/check",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.tms-check-report-status",
+      "kind": "rest_read",
+      "summary": "GET /tms/check/report/status",
+      "description": "organization-wide status-change report across all transaction checks, a computed reporting rollup rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tms/check/report/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.tms-check-check-id-report-performance",
+      "kind": "rest_read",
+      "summary": "GET /tms/check/{check_id}/report/performance",
+      "description": "performance report for one transaction check, a computed reporting rollup rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tms/check/{check_id}/report/performance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.tms-check-check-id-report-status",
+      "kind": "rest_read",
+      "summary": "GET /tms/check/{check_id}/report/status",
+      "description": "status-change report for one transaction check, a computed reporting rollup rather than an independently syncable business object",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tms/check/{check_id}/report/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.tms-check-cid",
+      "kind": "rest_read",
+      "summary": "GET /tms/check/{cid}",
+      "description": "single-transaction-check detail; identical record shape to the tms_checks list stream's per-item object, already covered by that stream",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tms/check/{cid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.put.tms-check-cid",
+      "kind": "rest_write",
+      "summary": "PUT /tms/check/{cid}",
+      "description": "modifies an existing transaction check's script/settings; out of scope for the same reason its create counterpart (POST /tms/check) is",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tms/check/{cid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.delete.tms-check-cid",
+      "kind": "rest_write",
+      "summary": "DELETE /tms/check/{cid}",
+      "description": "irreversible transaction-check deletion; Pass B breadth-vs-cost triage, no safer covered alternative for this resource in this pass",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/tms/check/{cid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "pingdom.get.traceroute",
+      "kind": "rest_read",
+      "summary": "GET /traceroute",
+      "description": "performs an ad-hoc traceroute on demand and returns its result inline; an on-demand action, not a syncable record read",
+      "source_url": "https://docs.pingdom.com/api/API_3.1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/traceroute",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

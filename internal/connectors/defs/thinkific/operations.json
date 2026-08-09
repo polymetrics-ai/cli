@@ -1,0 +1,1732 @@
+{
+  "operations": [
+    {
+      "id": "thinkific.get.api-public-v1-bundles-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/bundles/{id}",
+      "description": "no list endpoint exists to enumerate bundle ids at all (Thinkific's own API only exposes bundle-by-id and its sub-resources); a lone detail-by-id GET with no discovery path is not a syncable stream without an id already in hand from an external source",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/bundles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-bundles-id-courses",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/bundles/{id}/courses",
+      "description": "sub-resource of an unlistable bundle; same no-discovery-path reasoning as /bundles/{id}",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/bundles/{id}/courses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-bundles-id-enrollments",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/bundles/{id}/enrollments",
+      "description": "sub-resource of an unlistable bundle; same no-discovery-path reasoning as /bundles/{id}",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/bundles/{id}/enrollments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.api-public-v1-bundles-id-enrollments",
+      "kind": "rest_write",
+      "summary": "POST /api/public/v1/bundles/{id}/enrollments",
+      "description": "creates an enrollment scoped to an unlistable bundle id with no discovery path to obtain that id",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/public/v1/bundles/{id}/enrollments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.put.api-public-v1-bundles-id-enrollments",
+      "kind": "rest_write",
+      "summary": "PUT /api/public/v1/bundles/{id}/enrollments",
+      "description": "updates enrollments scoped to an unlistable bundle id with no discovery path to obtain that id",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/public/v1/bundles/{id}/enrollments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-chapters-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/chapters/{id}",
+      "description": "no top-level chapters list endpoint exists; only reachable per-course via courses/{id}/chapters, itself excluded for the same sub-resource-fan-out reason",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/chapters/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-chapters-id-contents",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/chapters/{id}/contents",
+      "description": "sub-resource of an unlistable chapter id; same no-discovery-path reasoning as /chapters/{id}",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/chapters/{id}/contents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-collections-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/collections/{id}",
+      "description": "single-collection detail; identical record shape to the collections list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/collections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-collections-id-products",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/collections/{id}/products",
+      "description": "a per-collection filtered view of the same records already covered by the products stream (the collections list stream's own product_ids field names the association)",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/collections/{id}/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-contents-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/contents/{id}",
+      "description": "no top-level contents list endpoint exists; only reachable per-chapter via chapters/{id}/contents, itself excluded for the same sub-resource-fan-out reason",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/contents/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.api-public-v1-coupons-bulk-create",
+      "kind": "rest_write",
+      "summary": "POST /api/public/v1/coupons/bulk_create",
+      "description": "a batch-of-many variant of create_coupon's single-record shape; this dialect's write actions are single-record, and repeated create_coupon calls cover the same outcome",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/public/v1/coupons/bulk_create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-coupons-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/coupons/{id}",
+      "description": "single-coupon detail; identical record shape to the coupons list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/coupons/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-course-reviews-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/course_reviews/{id}",
+      "description": "single-course-review detail; identical record shape to the course_reviews list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/course_reviews/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-courses-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/courses/{id}",
+      "description": "single-course detail; identical record shape to the courses list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/courses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-courses-id-chapters",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/courses/{id}/chapters",
+      "description": "chapters are only reachable per-course via this sub-resource path with no top-level list endpoint; would require sub-resource fan-out over every course id, not implemented this pass",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/courses/{id}/chapters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-enrollments-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/enrollments/{id}",
+      "description": "single-enrollment detail; identical record shape to the enrollments list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/enrollments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.api-public-v1-external-orders",
+      "kind": "rest_write",
+      "summary": "POST /api/public/v1/external_orders",
+      "description": "records a manually-completed off-platform sale as an order; a distinct bookkeeping workflow (not a general resource-lifecycle mutation) with no corresponding read stream to round-trip against",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/public/v1/external_orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.api-public-v1-external-orders-id-transactions-purchase",
+      "kind": "rest_write",
+      "summary": "POST /api/public/v1/external_orders/{id}/transactions/purchase",
+      "description": "records a manual purchase transaction against an external order; same narrow bookkeeping-workflow reasoning as /external_orders",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/public/v1/external_orders/{id}/transactions/purchase",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.api-public-v1-external-orders-id-transactions-refund",
+      "kind": "rest_write",
+      "summary": "POST /api/public/v1/external_orders/{id}/transactions/refund",
+      "description": "records a manual refund transaction against an external order; same narrow bookkeeping-workflow reasoning as /external_orders",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/public/v1/external_orders/{id}/transactions/refund",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.api-public-v1-group-analysts-user-id-groups",
+      "kind": "rest_write",
+      "summary": "POST /api/public/v1/group_analysts/{user_id}/groups",
+      "description": "the inverse (user-centric) analyst-group-assignment endpoint; same narrow-scope reasoning as the group-analyst sub-resource endpoints above",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/public/v1/group_analysts/{user_id}/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.api-public-v1-group-analysts-user-id-groups-group-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/public/v1/group_analysts/{user_id}/groups/{group_id}",
+      "description": "the inverse (user-centric) analyst-group-removal endpoint; same narrow-scope reasoning as the group-analyst sub-resource endpoints above",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/public/v1/group_analysts/{user_id}/groups/{group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-groups-group-id-analysts",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/groups/{group_id}/analysts",
+      "description": "per-group analyst-assignment sub-resource list, only reachable per-group with no top-level discovery endpoint; would require sub-resource fan-out over every group id, not implemented this pass",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/groups/{group_id}/analysts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.api-public-v1-groups-group-id-analysts",
+      "kind": "rest_write",
+      "summary": "POST /api/public/v1/groups/{group_id}/analysts",
+      "description": "assigns analysts to a specific group's analyst sub-resource; a narrower variant of group-membership management not modeled as a top-level write this pass",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/public/v1/groups/{group_id}/analysts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.api-public-v1-groups-group-id-analysts-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/public/v1/groups/{group_id}/analysts/{user_id}",
+      "description": "removes a specific analyst from a specific group's analyst sub-resource; same narrow-scope reasoning as the analyst-assignment endpoints above",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/public/v1/groups/{group_id}/analysts/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-groups-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/groups/{id}",
+      "description": "single-group detail; identical record shape to the groups list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-instructors-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/instructors/{id}",
+      "description": "single-instructor detail; identical record shape to the instructors list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/instructors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-orders-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/orders/{id}",
+      "description": "single-order detail; identical record shape to the orders list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-product-publish-requests-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/product_publish_requests/{id}",
+      "description": "single-publish-request detail; identical record shape to the product_publish_requests list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/product_publish_requests/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-products-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/products/{id}",
+      "description": "single-product detail; identical record shape to the products list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-products-id-related",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/products/{id}/related",
+      "description": "a related-products cross-reference view of the same records already covered by the products stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/products/{id}/related",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-promotions-by-coupon",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/promotions/by_coupon",
+      "description": "a coupon-code-keyed lookup of the same promotion records already covered by the promotions stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/promotions/by_coupon",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-promotions-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/promotions/{id}",
+      "description": "single-promotion detail; identical record shape to the promotions list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/promotions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-site-scripts-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/site_scripts/{id}",
+      "description": "single-site-script detail; identical record shape to the site_scripts list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/site_scripts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-users-id",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/users/{id}",
+      "description": "single-user detail; identical record shape to the users list stream's per-item object, already covered by that stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.api-public-v1-users-id-authentications-provider",
+      "kind": "rest_read",
+      "summary": "GET /api/public/v1/users/{id}/authentications/{provider}",
+      "description": "single-sign-on provider authentication-record lookup for one user/provider pair, not a syncable object stream",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/public/v1/users/{id}/authentications/{provider}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.bundles-id",
+      "kind": "rest_read",
+      "summary": "GET /bundles/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bundles/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.bundles-id-courses",
+      "kind": "rest_read",
+      "summary": "GET /bundles/{id}/courses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bundles/{id}/courses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.bundles-id-enrollments",
+      "kind": "rest_read",
+      "summary": "GET /bundles/{id}/enrollments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bundles/{id}/enrollments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.bundles-id-enrollments",
+      "kind": "rest_write",
+      "summary": "POST /bundles/{id}/enrollments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bundles/{id}/enrollments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.put.bundles-id-enrollments",
+      "kind": "rest_write",
+      "summary": "PUT /bundles/{id}/enrollments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/bundles/{id}/enrollments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.chapters-id",
+      "kind": "rest_read",
+      "summary": "GET /chapters/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/chapters/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.chapters-id-contents",
+      "kind": "rest_read",
+      "summary": "GET /chapters/{id}/contents",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/chapters/{id}/contents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.collection-memberships-id",
+      "kind": "rest_write",
+      "summary": "POST /collection_memberships/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/collection_memberships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.collection-memberships-id",
+      "kind": "rest_write",
+      "summary": "DELETE /collection_memberships/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/collection_memberships/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.collections",
+      "kind": "rest_read",
+      "summary": "GET /collections",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/collections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.collections",
+      "kind": "rest_write",
+      "summary": "POST /collections",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/collections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.collections-id",
+      "kind": "rest_read",
+      "summary": "GET /collections/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/collections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.put.collections-id",
+      "kind": "rest_write",
+      "summary": "PUT /collections/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/collections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.collections-id",
+      "kind": "rest_write",
+      "summary": "DELETE /collections/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/collections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.collections-id-products",
+      "kind": "rest_read",
+      "summary": "GET /collections/{id}/products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/collections/{id}/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.contents-id",
+      "kind": "rest_read",
+      "summary": "GET /contents/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contents/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.coupons",
+      "kind": "rest_read",
+      "summary": "GET /coupons",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.coupons",
+      "kind": "rest_write",
+      "summary": "POST /coupons",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/coupons",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.coupons-bulk-create",
+      "kind": "rest_write",
+      "summary": "POST /coupons/bulk_create",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/coupons/bulk_create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.coupons-id",
+      "kind": "rest_read",
+      "summary": "GET /coupons/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/coupons/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.put.coupons-id",
+      "kind": "rest_write",
+      "summary": "PUT /coupons/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/coupons/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.coupons-id",
+      "kind": "rest_write",
+      "summary": "DELETE /coupons/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/coupons/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.course-reviews",
+      "kind": "rest_read",
+      "summary": "GET /course_reviews",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/course_reviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.course-reviews",
+      "kind": "rest_write",
+      "summary": "POST /course_reviews",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/course_reviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.course-reviews-id",
+      "kind": "rest_read",
+      "summary": "GET /course_reviews/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/course_reviews/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.courses",
+      "kind": "rest_read",
+      "summary": "GET /courses",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/courses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.courses-id",
+      "kind": "rest_read",
+      "summary": "GET /courses/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/courses/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.courses-id-chapters",
+      "kind": "rest_read",
+      "summary": "GET /courses/{id}/chapters",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/courses/{id}/chapters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.custom-profile-field-definitions",
+      "kind": "rest_read",
+      "summary": "GET /custom_profile_field_definitions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/custom_profile_field_definitions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.enrollments",
+      "kind": "rest_read",
+      "summary": "GET /enrollments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enrollments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.enrollments",
+      "kind": "rest_write",
+      "summary": "POST /enrollments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/enrollments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.enrollments-id",
+      "kind": "rest_read",
+      "summary": "GET /enrollments/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enrollments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.put.enrollments-id",
+      "kind": "rest_write",
+      "summary": "PUT /enrollments/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/enrollments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.external-orders",
+      "kind": "rest_write",
+      "summary": "POST /external_orders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/external_orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.external-orders-id-transactions-purchase",
+      "kind": "rest_write",
+      "summary": "POST /external_orders/{id}/transactions/purchase",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/external_orders/{id}/transactions/purchase",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.external-orders-id-transactions-refund",
+      "kind": "rest_write",
+      "summary": "POST /external_orders/{id}/transactions/refund",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/external_orders/{id}/transactions/refund",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.group-analysts-user-id-groups",
+      "kind": "rest_write",
+      "summary": "POST /group_analysts/{user_id}/groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/group_analysts/{user_id}/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.group-analysts-user-id-groups-group-id",
+      "kind": "rest_write",
+      "summary": "DELETE /group_analysts/{user_id}/groups/{group_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/group_analysts/{user_id}/groups/{group_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.group-users",
+      "kind": "rest_write",
+      "summary": "POST /group_users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/group_users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.groups",
+      "kind": "rest_read",
+      "summary": "GET /groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.groups",
+      "kind": "rest_write",
+      "summary": "POST /groups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.groups-group-id-analysts",
+      "kind": "rest_read",
+      "summary": "GET /groups/{group_id}/analysts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{group_id}/analysts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.groups-group-id-analysts",
+      "kind": "rest_write",
+      "summary": "POST /groups/{group_id}/analysts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/groups/{group_id}/analysts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.groups-group-id-analysts-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /groups/{group_id}/analysts/{user_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/groups/{group_id}/analysts/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.groups-id",
+      "kind": "rest_read",
+      "summary": "GET /groups/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.groups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /groups/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/groups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.instructors",
+      "kind": "rest_read",
+      "summary": "GET /instructors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/instructors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.instructors",
+      "kind": "rest_write",
+      "summary": "POST /instructors",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/instructors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.instructors-id",
+      "kind": "rest_read",
+      "summary": "GET /instructors/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/instructors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.put.instructors-id",
+      "kind": "rest_write",
+      "summary": "PUT /instructors/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/instructors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.instructors-id",
+      "kind": "rest_write",
+      "summary": "DELETE /instructors/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/instructors/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.orders",
+      "kind": "rest_read",
+      "summary": "GET /orders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.orders-id",
+      "kind": "rest_read",
+      "summary": "GET /orders/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/orders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.product-publish-requests",
+      "kind": "rest_read",
+      "summary": "GET /product_publish_requests",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/product_publish_requests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.product-publish-requests-id",
+      "kind": "rest_read",
+      "summary": "GET /product_publish_requests/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/product_publish_requests/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.product-publish-requests-id-approve",
+      "kind": "rest_write",
+      "summary": "POST /product_publish_requests/{id}/approve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/product_publish_requests/{id}/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.product-publish-requests-id-deny",
+      "kind": "rest_write",
+      "summary": "POST /product_publish_requests/{id}/deny",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/product_publish_requests/{id}/deny",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.products",
+      "kind": "rest_read",
+      "summary": "GET /products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.products-id",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.products-id-related",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}/related",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}/related",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.promotions",
+      "kind": "rest_read",
+      "summary": "GET /promotions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/promotions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.promotions",
+      "kind": "rest_write",
+      "summary": "POST /promotions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/promotions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.promotions-by-coupon",
+      "kind": "rest_read",
+      "summary": "GET /promotions/by_coupon",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/promotions/by_coupon",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.promotions-id",
+      "kind": "rest_read",
+      "summary": "GET /promotions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/promotions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.put.promotions-id",
+      "kind": "rest_write",
+      "summary": "PUT /promotions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/promotions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.promotions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /promotions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/promotions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.site-scripts",
+      "kind": "rest_read",
+      "summary": "GET /site_scripts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/site_scripts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.site-scripts",
+      "kind": "rest_write",
+      "summary": "POST /site_scripts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/site_scripts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.site-scripts-id",
+      "kind": "rest_read",
+      "summary": "GET /site_scripts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/site_scripts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.put.site-scripts-id",
+      "kind": "rest_write",
+      "summary": "PUT /site_scripts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/site_scripts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.site-scripts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /site_scripts/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/site_scripts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.users",
+      "kind": "rest_read",
+      "summary": "GET /users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.put.users-id",
+      "kind": "rest_write",
+      "summary": "PUT /users/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.delete.users-id",
+      "kind": "rest_write",
+      "summary": "DELETE /users/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "thinkific.get.users-id-authentications-provider",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}/authentications/{provider}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}/authentications/{provider}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

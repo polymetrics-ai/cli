@@ -1,0 +1,2868 @@
+{
+  "tagline": "Run Google Directory's declared streams and reverse-ETL actions.",
+  "usage": "pm google-directory \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get admin directory v1 customer customer domainaliases",
+        "api get admin directory v1 customer customer domainaliases domainaliasname",
+        "api get admin directory v1 customer customer domains",
+        "api get admin directory v1 customer customer domains domainname",
+        "api get admin directory v1 customer customer resources buildings",
+        "api get admin directory v1 customer customer resources buildings buildingid",
+        "api get admin directory v1 customer customer resources calendars",
+        "api get admin directory v1 customer customer resources calendars calendarresourceid",
+        "api get admin directory v1 customer customer resources features",
+        "api get admin directory v1 customer customer resources features featurekey",
+        "api get admin directory v1 customer customer roleassignments",
+        "api get admin directory v1 customer customer roleassignments roleassignmentid",
+        "api get admin directory v1 customer customer roles",
+        "api get admin directory v1 customer customer roles all privileges",
+        "api get admin directory v1 customer customer roles roleid",
+        "api get admin directory v1 customer customerid devices chromeos",
+        "api get admin directory v1 customer customerid devices chromeos deviceid",
+        "api get admin directory v1 customer customerid devices chromeos deviceid commands commandid",
+        "api get admin directory v1 customer customerid devices chromeos-countchromeosdevices",
+        "api get admin directory v1 customer customerid devices mobile",
+        "api get admin directory v1 customer customerid devices mobile resourceid",
+        "api get admin directory v1 customer customerid orgunits",
+        "api get admin directory v1 customer customerid orgunits orgunitpath",
+        "api get admin directory v1 customer customerid schemas",
+        "api get admin directory v1 customer customerid schemas schemakey",
+        "api get admin directory v1 customers customerkey",
+        "api get admin directory v1 groups",
+        "api get admin directory v1 groups groupkey",
+        "api get admin directory v1 groups groupkey aliases",
+        "api get admin directory v1 groups groupkey hasmember memberkey",
+        "api get admin directory v1 groups groupkey members",
+        "api get admin directory v1 groups groupkey members memberkey",
+        "api get admin directory v1 name",
+        "api get admin directory v1 name operation",
+        "api get admin directory v1 parent chrome printers",
+        "api get admin directory v1 parent chrome printers-listprintermodels",
+        "api get admin directory v1 parent chrome printservers",
+        "api get admin directory v1 users",
+        "api get admin directory v1 users userkey",
+        "api get admin directory v1 users userkey aliases",
+        "api get admin directory v1 users userkey asps",
+        "api get admin directory v1 users userkey asps codeid",
+        "api get admin directory v1 users userkey photos thumbnail",
+        "api get admin directory v1 users userkey tokens",
+        "api get admin directory v1 users userkey tokens clientid",
+        "api get admin directory v1 users userkey verificationcodes",
+        "api get customer customer domains",
+        "api get customer customer roles",
+        "api get groups groupkey members",
+        "chromeos devices list",
+        "groups list",
+        "orgunits list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete admin directory v1 customer customer domainaliases domainaliasname",
+        "api delete admin directory v1 customer customer domains domainname",
+        "api delete admin directory v1 customer customer resources buildings buildingid",
+        "api delete admin directory v1 customer customer resources calendars calendarresourceid",
+        "api delete admin directory v1 customer customer resources features featurekey",
+        "api delete admin directory v1 customer customer roleassignments roleassignmentid",
+        "api delete admin directory v1 customer customer roles roleid",
+        "api delete admin directory v1 customer customerid devices mobile resourceid",
+        "api delete admin directory v1 customer customerid orgunits orgunitpath",
+        "api delete admin directory v1 customer customerid schemas schemakey",
+        "api delete admin directory v1 groups groupkey",
+        "api delete admin directory v1 groups groupkey aliases alias",
+        "api delete admin directory v1 groups groupkey members memberkey",
+        "api delete admin directory v1 name",
+        "api delete admin directory v1 name operation",
+        "api delete admin directory v1 users userkey",
+        "api delete admin directory v1 users userkey aliases alias",
+        "api delete admin directory v1 users userkey asps codeid",
+        "api delete admin directory v1 users userkey photos thumbnail",
+        "api delete admin directory v1 users userkey tokens clientid",
+        "api patch admin directory v1 customer customer resources buildings buildingid",
+        "api patch admin directory v1 customer customer resources calendars calendarresourceid",
+        "api patch admin directory v1 customer customer resources features featurekey",
+        "api patch admin directory v1 customer customer roles roleid",
+        "api patch admin directory v1 customer customerid devices chromeos deviceid",
+        "api patch admin directory v1 customer customerid orgunits orgunitpath",
+        "api patch admin directory v1 customer customerid schemas schemakey",
+        "api patch admin directory v1 customers customerkey",
+        "api patch admin directory v1 groups groupkey",
+        "api patch admin directory v1 groups groupkey members memberkey",
+        "api patch admin directory v1 name",
+        "api patch admin directory v1 name operation",
+        "api patch admin directory v1 users userkey",
+        "api patch admin directory v1 users userkey photos thumbnail",
+        "api post admin directory v1 customer customer domainaliases",
+        "api post admin directory v1 customer customer domains",
+        "api post admin directory v1 customer customer resources buildings",
+        "api post admin directory v1 customer customer resources calendars",
+        "api post admin directory v1 customer customer resources features",
+        "api post admin directory v1 customer customer resources features oldname rename",
+        "api post admin directory v1 customer customer roleassignments",
+        "api post admin directory v1 customer customer roles",
+        "api post admin directory v1 customer customerid devices chromeos deviceid issuecommand",
+        "api post admin directory v1 customer customerid devices chromeos movedevicestoou",
+        "api post admin directory v1 customer customerid devices chromeos resourceid action",
+        "api post admin directory v1 customer customerid devices chromeos-batchchangestatus",
+        "api post admin directory v1 customer customerid devices mobile resourceid action",
+        "api post admin directory v1 customer customerid orgunits",
+        "api post admin directory v1 customer customerid schemas",
+        "api post admin directory v1 groups",
+        "api post admin directory v1 groups groupkey aliases",
+        "api post admin directory v1 groups groupkey members",
+        "api post admin directory v1 parent chrome printers",
+        "api post admin directory v1 parent chrome printers-batchcreateprinters",
+        "api post admin directory v1 parent chrome printers-batchdeleteprinters",
+        "api post admin directory v1 parent chrome printservers",
+        "api post admin directory v1 parent chrome printservers-batchcreateprintservers",
+        "api post admin directory v1 parent chrome printservers-batchdeleteprintservers",
+        "api post admin directory v1 users",
+        "api post admin directory v1 users userkey aliases",
+        "api post admin directory v1 users userkey aliases watch",
+        "api post admin directory v1 users userkey makeadmin",
+        "api post admin directory v1 users userkey signout",
+        "api post admin directory v1 users userkey twostepverification turnoff",
+        "api post admin directory v1 users userkey undelete",
+        "api post admin directory v1 users userkey verificationcodes generate",
+        "api post admin directory v1 users userkey verificationcodes invalidate",
+        "api post admin directory v1 users watch",
+        "api post admin directory v1 users-createguest",
+        "api post admin directory-v1 channels stop",
+        "api post users",
+        "api put admin directory v1 customer customer resources buildings buildingid",
+        "api put admin directory v1 customer customer resources calendars calendarresourceid",
+        "api put admin directory v1 customer customer resources features featurekey",
+        "api put admin directory v1 customer customer roles roleid",
+        "api put admin directory v1 customer customerid devices chromeos deviceid",
+        "api put admin directory v1 customer customerid orgunits orgunitpath",
+        "api put admin directory v1 customer customerid schemas schemakey",
+        "api put admin directory v1 customers customerkey",
+        "api put admin directory v1 groups groupkey",
+        "api put admin directory v1 groups groupkey members memberkey",
+        "api put admin directory v1 users userkey",
+        "api put admin directory v1 users userkey photos thumbnail"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete admin directory v1 customer customer domainaliases domainaliasname",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customer domainaliases domainaliasname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customer-domainaliases-domainaliasname",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 customer customer domains domainname",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customer}/domains/{domainName} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customer domains domainname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customer}/domains/{domainName}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customer-domains-domainname",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 customer customer resources buildings buildingid",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customer}/resources/buildings/{buildingId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customer resources buildings buildingid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customer-resources-buildings-buildingid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 customer customer resources calendars calendarresourceid",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customer resources calendars calendarresourceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customer-resources-calendars-calendarresourceid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 customer customer resources features featurekey",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customer}/resources/features/{featureKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customer resources features featurekey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customer}/resources/features/{featureKey}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customer-resources-features-featurekey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 customer customer roleassignments roleassignmentid",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customer roleassignments roleassignmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customer-roleassignments-roleassignmentid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 customer customer roles roleid",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customer}/roles/{roleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customer roles roleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customer}/roles/{roleId}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customer-roles-roleid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 customer customerid devices mobile resourceid",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customerid devices mobile resourceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customerid-devices-mobile-resourceid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 customer customerid orgunits orgunitpath",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customerid orgunits orgunitpath --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customerid-orgunits-orgunitpath",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 customer customerid schemas schemakey",
+      "summary": "Documented DELETE /admin/directory/v1/customer/{customerId}/schemas/{schemaKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 customer customerid schemas schemakey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/customer/{customerId}/schemas/{schemaKey}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-customer-customerid-schemas-schemakey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 groups groupkey",
+      "summary": "Documented DELETE /admin/directory/v1/groups/{groupKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 groups groupkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/groups/{groupKey}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-groups-groupkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 groups groupkey aliases alias",
+      "summary": "Documented DELETE /admin/directory/v1/groups/{groupKey}/aliases/{alias} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 groups groupkey aliases alias --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/groups/{groupKey}/aliases/{alias}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-groups-groupkey-aliases-alias",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 groups groupkey members memberkey",
+      "summary": "Documented DELETE /admin/directory/v1/groups/{groupKey}/members/{memberKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 groups groupkey members memberkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/groups/{groupKey}/members/{memberKey}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-groups-groupkey-members-memberkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 name",
+      "summary": "Documented DELETE /admin/directory/v1/{+name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/{+name}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 name operation",
+      "summary": "Documented DELETE /admin/directory/v1/{+name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 name operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/{+name}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 users userkey",
+      "summary": "Documented DELETE /admin/directory/v1/users/{userKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 users userkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/users/{userKey}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-users-userkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 users userkey aliases alias",
+      "summary": "Documented DELETE /admin/directory/v1/users/{userKey}/aliases/{alias} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 users userkey aliases alias --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/users/{userKey}/aliases/{alias}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-users-userkey-aliases-alias",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 users userkey asps codeid",
+      "summary": "Documented DELETE /admin/directory/v1/users/{userKey}/asps/{codeId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 users userkey asps codeid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/users/{userKey}/asps/{codeId}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-users-userkey-asps-codeid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 users userkey photos thumbnail",
+      "summary": "Documented DELETE /admin/directory/v1/users/{userKey}/photos/thumbnail (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 users userkey photos thumbnail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/users/{userKey}/photos/thumbnail"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-users-userkey-photos-thumbnail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete admin directory v1 users userkey tokens clientid",
+      "summary": "Documented DELETE /admin/directory/v1/users/{userKey}/tokens/{clientId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api delete admin directory v1 users userkey tokens clientid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/admin/directory/v1/users/{userKey}/tokens/{clientId}"
+        }
+      ],
+      "operation": "google-directory.delete.admin-directory-v1-users-userkey-tokens-clientid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get admin directory v1 customer customer domainaliases",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/domainaliases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer domainaliases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/domainaliases"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-domainaliases",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer domainaliases domainaliasname",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer domainaliases domainaliasname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/domainaliases/{domainAliasName}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-domainaliases-domainaliasname",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer domains",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/domains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/domains"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-domains",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer domains domainname",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/domains/{domainName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer domains domainname --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/domains/{domainName}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-domains-domainname",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer resources buildings",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/resources/buildings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer resources buildings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/resources/buildings"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-resources-buildings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer resources buildings buildingid",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/resources/buildings/{buildingId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer resources buildings buildingid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-resources-buildings-buildingid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer resources calendars",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/resources/calendars (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer resources calendars --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/resources/calendars"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-resources-calendars",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer resources calendars calendarresourceid",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer resources calendars calendarresourceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-resources-calendars-calendarresourceid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer resources features",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/resources/features (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer resources features --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/resources/features"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-resources-features",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer resources features featurekey",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/resources/features/{featureKey} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer resources features featurekey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/resources/features/{featureKey}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-resources-features-featurekey",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer roleassignments",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/roleassignments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer roleassignments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/roleassignments"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-roleassignments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer roleassignments roleassignmentid",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer roleassignments roleassignmentid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/roleassignments/{roleAssignmentId}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-roleassignments-roleassignmentid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer roles",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/roles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/roles"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-roles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer roles all privileges",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/roles/ALL/privileges (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer roles all privileges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/roles/ALL/privileges"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-roles-all-privileges",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customer roles roleid",
+      "summary": "Documented GET /admin/directory/v1/customer/{customer}/roles/{roleId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customer roles roleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customer}/roles/{roleId}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customer-roles-roleid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid devices chromeos",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/devices/chromeos (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid devices chromeos --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-devices-chromeos",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid devices chromeos deviceid",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid devices chromeos deviceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-devices-chromeos-deviceid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid devices chromeos deviceid commands commandid",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}/commands/{commandId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid devices chromeos deviceid commands commandid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}/commands/{commandId}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-devices-chromeos-deviceid-commands-commandid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid devices chromeos-countchromeosdevices",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/devices/chromeos:countChromeOsDevices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid devices chromeos-countchromeosdevices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos:countChromeOsDevices"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-devices-chromeos-countchromeosdevices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid devices mobile",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/devices/mobile (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid devices mobile --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/mobile"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-devices-mobile",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid devices mobile resourceid",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid devices mobile resourceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-devices-mobile-resourceid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid orgunits",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/orgunits (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid orgunits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/orgunits"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-orgunits",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid orgunits orgunitpath",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid orgunits orgunitpath --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-orgunits-orgunitpath",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid schemas",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/schemas (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid schemas --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/schemas"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-schemas",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customer customerid schemas schemakey",
+      "summary": "Documented GET /admin/directory/v1/customer/{customerId}/schemas/{schemaKey} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customer customerid schemas schemakey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customer/{customerId}/schemas/{schemaKey}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customer-customerid-schemas-schemakey",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 customers customerkey",
+      "summary": "Documented GET /admin/directory/v1/customers/{customerKey} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 customers customerkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/customers/{customerKey}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-customers-customerkey",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 groups",
+      "summary": "Documented GET /admin/directory/v1/groups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/groups"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-groups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 groups groupkey",
+      "summary": "Documented GET /admin/directory/v1/groups/{groupKey} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 groups groupkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/groups/{groupKey}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-groups-groupkey",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 groups groupkey aliases",
+      "summary": "Documented GET /admin/directory/v1/groups/{groupKey}/aliases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 groups groupkey aliases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/groups/{groupKey}/aliases"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-groups-groupkey-aliases",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 groups groupkey hasmember memberkey",
+      "summary": "Documented GET /admin/directory/v1/groups/{groupKey}/hasMember/{memberKey} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 groups groupkey hasmember memberkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/groups/{groupKey}/hasMember/{memberKey}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-groups-groupkey-hasmember-memberkey",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 groups groupkey members",
+      "summary": "Documented GET /admin/directory/v1/groups/{groupKey}/members (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 groups groupkey members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/groups/{groupKey}/members"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-groups-groupkey-members",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 groups groupkey members memberkey",
+      "summary": "Documented GET /admin/directory/v1/groups/{groupKey}/members/{memberKey} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 groups groupkey members memberkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/groups/{groupKey}/members/{memberKey}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-groups-groupkey-members-memberkey",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 name",
+      "summary": "Documented GET /admin/directory/v1/{+name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/{+name}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-name",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 name operation",
+      "summary": "Documented GET /admin/directory/v1/{+name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 name operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/{+name}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-name",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 parent chrome printers",
+      "summary": "Documented GET /admin/directory/v1/{+parent}/chrome/printers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 parent chrome printers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/{+parent}/chrome/printers"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-parent-chrome-printers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 parent chrome printers-listprintermodels",
+      "summary": "Documented GET /admin/directory/v1/{+parent}/chrome/printers:listPrinterModels (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 parent chrome printers-listprintermodels --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/{+parent}/chrome/printers:listPrinterModels"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-parent-chrome-printers-listprintermodels",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 parent chrome printservers",
+      "summary": "Documented GET /admin/directory/v1/{+parent}/chrome/printServers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 parent chrome printservers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/{+parent}/chrome/printServers"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-parent-chrome-printservers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 users",
+      "summary": "Documented GET /admin/directory/v1/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/users"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 users userkey",
+      "summary": "Documented GET /admin/directory/v1/users/{userKey} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 users userkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/users/{userKey}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-users-userkey",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 users userkey aliases",
+      "summary": "Documented GET /admin/directory/v1/users/{userKey}/aliases (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 users userkey aliases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/users/{userKey}/aliases"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-users-userkey-aliases",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 users userkey asps",
+      "summary": "Documented GET /admin/directory/v1/users/{userKey}/asps (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 users userkey asps --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/users/{userKey}/asps"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-users-userkey-asps",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 users userkey asps codeid",
+      "summary": "Documented GET /admin/directory/v1/users/{userKey}/asps/{codeId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 users userkey asps codeid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/users/{userKey}/asps/{codeId}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-users-userkey-asps-codeid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 users userkey photos thumbnail",
+      "summary": "Documented GET /admin/directory/v1/users/{userKey}/photos/thumbnail (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 users userkey photos thumbnail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/users/{userKey}/photos/thumbnail"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-users-userkey-photos-thumbnail",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 users userkey tokens",
+      "summary": "Documented GET /admin/directory/v1/users/{userKey}/tokens (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 users userkey tokens --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/users/{userKey}/tokens"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-users-userkey-tokens",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 users userkey tokens clientid",
+      "summary": "Documented GET /admin/directory/v1/users/{userKey}/tokens/{clientId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 users userkey tokens clientid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/users/{userKey}/tokens/{clientId}"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-users-userkey-tokens-clientid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get admin directory v1 users userkey verificationcodes",
+      "summary": "Documented GET /admin/directory/v1/users/{userKey}/verificationCodes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get admin directory v1 users userkey verificationcodes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admin/directory/v1/users/{userKey}/verificationCodes"
+        }
+      ],
+      "operation": "google-directory.get.admin-directory-v1-users-userkey-verificationcodes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer customer domains",
+      "summary": "Documented GET /customer/{customer}/domains (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get customer customer domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/{customer}/domains"
+        }
+      ],
+      "operation": "google-directory.get.customer-customer-domains",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer customer roles",
+      "summary": "Documented GET /customer/{customer}/roles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get customer customer roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/{customer}/roles"
+        }
+      ],
+      "operation": "google-directory.get.customer-customer-roles",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get groups groupkey members",
+      "summary": "Documented GET /groups/{groupKey}/members (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api get groups groupkey members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups/{groupKey}/members"
+        }
+      ],
+      "operation": "google-directory.get.groups-groupkey-members",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch admin directory v1 customer customer resources buildings buildingid",
+      "summary": "Documented PATCH /admin/directory/v1/customer/{customer}/resources/buildings/{buildingId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 customer customer resources buildings buildingid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-customer-customer-resources-buildings-buildingid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 customer customer resources calendars calendarresourceid",
+      "summary": "Documented PATCH /admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 customer customer resources calendars calendarresourceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-customer-customer-resources-calendars-calendarresourceid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 customer customer resources features featurekey",
+      "summary": "Documented PATCH /admin/directory/v1/customer/{customer}/resources/features/{featureKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 customer customer resources features featurekey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/customer/{customer}/resources/features/{featureKey}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-customer-customer-resources-features-featurekey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 customer customer roles roleid",
+      "summary": "Documented PATCH /admin/directory/v1/customer/{customer}/roles/{roleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 customer customer roles roleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/customer/{customer}/roles/{roleId}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-customer-customer-roles-roleid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 customer customerid devices chromeos deviceid",
+      "summary": "Documented PATCH /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 customer customerid devices chromeos deviceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-customer-customerid-devices-chromeos-deviceid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 customer customerid orgunits orgunitpath",
+      "summary": "Documented PATCH /admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 customer customerid orgunits orgunitpath --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-customer-customerid-orgunits-orgunitpath",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 customer customerid schemas schemakey",
+      "summary": "Documented PATCH /admin/directory/v1/customer/{customerId}/schemas/{schemaKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 customer customerid schemas schemakey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/customer/{customerId}/schemas/{schemaKey}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-customer-customerid-schemas-schemakey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 customers customerkey",
+      "summary": "Documented PATCH /admin/directory/v1/customers/{customerKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 customers customerkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/customers/{customerKey}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-customers-customerkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 groups groupkey",
+      "summary": "Documented PATCH /admin/directory/v1/groups/{groupKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 groups groupkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/groups/{groupKey}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-groups-groupkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 groups groupkey members memberkey",
+      "summary": "Documented PATCH /admin/directory/v1/groups/{groupKey}/members/{memberKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 groups groupkey members memberkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/groups/{groupKey}/members/{memberKey}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-groups-groupkey-members-memberkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 name",
+      "summary": "Documented PATCH /admin/directory/v1/{+name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/{+name}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 name operation",
+      "summary": "Documented PATCH /admin/directory/v1/{+name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 name operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/{+name}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 users userkey",
+      "summary": "Documented PATCH /admin/directory/v1/users/{userKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 users userkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/users/{userKey}"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-users-userkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch admin directory v1 users userkey photos thumbnail",
+      "summary": "Documented PATCH /admin/directory/v1/users/{userKey}/photos/thumbnail (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api patch admin directory v1 users userkey photos thumbnail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/admin/directory/v1/users/{userKey}/photos/thumbnail"
+        }
+      ],
+      "operation": "google-directory.patch.admin-directory-v1-users-userkey-photos-thumbnail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customer domainaliases",
+      "summary": "Documented POST /admin/directory/v1/customer/{customer}/domainaliases (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customer domainaliases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customer}/domainaliases"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customer-domainaliases",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customer domains",
+      "summary": "Documented POST /admin/directory/v1/customer/{customer}/domains (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customer domains --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customer}/domains"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customer-domains",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customer resources buildings",
+      "summary": "Documented POST /admin/directory/v1/customer/{customer}/resources/buildings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customer resources buildings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customer}/resources/buildings"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customer-resources-buildings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customer resources calendars",
+      "summary": "Documented POST /admin/directory/v1/customer/{customer}/resources/calendars (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customer resources calendars --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customer}/resources/calendars"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customer-resources-calendars",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customer resources features",
+      "summary": "Documented POST /admin/directory/v1/customer/{customer}/resources/features (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customer resources features --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customer}/resources/features"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customer-resources-features",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customer resources features oldname rename",
+      "summary": "Documented POST /admin/directory/v1/customer/{customer}/resources/features/{oldName}/rename (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customer resources features oldname rename --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customer}/resources/features/{oldName}/rename"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customer-resources-features-oldname-rename",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customer roleassignments",
+      "summary": "Documented POST /admin/directory/v1/customer/{customer}/roleassignments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customer roleassignments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customer}/roleassignments"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customer-roleassignments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customer roles",
+      "summary": "Documented POST /admin/directory/v1/customer/{customer}/roles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customer roles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customer}/roles"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customer-roles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customerid devices chromeos deviceid issuecommand",
+      "summary": "Documented POST /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}:issueCommand (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customerid devices chromeos deviceid issuecommand --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}:issueCommand"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customerid-devices-chromeos-deviceid-issuecommand",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customerid devices chromeos movedevicestoou",
+      "summary": "Documented POST /admin/directory/v1/customer/{customerId}/devices/chromeos/moveDevicesToOu (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customerid devices chromeos movedevicestoou --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/moveDevicesToOu"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customerid-devices-chromeos-movedevicestoou",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customerid devices chromeos resourceid action",
+      "summary": "Documented POST /admin/directory/v1/customer/{customerId}/devices/chromeos/{resourceId}/action (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customerid devices chromeos resourceid action --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{resourceId}/action"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customerid-devices-chromeos-resourceid-action",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customerid devices chromeos-batchchangestatus",
+      "summary": "Documented POST /admin/directory/v1/customer/{customerId}/devices/chromeos:batchChangeStatus (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customerid devices chromeos-batchchangestatus --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos:batchChangeStatus"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customerid-devices-chromeos-batchchangestatus",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customerid devices mobile resourceid action",
+      "summary": "Documented POST /admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}/action (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customerid devices mobile resourceid action --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/mobile/{resourceId}/action"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customerid-devices-mobile-resourceid-action",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customerid orgunits",
+      "summary": "Documented POST /admin/directory/v1/customer/{customerId}/orgunits (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customerid orgunits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customerId}/orgunits"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customerid-orgunits",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 customer customerid schemas",
+      "summary": "Documented POST /admin/directory/v1/customer/{customerId}/schemas (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 customer customerid schemas --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/customer/{customerId}/schemas"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-customer-customerid-schemas",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 groups",
+      "summary": "Documented POST /admin/directory/v1/groups (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 groups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/groups"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 groups groupkey aliases",
+      "summary": "Documented POST /admin/directory/v1/groups/{groupKey}/aliases (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 groups groupkey aliases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/groups/{groupKey}/aliases"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-groups-groupkey-aliases",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 groups groupkey members",
+      "summary": "Documented POST /admin/directory/v1/groups/{groupKey}/members (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 groups groupkey members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/groups/{groupKey}/members"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-groups-groupkey-members",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 parent chrome printers",
+      "summary": "Documented POST /admin/directory/v1/{+parent}/chrome/printers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 parent chrome printers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/{+parent}/chrome/printers"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-parent-chrome-printers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 parent chrome printers-batchcreateprinters",
+      "summary": "Documented POST /admin/directory/v1/{+parent}/chrome/printers:batchCreatePrinters (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 parent chrome printers-batchcreateprinters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/{+parent}/chrome/printers:batchCreatePrinters"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-parent-chrome-printers-batchcreateprinters",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 parent chrome printers-batchdeleteprinters",
+      "summary": "Documented POST /admin/directory/v1/{+parent}/chrome/printers:batchDeletePrinters (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 parent chrome printers-batchdeleteprinters --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/{+parent}/chrome/printers:batchDeletePrinters"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-parent-chrome-printers-batchdeleteprinters",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 parent chrome printservers",
+      "summary": "Documented POST /admin/directory/v1/{+parent}/chrome/printServers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 parent chrome printservers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/{+parent}/chrome/printServers"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-parent-chrome-printservers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 parent chrome printservers-batchcreateprintservers",
+      "summary": "Documented POST /admin/directory/v1/{+parent}/chrome/printServers:batchCreatePrintServers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 parent chrome printservers-batchcreateprintservers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/{+parent}/chrome/printServers:batchCreatePrintServers"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-parent-chrome-printservers-batchcreateprintservers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 parent chrome printservers-batchdeleteprintservers",
+      "summary": "Documented POST /admin/directory/v1/{+parent}/chrome/printServers:batchDeletePrintServers (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 parent chrome printservers-batchdeleteprintservers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/{+parent}/chrome/printServers:batchDeletePrintServers"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-parent-chrome-printservers-batchdeleteprintservers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users",
+      "summary": "Documented POST /admin/directory/v1/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users userkey aliases",
+      "summary": "Documented POST /admin/directory/v1/users/{userKey}/aliases (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users userkey aliases --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users/{userKey}/aliases"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-userkey-aliases",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users userkey aliases watch",
+      "summary": "Documented POST /admin/directory/v1/users/{userKey}/aliases/watch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users userkey aliases watch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users/{userKey}/aliases/watch"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-userkey-aliases-watch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users userkey makeadmin",
+      "summary": "Documented POST /admin/directory/v1/users/{userKey}/makeAdmin (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users userkey makeadmin --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users/{userKey}/makeAdmin"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-userkey-makeadmin",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users userkey signout",
+      "summary": "Documented POST /admin/directory/v1/users/{userKey}/signOut (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users userkey signout --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users/{userKey}/signOut"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-userkey-signout",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users userkey twostepverification turnoff",
+      "summary": "Documented POST /admin/directory/v1/users/{userKey}/twoStepVerification/turnOff (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users userkey twostepverification turnoff --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users/{userKey}/twoStepVerification/turnOff"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-userkey-twostepverification-turnoff",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users userkey undelete",
+      "summary": "Documented POST /admin/directory/v1/users/{userKey}/undelete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users userkey undelete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users/{userKey}/undelete"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-userkey-undelete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users userkey verificationcodes generate",
+      "summary": "Documented POST /admin/directory/v1/users/{userKey}/verificationCodes/generate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users userkey verificationcodes generate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users/{userKey}/verificationCodes/generate"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-userkey-verificationcodes-generate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users userkey verificationcodes invalidate",
+      "summary": "Documented POST /admin/directory/v1/users/{userKey}/verificationCodes/invalidate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users userkey verificationcodes invalidate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users/{userKey}/verificationCodes/invalidate"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-userkey-verificationcodes-invalidate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users watch",
+      "summary": "Documented POST /admin/directory/v1/users/watch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users watch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users/watch"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-watch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory v1 users-createguest",
+      "summary": "Documented POST /admin/directory/v1/users:createGuest (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory v1 users-createguest --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory/v1/users:createGuest"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-users-createguest",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post admin directory-v1 channels stop",
+      "summary": "Documented POST /admin/directory_v1/channels/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post admin directory-v1 channels stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admin/directory_v1/channels/stop"
+        }
+      ],
+      "operation": "google-directory.post.admin-directory-v1-channels-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users",
+      "summary": "Documented POST /users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api post users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users"
+        }
+      ],
+      "operation": "google-directory.post.users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 customer customer resources buildings buildingid",
+      "summary": "Documented PUT /admin/directory/v1/customer/{customer}/resources/buildings/{buildingId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 customer customer resources buildings buildingid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/customer/{customer}/resources/buildings/{buildingId}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-customer-customer-resources-buildings-buildingid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 customer customer resources calendars calendarresourceid",
+      "summary": "Documented PUT /admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 customer customer resources calendars calendarresourceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/customer/{customer}/resources/calendars/{calendarResourceId}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-customer-customer-resources-calendars-calendarresourceid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 customer customer resources features featurekey",
+      "summary": "Documented PUT /admin/directory/v1/customer/{customer}/resources/features/{featureKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 customer customer resources features featurekey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/customer/{customer}/resources/features/{featureKey}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-customer-customer-resources-features-featurekey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 customer customer roles roleid",
+      "summary": "Documented PUT /admin/directory/v1/customer/{customer}/roles/{roleId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 customer customer roles roleid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/customer/{customer}/roles/{roleId}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-customer-customer-roles-roleid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 customer customerid devices chromeos deviceid",
+      "summary": "Documented PUT /admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 customer customerid devices chromeos deviceid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/customer/{customerId}/devices/chromeos/{deviceId}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-customer-customerid-devices-chromeos-deviceid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 customer customerid orgunits orgunitpath",
+      "summary": "Documented PUT /admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 customer customerid orgunits orgunitpath --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/customer/{customerId}/orgunits/{+orgUnitPath}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-customer-customerid-orgunits-orgunitpath",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 customer customerid schemas schemakey",
+      "summary": "Documented PUT /admin/directory/v1/customer/{customerId}/schemas/{schemaKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 customer customerid schemas schemakey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/customer/{customerId}/schemas/{schemaKey}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-customer-customerid-schemas-schemakey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 customers customerkey",
+      "summary": "Documented PUT /admin/directory/v1/customers/{customerKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 customers customerkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/customers/{customerKey}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-customers-customerkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 groups groupkey",
+      "summary": "Documented PUT /admin/directory/v1/groups/{groupKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 groups groupkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/groups/{groupKey}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-groups-groupkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 groups groupkey members memberkey",
+      "summary": "Documented PUT /admin/directory/v1/groups/{groupKey}/members/{memberKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 groups groupkey members memberkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/groups/{groupKey}/members/{memberKey}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-groups-groupkey-members-memberkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 users userkey",
+      "summary": "Documented PUT /admin/directory/v1/users/{userKey} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 users userkey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/users/{userKey}"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-users-userkey",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put admin directory v1 users userkey photos thumbnail",
+      "summary": "Documented PUT /admin/directory/v1/users/{userKey}/photos/thumbnail (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory api put admin directory v1 users userkey photos thumbnail --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admin/directory/v1/users/{userKey}/photos/thumbnail"
+        }
+      ],
+      "operation": "google-directory.put.admin-directory-v1-users-userkey-photos-thumbnail",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "chromeos devices list",
+      "summary": "Run the chromeos devices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "chromeos_devices",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory chromeos devices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/{customer}/devices/chromeos"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/groups"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "orgunits list",
+      "summary": "Run the orgunits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orgunits",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory orgunits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/{customer}/orgunits"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+      "examples": [
+        "pm google-directory users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

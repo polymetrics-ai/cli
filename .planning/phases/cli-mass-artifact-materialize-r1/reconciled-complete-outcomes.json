@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "outcomes": [
+    {"connector": "alpaca-broker-api", "state": "already_complete", "reachability": "reachable", "foundation_pending": false, "evidence": "preexisting v2 bundle"},
+    {"connector": "defillama", "state": "already_complete", "reachability": "reachable", "foundation_pending": false, "evidence": "preexisting v2 bundle"},
+    {"connector": "dockerhub", "state": "already_complete", "reachability": "reachable", "foundation_pending": false, "evidence": "preexisting v2 bundle"},
+    {"connector": "docuseal", "state": "already_complete", "reachability": "reachable", "foundation_pending": false, "evidence": "preexisting v2 bundle and pilot validation"},
+    {"connector": "flexmail", "state": "already_complete", "reachability": "reachable", "foundation_pending": false, "evidence": "preexisting v2 bundle"},
+    {"connector": "copper", "state": "recovered_pilot", "reachability": "reachable", "foundation_pending": true, "evidence": "persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08"},
+    {"connector": "float", "state": "recovered_pilot", "reachability": "reachable", "foundation_pending": true, "evidence": "persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08"},
+    {"connector": "persistiq", "state": "recovered_pilot", "reachability": "reachable", "foundation_pending": true, "evidence": "persistiq-artifact-materialize-pilot-r1/rerun-2026-08-08"},
+    {"connector": "watchmode", "state": "recovered_pilot", "reachability": "reachable", "foundation_pending": true, "evidence": "persistiq-artifact-materialize-pilot-r1/generalization-validation-2026-08-08"}
+  ]
+}

@@ -1,0 +1,343 @@
+{
+  "operations": [
+    {
+      "id": "sharetribe.get.integration-api-availability-exceptions-query",
+      "kind": "rest_read",
+      "summary": "GET /integration_api/availability_exceptions/query",
+      "description": "the only query shape is scoped to a single mandatory listingId (plus a mandatory start/end range capped at 366 days) — there is no unfiltered list-all-availability-exceptions endpoint across the whole marketplace, so this cannot back a top-level sync stream the way listings/users/transactions/events can",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration_api/availability_exceptions/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.post.integration-api-images-upload",
+      "kind": "rest_write",
+      "summary": "POST /integration_api/images/upload",
+      "description": "accepts a multipart/form-data file upload body, not a JSON payload; the engine's declarative HTTP write dialect has no multipart-body primitive. Listing/user image attachment (imageId/profileImageId) already flows through create_listing/update_listing/update_user_profile for an id previously uploaded out-of-band",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/integration_api/images/upload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.integration-api-listings-show",
+      "kind": "rest_read",
+      "summary": "GET /integration_api/listings/show",
+      "description": "single-listing detail fetch for a resource the listings stream (GET /integration_api/listings/query with no filter body, listing every listing) already lists in full",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration_api/listings/show",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.integration-api-messages-query",
+      "kind": "rest_read",
+      "summary": "GET /integration_api/messages/query",
+      "description": "every documented query requires either transactionId or ids (the docs state explicitly: 'Either transactionId or ids must be provided') — there is no unfiltered list-all-messages shape, and no natural connector-instance-level config value (a single fixed transaction id) that would make this a meaningful sync-all stream; a caller wanting a specific transaction's messages should read the transactions stream and cross-reference, or this could be added as a fan_out stream keyed off transaction ids in a future capability expansion",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration_api/messages/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.integration-api-stock-adjustments-query",
+      "kind": "rest_read",
+      "summary": "GET /integration_api/stock_adjustments/query",
+      "description": "the only query shape is scoped to a single mandatory listingId, same reasoning as availability_exceptions/query — no unfiltered list-all-stock-adjustments endpoint exists",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration_api/stock_adjustments/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.integration-api-stock-reservations-show",
+      "kind": "rest_read",
+      "summary": "GET /integration_api/stock_reservations/show",
+      "description": "single-stock-reservation detail fetch by mandatory id, with NO corresponding list/query endpoint at all (stock reservations are reachable only via the stockReservation relationship of a stock adjustment) — there is no way to enumerate reservation ids to iterate this endpoint over",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration_api/stock_reservations/show",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.integration-api-transactions-show",
+      "kind": "rest_read",
+      "summary": "GET /integration_api/transactions/show",
+      "description": "single-transaction detail fetch for a resource the transactions stream already lists in full",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration_api/transactions/show",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.integration-api-users-show",
+      "kind": "rest_read",
+      "summary": "GET /integration_api/users/show",
+      "description": "single-user detail fetch for a resource the users stream already lists in full",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integration_api/users/show",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.listings-query",
+      "kind": "rest_read",
+      "summary": "GET /listings/query",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/listings/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.listings-show",
+      "kind": "rest_read",
+      "summary": "GET /listings/show",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/listings/show",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.post.own-listings-create",
+      "kind": "rest_write",
+      "summary": "POST /own_listings/create",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/own_listings/create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.post.own-listings-create-draft",
+      "kind": "rest_write",
+      "summary": "POST /own_listings/create_draft",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/own_listings/create_draft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.post.own-listings-open",
+      "kind": "rest_write",
+      "summary": "POST /own_listings/open",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/own_listings/open",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.post.own-listings-publish-draft",
+      "kind": "rest_write",
+      "summary": "POST /own_listings/publish_draft",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/own_listings/publish_draft",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.reviews-query",
+      "kind": "rest_read",
+      "summary": "GET /reviews/query",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reviews/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.reviews-show",
+      "kind": "rest_read",
+      "summary": "GET /reviews/show",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/reviews/show",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.timeslots-query",
+      "kind": "rest_read",
+      "summary": "GET /timeslots/query",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/timeslots/query",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.post.transactions-initiate",
+      "kind": "rest_write",
+      "summary": "POST /transactions/initiate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/transactions/initiate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.get.users-show",
+      "kind": "rest_read",
+      "summary": "GET /users/show",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/show",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.post.v1-integration-api-file-downloads-create",
+      "kind": "rest_write",
+      "summary": "POST /v1/integration_api/file_downloads/create",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/integration_api/file_downloads/create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.post.v1-integration-api-file-uploads-create",
+      "kind": "rest_write",
+      "summary": "POST /v1/integration_api/file_uploads/create",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/integration_api/file_uploads/create",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "sharetribe.post.v1-integration-api-files-create",
+      "kind": "rest_write",
+      "summary": "POST /v1/integration_api/files/create",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.sharetribe.com/api-reference/integration.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/integration_api/files/create",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "operations": [
+    {
+      "id": "ip2whois.get.v2",
+      "kind": "rest_read",
+      "summary": "GET /v2",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.ip2whois.com/developers-api",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "ip2whois.get.v2-domain-lookup-nameservers-array",
+      "kind": "rest_read",
+      "summary": "GET /v2 (domain lookup, nameservers[] array)",
+      "description": "ENGINE_GAP: no declarative primitive fans a bare JSON array of scalar values into one record per element; see docs.md Known limits",
+      "source_url": "https://www.ip2whois.com/developers-api",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2 (domain lookup, nameservers[] array)",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

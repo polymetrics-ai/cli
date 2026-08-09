@@ -1,53 +1,2548 @@
 {
-  "api": "Coda REST API v1 (https://coda.io/apis/v1)",
+  "api": "Coda REST API v1 (https://coda.io/apis/v1); provider artifact version: Superhuman Docs (formerly Coda) API v1; OpenAPI 3.0.0; info.version 1.6.0",
   "docs": "https://coda.io/developers/apis/v1",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every endpoint documented under the public Coda API v1 reference (docs/folders/pages/tables/rows/columns/formulas/controls/permissions/publishing/analytics/misc). Coda's separate admin/v1 and Packs-maker APIs are a distinct product surface (workspace-admin and Pack-publisher tooling, not doc-data access) and are out of scope for this source/destination connector.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (124 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "coda-artifact-2026-08-09",
+      "url": "https://coda.io/apis/v1/openapi.yaml",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/docs", "covered_by": { "stream": "docs" } },
-    { "method": "POST", "path": "/docs", "excluded": { "category": "requires_elevated_scope", "reason": "creates a brand-new doc (optionally copying an existing one); doc-lifecycle management is a workspace-admin action outside this connector's per-doc data-sync scope, and duplicating an arbitrary sourceDoc has no bounded blast radius to express as a plain row/page mutation" } },
-    { "method": "GET", "path": "/docs/{docId}", "excluded": { "category": "duplicate_of", "reason": "single-doc detail is a strict subset of the docs stream's per-record shape already returned by GET /docs; no additional fields worth a dedicated stream" } },
-    { "method": "DELETE", "path": "/docs/{docId}", "excluded": { "category": "destructive_admin", "reason": "irreversibly deletes an entire doc and everything in it; far outside the bounded per-row/per-page mutation surface this connector exposes" } },
-    { "method": "PATCH", "path": "/docs/{docId}", "excluded": { "category": "requires_elevated_scope", "reason": "renames/re-icons the doc itself; doc-level metadata management, not doc-scoped data sync" } },
-    { "method": "GET", "path": "/docs/{docId}/acl/metadata", "excluded": { "category": "requires_elevated_scope", "reason": "sharing/ACL metadata is workspace-permission surface, not doc content data" } },
-    { "method": "GET", "path": "/docs/{docId}/acl/permissions", "excluded": { "category": "requires_elevated_scope", "reason": "lists who has access to the doc; permission/sharing management is out of scope for a content connector" } },
-    { "method": "POST", "path": "/docs/{docId}/acl/permissions", "excluded": { "category": "requires_elevated_scope", "reason": "grants doc access to a principal; access-control mutation, not content data" } },
-    { "method": "DELETE", "path": "/docs/{docId}/acl/permissions/{permissionId}", "excluded": { "category": "requires_elevated_scope", "reason": "revokes doc access; access-control mutation, not content data" } },
-    { "method": "GET", "path": "/docs/{docId}/acl/principals/search", "excluded": { "category": "requires_elevated_scope", "reason": "searches workspace principals for sharing purposes; identity/directory surface, not doc content" } },
-    { "method": "GET", "path": "/docs/{docId}/acl/settings", "excluded": { "category": "requires_elevated_scope", "reason": "doc-level sharing default settings; access-control configuration, not content data" } },
-    { "method": "PATCH", "path": "/docs/{docId}/acl/settings", "excluded": { "category": "requires_elevated_scope", "reason": "mutates doc-level sharing defaults; access-control configuration, not content data" } },
-    { "method": "GET", "path": "/docs/{docId}/controls", "covered_by": { "stream": "controls" } },
-    { "method": "GET", "path": "/docs/{docId}/controls/{controlIdOrName}", "excluded": { "category": "duplicate_of", "reason": "single-control detail is a strict subset of the controls stream's per-record shape already returned by GET /docs/{docId}/controls" } },
-    { "method": "GET", "path": "/docs/${docId}/domains", "excluded": { "category": "requires_elevated_scope", "reason": "lists custom domains bound to the doc; workspace/domain-administration surface, not doc content data" } },
-    { "method": "POST", "path": "/docs/${docId}/domains", "excluded": { "category": "requires_elevated_scope", "reason": "binds a custom domain to the doc; domain-administration mutation, not content data" } },
-    { "method": "DELETE", "path": "/docs/{docId}/domains/{customDocDomain}", "excluded": { "category": "requires_elevated_scope", "reason": "unbinds a custom domain; domain-administration mutation, not content data" } },
-    { "method": "PATCH", "path": "/docs/{docId}/domains/{customDocDomain}", "excluded": { "category": "requires_elevated_scope", "reason": "updates a custom domain binding; domain-administration mutation, not content data" } },
-    { "method": "GET", "path": "/docs/{docId}/formulas", "covered_by": { "stream": "formulas" } },
-    { "method": "GET", "path": "/docs/{docId}/formulas/{formulaIdOrName}", "excluded": { "category": "duplicate_of", "reason": "single-formula detail is a strict subset of the formulas stream's per-record shape already returned by GET /docs/{docId}/formulas" } },
-    { "method": "POST", "path": "/docs/{docId}/hooks/automation/{ruleId}", "excluded": { "category": "out_of_scope", "reason": "triggers a doc-authored automation rule by webhook; the rule's own logic (which may itself write anywhere in the doc) is opaque to this connector and has no bounded, declarable request/response shape beyond a bare trigger POST with no standard body contract" } },
-    { "method": "GET", "path": "/docs/{docId}/pages", "covered_by": { "stream": "pages" } },
-    { "method": "POST", "path": "/docs/{docId}/pages", "covered_by": { "write": "create_page" } },
-    { "method": "GET", "path": "/docs/{docId}/pages/{pageIdOrName}", "excluded": { "category": "duplicate_of", "reason": "single-page detail is a strict subset of the pages stream's per-record shape already returned by GET /docs/{docId}/pages" } },
-    { "method": "PUT", "path": "/docs/{docId}/pages/{pageIdOrName}", "covered_by": { "write": "update_page" } },
-    { "method": "DELETE", "path": "/docs/{docId}/pages/{pageIdOrName}", "covered_by": { "write": "delete_page" } },
-    { "method": "POST", "path": "/docs/{docId}/pages/{pageIdOrName}/export", "excluded": { "category": "binary_payload", "reason": "begins an async export of page content to HTML/Markdown; the result is a downloadable blob fetched via a follow-up polling request, not a declarative JSON record read or write" } },
-    { "method": "GET", "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}", "excluded": { "category": "non_data_endpoint", "reason": "polls the status/download link of an in-flight content export job (see the export POST above); job-status polling, not a data resource" } },
-    { "method": "PUT", "path": "/docs/{docId}/publish", "excluded": { "category": "requires_elevated_scope", "reason": "publishes the doc (or changes its publish settings) to a public/discoverable URL; a workspace-publishing action, not per-record content data" } },
-    { "method": "DELETE", "path": "/docs/{docId}/publish", "excluded": { "category": "requires_elevated_scope", "reason": "unpublishes the doc; a workspace-publishing action, not per-record content data" } },
-    { "method": "GET", "path": "/docs/{docId}/tables", "covered_by": { "stream": "tables" } },
-    { "method": "GET", "path": "/docs/{docId}/tables/{tableIdOrName}", "excluded": { "category": "duplicate_of", "reason": "single-table detail is a strict subset of the tables stream's per-record shape already returned by GET /docs/{docId}/tables" } },
-    { "method": "GET", "path": "/docs/{docId}/tables/{tableIdOrName}/columns", "covered_by": { "stream": "columns" } },
-    { "method": "GET", "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}", "excluded": { "category": "duplicate_of", "reason": "single-column detail is a strict subset of the columns stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/columns" } },
-    { "method": "GET", "path": "/docs/{docId}/tables/{tableIdOrName}/rows", "covered_by": { "stream": "rows" } },
-    { "method": "POST", "path": "/docs/{docId}/tables/{tableIdOrName}/rows", "covered_by": { "write": "upsert_rows" } },
-    { "method": "DELETE", "path": "/docs/{docId}/tables/{tableIdOrName}/rows", "covered_by": { "write": "delete_rows" } },
-    { "method": "GET", "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}", "excluded": { "category": "duplicate_of", "reason": "single-row detail is a strict subset of the rows stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/rows" } },
-    { "method": "PUT", "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}", "covered_by": { "write": "update_row" } },
-    { "method": "DELETE", "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}", "covered_by": { "write": "delete_row" } },
-    { "method": "POST", "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}", "covered_by": { "write": "push_button" } },
-    { "method": "GET", "path": "/categories", "excluded": { "category": "out_of_scope", "reason": "lists Coda doc-gallery publish categories (e.g. \"Product\", \"Sales\"); a fixed lookup enum for the publishing UI, not workspace/doc content data" } },
-    { "method": "GET", "path": "/mutationStatus/{requestId}", "excluded": { "category": "non_data_endpoint", "reason": "polls the completion status of an async mutation request id (rows/pages writes here return 202 immediately); status polling, not a data resource, and this connector's write actions do not themselves poll for completion (matching every other async-202 write action bundle in this migration)" } },
-    { "method": "GET", "path": "/resolveBrowserLink", "excluded": { "category": "non_data_endpoint", "reason": "resolves a coda.io browser URL to its API resource id/type; a URL-resolution utility, not a data resource" } },
-    { "method": "GET", "path": "/whoami", "excluded": { "category": "non_data_endpoint", "reason": "returns the authenticated user's own identity/token metadata; auth introspection, not workspace/doc content" } }
+    {
+      "method": "GET",
+      "path": "/analytics/docs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/analytics/docs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/docs/summary",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/analytics/docs/summary\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/docs/{docId}/pages",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/analytics/docs/{docId}/pages\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/packs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/analytics/packs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/packs/summary",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/analytics/packs/summary\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/packs/{packId}/formulas",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/analytics/packs/{packId}/formulas\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/updated",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/analytics/updated\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/categories",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/categories\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "lists Coda doc-gallery publish categories (e.g. \"Product\", \"Sales\"); a fixed lookup enum for the publishing UI, not workspace/doc content data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs\"].get"
+      },
+      "covered_by": {
+        "stream": "docs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "creates a brand-new doc (optionally copying an existing one); doc-lifecycle management is a workspace-admin action outside this connector's per-doc data-sync scope, and duplicating an arbitrary sourceDoc has no bounded blast radius to express as a plain row/page mutation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/${docId}/domains",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/${docId}/domains\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "lists custom domains bound to the doc; workspace/domain-administration surface, not doc content data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/${docId}/domains",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/${docId}/domains\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "binds a custom domain to the doc; domain-administration mutation, not content data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-doc detail is a strict subset of the docs stream's per-record shape already returned by GET /docs; no additional fields worth a dedicated stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/docs/{docId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "renames/re-icons the doc itself; doc-level metadata management, not doc-scoped data sync",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}\"].delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "irreversibly deletes an entire doc and everything in it; far outside the bounded per-row/per-page mutation surface this connector exposes",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/acl/metadata",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/acl/metadata\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "sharing/ACL metadata is workspace-permission surface, not doc content data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/acl/permissions",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/acl/permissions\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "lists who has access to the doc; permission/sharing management is out of scope for a content connector",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/acl/permissions",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/acl/permissions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "grants doc access to a principal; access-control mutation, not content data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/acl/permissions/{permissionId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/acl/permissions/{permissionId}\"].delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "revokes doc access; access-control mutation, not content data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/acl/principals/search",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/acl/principals/search\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "searches workspace principals for sharing purposes; identity/directory surface, not doc content",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/acl/settings",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/acl/settings\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "doc-level sharing default settings; access-control configuration, not content data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/docs/{docId}/acl/settings",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/acl/settings\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "mutates doc-level sharing defaults; access-control configuration, not content data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/controls",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/controls\"].get"
+      },
+      "covered_by": {
+        "stream": "controls"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/controls/{controlIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/controls/{controlIdOrName}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-control detail is a strict subset of the controls stream's per-record shape already returned by GET /docs/{docId}/controls",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/docs/{docId}/domains/{customDocDomain}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/domains/{customDocDomain}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "updates a custom domain binding; domain-administration mutation, not content data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/domains/{customDocDomain}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/domains/{customDocDomain}\"].delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "unbinds a custom domain; domain-administration mutation, not content data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/formulas",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/formulas\"].get"
+      },
+      "covered_by": {
+        "stream": "formulas"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/formulas/{formulaIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/formulas/{formulaIdOrName}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-formula detail is a strict subset of the formulas stream's per-record shape already returned by GET /docs/{docId}/formulas",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/hooks/automation/{ruleId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/hooks/automation/{ruleId}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "triggers a doc-authored automation rule by webhook; the rule's own logic (which may itself write anywhere in the doc) is opaque to this connector and has no bounded, declarable request/response shape beyond a bare trigger POST with no standard body contract",
+        "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/pages",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/pages\"].get"
+      },
+      "covered_by": {
+        "stream": "pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/pages",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/pages\"].post"
+      },
+      "covered_by": {
+        "write": "create_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/pages/{pageIdOrName}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-page detail is a strict subset of the pages stream's per-record shape already returned by GET /docs/{docId}/pages",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/pages/{pageIdOrName}\"].put"
+      },
+      "covered_by": {
+        "write": "update_page"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/pages/{pageIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/pages/{pageIdOrName}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/pages/{pageIdOrName}/content\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/content",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/pages/{pageIdOrName}/content\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/export",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/pages/{pageIdOrName}/export\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "begins an async export of page content to HTML/Markdown; the result is a downloadable blob fetched via a follow-up polling request, not a declarative JSON record read or write",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/pages/{pageIdOrName}/export/{requestId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/pages/{pageIdOrName}/export/{requestId}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "polls the status/download link of an in-flight content export job (see the export POST above); job-status polling, not a data resource",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/docs/{docId}/publish",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/publish\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "publishes the doc (or changes its publish settings) to a public/discoverable URL; a workspace-publishing action, not per-record content data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/publish",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/publish\"].delete"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "unpublishes the doc; a workspace-publishing action, not per-record content data",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables\"].get"
+      },
+      "covered_by": {
+        "stream": "tables"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-table detail is a strict subset of the tables stream's per-record shape already returned by GET /docs/{docId}/tables",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/columns",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}/columns\"].get"
+      },
+      "covered_by": {
+        "stream": "columns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}/columns/{columnIdOrName}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-column detail is a strict subset of the columns stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/columns",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows\"].get"
+      },
+      "covered_by": {
+        "stream": "rows"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows\"].post"
+      },
+      "covered_by": {
+        "write": "upsert_rows"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_rows"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-row detail is a strict subset of the rows stream's per-record shape already returned by GET /docs/{docId}/tables/{tableIdOrName}/rows",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}\"].put"
+      },
+      "covered_by": {
+        "write": "update_row"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_row"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/docs/{docId}/tables/{tableIdOrName}/rows/{rowIdOrName}/buttons/{columnIdOrName}\"].post"
+      },
+      "covered_by": {
+        "write": "push_button"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/domains/provider/{customDocDomain}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/domains/provider/{customDocDomain}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/folders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/folders",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/folders\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/folders/{folderId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/folders/{folderId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/folders/{folderId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/folders/{folderId}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/folders/{folderId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/folders/{folderId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/agentSessionIds\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/go/tenants/{tenantId}/agentInstances/{agentInstanceId}/logs/{logId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/mutationStatus/{requestId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/mutationStatus/{requestId}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "polls the completion status of an async mutation request id (rows/pages writes here return 202 immediately); status polling, not a data resource, and this connector's write actions do not themselves poll for completion (matching every other async-202 write action bundle in this migration)",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/organizations/{organizationId}/goLinks",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/organizations/{organizationId}/goLinks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/invitations",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/invitations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/invitations/{invitationId}/reply",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/invitations/{invitationId}/reply\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/listings",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/listings\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/packs/{packId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/packs/{packId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/assets/{packAssetId}/assetType/{packAssetType}/uploadComplete\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/categories",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/categories\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/category",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/category\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/packs/{packId}/category/{categoryName}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/category/{categoryName}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/configurations/schema",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/configurations/schema\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/docs/{docId}/groupedLogs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/docs/{docId}/groupedLogs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/docs/{docId}/logs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/docs/{docId}/logs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/featuredDocs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/featuredDocs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/packs/{packId}/featuredDocs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/featuredDocs\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/invitations",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/invitations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/invitations",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/invitations\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/packs/{packId}/invitations/{invitationId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/invitations/{invitationId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/packs/{packId}/invitations/{invitationId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/invitations/{invitationId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/listing",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/listing\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/listingDraft",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/listingDraft\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/packs/{packId}/listingDraft",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/listingDraft\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/packs/{packId}/listingDraft",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/listingDraft\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/maker",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/maker\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/packs/{packId}/maker/{loginId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/maker/{loginId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/makers",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/makers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/nextVersion",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/nextVersion\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/oauthConfig",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/oauthConfig\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/packs/{packId}/oauthConfig",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/oauthConfig\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/permissions",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/permissions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/permissions",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/permissions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/packs/{packId}/permissions",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/permissions\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/packs/{packId}/permissions/{permissionId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/permissions/{permissionId}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/releases",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/releases\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/releases",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/releases\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/packs/{packId}/releases/{packReleaseId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/releases/{packReleaseId}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/reviews",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/reviews\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/reviews",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/reviews\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/reviews/pending/cancel",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/reviews/pending/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/systemConnection",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/systemConnection\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/packs/{packId}/systemConnection",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/systemConnection\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/packs/{packId}/systemConnection",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/systemConnection\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/groupedLogs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/ingestionBatchExecutions/{ingestionExecutionId}/parentItems\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/tenantId/{tenantId}/rootIngestionId/{rootIngestionId}/logs/{logId}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/uploadAsset",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/uploadAsset\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/uploadSourceCode",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/uploadSourceCode\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/versions",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/versions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/versions/{basePackVersion}/diff/{targetPackVersion}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/versions/{packVersion}/register",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/versions/{packVersion}/register\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/packs/{packId}/versions/{packVersion}/sourceCode",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/versions/{packVersion}/sourceCode\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/versions/{packVersion}/sourceCode/uploadComplete\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/packs/{packId}/versions/{packVersion}/uploadComplete",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/packs/{packId}/versions/{packVersion}/uploadComplete\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/resolveBrowserLink",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/resolveBrowserLink\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "resolves a coda.io browser URL to its API resource id/type; a URL-resolution utility, not a data resource",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/whoami",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/whoami\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns the authenticated user's own identity/token metadata; auth introspection, not workspace/doc content",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspaceId}/roles",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/workspaces/{workspaceId}/roles\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/workspaces/{workspaceId}/users",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/workspaces/{workspaceId}/users\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/workspaces/{workspaceId}/users/role",
+      "provenance": {
+        "artifact": "coda-artifact-2026-08-09",
+        "source_url": "https://coda.io/apis/v1/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3",
+        "coordinate": "paths[\"/workspaces/{workspaceId}/users/role\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    }
   ]
 }

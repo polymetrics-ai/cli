@@ -1,91 +1,1668 @@
 {
-  "api": "Revolut Merchant API (https://merchant.revolut.com/api/1.0)",
+  "api": "Revolut Merchant API (https://merchant.revolut.com/api/1.0); provider artifact version: Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
   "docs": "https://developer.revolut.com/docs/guides/merchant/reference/api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (orders, customers, settlements, payment_links); legacy ships no writes (capabilities.write is false) and the full Revolut Merchant surface (order create/capture/cancel/refund, customer create/update, webhook management, payout endpoints) is out of scope outside this connector's current declared surface.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (68 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "revolut-merchant-artifact-2026-08-09",
+      "url": "https://developer.revolut.com/docs/api/merchant.yaml",
+      "kind": "openapi",
+      "version": "3.1.2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/1.0/orders",
-      "covered_by": {
-        "stream": "orders"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/1.0/customers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[GET /1.0/customers]"
+      },
       "covered_by": {
         "stream": "customers"
       }
     },
     {
-      "method": "GET",
-      "path": "/1.0/settlements",
-      "covered_by": {
-        "stream": "settlements"
+      "method": "POST",
+      "path": "/1.0/customers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[POST /1.0/customers]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy connector never implemented customer create/update; not implemented in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/1.0/payment-links",
+      "path": "/1.0/orders",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[GET /1.0/orders]"
+      },
       "covered_by": {
-        "stream": "payment_links"
+        "stream": "orders"
       }
     },
     {
       "method": "POST",
       "path": "/1.0/orders",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented order creation; not implemented in this bundle"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/1.0/orders/{order_id}/capture",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented order capture; not implemented in this bundle"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[POST /1.0/orders]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy connector never implemented order creation; not implemented in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
       "path": "/1.0/orders/{order_id}/cancel",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "order cancellation mutation; legacy never implemented writes"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[POST /1.0/orders/{order_id}/cancel]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "order cancellation mutation; legacy never implemented writes",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1.0/orders/{order_id}/capture",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[POST /1.0/orders/{order_id}/capture]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy connector never implemented order capture; not implemented in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
       "path": "/1.0/orders/{order_id}/refund",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "order refund mutation; legacy never implemented writes"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[POST /1.0/orders/{order_id}/refund]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "order refund mutation; legacy never implemented writes",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
-      "method": "POST",
-      "path": "/1.0/customers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented customer create/update; not implemented in this bundle"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/1.0/webhooks",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "webhook management not modeled by legacy; not implemented in this bundle"
+      "method": "GET",
+      "path": "/1.0/payment-links",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[GET /1.0/payment-links]"
+      },
+      "covered_by": {
+        "stream": "payment_links"
       }
     },
     {
       "method": "GET",
       "path": "/1.0/payouts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "payout endpoints not modeled by legacy; not implemented in this bundle"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[GET /1.0/payouts]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "payout endpoints not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/1.0/settlements",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[GET /1.0/settlements]"
+      },
+      "covered_by": {
+        "stream": "settlements"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/1.0/webhooks",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "Revolut Merchant API 2026-04-20; OpenAPI 3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "existing-surface[POST /1.0/webhooks]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "webhook management not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/apple-pay/domains/register",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/apple-pay/domains/register\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/apple-pay/domains/unregister",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/apple-pay/domains/unregister\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/customers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/customers",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/customers\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/{customer_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/customers/{customer_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/customers/{customer_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/customers/{customer_id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers/{customer_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/customers/{customer_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/{customer_id}/payment-methods",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/customers/{customer_id}/payment-methods\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/customers/{customer_id}/payment-methods/{payment_method_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/customers/{customer_id}/payment-methods/{payment_method_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/customers/{customer_id}/payment-methods/{payment_method_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/customers/{customer_id}/payment-methods/{payment_method_id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/customers/{customer_id}/payment-methods/{payment_method_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/customers/{customer_id}/payment-methods/{payment_method_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/disputes",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/disputes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/disputes/{dispute_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/disputes/{dispute_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/disputes/{dispute_id}/accept",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/disputes/{dispute_id}/accept\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/disputes/{dispute_id}/challenge",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/disputes/{dispute_id}/challenge\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/disputes/{dispute_id}/evidences",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/disputes/{dispute_id}/evidences\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/locations",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/locations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/locations",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/locations\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/locations/{location_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/locations/{location_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/locations/{location_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/locations/{location_id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/locations/{location_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/locations/{location_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/orders",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/orders/{order_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders/{order_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/orders/{order_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders/{order_id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/{order_id}/cancel",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders/{order_id}/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/{order_id}/capture",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders/{order_id}/capture\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/{order_id}/increment-authorisation",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders/{order_id}/increment-authorisation\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/{order_id}/payment-intents",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders/{order_id}/payment-intents\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/orders/{order_id}/payments",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders/{order_id}/payments\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/{order_id}/payments",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders/{order_id}/payments\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/orders/{order_id}/refund",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/orders/{order_id}/refund\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/payment-intents/{payment_intent_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/payment-intents/{payment_intent_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/payment-intents/{payment_intent_id}/cancel",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/payment-intents/{payment_intent_id}/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/payments/{payment_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/payments/{payment_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/payouts",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/payouts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/payouts/{payout_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/payouts/{payout_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/report-runs",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/report-runs\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/report-runs/{report_run_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/report-runs/{report_run_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/report-runs/{report_run_id}/file",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/report-runs/{report_run_id}/file\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subscription-plans",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscription-plans\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/subscription-plans",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscription-plans\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subscription-plans/{subscription_plan_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscription-plans/{subscription_plan_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subscription-usages",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscription-usages\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/subscription-usages",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscription-usages\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subscription-usages/{usage_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscription-usages/{usage_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/subscription-usages/{usage_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscription-usages/{usage_id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/subscription-usages/{usage_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscription-usages/{usage_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subscriptions",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscriptions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/subscriptions",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscriptions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscriptions/{subscription_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscriptions/{subscription_id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/subscriptions/{subscription_id}/cancel",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscriptions/{subscription_id}/cancel\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/subscriptions/{subscription_id}/change-plan",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscriptions/{subscription_id}/change-plan\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/subscriptions/{subscription_id}/change-renewal-date",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscriptions/{subscription_id}/change-renewal-date\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subscriptions/{subscription_id}/cycles",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscriptions/{subscription_id}/cycles\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/subscriptions/{subscription_id}/cycles/{cycle_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/subscriptions/{subscription_id}/cycles/{cycle_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/synchronous-webhooks",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/synchronous-webhooks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/synchronous-webhooks",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/synchronous-webhooks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/synchronous-webhooks/{synchronous_webhook_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/synchronous-webhooks/{synchronous_webhook_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/terminals",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/terminals\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/webhooks",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/webhooks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/webhooks",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/webhooks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/webhooks/{webhook_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/webhooks/{webhook_id}\"].patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/webhooks/{webhook_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/webhooks/{webhook_id}/rotate-signing-secret",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "paths[\"/api/webhooks/{webhook_id}/rotate-signing-secret\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "WEBHOOK",
+      "path": "webhookEvent#POST",
+      "provenance": {
+        "artifact": "revolut-merchant-artifact-2026-08-09",
+        "source_url": "https://developer.revolut.com/docs/api/merchant.yaml",
+        "source_kind": "openapi",
+        "version": "3.1.2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f33bff0ac0eb03aa7ff06f4d4b01f6d420f23a84e9b6159a0cd4c29cbc62204",
+        "coordinate": "webhooks[\"webhookEvent\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+        "notes": "named_dependency=engine.webhook_receiver_executor: the runtime has no inbound webhook receiver executor for top-level webhook operations"
       }
     }
   ]

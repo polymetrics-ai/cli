@@ -1,14 +1,147 @@
 {
-  "api": "IP2WHOIS API v2 (https://api.ip2whois.com/v2)",
+  "api": "IP2WHOIS API v2 (https://api.ip2whois.com/v2); provider artifact version: IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
   "docs": "https://www.ip2whois.com/developers-api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave3 unblock: the single domain-lookup endpoint, fanned out per configured domain (fan_out.ids_from.config_key) into a flattened whois stream and 4 per-role contact streams; the nameservers stream is not migrated (ENGINE_GAP, see docs.md Known limits)",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (1 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "ip2whois-artifact-2026-08-09",
+      "url": "https://www.ip2whois.com/developers-api",
+      "kind": "html_reference",
+      "version": "IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "e8d71054b9402d912ed0fcfc9f6958a4eaf5753c031614413dc7ec7d2b3ea98b"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v2 (domain lookup)", "covered_by": { "stream": "whois" } },
-    { "method": "GET", "path": "/v2 (domain lookup, registrant sub-object)", "covered_by": { "stream": "contacts_registrant" } },
-    { "method": "GET", "path": "/v2 (domain lookup, admin sub-object)", "covered_by": { "stream": "contacts_admin" } },
-    { "method": "GET", "path": "/v2 (domain lookup, tech sub-object)", "covered_by": { "stream": "contacts_tech" } },
-    { "method": "GET", "path": "/v2 (domain lookup, billing sub-object)", "covered_by": { "stream": "contacts_billing" } },
-    { "method": "GET", "path": "/v2 (domain lookup, nameservers[] array)", "excluded": { "category": "out_of_scope", "reason": "ENGINE_GAP: no declarative primitive fans a bare JSON array of scalar values into one record per element; see docs.md Known limits" } }
+    {
+      "method": "GET",
+      "path": "/v2",
+      "provenance": {
+        "artifact": "ip2whois-artifact-2026-08-09",
+        "source_url": "https://www.ip2whois.com/developers-api",
+        "source_kind": "html_reference",
+        "version": "IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e8d71054b9402d912ed0fcfc9f6958a4eaf5753c031614413dc7ec7d2b3ea98b",
+        "coordinate": "https://www.ip2whois.com/developers-api#GET /v2"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (domain lookup)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ip2whois-artifact-2026-08-09",
+        "source_url": "https://www.ip2whois.com/developers-api",
+        "source_kind": "html_reference",
+        "version": "IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e8d71054b9402d912ed0fcfc9f6958a4eaf5753c031614413dc7ec7d2b3ea98b",
+        "coordinate": "existing-surface[GET /v2 (domain lookup)]"
+      },
+      "covered_by": {
+        "stream": "whois"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (domain lookup, admin sub-object)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ip2whois-artifact-2026-08-09",
+        "source_url": "https://www.ip2whois.com/developers-api",
+        "source_kind": "html_reference",
+        "version": "IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e8d71054b9402d912ed0fcfc9f6958a4eaf5753c031614413dc7ec7d2b3ea98b",
+        "coordinate": "existing-surface[GET /v2 (domain lookup, admin sub-object)]"
+      },
+      "covered_by": {
+        "stream": "contacts_admin"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (domain lookup, billing sub-object)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ip2whois-artifact-2026-08-09",
+        "source_url": "https://www.ip2whois.com/developers-api",
+        "source_kind": "html_reference",
+        "version": "IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e8d71054b9402d912ed0fcfc9f6958a4eaf5753c031614413dc7ec7d2b3ea98b",
+        "coordinate": "existing-surface[GET /v2 (domain lookup, billing sub-object)]"
+      },
+      "covered_by": {
+        "stream": "contacts_billing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (domain lookup, nameservers[] array)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ip2whois-artifact-2026-08-09",
+        "source_url": "https://www.ip2whois.com/developers-api",
+        "source_kind": "html_reference",
+        "version": "IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e8d71054b9402d912ed0fcfc9f6958a4eaf5753c031614413dc7ec7d2b3ea98b",
+        "coordinate": "existing-surface[GET /v2 (domain lookup, nameservers[] array)]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "ENGINE_GAP: no declarative primitive fans a bare JSON array of scalar values into one record per element; see docs.md Known limits",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (domain lookup, registrant sub-object)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ip2whois-artifact-2026-08-09",
+        "source_url": "https://www.ip2whois.com/developers-api",
+        "source_kind": "html_reference",
+        "version": "IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e8d71054b9402d912ed0fcfc9f6958a4eaf5753c031614413dc7ec7d2b3ea98b",
+        "coordinate": "existing-surface[GET /v2 (domain lookup, registrant sub-object)]"
+      },
+      "covered_by": {
+        "stream": "contacts_registrant"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2 (domain lookup, tech sub-object)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "ip2whois-artifact-2026-08-09",
+        "source_url": "https://www.ip2whois.com/developers-api",
+        "source_kind": "html_reference",
+        "version": "IP2WHOIS Domain WHOIS REST API v2 (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e8d71054b9402d912ed0fcfc9f6958a4eaf5753c031614413dc7ec7d2b3ea98b",
+        "coordinate": "existing-surface[GET /v2 (domain lookup, tech sub-object)]"
+      },
+      "covered_by": {
+        "stream": "contacts_tech"
+      }
+    }
   ]
 }

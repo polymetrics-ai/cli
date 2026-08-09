@@ -1,0 +1,2672 @@
+{
+  "tagline": "Run Illumina BaseSpace's declared streams and reverse-ETL actions.",
+  "usage": "pm illumina-basespace \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get applications",
+        "api get applications id",
+        "api get applications id qcthresholds",
+        "api get applications id settings",
+        "api get applications id workflowdependencies",
+        "api get appsessions",
+        "api get appsessions id",
+        "api get appsessions id comments",
+        "api get appsessions id logfiles",
+        "api get appsessions id properties",
+        "api get appsessions id properties name",
+        "api get appsessions id properties name items",
+        "api get biosamples",
+        "api get biosamples biosampleid labrequeues",
+        "api get biosamples id",
+        "api get biosamples id libraries",
+        "api get biosamples id runlanesummaries",
+        "api get datasets",
+        "api get datasets id",
+        "api get datasets id comments",
+        "api get datasets id files",
+        "api get datasettypes id",
+        "api get instrumentstatistics",
+        "api get labrequeues",
+        "api get labrequeues id",
+        "api get laneqcthresholds",
+        "api get lanes id",
+        "api get lanes id comments",
+        "api get libraries",
+        "api get librarypools id libraries",
+        "api get projects id",
+        "api get projects id datasets",
+        "api get runs id files",
+        "api get trash",
+        "api get trash id",
+        "api get users current",
+        "api get users current subscription",
+        "api get users current usage",
+        "api get users current workgroups",
+        "api get users id",
+        "api get users id settings",
+        "api get v2 trash",
+        "api get workgroups id",
+        "application list",
+        "application qcthresholds list",
+        "application settings list",
+        "application workflowdependencies list",
+        "applications list",
+        "appsession comments list",
+        "appsession list",
+        "appsession properties list",
+        "appsession property items list",
+        "appsession property list",
+        "appsessions all list",
+        "appsessions list",
+        "appsessions logfiles list",
+        "biosample labrequeues list",
+        "biosample libraries list",
+        "biosample list",
+        "biosample runlane summaries list",
+        "biosamples list",
+        "configured user list",
+        "current user list",
+        "current user subscription list",
+        "current user usage list",
+        "current user workgroups list",
+        "dataset comments list",
+        "dataset files list",
+        "dataset list",
+        "datasets all list",
+        "datasets list",
+        "datasettype list",
+        "instrumentstatistics list",
+        "labrequeue list",
+        "labrequeues list",
+        "lane comments list",
+        "lane list",
+        "laneqcthresholds list",
+        "libraries list",
+        "librarypool libraries list",
+        "project datasets list",
+        "project list",
+        "projects list",
+        "run files list",
+        "runs list",
+        "samples list",
+        "trash 2 list",
+        "trash list",
+        "user list",
+        "user settings list",
+        "workgroup list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete appsessions id",
+        "api delete appsessions id properties name",
+        "api delete trash",
+        "api post applications id workflows",
+        "api post appsessions id",
+        "api post appsessions id properties",
+        "api post appsessions id stop",
+        "api post biosamples bulkupdate",
+        "api post biosamples id",
+        "api post datasets id",
+        "api post lanes id",
+        "api post libraries libraryid labrequeues",
+        "api post librarypools id",
+        "api post librarypools poolid labrequeues",
+        "api post preprequests preprequestid labrequeues",
+        "api post trash id restorefromtrash",
+        "api post users id settings",
+        "api put applications id qcthresholds",
+        "api put applications id workflowdependencies",
+        "api put laneqcthresholds",
+        "applications id workflows apply",
+        "appsessions id apply",
+        "appsessions id properties apply",
+        "appsessions id stop apply",
+        "biosamples bulkupdate apply",
+        "biosamples id apply",
+        "datasets id apply",
+        "delete appsessions id apply",
+        "delete appsessions id properties name apply",
+        "delete trash apply",
+        "lanes id apply",
+        "libraries libraryid labrequeues apply",
+        "librarypools id apply",
+        "librarypools poolid labrequeues apply",
+        "preprequests preprequestid labrequeues apply",
+        "trash id restorefromtrash apply",
+        "update applications id qcthresholds apply",
+        "update applications id workflowdependencies apply",
+        "update laneqcthresholds apply",
+        "users id settings apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete appsessions id",
+      "summary": "Documented DELETE /appsessions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api delete appsessions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/appsessions/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.delete.appsessions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete appsessions id properties name",
+      "summary": "Documented DELETE /appsessions/{id}/properties/{name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api delete appsessions id properties name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/appsessions/{id}/properties/{name}"
+        }
+      ],
+      "operation": "illumina-basespace.delete.appsessions-id-properties-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete trash",
+      "summary": "Documented DELETE /trash (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api delete trash --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/trash"
+        }
+      ],
+      "operation": "illumina-basespace.delete.trash",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get applications",
+      "summary": "Documented GET /applications (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get applications --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/applications"
+        }
+      ],
+      "operation": "illumina-basespace.get.applications",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get applications id",
+      "summary": "Documented GET /applications/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get applications id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/applications/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.applications-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get applications id qcthresholds",
+      "summary": "Documented GET /applications/{id}/qcthresholds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get applications id qcthresholds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/applications/{id}/qcthresholds"
+        }
+      ],
+      "operation": "illumina-basespace.get.applications-id-qcthresholds",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get applications id settings",
+      "summary": "Documented GET /applications/{id}/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get applications id settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/applications/{id}/settings"
+        }
+      ],
+      "operation": "illumina-basespace.get.applications-id-settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get applications id workflowdependencies",
+      "summary": "Documented GET /applications/{id}/workflowdependencies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get applications id workflowdependencies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/applications/{id}/workflowdependencies"
+        }
+      ],
+      "operation": "illumina-basespace.get.applications-id-workflowdependencies",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appsessions",
+      "summary": "Documented GET /appsessions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get appsessions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appsessions"
+        }
+      ],
+      "operation": "illumina-basespace.get.appsessions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appsessions id",
+      "summary": "Documented GET /appsessions/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get appsessions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appsessions/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.appsessions-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appsessions id comments",
+      "summary": "Documented GET /appsessions/{id}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get appsessions id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appsessions/{id}/comments"
+        }
+      ],
+      "operation": "illumina-basespace.get.appsessions-id-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appsessions id logfiles",
+      "summary": "Documented GET /appsessions/{id}/logfiles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get appsessions id logfiles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appsessions/{id}/logfiles"
+        }
+      ],
+      "operation": "illumina-basespace.get.appsessions-id-logfiles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appsessions id properties",
+      "summary": "Documented GET /appsessions/{id}/properties (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get appsessions id properties --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appsessions/{id}/properties"
+        }
+      ],
+      "operation": "illumina-basespace.get.appsessions-id-properties",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appsessions id properties name",
+      "summary": "Documented GET /appsessions/{id}/properties/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get appsessions id properties name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appsessions/{id}/properties/{name}"
+        }
+      ],
+      "operation": "illumina-basespace.get.appsessions-id-properties-name",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get appsessions id properties name items",
+      "summary": "Documented GET /appsessions/{id}/properties/{name}/items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get appsessions id properties name items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/appsessions/{id}/properties/{name}/items"
+        }
+      ],
+      "operation": "illumina-basespace.get.appsessions-id-properties-name-items",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get biosamples",
+      "summary": "Documented GET /biosamples (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get biosamples --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/biosamples"
+        }
+      ],
+      "operation": "illumina-basespace.get.biosamples",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get biosamples biosampleid labrequeues",
+      "summary": "Documented GET /biosamples/{biosampleid}/labrequeues (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get biosamples biosampleid labrequeues --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/biosamples/{biosampleid}/labrequeues"
+        }
+      ],
+      "operation": "illumina-basespace.get.biosamples-biosampleid-labrequeues",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get biosamples id",
+      "summary": "Documented GET /biosamples/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get biosamples id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/biosamples/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.biosamples-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get biosamples id libraries",
+      "summary": "Documented GET /biosamples/{id}/libraries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get biosamples id libraries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/biosamples/{id}/libraries"
+        }
+      ],
+      "operation": "illumina-basespace.get.biosamples-id-libraries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get biosamples id runlanesummaries",
+      "summary": "Documented GET /biosamples/{id}/runlanesummaries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get biosamples id runlanesummaries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/biosamples/{id}/runlanesummaries"
+        }
+      ],
+      "operation": "illumina-basespace.get.biosamples-id-runlanesummaries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get datasets",
+      "summary": "Documented GET /datasets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get datasets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/datasets"
+        }
+      ],
+      "operation": "illumina-basespace.get.datasets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get datasets id",
+      "summary": "Documented GET /datasets/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get datasets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/datasets/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.datasets-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get datasets id comments",
+      "summary": "Documented GET /datasets/{id}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get datasets id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/datasets/{id}/comments"
+        }
+      ],
+      "operation": "illumina-basespace.get.datasets-id-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get datasets id files",
+      "summary": "Documented GET /datasets/{id}/files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get datasets id files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/datasets/{id}/files"
+        }
+      ],
+      "operation": "illumina-basespace.get.datasets-id-files",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get datasettypes id",
+      "summary": "Documented GET /datasettypes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get datasettypes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/datasettypes/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.datasettypes-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get instrumentstatistics",
+      "summary": "Documented GET /instrumentstatistics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get instrumentstatistics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/instrumentstatistics"
+        }
+      ],
+      "operation": "illumina-basespace.get.instrumentstatistics",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get labrequeues",
+      "summary": "Documented GET /labrequeues (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get labrequeues --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/labrequeues"
+        }
+      ],
+      "operation": "illumina-basespace.get.labrequeues",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get labrequeues id",
+      "summary": "Documented GET /labrequeues/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get labrequeues id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/labrequeues/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.labrequeues-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get laneqcthresholds",
+      "summary": "Documented GET /laneqcthresholds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get laneqcthresholds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/laneqcthresholds"
+        }
+      ],
+      "operation": "illumina-basespace.get.laneqcthresholds",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lanes id",
+      "summary": "Documented GET /lanes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get lanes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lanes/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.lanes-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lanes id comments",
+      "summary": "Documented GET /lanes/{id}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get lanes id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lanes/{id}/comments"
+        }
+      ],
+      "operation": "illumina-basespace.get.lanes-id-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get libraries",
+      "summary": "Documented GET /libraries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get libraries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/libraries"
+        }
+      ],
+      "operation": "illumina-basespace.get.libraries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get librarypools id libraries",
+      "summary": "Documented GET /librarypools/{id}/libraries (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get librarypools id libraries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/librarypools/{id}/libraries"
+        }
+      ],
+      "operation": "illumina-basespace.get.librarypools-id-libraries",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects id",
+      "summary": "Documented GET /projects/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get projects id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.projects-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get projects id datasets",
+      "summary": "Documented GET /projects/{id}/datasets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get projects id datasets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}/datasets"
+        }
+      ],
+      "operation": "illumina-basespace.get.projects-id-datasets",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get runs id files",
+      "summary": "Documented GET /runs/{id}/files (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get runs id files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/runs/{id}/files"
+        }
+      ],
+      "operation": "illumina-basespace.get.runs-id-files",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get trash",
+      "summary": "Documented GET /trash (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get trash --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trash"
+        }
+      ],
+      "operation": "illumina-basespace.get.trash",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get trash id",
+      "summary": "Documented GET /trash/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get trash id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/trash/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.trash-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users current",
+      "summary": "Documented GET /users/current (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get users current --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/current"
+        }
+      ],
+      "operation": "illumina-basespace.get.users-current",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users current subscription",
+      "summary": "Documented GET /users/current/subscription (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get users current subscription --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/current/subscription"
+        }
+      ],
+      "operation": "illumina-basespace.get.users-current-subscription",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users current usage",
+      "summary": "Documented GET /users/current/usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get users current usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/current/usage"
+        }
+      ],
+      "operation": "illumina-basespace.get.users-current-usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users current workgroups",
+      "summary": "Documented GET /users/current/workgroups (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get users current workgroups --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/current/workgroups"
+        }
+      ],
+      "operation": "illumina-basespace.get.users-current-workgroups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id",
+      "summary": "Documented GET /users/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.users-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users id settings",
+      "summary": "Documented GET /users/{id}/settings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get users id settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{id}/settings"
+        }
+      ],
+      "operation": "illumina-basespace.get.users-id-settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 trash",
+      "summary": "Documented GET /v2/trash (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get v2 trash --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/trash"
+        }
+      ],
+      "operation": "illumina-basespace.get.v2-trash",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get workgroups id",
+      "summary": "Documented GET /workgroups/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api get workgroups id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/workgroups/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.get.workgroups-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post applications id workflows",
+      "summary": "Documented POST /applications/{id}/workflows (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post applications id workflows --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/applications/{id}/workflows"
+        }
+      ],
+      "operation": "illumina-basespace.post.applications-id-workflows",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post appsessions id",
+      "summary": "Documented POST /appsessions/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post appsessions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/appsessions/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.post.appsessions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post appsessions id properties",
+      "summary": "Documented POST /appsessions/{id}/properties (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post appsessions id properties --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/appsessions/{id}/properties"
+        }
+      ],
+      "operation": "illumina-basespace.post.appsessions-id-properties",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post appsessions id stop",
+      "summary": "Documented POST /appsessions/{id}/stop (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post appsessions id stop --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/appsessions/{id}/stop"
+        }
+      ],
+      "operation": "illumina-basespace.post.appsessions-id-stop",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post biosamples bulkupdate",
+      "summary": "Documented POST /biosamples/bulkupdate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post biosamples bulkupdate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/biosamples/bulkupdate"
+        }
+      ],
+      "operation": "illumina-basespace.post.biosamples-bulkupdate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post biosamples id",
+      "summary": "Documented POST /biosamples/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post biosamples id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/biosamples/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.post.biosamples-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post datasets id",
+      "summary": "Documented POST /datasets/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post datasets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/datasets/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.post.datasets-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post lanes id",
+      "summary": "Documented POST /lanes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post lanes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lanes/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.post.lanes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post libraries libraryid labrequeues",
+      "summary": "Documented POST /libraries/{libraryid}/labrequeues (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post libraries libraryid labrequeues --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/libraries/{libraryid}/labrequeues"
+        }
+      ],
+      "operation": "illumina-basespace.post.libraries-libraryid-labrequeues",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post librarypools id",
+      "summary": "Documented POST /librarypools/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post librarypools id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/librarypools/{id}"
+        }
+      ],
+      "operation": "illumina-basespace.post.librarypools-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post librarypools poolid labrequeues",
+      "summary": "Documented POST /librarypools/{poolid}/labrequeues (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post librarypools poolid labrequeues --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/librarypools/{poolid}/labrequeues"
+        }
+      ],
+      "operation": "illumina-basespace.post.librarypools-poolid-labrequeues",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post preprequests preprequestid labrequeues",
+      "summary": "Documented POST /preprequests/{preprequestid}/labrequeues (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post preprequests preprequestid labrequeues --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/preprequests/{preprequestid}/labrequeues"
+        }
+      ],
+      "operation": "illumina-basespace.post.preprequests-preprequestid-labrequeues",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post trash id restorefromtrash",
+      "summary": "Documented POST /trash/{id}/restorefromtrash (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post trash id restorefromtrash --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/trash/{id}/restorefromtrash"
+        }
+      ],
+      "operation": "illumina-basespace.post.trash-id-restorefromtrash",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users id settings",
+      "summary": "Documented POST /users/{id}/settings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api post users id settings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{id}/settings"
+        }
+      ],
+      "operation": "illumina-basespace.post.users-id-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put applications id qcthresholds",
+      "summary": "Documented PUT /applications/{id}/qcthresholds (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api put applications id qcthresholds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/applications/{id}/qcthresholds"
+        }
+      ],
+      "operation": "illumina-basespace.put.applications-id-qcthresholds",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put applications id workflowdependencies",
+      "summary": "Documented PUT /applications/{id}/workflowdependencies (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api put applications id workflowdependencies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/applications/{id}/workflowdependencies"
+        }
+      ],
+      "operation": "illumina-basespace.put.applications-id-workflowdependencies",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put laneqcthresholds",
+      "summary": "Documented PUT /laneqcthresholds (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace api put laneqcthresholds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/laneqcthresholds"
+        }
+      ],
+      "operation": "illumina-basespace.put.laneqcthresholds",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "application list",
+      "summary": "Run the application ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "application",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace application list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/applications/{application_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "application qcthresholds list",
+      "summary": "Run the application qcthresholds ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "application_qcthresholds",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace application qcthresholds list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/applications/{application_id}/qcthresholds"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "application settings list",
+      "summary": "Run the application settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "application_settings",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace application settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/applications/{application_id}/settings"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "application workflowdependencies list",
+      "summary": "Run the application workflowdependencies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "application_workflowdependencies",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace application workflowdependencies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/applications/{application_id}/workflowdependencies"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "applications id workflows apply",
+      "summary": "Plan and execute the applications id workflows reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "applications_id_workflows",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace applications id workflows apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/applications/{application_id}/workflows"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/applications/{application_id}/workflows.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "applications list",
+      "summary": "Run the applications ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "applications",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace applications list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/applications"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "appsession comments list",
+      "summary": "Run the appsession comments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "appsession_comments",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsession comments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/appsessions/{appsession_id}/comments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "appsession list",
+      "summary": "Run the appsession ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "appsession",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsession list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/appsessions/{appsession_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "appsession properties list",
+      "summary": "Run the appsession properties ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "appsession_properties",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsession properties list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/appsessions/{appsession_id}/properties"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "appsession property items list",
+      "summary": "Run the appsession property items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "appsession_property_items",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsession property items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}/items"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "appsession property list",
+      "summary": "Run the appsession property ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "appsession_property",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsession property list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "appsessions all list",
+      "summary": "Run the appsessions all ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "appsessions_all",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsessions all list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/appsessions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "appsessions id apply",
+      "summary": "Plan and execute the appsessions id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "appsessions_id",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsessions id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/appsessions/{appsession_id}"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/appsessions/{appsession_id}.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "appsessions id properties apply",
+      "summary": "Plan and execute the appsessions id properties reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "appsessions_id_properties",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsessions id properties apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/appsessions/{appsession_id}/properties"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/appsessions/{appsession_id}/properties.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "appsessions id stop apply",
+      "summary": "Plan and execute the appsessions id stop reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "appsessions_id_stop",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsessions id stop apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/appsessions/{appsession_id}/stop"
+        }
+      ],
+      "risk": "Destructive BaseSpace mutation: POST /v1pre3/appsessions/{appsession_id}/stop.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "appsessions list",
+      "summary": "Run the appsessions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "appsessions",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsessions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/{user}/appsessions"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "appsessions logfiles list",
+      "summary": "Run the appsessions logfiles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "appsessions_logfiles",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace appsessions logfiles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/appsessions/{appsession_id}/logfiles"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "biosample labrequeues list",
+      "summary": "Run the biosample labrequeues ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "biosample_labrequeues",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace biosample labrequeues list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/biosamples/{biosample_id}/labrequeues"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "biosample libraries list",
+      "summary": "Run the biosample libraries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "biosample_libraries",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace biosample libraries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/biosamples/{biosample_id}/libraries"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "biosample list",
+      "summary": "Run the biosample ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "biosample",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace biosample list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/biosamples/{biosample_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "biosample runlane summaries list",
+      "summary": "Run the biosample runlane summaries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "biosample_runlane_summaries",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace biosample runlane summaries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/biosamples/{biosample_id}/runlanesummaries"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "biosamples bulkupdate apply",
+      "summary": "Plan and execute the biosamples bulkupdate reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "biosamples_bulkupdate",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace biosamples bulkupdate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/biosamples/bulkupdate"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/biosamples/bulkupdate.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "biosamples id apply",
+      "summary": "Plan and execute the biosamples id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "biosamples_id",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace biosamples id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/biosamples/{biosample_id}"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/biosamples/{biosample_id}.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "biosamples list",
+      "summary": "Run the biosamples ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "biosamples",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace biosamples list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/biosamples"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "configured user list",
+      "summary": "Run the configured user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "configured_user",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace configured user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/{user}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "current user list",
+      "summary": "Run the current user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "current_user",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace current user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/current"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "current user subscription list",
+      "summary": "Run the current user subscription ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "current_user_subscription",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace current user subscription list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/current/subscription"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "current user usage list",
+      "summary": "Run the current user usage ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "current_user_usage",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace current user usage list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/current/usage"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "current user workgroups list",
+      "summary": "Run the current user workgroups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "current_user_workgroups",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace current user workgroups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/current/workgroups"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "dataset comments list",
+      "summary": "Run the dataset comments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dataset_comments",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace dataset comments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/datasets/{dataset_id}/comments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "dataset files list",
+      "summary": "Run the dataset files ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dataset_files",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace dataset files list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/datasets/{dataset_id}/files"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "dataset list",
+      "summary": "Run the dataset ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dataset",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace dataset list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/datasets/{dataset_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "datasets all list",
+      "summary": "Run the datasets all ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets_all",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace datasets all list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/datasets"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "datasets id apply",
+      "summary": "Plan and execute the datasets id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "datasets_id",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace datasets id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/datasets/{dataset_id}"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/datasets/{dataset_id}.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "datasets list",
+      "summary": "Run the datasets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace datasets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/{user}/datasets"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "datasettype list",
+      "summary": "Run the datasettype ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasettype",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace datasettype list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/datasettypes/{datasettype_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "delete appsessions id apply",
+      "summary": "Plan and execute the delete appsessions id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_appsessions_id",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace delete appsessions id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1pre3/appsessions/{appsession_id}"
+        }
+      ],
+      "risk": "Destructive BaseSpace mutation: DELETE /v1pre3/appsessions/{appsession_id}.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete appsessions id properties name apply",
+      "summary": "Plan and execute the delete appsessions id properties name reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_appsessions_id_properties_name",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace delete appsessions id properties name apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1pre3/appsessions/{appsession_id}/properties/{name}"
+        }
+      ],
+      "risk": "Destructive BaseSpace mutation: DELETE /v1pre3/appsessions/{appsession_id}/properties/{name}.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete trash apply",
+      "summary": "Plan and execute the delete trash reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_trash",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace delete trash apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1pre3/trash"
+        }
+      ],
+      "risk": "Destructive BaseSpace mutation: DELETE /v1pre3/trash.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "instrumentstatistics list",
+      "summary": "Run the instrumentstatistics ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "instrumentstatistics",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace instrumentstatistics list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/instrumentstatistics"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "labrequeue list",
+      "summary": "Run the labrequeue ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "labrequeue",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace labrequeue list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/labrequeues/{labrequeue_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "labrequeues list",
+      "summary": "Run the labrequeues ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "labrequeues",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace labrequeues list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/labrequeues"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "lane comments list",
+      "summary": "Run the lane comments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lane_comments",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace lane comments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/lanes/{lane_id}/comments"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "lane list",
+      "summary": "Run the lane ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lane",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace lane list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/lanes/{lane_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "laneqcthresholds list",
+      "summary": "Run the laneqcthresholds ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "laneqcthresholds",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace laneqcthresholds list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/laneqcthresholds"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "lanes id apply",
+      "summary": "Plan and execute the lanes id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "lanes_id",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace lanes id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/lanes/{lane_id}"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/lanes/{lane_id}.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "libraries libraryid labrequeues apply",
+      "summary": "Plan and execute the libraries libraryid labrequeues reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "libraries_libraryid_labrequeues",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace libraries libraryid labrequeues apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/libraries/{library_id}/labrequeues"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/libraries/{library_id}/labrequeues.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "libraries list",
+      "summary": "Run the libraries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "libraries",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace libraries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/libraries"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "librarypool libraries list",
+      "summary": "Run the librarypool libraries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "librarypool_libraries",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace librarypool libraries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/librarypools/{librarypool_id}/libraries"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "librarypools id apply",
+      "summary": "Plan and execute the librarypools id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "librarypools_id",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace librarypools id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/librarypools/{librarypool_id}"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/librarypools/{librarypool_id}.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "librarypools poolid labrequeues apply",
+      "summary": "Plan and execute the librarypools poolid labrequeues reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "librarypools_poolid_labrequeues",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace librarypools poolid labrequeues apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/librarypools/{pool_id}/labrequeues"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/librarypools/{pool_id}/labrequeues.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "preprequests preprequestid labrequeues apply",
+      "summary": "Plan and execute the preprequests preprequestid labrequeues reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "preprequests_preprequestid_labrequeues",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace preprequests preprequestid labrequeues apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/preprequests/{preprequest_id}/labrequeues"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/preprequests/{preprequest_id}/labrequeues.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "project datasets list",
+      "summary": "Run the project datasets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_datasets",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace project datasets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/projects/{project_id}/datasets"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "project list",
+      "summary": "Run the project ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace project list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/projects/{project_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/{user}/projects"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "run files list",
+      "summary": "Run the run files ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "run_files",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace run files list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/runs/{run_id}/files"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "runs list",
+      "summary": "Run the runs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "runs",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace runs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/{user}/runs"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "samples list",
+      "summary": "Run the samples ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "samples",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace samples list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/{user}/samples"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "trash 2 list",
+      "summary": "Run the trash 2 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trash_2",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace trash 2 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/trash/{trash_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "trash id restorefromtrash apply",
+      "summary": "Plan and execute the trash id restorefromtrash reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "trash_id_restorefromtrash",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace trash id restorefromtrash apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/trash/{trash_id}/restorefromtrash"
+        }
+      ],
+      "risk": "Destructive BaseSpace mutation: POST /v1pre3/trash/{trash_id}/restorefromtrash.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "trash list",
+      "summary": "Run the trash ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trash",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace trash list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/trash"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "update applications id qcthresholds apply",
+      "summary": "Plan and execute the update applications id qcthresholds reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_applications_id_qcthresholds",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace update applications id qcthresholds apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1pre3/applications/{application_id}/qcthresholds"
+        }
+      ],
+      "risk": "BaseSpace mutation: PUT /v1pre3/applications/{application_id}/qcthresholds.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update applications id workflowdependencies apply",
+      "summary": "Plan and execute the update applications id workflowdependencies reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_applications_id_workflowdependencies",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace update applications id workflowdependencies apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1pre3/applications/{application_id}/workflowdependencies"
+        }
+      ],
+      "risk": "BaseSpace mutation: PUT /v1pre3/applications/{application_id}/workflowdependencies.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update laneqcthresholds apply",
+      "summary": "Plan and execute the update laneqcthresholds reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_laneqcthresholds",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace update laneqcthresholds apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1pre3/laneqcthresholds"
+        }
+      ],
+      "risk": "BaseSpace mutation: PUT /v1pre3/laneqcthresholds.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "user list",
+      "summary": "Run the user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/{user_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "user settings list",
+      "summary": "Run the user settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_settings",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace user settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/users/{user_id}/settings"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "users id settings apply",
+      "summary": "Plan and execute the users id settings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "users_id_settings",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace users id settings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1pre3/users/{user_id}/settings"
+        }
+      ],
+      "risk": "BaseSpace mutation: POST /v1pre3/users/{user_id}/settings.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "workgroup list",
+      "summary": "Run the workgroup ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workgroup",
+      "source_url": "https://developer.basespace.illumina.com/docs/content/documentation/rest-api/api-reference",
+      "examples": [
+        "pm illumina-basespace workgroup list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1pre3/workgroups/{workgroup_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

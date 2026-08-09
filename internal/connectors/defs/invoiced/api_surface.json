@@ -1,54 +1,254 @@
 {
-  "api": "Invoiced API (https://api.invoiced.com)",
+  "api": "Invoiced API (https://api.invoiced.com); provider artifact version: Invoiced API Documentation (live HTML)",
   "docs": "https://developer.invoiced.com/api",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full documented REST API surface expansion from the official Invoiced API reference. GET list/detail endpoints are streams; dialect-expressible mutations are writes; multipart file upload is excluded as binary payload.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (111 documented operations across 22 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "invoiced-artifact-2026-08-09",
+      "url": "https://developer.invoiced.com/api",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4"
+    },
+    {
+      "id": "invoiced-artifact-ref-c2409fe8e3b81e8d-db5c329014097620",
+      "url": "https://developer.invoiced.com/api/charges",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c2409fe8e3b81e8d8118d840e3147ce0061598ab353c64adef2606f77723610e"
+    },
+    {
+      "id": "invoiced-artifact-ref-c3f7a9e8f71fafc6-0212e74fef8d4e67",
+      "url": "https://developer.invoiced.com/api/contacts",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c3f7a9e8f71fafc6d74feddfecac68cffea0d9fbaa39bfab21d5ab851c6cbae0"
+    },
+    {
+      "id": "invoiced-artifact-ref-d12ef09229525c64-dbc14dd70d452e31",
+      "url": "https://developer.invoiced.com/api/coupons",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d12ef09229525c64197fa3fc55d3821ce60ad307ae90a63ab564670ddd51dae9"
+    },
+    {
+      "id": "invoiced-artifact-ref-15597d21ce8dd719-8f128106f7e53d53",
+      "url": "https://developer.invoiced.com/api/credit-balances",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "15597d21ce8dd7191d2c032d9e7b8e7d53fee19348d430d9c4b213e85ea7dcaf"
+    },
+    {
+      "id": "invoiced-artifact-ref-7e3b89d84b34bf6d-1e718405ce76233a",
+      "url": "https://developer.invoiced.com/api/credit-notes",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "7e3b89d84b34bf6d179a1154b6f4db266c81b8a353b9c65c3ae9ee3424cf8ad4"
+    },
+    {
+      "id": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+      "url": "https://developer.invoiced.com/api/customers",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b"
+    },
+    {
+      "id": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+      "url": "https://developer.invoiced.com/api/estimates",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254"
+    },
+    {
+      "id": "invoiced-artifact-ref-72e23dfc76d82740-ab5a1fb1ba6bfb6d",
+      "url": "https://developer.invoiced.com/api/events",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "72e23dfc76d82740062cf1eabe0133cc58eb2c29dd293635060a156c7c7e4d73"
+    },
+    {
+      "id": "invoiced-artifact-ref-45314f13359aa3e1-857083d81c4a73e4",
+      "url": "https://developer.invoiced.com/api/files",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "45314f13359aa3e13a10cf02e1a352fe18a124ac0156dc7d258c950579e8a282"
+    },
+    {
+      "id": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+      "url": "https://developer.invoiced.com/api/invoices",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5"
+    },
+    {
+      "id": "invoiced-artifact-ref-e7cf9ae5d3474d8b-b91e00c370ad3925",
+      "url": "https://developer.invoiced.com/api/items",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "e7cf9ae5d3474d8b7b81fdd6a8e48a100e635a8cba787621a2b60ef3d0afcd46"
+    },
+    {
+      "id": "invoiced-artifact-ref-68647d24b68b3531-0007bcab27b9a879",
+      "url": "https://developer.invoiced.com/api/metered-billing",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "68647d24b68b3531312e13b472d07d6acb332cb4d10094b102563cf9ccf2203c"
+    },
+    {
+      "id": "invoiced-artifact-ref-12d7e09bedb74091-d6915236b2881bbc",
+      "url": "https://developer.invoiced.com/api/notes",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "12d7e09bedb74091ef408edba3eb9a4a38ba5084415636bd2d4ea6e243b03b9f"
+    },
+    {
+      "id": "invoiced-artifact-ref-45c5dfcd5af3556b-8d5e2af81dec70b1",
+      "url": "https://developer.invoiced.com/api/payment-plans",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "45c5dfcd5af3556bb32f60ead60b820fc9b726e5f11540ccf9fbb8a96b5c7316"
+    },
+    {
+      "id": "invoiced-artifact-ref-c3cb0c0885898217-cfba389d8ad83c81",
+      "url": "https://developer.invoiced.com/api/payment-sources",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "c3cb0c0885898217c4cac7a35c6528c114cdbc777e9e9c16cd97e55f4417a146"
+    },
+    {
+      "id": "invoiced-artifact-ref-a56dbdb93cdca00f-959eb7bcd85b9b88",
+      "url": "https://developer.invoiced.com/api/payments",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "a56dbdb93cdca00f3d6ec179a16f7d0b71a9a628ceb8f2ae6ed03d05de08a9f0"
+    },
+    {
+      "id": "invoiced-artifact-ref-76d6946450f88df7-6dfc79e9388ddae0",
+      "url": "https://developer.invoiced.com/api/plans",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "76d6946450f88df73fa1ecbedd63eb23cf460ebae115745234a4b063c62e56d6"
+    },
+    {
+      "id": "invoiced-artifact-ref-0ae2f8f116248af0-d031876cf631c3f3",
+      "url": "https://developer.invoiced.com/api/refunds",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0ae2f8f116248af066a9d23e91418db33f00857032e447837ac5d1624b8c4d56"
+    },
+    {
+      "id": "invoiced-artifact-ref-f9d383c2610f70f5-6b30e214dc717cae",
+      "url": "https://developer.invoiced.com/api/subscriptions",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "f9d383c2610f70f5421bfe3e4e0979c18e2f4bba691e8de38f4ee752e003d5f2"
+    },
+    {
+      "id": "invoiced-artifact-ref-89caedcf243520ae-69f551b476471414",
+      "url": "https://developer.invoiced.com/api/tasks",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "89caedcf243520aeccd72be1b191b8da4ceb8da58fd1f07f1f1dba3afe33c337"
+    },
+    {
+      "id": "invoiced-artifact-ref-4594086d0ee31395-69d91a31fcfd95cc",
+      "url": "https://developer.invoiced.com/api/tax-rates",
+      "kind": "html_reference",
+      "version": "Invoiced API Documentation (live HTML)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "4594086d0ee31395c9f50a9c09b8bd35796f75a6b9848d1957790e134e1b79c4"
+    }
+  ],
   "endpoints": [
     {
       "method": "POST",
       "path": "/charges",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c2409fe8e3b81e8d-db5c329014097620",
+        "source_url": "https://developer.invoiced.com/api/charges",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c2409fe8e3b81e8d8118d840e3147ce0061598ab353c64adef2606f77723610e",
+        "coordinate": "https://developer.invoiced.com/api/charges#POST /charges"
+      },
       "covered_by": {
         "write": "create_charge"
       }
     },
     {
-      "method": "GET",
-      "path": "/customers/{customer_id}/contacts",
-      "covered_by": {
-        "stream": "customer_contacts"
+      "method": "POST",
+      "path": "/charges/:id/refunds",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-0ae2f8f116248af0-d031876cf631c3f3",
+        "source_url": "https://developer.invoiced.com/api/refunds",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ae2f8f116248af066a9d23e91418db33f00857032e447837ac5d1624b8c4d56",
+        "coordinate": "https://developer.invoiced.com/api/refunds#POST /charges/:id/refunds"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
-      "path": "/customers/{customer_id}/contacts",
+      "path": "/charges/{id}/refunds",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /charges/{id}/refunds]"
+      },
       "covered_by": {
-        "write": "create_contact"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/customers/{customer_id}/contacts/{id}",
-      "covered_by": {
-        "stream": "customer_contact"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/customers/{customer_id}/contacts/{id}",
-      "covered_by": {
-        "write": "update_contact"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/customers/{customer_id}/contacts/{id}",
-      "covered_by": {
-        "write": "delete_contact"
+        "write": "refund_charge"
       }
     },
     {
       "method": "GET",
       "path": "/coupons",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-d12ef09229525c64-dbc14dd70d452e31",
+        "source_url": "https://developer.invoiced.com/api/coupons",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d12ef09229525c64197fa3fc55d3821ce60ad307ae90a63ab564670ddd51dae9",
+        "coordinate": "https://developer.invoiced.com/api/coupons#GET /coupons"
+      },
       "covered_by": {
         "stream": "coupons"
       }
@@ -56,13 +256,95 @@
     {
       "method": "POST",
       "path": "/coupons",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-d12ef09229525c64-dbc14dd70d452e31",
+        "source_url": "https://developer.invoiced.com/api/coupons",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d12ef09229525c64197fa3fc55d3821ce60ad307ae90a63ab564670ddd51dae9",
+        "coordinate": "https://developer.invoiced.com/api/coupons#POST /coupons"
+      },
       "covered_by": {
         "write": "create_coupon"
       }
     },
     {
       "method": "GET",
+      "path": "/coupons/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-d12ef09229525c64-dbc14dd70d452e31",
+        "source_url": "https://developer.invoiced.com/api/coupons",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d12ef09229525c64197fa3fc55d3821ce60ad307ae90a63ab564670ddd51dae9",
+        "coordinate": "https://developer.invoiced.com/api/coupons#GET /coupons/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/coupons/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-d12ef09229525c64-dbc14dd70d452e31",
+        "source_url": "https://developer.invoiced.com/api/coupons",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d12ef09229525c64197fa3fc55d3821ce60ad307ae90a63ab564670ddd51dae9",
+        "coordinate": "https://developer.invoiced.com/api/coupons#PATCH /coupons/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/coupons/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-d12ef09229525c64-dbc14dd70d452e31",
+        "source_url": "https://developer.invoiced.com/api/coupons",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d12ef09229525c64197fa3fc55d3821ce60ad307ae90a63ab564670ddd51dae9",
+        "coordinate": "https://developer.invoiced.com/api/coupons#DELETE /coupons/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/coupons/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /coupons/{id}]"
+      },
       "covered_by": {
         "stream": "coupon"
       }
@@ -70,6 +352,16 @@
     {
       "method": "PATCH",
       "path": "/coupons/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /coupons/{id}]"
+      },
       "covered_by": {
         "write": "update_coupon"
       }
@@ -77,6 +369,16 @@
     {
       "method": "DELETE",
       "path": "/coupons/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /coupons/{id}]"
+      },
       "covered_by": {
         "write": "delete_coupon"
       }
@@ -84,6 +386,15 @@
     {
       "method": "GET",
       "path": "/credit_balance_adjustments",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-15597d21ce8dd719-8f128106f7e53d53",
+        "source_url": "https://developer.invoiced.com/api/credit-balances",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "15597d21ce8dd7191d2c032d9e7b8e7d53fee19348d430d9c4b213e85ea7dcaf",
+        "coordinate": "https://developer.invoiced.com/api/credit-balances#GET /credit_balance_adjustments"
+      },
       "covered_by": {
         "stream": "credit_balance_adjustments"
       }
@@ -91,13 +402,95 @@
     {
       "method": "POST",
       "path": "/credit_balance_adjustments",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-15597d21ce8dd719-8f128106f7e53d53",
+        "source_url": "https://developer.invoiced.com/api/credit-balances",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "15597d21ce8dd7191d2c032d9e7b8e7d53fee19348d430d9c4b213e85ea7dcaf",
+        "coordinate": "https://developer.invoiced.com/api/credit-balances#POST /credit_balance_adjustments"
+      },
       "covered_by": {
         "write": "create_credit_balance_adjustment"
       }
     },
     {
       "method": "GET",
+      "path": "/credit_balance_adjustments/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-15597d21ce8dd719-8f128106f7e53d53",
+        "source_url": "https://developer.invoiced.com/api/credit-balances",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "15597d21ce8dd7191d2c032d9e7b8e7d53fee19348d430d9c4b213e85ea7dcaf",
+        "coordinate": "https://developer.invoiced.com/api/credit-balances#GET /credit_balance_adjustments/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/credit_balance_adjustments/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-15597d21ce8dd719-8f128106f7e53d53",
+        "source_url": "https://developer.invoiced.com/api/credit-balances",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "15597d21ce8dd7191d2c032d9e7b8e7d53fee19348d430d9c4b213e85ea7dcaf",
+        "coordinate": "https://developer.invoiced.com/api/credit-balances#PATCH /credit_balance_adjustments/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/credit_balance_adjustments/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-15597d21ce8dd719-8f128106f7e53d53",
+        "source_url": "https://developer.invoiced.com/api/credit-balances",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "15597d21ce8dd7191d2c032d9e7b8e7d53fee19348d430d9c4b213e85ea7dcaf",
+        "coordinate": "https://developer.invoiced.com/api/credit-balances#DELETE /credit_balance_adjustments/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/credit_balance_adjustments/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /credit_balance_adjustments/{id}]"
+      },
       "covered_by": {
         "stream": "credit_balance_adjustment"
       }
@@ -105,6 +498,16 @@
     {
       "method": "PATCH",
       "path": "/credit_balance_adjustments/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /credit_balance_adjustments/{id}]"
+      },
       "covered_by": {
         "write": "update_credit_balance_adjustment"
       }
@@ -112,6 +515,16 @@
     {
       "method": "DELETE",
       "path": "/credit_balance_adjustments/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /credit_balance_adjustments/{id}]"
+      },
       "covered_by": {
         "write": "delete_credit_balance_adjustment"
       }
@@ -119,6 +532,15 @@
     {
       "method": "GET",
       "path": "/credit_notes",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-7e3b89d84b34bf6d-1e718405ce76233a",
+        "source_url": "https://developer.invoiced.com/api/credit-notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7e3b89d84b34bf6d179a1154b6f4db266c81b8a353b9c65c3ae9ee3424cf8ad4",
+        "coordinate": "https://developer.invoiced.com/api/credit-notes#GET /credit_notes"
+      },
       "covered_by": {
         "stream": "credit_notes"
       }
@@ -126,13 +548,158 @@
     {
       "method": "POST",
       "path": "/credit_notes",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-7e3b89d84b34bf6d-1e718405ce76233a",
+        "source_url": "https://developer.invoiced.com/api/credit-notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7e3b89d84b34bf6d179a1154b6f4db266c81b8a353b9c65c3ae9ee3424cf8ad4",
+        "coordinate": "https://developer.invoiced.com/api/credit-notes#POST /credit_notes"
+      },
       "covered_by": {
         "write": "create_credit_note"
       }
     },
     {
       "method": "GET",
+      "path": "/credit_notes/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-7e3b89d84b34bf6d-1e718405ce76233a",
+        "source_url": "https://developer.invoiced.com/api/credit-notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7e3b89d84b34bf6d179a1154b6f4db266c81b8a353b9c65c3ae9ee3424cf8ad4",
+        "coordinate": "https://developer.invoiced.com/api/credit-notes#GET /credit_notes/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/credit_notes/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-7e3b89d84b34bf6d-1e718405ce76233a",
+        "source_url": "https://developer.invoiced.com/api/credit-notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7e3b89d84b34bf6d179a1154b6f4db266c81b8a353b9c65c3ae9ee3424cf8ad4",
+        "coordinate": "https://developer.invoiced.com/api/credit-notes#PATCH /credit_notes/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/credit_notes/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-7e3b89d84b34bf6d-1e718405ce76233a",
+        "source_url": "https://developer.invoiced.com/api/credit-notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7e3b89d84b34bf6d179a1154b6f4db266c81b8a353b9c65c3ae9ee3424cf8ad4",
+        "coordinate": "https://developer.invoiced.com/api/credit-notes#DELETE /credit_notes/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/credit_notes/:id/attachments",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-7e3b89d84b34bf6d-1e718405ce76233a",
+        "source_url": "https://developer.invoiced.com/api/credit-notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7e3b89d84b34bf6d179a1154b6f4db266c81b8a353b9c65c3ae9ee3424cf8ad4",
+        "coordinate": "https://developer.invoiced.com/api/credit-notes#GET /credit_notes/:id/attachments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_notes/:id/emails",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-7e3b89d84b34bf6d-1e718405ce76233a",
+        "source_url": "https://developer.invoiced.com/api/credit-notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7e3b89d84b34bf6d179a1154b6f4db266c81b8a353b9c65c3ae9ee3424cf8ad4",
+        "coordinate": "https://developer.invoiced.com/api/credit-notes#POST /credit_notes/:id/emails"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_notes/:id/void",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-7e3b89d84b34bf6d-1e718405ce76233a",
+        "source_url": "https://developer.invoiced.com/api/credit-notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7e3b89d84b34bf6d179a1154b6f4db266c81b8a353b9c65c3ae9ee3424cf8ad4",
+        "coordinate": "https://developer.invoiced.com/api/credit-notes#POST /credit_notes/:id/void"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/credit_notes/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /credit_notes/{id}]"
+      },
       "covered_by": {
         "stream": "credit_note"
       }
@@ -140,27 +707,33 @@
     {
       "method": "PATCH",
       "path": "/credit_notes/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /credit_notes/{id}]"
+      },
       "covered_by": {
         "write": "update_credit_note"
       }
     },
     {
-      "method": "POST",
-      "path": "/credit_notes/{id}/emails",
-      "covered_by": {
-        "write": "send_credit_note_email"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/credit_notes/{id}/void",
-      "covered_by": {
-        "write": "void_credit_note"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/credit_notes/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /credit_notes/{id}]"
+      },
       "covered_by": {
         "write": "delete_credit_note"
       }
@@ -168,13 +741,104 @@
     {
       "method": "GET",
       "path": "/credit_notes/{id}/attachments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /credit_notes/{id}/attachments]"
+      },
       "covered_by": {
         "stream": "credit_note_attachments"
       }
     },
     {
+      "method": "POST",
+      "path": "/credit_notes/{id}/emails",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /credit_notes/{id}/emails]"
+      },
+      "covered_by": {
+        "write": "send_credit_note_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/credit_notes/{id}/void",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /credit_notes/{id}/void]"
+      },
+      "covered_by": {
+        "write": "void_credit_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer/:id/notes",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-12d7e09bedb74091-d6915236b2881bbc",
+        "source_url": "https://developer.invoiced.com/api/notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "12d7e09bedb74091ef408edba3eb9a4a38ba5084415636bd2d4ea6e243b03b9f",
+        "coordinate": "https://developer.invoiced.com/api/notes#GET /customer/:id/notes"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customer/{id}/notes",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /customer/{id}/notes]"
+      },
+      "covered_by": {
+        "stream": "customer_notes"
+      }
+    },
+    {
       "method": "GET",
       "path": "/customers",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+        "source_url": "https://developer.invoiced.com/api/customers",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b",
+        "coordinate": "https://developer.invoiced.com/api/customers#GET /customers"
+      },
       "covered_by": {
         "stream": "customers"
       }
@@ -182,280 +846,651 @@
     {
       "method": "POST",
       "path": "/customers",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+        "source_url": "https://developer.invoiced.com/api/customers",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b",
+        "coordinate": "https://developer.invoiced.com/api/customers#POST /customers"
+      },
       "covered_by": {
         "write": "create_customer"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/customers/:customer_id/bank_accounts/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c3cb0c0885898217-cfba389d8ad83c81",
+        "source_url": "https://developer.invoiced.com/api/payment-sources",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3cb0c0885898217c4cac7a35c6528c114cdbc777e9e9c16cd97e55f4417a146",
+        "coordinate": "https://developer.invoiced.com/api/payment-sources#DELETE /customers/:customer_id/bank_accounts/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/:customer_id/cards/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c3cb0c0885898217-cfba389d8ad83c81",
+        "source_url": "https://developer.invoiced.com/api/payment-sources",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3cb0c0885898217c4cac7a35c6528c114cdbc777e9e9c16cd97e55f4417a146",
+        "coordinate": "https://developer.invoiced.com/api/payment-sources#DELETE /customers/:customer_id/cards/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
-      "path": "/customers/{id}",
-      "covered_by": {
-        "stream": "customer"
+      "path": "/customers/:customer_id/contacts",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c3f7a9e8f71fafc6-0212e74fef8d4e67",
+        "source_url": "https://developer.invoiced.com/api/contacts",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3f7a9e8f71fafc6d74feddfecac68cffea0d9fbaa39bfab21d5ab851c6cbae0",
+        "coordinate": "https://developer.invoiced.com/api/contacts#GET /customers/:customer_id/contacts"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/:customer_id/contacts",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c3f7a9e8f71fafc6-0212e74fef8d4e67",
+        "source_url": "https://developer.invoiced.com/api/contacts",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3f7a9e8f71fafc6d74feddfecac68cffea0d9fbaa39bfab21d5ab851c6cbae0",
+        "coordinate": "https://developer.invoiced.com/api/contacts#POST /customers/:customer_id/contacts"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/:customer_id/contacts/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c3f7a9e8f71fafc6-0212e74fef8d4e67",
+        "source_url": "https://developer.invoiced.com/api/contacts",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3f7a9e8f71fafc6d74feddfecac68cffea0d9fbaa39bfab21d5ab851c6cbae0",
+        "coordinate": "https://developer.invoiced.com/api/contacts#GET /customers/:customer_id/contacts/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "PATCH",
-      "path": "/customers/{id}",
-      "covered_by": {
-        "write": "update_customer"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/customers/{id}/balance",
-      "covered_by": {
-        "stream": "customer_balance"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customers/{id}/emails",
-      "covered_by": {
-        "write": "send_statement_email"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customers/{id}/text_messages",
-      "covered_by": {
-        "write": "send_statement_sms"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customers/{id}/letters",
-      "covered_by": {
-        "write": "send_statement_letter"
+      "path": "/customers/:customer_id/contacts/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c3f7a9e8f71fafc6-0212e74fef8d4e67",
+        "source_url": "https://developer.invoiced.com/api/contacts",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3f7a9e8f71fafc6d74feddfecac68cffea0d9fbaa39bfab21d5ab851c6cbae0",
+        "coordinate": "https://developer.invoiced.com/api/contacts#PATCH /customers/:customer_id/contacts/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "DELETE",
-      "path": "/customers/{id}",
-      "covered_by": {
-        "write": "delete_customer"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/estimates",
-      "covered_by": {
-        "stream": "estimates"
+      "path": "/customers/:customer_id/contacts/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c3f7a9e8f71fafc6-0212e74fef8d4e67",
+        "source_url": "https://developer.invoiced.com/api/contacts",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3f7a9e8f71fafc6d74feddfecac68cffea0d9fbaa39bfab21d5ab851c6cbae0",
+        "coordinate": "https://developer.invoiced.com/api/contacts#DELETE /customers/:customer_id/contacts/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
-      "path": "/estimates",
-      "covered_by": {
-        "write": "create_an_estimate"
+      "path": "/customers/:customer_id/invoices",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-68647d24b68b3531-0007bcab27b9a879",
+        "source_url": "https://developer.invoiced.com/api/metered-billing",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "68647d24b68b3531312e13b472d07d6acb332cb4d10094b102563cf9ccf2203c",
+        "coordinate": "https://developer.invoiced.com/api/metered-billing#POST /customers/:customer_id/invoices"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/estimates/{id}",
-      "covered_by": {
-        "stream": "estimate"
+      "path": "/customers/:customer_id/line_items",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-68647d24b68b3531-0007bcab27b9a879",
+        "source_url": "https://developer.invoiced.com/api/metered-billing",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "68647d24b68b3531312e13b472d07d6acb332cb4d10094b102563cf9ccf2203c",
+        "coordinate": "https://developer.invoiced.com/api/metered-billing#GET /customers/:customer_id/line_items"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/:customer_id/line_items",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-68647d24b68b3531-0007bcab27b9a879",
+        "source_url": "https://developer.invoiced.com/api/metered-billing",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "68647d24b68b3531312e13b472d07d6acb332cb4d10094b102563cf9ccf2203c",
+        "coordinate": "https://developer.invoiced.com/api/metered-billing#POST /customers/:customer_id/line_items"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/:customer_id/line_items/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-68647d24b68b3531-0007bcab27b9a879",
+        "source_url": "https://developer.invoiced.com/api/metered-billing",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "68647d24b68b3531312e13b472d07d6acb332cb4d10094b102563cf9ccf2203c",
+        "coordinate": "https://developer.invoiced.com/api/metered-billing#GET /customers/:customer_id/line_items/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "PATCH",
-      "path": "/estimates/{id}",
-      "covered_by": {
-        "write": "update_an_estimate"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/estimates/{id}/emails",
-      "covered_by": {
-        "write": "send_estimate_email"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/estimates/{id}/void",
-      "covered_by": {
-        "write": "void_estimate"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/estimates/{id}",
-      "covered_by": {
-        "write": "delete_an_estimate"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/estimates/{id}/attachments",
-      "covered_by": {
-        "stream": "estimate_attachments"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/estimates/{estimate_id}/invoice",
-      "covered_by": {
-        "write": "convert_estimate_to_invoice"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/events",
-      "covered_by": {
-        "stream": "events"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/events/{id}",
-      "covered_by": {
-        "stream": "event"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/files",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "The documented file upload requires multipart/form-data with a file part; the declarative write dialect supports JSON/form fields only."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/files/{id}",
-      "covered_by": {
-        "stream": "file"
+      "path": "/customers/:customer_id/line_items/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-68647d24b68b3531-0007bcab27b9a879",
+        "source_url": "https://developer.invoiced.com/api/metered-billing",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "68647d24b68b3531312e13b472d07d6acb332cb4d10094b102563cf9ccf2203c",
+        "coordinate": "https://developer.invoiced.com/api/metered-billing#PATCH /customers/:customer_id/line_items/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "DELETE",
-      "path": "/files/{id}",
-      "covered_by": {
-        "write": "delete_file"
+      "path": "/customers/:customer_id/line_items/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-68647d24b68b3531-0007bcab27b9a879",
+        "source_url": "https://developer.invoiced.com/api/metered-billing",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "68647d24b68b3531312e13b472d07d6acb332cb4d10094b102563cf9ccf2203c",
+        "coordinate": "https://developer.invoiced.com/api/metered-billing#DELETE /customers/:customer_id/line_items/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/invoices",
-      "covered_by": {
-        "stream": "invoices"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/invoices",
-      "covered_by": {
-        "write": "create_an_invoice"
+      "path": "/customers/:customer_id/payment_sources",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c3cb0c0885898217-cfba389d8ad83c81",
+        "source_url": "https://developer.invoiced.com/api/payment-sources",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3cb0c0885898217c4cac7a35c6528c114cdbc777e9e9c16cd97e55f4417a146",
+        "coordinate": "https://developer.invoiced.com/api/payment-sources#GET /customers/:customer_id/payment_sources"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/invoices/{id}",
-      "covered_by": {
-        "stream": "invoice"
+      "path": "/customers/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+        "source_url": "https://developer.invoiced.com/api/customers",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b",
+        "coordinate": "https://developer.invoiced.com/api/customers#GET /customers/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "PATCH",
-      "path": "/invoices/{id}",
-      "covered_by": {
-        "write": "update_an_invoice"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/invoices/{id}/emails",
-      "covered_by": {
-        "write": "send_invoice_email"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/invoices/{id}/text_messages",
-      "covered_by": {
-        "write": "send_invoice_sms"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/invoices/{id}/letters",
-      "covered_by": {
-        "write": "send_invoice_letter"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/invoices/{id}/pay",
-      "covered_by": {
-        "write": "pay_invoice"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/invoices/{id}/attachments",
-      "covered_by": {
-        "stream": "invoice_attachments"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customers/{id}/consolidate_invoices",
-      "covered_by": {
-        "write": "create_consolidated_invoice"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/invoices/{id}/void",
-      "covered_by": {
-        "write": "void_invoice"
+      "path": "/customers/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+        "source_url": "https://developer.invoiced.com/api/customers",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b",
+        "coordinate": "https://developer.invoiced.com/api/customers#PATCH /customers/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "DELETE",
-      "path": "/invoices/{id}",
-      "covered_by": {
-        "write": "delete_an_invoice"
+      "path": "/customers/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+        "source_url": "https://developer.invoiced.com/api/customers",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b",
+        "coordinate": "https://developer.invoiced.com/api/customers#DELETE /customers/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/items",
-      "covered_by": {
-        "stream": "items"
+      "path": "/customers/:id/balance",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+        "source_url": "https://developer.invoiced.com/api/customers",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b",
+        "coordinate": "https://developer.invoiced.com/api/customers#GET /customers/:id/balance"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/items",
+      "path": "/customers/:id/consolidate_invoices",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#POST /customers/:id/consolidate_invoices"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/:id/emails",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+        "source_url": "https://developer.invoiced.com/api/customers",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b",
+        "coordinate": "https://developer.invoiced.com/api/customers#POST /customers/:id/emails"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/:id/letters",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+        "source_url": "https://developer.invoiced.com/api/customers",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b",
+        "coordinate": "https://developer.invoiced.com/api/customers#POST /customers/:id/letters"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/:id/payment_sources",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-c3cb0c0885898217-cfba389d8ad83c81",
+        "source_url": "https://developer.invoiced.com/api/payment-sources",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c3cb0c0885898217c4cac7a35c6528c114cdbc777e9e9c16cd97e55f4417a146",
+        "coordinate": "https://developer.invoiced.com/api/payment-sources#POST /customers/:id/payment_sources"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/:id/text_messages",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f4315a815d28788e-37e97dc59856a84a",
+        "source_url": "https://developer.invoiced.com/api/customers",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f4315a815d28788eba3f580c764b1634c5df619ebfe61dc400c0804b1b7d691b",
+        "coordinate": "https://developer.invoiced.com/api/customers#POST /customers/:id/text_messages"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/bank_accounts/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /customers/{customer_id}/bank_accounts/{id}]"
+      },
       "covered_by": {
-        "write": "create_an_item"
+        "write": "delete_bank_account_payment_source"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{customer_id}/cards/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /customers/{customer_id}/cards/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_card_payment_source"
       }
     },
     {
       "method": "GET",
-      "path": "/items/{id}",
+      "path": "/customers/{customer_id}/contacts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /customers/{customer_id}/contacts]"
+      },
       "covered_by": {
-        "stream": "item"
+        "stream": "customer_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/contacts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /customers/{customer_id}/contacts]"
+      },
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{customer_id}/contacts/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /customers/{customer_id}/contacts/{id}]"
+      },
+      "covered_by": {
+        "stream": "customer_contact"
       }
     },
     {
       "method": "PATCH",
-      "path": "/items/{id}",
+      "path": "/customers/{customer_id}/contacts/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /customers/{customer_id}/contacts/{id}]"
+      },
       "covered_by": {
-        "write": "update_an_item"
+        "write": "update_contact"
       }
     },
     {
       "method": "DELETE",
-      "path": "/items/{id}",
+      "path": "/customers/{customer_id}/contacts/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /customers/{customer_id}/contacts/{id}]"
+      },
       "covered_by": {
-        "write": "delete_an_item"
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{customer_id}/invoices",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /customers/{customer_id}/invoices]"
+      },
+      "covered_by": {
+        "write": "create_customer_invoice"
       }
     },
     {
       "method": "GET",
       "path": "/customers/{customer_id}/line_items",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /customers/{customer_id}/line_items]"
+      },
       "covered_by": {
         "stream": "customer_line_items"
       }
@@ -463,6 +1498,16 @@
     {
       "method": "POST",
       "path": "/customers/{customer_id}/line_items",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /customers/{customer_id}/line_items]"
+      },
       "covered_by": {
         "write": "create_customer_line_item"
       }
@@ -470,6 +1515,16 @@
     {
       "method": "GET",
       "path": "/customers/{customer_id}/line_items/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /customers/{customer_id}/line_items/{id}]"
+      },
       "covered_by": {
         "stream": "customer_line_item"
       }
@@ -477,6 +1532,16 @@
     {
       "method": "PATCH",
       "path": "/customers/{customer_id}/line_items/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /customers/{customer_id}/line_items/{id}]"
+      },
       "covered_by": {
         "write": "update_customer_line_item"
       }
@@ -484,20 +1549,1323 @@
     {
       "method": "DELETE",
       "path": "/customers/{customer_id}/line_items/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /customers/{customer_id}/line_items/{id}]"
+      },
       "covered_by": {
         "write": "delete_customer_line_item"
       }
     },
     {
-      "method": "POST",
-      "path": "/customers/{customer_id}/invoices",
+      "method": "GET",
+      "path": "/customers/{customer_id}/payment_sources",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /customers/{customer_id}/payment_sources]"
+      },
       "covered_by": {
-        "write": "create_customer_invoice"
+        "stream": "customer_payment_sources"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /customers/{id}]"
+      },
+      "covered_by": {
+        "stream": "customer"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/customers/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /customers/{id}]"
+      },
+      "covered_by": {
+        "write": "update_customer"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/customers/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /customers/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/customers/{id}/balance",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /customers/{id}/balance]"
+      },
+      "covered_by": {
+        "stream": "customer_balance"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/consolidate_invoices",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /customers/{id}/consolidate_invoices]"
+      },
+      "covered_by": {
+        "write": "create_consolidated_invoice"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/emails",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /customers/{id}/emails]"
+      },
+      "covered_by": {
+        "write": "send_statement_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/letters",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /customers/{id}/letters]"
+      },
+      "covered_by": {
+        "write": "send_statement_letter"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/payment_sources",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /customers/{id}/payment_sources]"
+      },
+      "covered_by": {
+        "write": "create_payment_source"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers/{id}/text_messages",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /customers/{id}/text_messages]"
+      },
+      "covered_by": {
+        "write": "send_statement_sms"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+        "source_url": "https://developer.invoiced.com/api/estimates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254",
+        "coordinate": "https://developer.invoiced.com/api/estimates#GET /estimates"
+      },
+      "covered_by": {
+        "stream": "estimates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+        "source_url": "https://developer.invoiced.com/api/estimates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254",
+        "coordinate": "https://developer.invoiced.com/api/estimates#POST /estimates"
+      },
+      "covered_by": {
+        "write": "create_an_estimate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/:estimate_id/invoice",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+        "source_url": "https://developer.invoiced.com/api/estimates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254",
+        "coordinate": "https://developer.invoiced.com/api/estimates#POST /estimates/:estimate_id/invoice"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+        "source_url": "https://developer.invoiced.com/api/estimates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254",
+        "coordinate": "https://developer.invoiced.com/api/estimates#GET /estimates/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/estimates/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+        "source_url": "https://developer.invoiced.com/api/estimates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254",
+        "coordinate": "https://developer.invoiced.com/api/estimates#PATCH /estimates/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/estimates/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+        "source_url": "https://developer.invoiced.com/api/estimates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254",
+        "coordinate": "https://developer.invoiced.com/api/estimates#DELETE /estimates/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/:id/attachments",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+        "source_url": "https://developer.invoiced.com/api/estimates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254",
+        "coordinate": "https://developer.invoiced.com/api/estimates#GET /estimates/:id/attachments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/:id/emails",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+        "source_url": "https://developer.invoiced.com/api/estimates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254",
+        "coordinate": "https://developer.invoiced.com/api/estimates#POST /estimates/:id/emails"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/:id/void",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-5c7d2ed11b0102d3-c812eed05d2f2bb3",
+        "source_url": "https://developer.invoiced.com/api/estimates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "5c7d2ed11b0102d37834bb92baa0e6362132bdb18077f6b665027069ad3ed254",
+        "coordinate": "https://developer.invoiced.com/api/estimates#POST /estimates/:id/void"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{estimate_id}/invoice",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /estimates/{estimate_id}/invoice]"
+      },
+      "covered_by": {
+        "write": "convert_estimate_to_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /estimates/{id}]"
+      },
+      "covered_by": {
+        "stream": "estimate"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/estimates/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /estimates/{id}]"
+      },
+      "covered_by": {
+        "write": "update_an_estimate"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/estimates/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /estimates/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_an_estimate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/estimates/{id}/attachments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /estimates/{id}/attachments]"
+      },
+      "covered_by": {
+        "stream": "estimate_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{id}/emails",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /estimates/{id}/emails]"
+      },
+      "covered_by": {
+        "write": "send_estimate_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/estimates/{id}/void",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /estimates/{id}/void]"
+      },
+      "covered_by": {
+        "write": "void_estimate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-72e23dfc76d82740-ab5a1fb1ba6bfb6d",
+        "source_url": "https://developer.invoiced.com/api/events",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "72e23dfc76d82740062cf1eabe0133cc58eb2c29dd293635060a156c7c7e4d73",
+        "coordinate": "https://developer.invoiced.com/api/events#GET /events"
+      },
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-72e23dfc76d82740-ab5a1fb1ba6bfb6d",
+        "source_url": "https://developer.invoiced.com/api/events",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "72e23dfc76d82740062cf1eabe0133cc58eb2c29dd293635060a156c7c7e4d73",
+        "coordinate": "https://developer.invoiced.com/api/events#GET /events/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /events/{id}]"
+      },
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/files",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-45314f13359aa3e1-857083d81c4a73e4",
+        "source_url": "https://developer.invoiced.com/api/files",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "45314f13359aa3e13a10cf02e1a352fe18a124ac0156dc7d258c950579e8a282",
+        "coordinate": "https://developer.invoiced.com/api/files#POST /files"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "The documented file upload requires multipart/form-data with a file part; the declarative write dialect supports JSON/form fields only.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-45314f13359aa3e1-857083d81c4a73e4",
+        "source_url": "https://developer.invoiced.com/api/files",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "45314f13359aa3e13a10cf02e1a352fe18a124ac0156dc7d258c950579e8a282",
+        "coordinate": "https://developer.invoiced.com/api/files#GET /files/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-45314f13359aa3e1-857083d81c4a73e4",
+        "source_url": "https://developer.invoiced.com/api/files",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "45314f13359aa3e13a10cf02e1a352fe18a124ac0156dc7d258c950579e8a282",
+        "coordinate": "https://developer.invoiced.com/api/files#DELETE /files/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/files/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /files/{id}]"
+      },
+      "covered_by": {
+        "stream": "file"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/files/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /files/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_file"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoice/:id/notes",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-12d7e09bedb74091-d6915236b2881bbc",
+        "source_url": "https://developer.invoiced.com/api/notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "12d7e09bedb74091ef408edba3eb9a4a38ba5084415636bd2d4ea6e243b03b9f",
+        "coordinate": "https://developer.invoiced.com/api/notes#GET /invoice/:id/notes"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoice/{id}/notes",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /invoice/{id}/notes]"
+      },
+      "covered_by": {
+        "stream": "invoice_notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#GET /invoices"
+      },
+      "covered_by": {
+        "stream": "invoices"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#POST /invoices"
+      },
+      "covered_by": {
+        "write": "create_an_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#GET /invoices/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/invoices/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#PATCH /invoices/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#DELETE /invoices/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/:id/attachments",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#GET /invoices/:id/attachments"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/:id/emails",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#POST /invoices/:id/emails"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/:id/letters",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#POST /invoices/:id/letters"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/:id/pay",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#POST /invoices/:id/pay"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/:id/payment_plan",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-45c5dfcd5af3556b-8d5e2af81dec70b1",
+        "source_url": "https://developer.invoiced.com/api/payment-plans",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "45c5dfcd5af3556bb32f60ead60b820fc9b726e5f11540ccf9fbb8a96b5c7316",
+        "coordinate": "https://developer.invoiced.com/api/payment-plans#GET /invoices/:id/payment_plan"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/:id/payment_plan",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-45c5dfcd5af3556b-8d5e2af81dec70b1",
+        "source_url": "https://developer.invoiced.com/api/payment-plans",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "45c5dfcd5af3556bb32f60ead60b820fc9b726e5f11540ccf9fbb8a96b5c7316",
+        "coordinate": "https://developer.invoiced.com/api/payment-plans#PUT /invoices/:id/payment_plan"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/:id/payment_plan",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-45c5dfcd5af3556b-8d5e2af81dec70b1",
+        "source_url": "https://developer.invoiced.com/api/payment-plans",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "45c5dfcd5af3556bb32f60ead60b820fc9b726e5f11540ccf9fbb8a96b5c7316",
+        "coordinate": "https://developer.invoiced.com/api/payment-plans#DELETE /invoices/:id/payment_plan"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/:id/text_messages",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#POST /invoices/:id/text_messages"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/:id/void",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-67b44bf7d8f6d40d-3680a27c3a76a122",
+        "source_url": "https://developer.invoiced.com/api/invoices",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "67b44bf7d8f6d40d71ee5c5bdf6e0d28107c18a268d44ca4dd67a3c5a8ed22a5",
+        "coordinate": "https://developer.invoiced.com/api/invoices#POST /invoices/:id/void"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /invoices/{id}]"
+      },
+      "covered_by": {
+        "stream": "invoice"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/invoices/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /invoices/{id}]"
+      },
+      "covered_by": {
+        "write": "update_an_invoice"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /invoices/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_an_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{id}/attachments",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /invoices/{id}/attachments]"
+      },
+      "covered_by": {
+        "stream": "invoice_attachments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/emails",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /invoices/{id}/emails]"
+      },
+      "covered_by": {
+        "write": "send_invoice_email"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/letters",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /invoices/{id}/letters]"
+      },
+      "covered_by": {
+        "write": "send_invoice_letter"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/pay",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /invoices/{id}/pay]"
+      },
+      "covered_by": {
+        "write": "pay_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/{id}/payment_plan",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /invoices/{id}/payment_plan]"
+      },
+      "covered_by": {
+        "stream": "invoice_payment_plan"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/invoices/{id}/payment_plan",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PUT /invoices/{id}/payment_plan]"
+      },
+      "covered_by": {
+        "write": "create_payment_plan"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/invoices/{id}/payment_plan",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /invoices/{id}/payment_plan]"
+      },
+      "covered_by": {
+        "write": "cancel_payment_plan"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/text_messages",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /invoices/{id}/text_messages]"
+      },
+      "covered_by": {
+        "write": "send_invoice_sms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/{id}/void",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /invoices/{id}/void]"
+      },
+      "covered_by": {
+        "write": "void_invoice"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-e7cf9ae5d3474d8b-b91e00c370ad3925",
+        "source_url": "https://developer.invoiced.com/api/items",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e7cf9ae5d3474d8b7b81fdd6a8e48a100e635a8cba787621a2b60ef3d0afcd46",
+        "coordinate": "https://developer.invoiced.com/api/items#GET /items"
+      },
+      "covered_by": {
+        "stream": "items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/items",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-e7cf9ae5d3474d8b-b91e00c370ad3925",
+        "source_url": "https://developer.invoiced.com/api/items",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e7cf9ae5d3474d8b7b81fdd6a8e48a100e635a8cba787621a2b60ef3d0afcd46",
+        "coordinate": "https://developer.invoiced.com/api/items#POST /items"
+      },
+      "covered_by": {
+        "write": "create_an_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-e7cf9ae5d3474d8b-b91e00c370ad3925",
+        "source_url": "https://developer.invoiced.com/api/items",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e7cf9ae5d3474d8b7b81fdd6a8e48a100e635a8cba787621a2b60ef3d0afcd46",
+        "coordinate": "https://developer.invoiced.com/api/items#GET /items/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/items/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-e7cf9ae5d3474d8b-b91e00c370ad3925",
+        "source_url": "https://developer.invoiced.com/api/items",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e7cf9ae5d3474d8b7b81fdd6a8e48a100e635a8cba787621a2b60ef3d0afcd46",
+        "coordinate": "https://developer.invoiced.com/api/items#PATCH /items/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/items/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-e7cf9ae5d3474d8b-b91e00c370ad3925",
+        "source_url": "https://developer.invoiced.com/api/items",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e7cf9ae5d3474d8b7b81fdd6a8e48a100e635a8cba787621a2b60ef3d0afcd46",
+        "coordinate": "https://developer.invoiced.com/api/items#DELETE /items/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/items/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /items/{id}]"
+      },
+      "covered_by": {
+        "stream": "item"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/items/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /items/{id}]"
+      },
+      "covered_by": {
+        "write": "update_an_item"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/items/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /items/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_an_item"
       }
     },
     {
       "method": "GET",
       "path": "/notes",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-12d7e09bedb74091-d6915236b2881bbc",
+        "source_url": "https://developer.invoiced.com/api/notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "12d7e09bedb74091ef408edba3eb9a4a38ba5084415636bd2d4ea6e243b03b9f",
+        "coordinate": "https://developer.invoiced.com/api/notes#GET /notes"
+      },
       "covered_by": {
         "stream": "notes"
       }
@@ -505,13 +2873,74 @@
     {
       "method": "POST",
       "path": "/notes",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-12d7e09bedb74091-d6915236b2881bbc",
+        "source_url": "https://developer.invoiced.com/api/notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "12d7e09bedb74091ef408edba3eb9a4a38ba5084415636bd2d4ea6e243b03b9f",
+        "coordinate": "https://developer.invoiced.com/api/notes#POST /notes"
+      },
       "covered_by": {
         "write": "create_note"
       }
     },
     {
       "method": "PATCH",
+      "path": "/notes/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-12d7e09bedb74091-d6915236b2881bbc",
+        "source_url": "https://developer.invoiced.com/api/notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "12d7e09bedb74091ef408edba3eb9a4a38ba5084415636bd2d4ea6e243b03b9f",
+        "coordinate": "https://developer.invoiced.com/api/notes#PATCH /notes/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/notes/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-12d7e09bedb74091-d6915236b2881bbc",
+        "source_url": "https://developer.invoiced.com/api/notes",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "12d7e09bedb74091ef408edba3eb9a4a38ba5084415636bd2d4ea6e243b03b9f",
+        "coordinate": "https://developer.invoiced.com/api/notes#DELETE /notes/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
       "path": "/notes/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /notes/{id}]"
+      },
       "covered_by": {
         "write": "update_note"
       }
@@ -519,76 +2948,32 @@
     {
       "method": "DELETE",
       "path": "/notes/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /notes/{id}]"
+      },
       "covered_by": {
         "write": "delete_note"
       }
     },
     {
       "method": "GET",
-      "path": "/customer/{id}/notes",
-      "covered_by": {
-        "stream": "customer_notes"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/invoice/{id}/notes",
-      "covered_by": {
-        "stream": "invoice_notes"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/invoices/{id}/payment_plan",
-      "covered_by": {
-        "write": "create_payment_plan"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/invoices/{id}/payment_plan",
-      "covered_by": {
-        "stream": "invoice_payment_plan"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/invoices/{id}/payment_plan",
-      "covered_by": {
-        "write": "cancel_payment_plan"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/customers/{id}/payment_sources",
-      "covered_by": {
-        "write": "create_payment_source"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/customers/{customer_id}/payment_sources",
-      "covered_by": {
-        "stream": "customer_payment_sources"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/customers/{customer_id}/cards/{id}",
-      "covered_by": {
-        "write": "delete_card_payment_source"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/customers/{customer_id}/bank_accounts/{id}",
-      "covered_by": {
-        "write": "delete_bank_account_payment_source"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/payments",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-a56dbdb93cdca00f-959eb7bcd85b9b88",
+        "source_url": "https://developer.invoiced.com/api/payments",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a56dbdb93cdca00f3d6ec179a16f7d0b71a9a628ceb8f2ae6ed03d05de08a9f0",
+        "coordinate": "https://developer.invoiced.com/api/payments#GET /payments"
+      },
       "covered_by": {
         "stream": "payments"
       }
@@ -596,13 +2981,116 @@
     {
       "method": "POST",
       "path": "/payments",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-a56dbdb93cdca00f-959eb7bcd85b9b88",
+        "source_url": "https://developer.invoiced.com/api/payments",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a56dbdb93cdca00f3d6ec179a16f7d0b71a9a628ceb8f2ae6ed03d05de08a9f0",
+        "coordinate": "https://developer.invoiced.com/api/payments#POST /payments"
+      },
       "covered_by": {
         "write": "create_payment"
       }
     },
     {
       "method": "GET",
+      "path": "/payments/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-a56dbdb93cdca00f-959eb7bcd85b9b88",
+        "source_url": "https://developer.invoiced.com/api/payments",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a56dbdb93cdca00f3d6ec179a16f7d0b71a9a628ceb8f2ae6ed03d05de08a9f0",
+        "coordinate": "https://developer.invoiced.com/api/payments#GET /payments/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/payments/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-a56dbdb93cdca00f-959eb7bcd85b9b88",
+        "source_url": "https://developer.invoiced.com/api/payments",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a56dbdb93cdca00f3d6ec179a16f7d0b71a9a628ceb8f2ae6ed03d05de08a9f0",
+        "coordinate": "https://developer.invoiced.com/api/payments#PATCH /payments/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/payments/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-a56dbdb93cdca00f-959eb7bcd85b9b88",
+        "source_url": "https://developer.invoiced.com/api/payments",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a56dbdb93cdca00f3d6ec179a16f7d0b71a9a628ceb8f2ae6ed03d05de08a9f0",
+        "coordinate": "https://developer.invoiced.com/api/payments#DELETE /payments/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/payments/:id/emails",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-a56dbdb93cdca00f-959eb7bcd85b9b88",
+        "source_url": "https://developer.invoiced.com/api/payments",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a56dbdb93cdca00f3d6ec179a16f7d0b71a9a628ceb8f2ae6ed03d05de08a9f0",
+        "coordinate": "https://developer.invoiced.com/api/payments#POST /payments/:id/emails"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/payments/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /payments/{id}]"
+      },
       "covered_by": {
         "stream": "payment"
       }
@@ -610,27 +3098,66 @@
     {
       "method": "PATCH",
       "path": "/payments/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /payments/{id}]"
+      },
       "covered_by": {
         "write": "update_payment"
       }
     },
     {
-      "method": "POST",
-      "path": "/payments/{id}/emails",
-      "covered_by": {
-        "write": "send_a_payment_receipt_email"
-      }
-    },
-    {
       "method": "DELETE",
       "path": "/payments/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /payments/{id}]"
+      },
       "covered_by": {
         "write": "delete_payment"
       }
     },
     {
+      "method": "POST",
+      "path": "/payments/{id}/emails",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[POST /payments/{id}/emails]"
+      },
+      "covered_by": {
+        "write": "send_a_payment_receipt_email"
+      }
+    },
+    {
       "method": "GET",
       "path": "/plans",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-76d6946450f88df7-6dfc79e9388ddae0",
+        "source_url": "https://developer.invoiced.com/api/plans",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "76d6946450f88df73fa1ecbedd63eb23cf460ebae115745234a4b063c62e56d6",
+        "coordinate": "https://developer.invoiced.com/api/plans#GET /plans"
+      },
       "covered_by": {
         "stream": "plans"
       }
@@ -638,13 +3165,95 @@
     {
       "method": "POST",
       "path": "/plans",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-76d6946450f88df7-6dfc79e9388ddae0",
+        "source_url": "https://developer.invoiced.com/api/plans",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "76d6946450f88df73fa1ecbedd63eb23cf460ebae115745234a4b063c62e56d6",
+        "coordinate": "https://developer.invoiced.com/api/plans#POST /plans"
+      },
       "covered_by": {
         "write": "create_plan"
       }
     },
     {
       "method": "GET",
+      "path": "/plans/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-76d6946450f88df7-6dfc79e9388ddae0",
+        "source_url": "https://developer.invoiced.com/api/plans",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "76d6946450f88df73fa1ecbedd63eb23cf460ebae115745234a4b063c62e56d6",
+        "coordinate": "https://developer.invoiced.com/api/plans#GET /plans/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/plans/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-76d6946450f88df7-6dfc79e9388ddae0",
+        "source_url": "https://developer.invoiced.com/api/plans",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "76d6946450f88df73fa1ecbedd63eb23cf460ebae115745234a4b063c62e56d6",
+        "coordinate": "https://developer.invoiced.com/api/plans#PATCH /plans/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/plans/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-76d6946450f88df7-6dfc79e9388ddae0",
+        "source_url": "https://developer.invoiced.com/api/plans",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "76d6946450f88df73fa1ecbedd63eb23cf460ebae115745234a4b063c62e56d6",
+        "coordinate": "https://developer.invoiced.com/api/plans#DELETE /plans/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/plans/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /plans/{id}]"
+      },
       "covered_by": {
         "stream": "plan"
       }
@@ -652,6 +3261,16 @@
     {
       "method": "PATCH",
       "path": "/plans/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /plans/{id}]"
+      },
       "covered_by": {
         "write": "update_plan"
       }
@@ -659,20 +3278,32 @@
     {
       "method": "DELETE",
       "path": "/plans/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /plans/{id}]"
+      },
       "covered_by": {
         "write": "delete_plan"
       }
     },
     {
-      "method": "POST",
-      "path": "/charges/{id}/refunds",
-      "covered_by": {
-        "write": "refund_charge"
-      }
-    },
-    {
       "method": "GET",
       "path": "/subscriptions",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f9d383c2610f70f5-6b30e214dc717cae",
+        "source_url": "https://developer.invoiced.com/api/subscriptions",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f9d383c2610f70f5421bfe3e4e0979c18e2f4bba691e8de38f4ee752e003d5f2",
+        "coordinate": "https://developer.invoiced.com/api/subscriptions#GET /subscriptions"
+      },
       "covered_by": {
         "stream": "subscriptions"
       }
@@ -680,13 +3311,94 @@
     {
       "method": "POST",
       "path": "/subscriptions",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f9d383c2610f70f5-6b30e214dc717cae",
+        "source_url": "https://developer.invoiced.com/api/subscriptions",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f9d383c2610f70f5421bfe3e4e0979c18e2f4bba691e8de38f4ee752e003d5f2",
+        "coordinate": "https://developer.invoiced.com/api/subscriptions#POST /subscriptions"
+      },
       "covered_by": {
         "write": "create_subscription"
       }
     },
     {
+      "method": "GET",
+      "path": "/subscriptions/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f9d383c2610f70f5-6b30e214dc717cae",
+        "source_url": "https://developer.invoiced.com/api/subscriptions",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f9d383c2610f70f5421bfe3e4e0979c18e2f4bba691e8de38f4ee752e003d5f2",
+        "coordinate": "https://developer.invoiced.com/api/subscriptions#GET /subscriptions/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/subscriptions/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f9d383c2610f70f5-6b30e214dc717cae",
+        "source_url": "https://developer.invoiced.com/api/subscriptions",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f9d383c2610f70f5421bfe3e4e0979c18e2f4bba691e8de38f4ee752e003d5f2",
+        "coordinate": "https://developer.invoiced.com/api/subscriptions#PATCH /subscriptions/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/subscriptions/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f9d383c2610f70f5-6b30e214dc717cae",
+        "source_url": "https://developer.invoiced.com/api/subscriptions",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f9d383c2610f70f5421bfe3e4e0979c18e2f4bba691e8de38f4ee752e003d5f2",
+        "coordinate": "https://developer.invoiced.com/api/subscriptions#DELETE /subscriptions/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "POST",
       "path": "/subscriptions/preview",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-f9d383c2610f70f5-6b30e214dc717cae",
+        "source_url": "https://developer.invoiced.com/api/subscriptions",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f9d383c2610f70f5421bfe3e4e0979c18e2f4bba691e8de38f4ee752e003d5f2",
+        "coordinate": "https://developer.invoiced.com/api/subscriptions#POST /subscriptions/preview"
+      },
       "covered_by": {
         "write": "preview_subscription"
       }
@@ -694,6 +3406,16 @@
     {
       "method": "GET",
       "path": "/subscriptions/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /subscriptions/{id}]"
+      },
       "covered_by": {
         "stream": "subscription"
       }
@@ -701,6 +3423,16 @@
     {
       "method": "PATCH",
       "path": "/subscriptions/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /subscriptions/{id}]"
+      },
       "covered_by": {
         "write": "update_subscription"
       }
@@ -708,6 +3440,16 @@
     {
       "method": "DELETE",
       "path": "/subscriptions/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /subscriptions/{id}]"
+      },
       "covered_by": {
         "write": "cancel_subscription"
       }
@@ -715,6 +3457,15 @@
     {
       "method": "GET",
       "path": "/tasks",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-89caedcf243520ae-69f551b476471414",
+        "source_url": "https://developer.invoiced.com/api/tasks",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "89caedcf243520aeccd72be1b191b8da4ceb8da58fd1f07f1f1dba3afe33c337",
+        "coordinate": "https://developer.invoiced.com/api/tasks#GET /tasks"
+      },
       "covered_by": {
         "stream": "tasks"
       }
@@ -722,13 +3473,95 @@
     {
       "method": "POST",
       "path": "/tasks",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-89caedcf243520ae-69f551b476471414",
+        "source_url": "https://developer.invoiced.com/api/tasks",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "89caedcf243520aeccd72be1b191b8da4ceb8da58fd1f07f1f1dba3afe33c337",
+        "coordinate": "https://developer.invoiced.com/api/tasks#POST /tasks"
+      },
       "covered_by": {
         "write": "create_task"
       }
     },
     {
       "method": "GET",
+      "path": "/tasks/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-89caedcf243520ae-69f551b476471414",
+        "source_url": "https://developer.invoiced.com/api/tasks",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "89caedcf243520aeccd72be1b191b8da4ceb8da58fd1f07f1f1dba3afe33c337",
+        "coordinate": "https://developer.invoiced.com/api/tasks#GET /tasks/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tasks/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-89caedcf243520ae-69f551b476471414",
+        "source_url": "https://developer.invoiced.com/api/tasks",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "89caedcf243520aeccd72be1b191b8da4ceb8da58fd1f07f1f1dba3afe33c337",
+        "coordinate": "https://developer.invoiced.com/api/tasks#PATCH /tasks/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-89caedcf243520ae-69f551b476471414",
+        "source_url": "https://developer.invoiced.com/api/tasks",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "89caedcf243520aeccd72be1b191b8da4ceb8da58fd1f07f1f1dba3afe33c337",
+        "coordinate": "https://developer.invoiced.com/api/tasks#DELETE /tasks/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/tasks/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /tasks/{id}]"
+      },
       "covered_by": {
         "stream": "task"
       }
@@ -736,6 +3569,16 @@
     {
       "method": "PATCH",
       "path": "/tasks/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /tasks/{id}]"
+      },
       "covered_by": {
         "write": "update_task"
       }
@@ -743,6 +3586,16 @@
     {
       "method": "DELETE",
       "path": "/tasks/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /tasks/{id}]"
+      },
       "covered_by": {
         "write": "delete_task"
       }
@@ -750,6 +3603,15 @@
     {
       "method": "GET",
       "path": "/tax_rates",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-4594086d0ee31395-69d91a31fcfd95cc",
+        "source_url": "https://developer.invoiced.com/api/tax-rates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4594086d0ee31395c9f50a9c09b8bd35796f75a6b9848d1957790e134e1b79c4",
+        "coordinate": "https://developer.invoiced.com/api/tax-rates#GET /tax_rates"
+      },
       "covered_by": {
         "stream": "tax_rates"
       }
@@ -757,13 +3619,95 @@
     {
       "method": "POST",
       "path": "/tax_rates",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-4594086d0ee31395-69d91a31fcfd95cc",
+        "source_url": "https://developer.invoiced.com/api/tax-rates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4594086d0ee31395c9f50a9c09b8bd35796f75a6b9848d1957790e134e1b79c4",
+        "coordinate": "https://developer.invoiced.com/api/tax-rates#POST /tax_rates"
+      },
       "covered_by": {
         "write": "create_tax_rate"
       }
     },
     {
       "method": "GET",
+      "path": "/tax_rates/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-4594086d0ee31395-69d91a31fcfd95cc",
+        "source_url": "https://developer.invoiced.com/api/tax-rates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4594086d0ee31395c9f50a9c09b8bd35796f75a6b9848d1957790e134e1b79c4",
+        "coordinate": "https://developer.invoiced.com/api/tax-rates#GET /tax_rates/:id"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tax_rates/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-4594086d0ee31395-69d91a31fcfd95cc",
+        "source_url": "https://developer.invoiced.com/api/tax-rates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4594086d0ee31395c9f50a9c09b8bd35796f75a6b9848d1957790e134e1b79c4",
+        "coordinate": "https://developer.invoiced.com/api/tax-rates#PATCH /tax_rates/:id"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tax_rates/:id",
+      "provenance": {
+        "artifact": "invoiced-artifact-ref-4594086d0ee31395-69d91a31fcfd95cc",
+        "source_url": "https://developer.invoiced.com/api/tax-rates",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4594086d0ee31395c9f50a9c09b8bd35796f75a6b9848d1957790e134e1b79c4",
+        "coordinate": "https://developer.invoiced.com/api/tax-rates#DELETE /tax_rates/:id"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/tax_rates/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[GET /tax_rates/{id}]"
+      },
       "covered_by": {
         "stream": "tax_rate"
       }
@@ -771,6 +3715,16 @@
     {
       "method": "PATCH",
       "path": "/tax_rates/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[PATCH /tax_rates/{id}]"
+      },
       "covered_by": {
         "write": "update_tax_rate"
       }
@@ -778,6 +3732,16 @@
     {
       "method": "DELETE",
       "path": "/tax_rates/{id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "invoiced-artifact-2026-08-09",
+        "source_url": "https://developer.invoiced.com/api",
+        "source_kind": "html_reference",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4",
+        "coordinate": "existing-surface[DELETE /tax_rates/{id}]"
+      },
       "covered_by": {
         "write": "delete_tax_rate"
       }

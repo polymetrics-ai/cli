@@ -1,0 +1,1125 @@
+{
+  "tagline": "Run Squarespace's declared streams and reverse-ETL actions.",
+  "usage": "pm squarespace \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get 1-0 authorization member",
+        "api get 1-0 authorization website",
+        "api get 1-0 commerce inventory variantidcsvs",
+        "api get 1-0 commerce orders id",
+        "api get 1-0 commerce transactions documentids",
+        "api get 1-0 profiles profileidcsvs",
+        "api get 1-0 webhook-subscriptions subscriptionid",
+        "api get v1 commerce discounts",
+        "api get v1 commerce discounts discountid",
+        "api get v1 contacts contactid",
+        "api get v1 contacts contactid address-book",
+        "api get v1 contacts contactid address-book addressbookentryid",
+        "api get v1 fulfillments fulfillment-options",
+        "api get v2 commerce products productid images imageid status",
+        "api get v2 commerce products productidcsvs",
+        "contacts list",
+        "inventory list",
+        "orders list",
+        "products list",
+        "profiles list",
+        "store pages list",
+        "transactions list",
+        "webhook subscriptions list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 commerce discounts discountid",
+        "api delete v1 contacts contactid",
+        "api delete v1 contacts contactid address-book addressbookentryid",
+        "api delete v2 commerce products productid",
+        "api delete v2 commerce products productid images imageid",
+        "api delete v2 commerce products productid variants variantid",
+        "api patch v1 contacts contactid",
+        "api post 1-0 commerce inventory adjustments",
+        "api post 1-0 commerce orders",
+        "api post 1-0 commerce orders id fulfillments",
+        "api post 1-0 webhook-subscriptions subscriptionid",
+        "api post 1-0 webhook-subscriptions subscriptionid actions rotatesecret",
+        "api post 1-0 webhook-subscriptions subscriptionid actions sendtestnotification",
+        "api post v1 analytics transaction-summaries",
+        "api post v1 commerce discounts",
+        "api post v1 contacts",
+        "api post v1 contacts contactid address-book",
+        "api post v1 contacts query",
+        "api post v2 commerce products",
+        "api post v2 commerce products productid",
+        "api post v2 commerce products productid images",
+        "api post v2 commerce products productid images imageid",
+        "api post v2 commerce products productid images imageid order",
+        "api post v2 commerce products productid variants",
+        "api post v2 commerce products productid variants variantid",
+        "api post v2 commerce products productid variants variantid image",
+        "api put v1 commerce discounts discountid",
+        "api put v1 contacts contactid address-book addressbookentryid",
+        "create webhook subscription apply",
+        "delete webhook subscription apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v1 commerce discounts discountid",
+      "summary": "Documented DELETE /v1/commerce/discounts/{discountId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api delete v1 commerce discounts discountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/commerce/discounts/{discountId}"
+        }
+      ],
+      "operation": "squarespace.delete.v1-commerce-discounts-discountid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 contacts contactid",
+      "summary": "Documented DELETE /v1/contacts/{contactId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api delete v1 contacts contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/contacts/{contactId}"
+        }
+      ],
+      "operation": "squarespace.delete.v1-contacts-contactid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 contacts contactid address-book addressbookentryid",
+      "summary": "Documented DELETE /v1/contacts/{contactId}/address-book/{addressBookEntryId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api delete v1 contacts contactid address-book addressbookentryid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}"
+        }
+      ],
+      "operation": "squarespace.delete.v1-contacts-contactid-address-book-addressbookentryid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 commerce products productid",
+      "summary": "Documented DELETE /v2/commerce/products/{productId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api delete v2 commerce products productid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/commerce/products/{productId}"
+        }
+      ],
+      "operation": "squarespace.delete.v2-commerce-products-productid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 commerce products productid images imageid",
+      "summary": "Documented DELETE /v2/commerce/products/{productId}/images/{imageId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api delete v2 commerce products productid images imageid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/commerce/products/{productId}/images/{imageId}"
+        }
+      ],
+      "operation": "squarespace.delete.v2-commerce-products-productid-images-imageid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 commerce products productid variants variantid",
+      "summary": "Documented DELETE /v2/commerce/products/{productId}/variants/{variantId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api delete v2 commerce products productid variants variantid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/commerce/products/{productId}/variants/{variantId}"
+        }
+      ],
+      "operation": "squarespace.delete.v2-commerce-products-productid-variants-variantid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get 1-0 authorization member",
+      "summary": "Documented GET /1.0/authorization/member (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get 1-0 authorization member --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/authorization/member"
+        }
+      ],
+      "operation": "squarespace.get.1-0-authorization-member",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1-0 authorization website",
+      "summary": "Documented GET /1.0/authorization/website (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get 1-0 authorization website --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/authorization/website"
+        }
+      ],
+      "operation": "squarespace.get.1-0-authorization-website",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1-0 commerce inventory variantidcsvs",
+      "summary": "Documented GET /1.0/commerce/inventory/{variantIdCsvs} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get 1-0 commerce inventory variantidcsvs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/commerce/inventory/{variantIdCsvs}"
+        }
+      ],
+      "operation": "squarespace.get.1-0-commerce-inventory-variantidcsvs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1-0 commerce orders id",
+      "summary": "Documented GET /1.0/commerce/orders/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get 1-0 commerce orders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/commerce/orders/{id}"
+        }
+      ],
+      "operation": "squarespace.get.1-0-commerce-orders-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1-0 commerce transactions documentids",
+      "summary": "Documented GET /1.0/commerce/transactions/{documentIds} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get 1-0 commerce transactions documentids --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/commerce/transactions/{documentIds}"
+        }
+      ],
+      "operation": "squarespace.get.1-0-commerce-transactions-documentids",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1-0 profiles profileidcsvs",
+      "summary": "Documented GET /1.0/profiles/{profileIdCsvs} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get 1-0 profiles profileidcsvs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/profiles/{profileIdCsvs}"
+        }
+      ],
+      "operation": "squarespace.get.1-0-profiles-profileidcsvs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get 1-0 webhook-subscriptions subscriptionid",
+      "summary": "Documented GET /1.0/webhook_subscriptions/{subscriptionId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get 1-0 webhook-subscriptions subscriptionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/webhook_subscriptions/{subscriptionId}"
+        }
+      ],
+      "operation": "squarespace.get.1-0-webhook-subscriptions-subscriptionid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 commerce discounts",
+      "summary": "Documented GET /v1/commerce/discounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get v1 commerce discounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/commerce/discounts"
+        }
+      ],
+      "operation": "squarespace.get.v1-commerce-discounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 commerce discounts discountid",
+      "summary": "Documented GET /v1/commerce/discounts/{discountId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get v1 commerce discounts discountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/commerce/discounts/{discountId}"
+        }
+      ],
+      "operation": "squarespace.get.v1-commerce-discounts-discountid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 contacts contactid",
+      "summary": "Documented GET /v1/contacts/{contactId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get v1 contacts contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts/{contactId}"
+        }
+      ],
+      "operation": "squarespace.get.v1-contacts-contactid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 contacts contactid address-book",
+      "summary": "Documented GET /v1/contacts/{contactId}/address-book (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get v1 contacts contactid address-book --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts/{contactId}/address-book"
+        }
+      ],
+      "operation": "squarespace.get.v1-contacts-contactid-address-book",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 contacts contactid address-book addressbookentryid",
+      "summary": "Documented GET /v1/contacts/{contactId}/address-book/{addressBookEntryId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get v1 contacts contactid address-book addressbookentryid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}"
+        }
+      ],
+      "operation": "squarespace.get.v1-contacts-contactid-address-book-addressbookentryid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 fulfillments fulfillment-options",
+      "summary": "Documented GET /v1/fulfillments/fulfillment-options (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get v1 fulfillments fulfillment-options --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/fulfillments/fulfillment-options"
+        }
+      ],
+      "operation": "squarespace.get.v1-fulfillments-fulfillment-options",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 commerce products productid images imageid status",
+      "summary": "Documented GET /v2/commerce/products/{productId}/images/{imageId}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get v2 commerce products productid images imageid status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/commerce/products/{productId}/images/{imageId}/status"
+        }
+      ],
+      "operation": "squarespace.get.v2-commerce-products-productid-images-imageid-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 commerce products productidcsvs",
+      "summary": "Documented GET /v2/commerce/products/{productIdCsvs} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api get v2 commerce products productidcsvs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/commerce/products/{productIdCsvs}"
+        }
+      ],
+      "operation": "squarespace.get.v2-commerce-products-productidcsvs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v1 contacts contactid",
+      "summary": "Documented PATCH /v1/contacts/{contactId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api patch v1 contacts contactid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/contacts/{contactId}"
+        }
+      ],
+      "operation": "squarespace.patch.v1-contacts-contactid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 commerce inventory adjustments",
+      "summary": "Documented POST /1.0/commerce/inventory/adjustments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post 1-0 commerce inventory adjustments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/commerce/inventory/adjustments"
+        }
+      ],
+      "operation": "squarespace.post.1-0-commerce-inventory-adjustments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 commerce orders",
+      "summary": "Documented POST /1.0/commerce/orders (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post 1-0 commerce orders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/commerce/orders"
+        }
+      ],
+      "operation": "squarespace.post.1-0-commerce-orders",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 commerce orders id fulfillments",
+      "summary": "Documented POST /1.0/commerce/orders/{id}/fulfillments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post 1-0 commerce orders id fulfillments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/commerce/orders/{id}/fulfillments"
+        }
+      ],
+      "operation": "squarespace.post.1-0-commerce-orders-id-fulfillments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post 1-0 webhook-subscriptions subscriptionid",
+      "summary": "Documented POST /1.0/webhook_subscriptions/{subscriptionId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post 1-0 webhook-subscriptions subscriptionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/webhook_subscriptions/{subscriptionId}"
+        }
+      ],
+      "operation": "squarespace.post.1-0-webhook-subscriptions-subscriptionid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post 1-0 webhook-subscriptions subscriptionid actions rotatesecret",
+      "summary": "Documented POST /1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post 1-0 webhook-subscriptions subscriptionid actions rotatesecret --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/rotateSecret"
+        }
+      ],
+      "operation": "squarespace.post.1-0-webhook-subscriptions-subscriptionid-actions-rotatesecret",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api post 1-0 webhook-subscriptions subscriptionid actions sendtestnotification",
+      "summary": "Documented POST /1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post 1-0 webhook-subscriptions subscriptionid actions sendtestnotification --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/webhook_subscriptions/{subscriptionId}/actions/sendTestNotification"
+        }
+      ],
+      "operation": "squarespace.post.1-0-webhook-subscriptions-subscriptionid-actions-sendtestnotification",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 analytics transaction-summaries",
+      "summary": "Documented POST /v1/analytics/transaction-summaries (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v1 analytics transaction-summaries --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/analytics/transaction-summaries"
+        }
+      ],
+      "operation": "squarespace.post.v1-analytics-transaction-summaries",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 commerce discounts",
+      "summary": "Documented POST /v1/commerce/discounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v1 commerce discounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/commerce/discounts"
+        }
+      ],
+      "operation": "squarespace.post.v1-commerce-discounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts",
+      "summary": "Documented POST /v1/contacts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v1 contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts"
+        }
+      ],
+      "operation": "squarespace.post.v1-contacts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts contactid address-book",
+      "summary": "Documented POST /v1/contacts/{contactId}/address-book (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v1 contacts contactid address-book --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/{contactId}/address-book"
+        }
+      ],
+      "operation": "squarespace.post.v1-contacts-contactid-address-book",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts query",
+      "summary": "Documented POST /v1/contacts/query (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v1 contacts query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/query"
+        }
+      ],
+      "operation": "squarespace.post.v1-contacts-query",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 commerce products",
+      "summary": "Documented POST /v2/commerce/products (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v2 commerce products --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/commerce/products"
+        }
+      ],
+      "operation": "squarespace.post.v2-commerce-products",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 commerce products productid",
+      "summary": "Documented POST /v2/commerce/products/{productId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v2 commerce products productid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/commerce/products/{productId}"
+        }
+      ],
+      "operation": "squarespace.post.v2-commerce-products-productid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post v2 commerce products productid images",
+      "summary": "Documented POST /v2/commerce/products/{productId}/images (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v2 commerce products productid images --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/commerce/products/{productId}/images"
+        }
+      ],
+      "operation": "squarespace.post.v2-commerce-products-productid-images",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 commerce products productid images imageid",
+      "summary": "Documented POST /v2/commerce/products/{productId}/images/{imageId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v2 commerce products productid images imageid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/commerce/products/{productId}/images/{imageId}"
+        }
+      ],
+      "operation": "squarespace.post.v2-commerce-products-productid-images-imageid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 commerce products productid images imageid order",
+      "summary": "Documented POST /v2/commerce/products/{productId}/images/{imageId}/order (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v2 commerce products productid images imageid order --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/commerce/products/{productId}/images/{imageId}/order"
+        }
+      ],
+      "operation": "squarespace.post.v2-commerce-products-productid-images-imageid-order",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 commerce products productid variants",
+      "summary": "Documented POST /v2/commerce/products/{productId}/variants (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v2 commerce products productid variants --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/commerce/products/{productId}/variants"
+        }
+      ],
+      "operation": "squarespace.post.v2-commerce-products-productid-variants",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 commerce products productid variants variantid",
+      "summary": "Documented POST /v2/commerce/products/{productId}/variants/{variantId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v2 commerce products productid variants variantid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/commerce/products/{productId}/variants/{variantId}"
+        }
+      ],
+      "operation": "squarespace.post.v2-commerce-products-productid-variants-variantid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post v2 commerce products productid variants variantid image",
+      "summary": "Documented POST /v2/commerce/products/{productId}/variants/{variantId}/image (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api post v2 commerce products productid variants variantid image --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/commerce/products/{productId}/variants/{variantId}/image"
+        }
+      ],
+      "operation": "squarespace.post.v2-commerce-products-productid-variants-variantid-image",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 commerce discounts discountid",
+      "summary": "Documented PUT /v1/commerce/discounts/{discountId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api put v1 commerce discounts discountid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/commerce/discounts/{discountId}"
+        }
+      ],
+      "operation": "squarespace.put.v1-commerce-discounts-discountid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 contacts contactid address-book addressbookentryid",
+      "summary": "Documented PUT /v1/contacts/{contactId}/address-book/{addressBookEntryId} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace api put v1 contacts contactid address-book addressbookentryid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/contacts/{contactId}/address-book/{addressBookEntryId}"
+        }
+      ],
+      "operation": "squarespace.put.v1-contacts-contactid-address-book-addressbookentryid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts"
+        }
+      ]
+    },
+    {
+      "path": "create webhook subscription apply",
+      "summary": "Plan and execute the create webhook subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook_subscription",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "flags": [
+        {
+          "name": "endpointUrl",
+          "type": "string",
+          "summary": "Required endpointUrl record field.",
+          "maps_to": "record.endpointUrl",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm squarespace create webhook subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/1.0/webhook_subscriptions"
+        }
+      ],
+      "risk": "registers a new HTTPS endpoint to receive live order/contact/address event notifications; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook subscription apply",
+      "summary": "Plan and execute the delete webhook subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook_subscription",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm squarespace delete webhook subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/1.0/webhook_subscriptions/{subscriptionId}"
+        }
+      ],
+      "risk": "permanently removes a webhook subscription, stopping future event notifications to that endpoint; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "inventory list",
+      "summary": "Run the inventory ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "inventory",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace inventory list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/commerce/inventory"
+        }
+      ]
+    },
+    {
+      "path": "orders list",
+      "summary": "Run the orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/commerce/orders"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/commerce/products"
+        }
+      ]
+    },
+    {
+      "path": "profiles list",
+      "summary": "Run the profiles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "profiles",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace profiles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/profiles"
+        }
+      ]
+    },
+    {
+      "path": "store pages list",
+      "summary": "Run the store pages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "store_pages",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace store pages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/commerce/store_pages"
+        }
+      ]
+    },
+    {
+      "path": "transactions list",
+      "summary": "Run the transactions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "transactions",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace transactions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/commerce/transactions"
+        }
+      ]
+    },
+    {
+      "path": "webhook subscriptions list",
+      "summary": "Run the webhook subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook_subscriptions",
+      "source_url": "https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json",
+      "examples": [
+        "pm squarespace webhook subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/1.0/webhook_subscriptions"
+        }
+      ]
+    }
+  ]
+}

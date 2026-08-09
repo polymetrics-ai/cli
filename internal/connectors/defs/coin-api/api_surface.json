@@ -1,12 +1,32 @@
 {
-  "api": "CoinAPI Market Data REST API v1/v2 (https://rest.coinapi.io, sandbox https://rest-sandbox.coinapi.io)",
+  "api": "CoinAPI Market Data REST API v1/v2 (https://rest.coinapi.io, sandbox https://rest-sandbox.coinapi.io); provider artifact version: CoinAPI Market Data REST API; OpenAPI 3.0.4; info.version v1",
   "docs": "https://docs.coinapi.io/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: reviewed the current, live CoinAPI Market Data REST API OpenAPI spec (50 method+path operations across v1 and v2, fetched from https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml -- the canonical source CoinAPI's own docs page links to; the docs.coinapi.io site itself blocks automated fetches, so this spec, plus a live unauthenticated probe of https://rest.coinapi.io to confirm host/auth-gate behavior, was the review source). CoinAPI is entirely read-only (every documented operation is GET; there is no write/mutation surface at all, consistent with legacy). 9 streams now cover the practical surface: the original 5 (symbols, exchanges, assets, ohlcv_historical_data, trades_historical_data -- symbols retains legacy's all-exchanges GET /v1/symbols endpoint to preserve emitted data scope, see docs.md) plus 4 new in this pass (exchange_rates, quotes_current, orderbook_current, metrics_listing). The remaining ~41 operations are genuinely out of scope: latest/current/history variants of already-covered resources (duplicate_of), per-entity metrics values requiring iteration over the large metrics catalog, order-book depth/v3-envelope/history variants, options-chain data, blockchain-chain metadata, and icon image binaries.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (50 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "coin-api-artifact-2026-08-09",
+      "url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+      "kind": "openapi",
+      "version": "3.0.4",
+      "retrieved_at": "2026-08-09",
+      "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/v1/assets",
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/assets\"].get"
+      },
       "covered_by": {
         "stream": "assets"
       }
@@ -14,46 +34,120 @@
     {
       "method": "GET",
       "path": "/v1/assets/icons/{size}",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "returns branding icon image binaries (PNG), not structured market data"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/assets/icons/{size}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns branding icon image binaries (PNG), not structured market data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/assets/{asset_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/assets/{asset_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pass B full-surface review: endpoint reviewed and intentionally not implemented in this pass",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/chains",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "on-chain blockchain/network metadata, a distinct data domain from the market-data streams this connector covers"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/chains\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "on-chain blockchain/network metadata, a distinct data domain from the market-data streams this connector covers",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/chains/{chain_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "on-chain blockchain/network metadata, a distinct data domain from the market-data streams this connector covers"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/chains/{chain_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "on-chain blockchain/network metadata, a distinct data domain from the market-data streams this connector covers",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/exchangerate/history/periods",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "static enumeration of valid timeseries period identifiers for the exchange-rate history endpoint, not itself market data"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/exchangerate/history/periods\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "static enumeration of valid timeseries period identifiers for the exchange-rate history endpoint, not itself market data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/exchangerate/{asset_id_base}",
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/exchangerate/{asset_id_base}\"].get"
+      },
       "covered_by": {
         "stream": "exchange_rates"
       }
@@ -61,22 +155,57 @@
     {
       "method": "GET",
       "path": "/v1/exchangerate/{asset_id_base}/{asset_id_quote}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single quote-asset exchange rate is a strict subset of the covered all-current-rates stream for the same base asset (same fields, client-side filterable)"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/exchangerate/{asset_id_base}/{asset_id_quote}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single quote-asset exchange rate is a strict subset of the covered all-current-rates stream for the same base asset (same fields, client-side filterable)",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/exchangerate/{asset_id_base}/{asset_id_quote}/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "historical exchange-rate timeseries for one base/quote pair; Pass B full-surface expansion covers the current-rate snapshot only"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/exchangerate/{asset_id_base}/{asset_id_quote}/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "historical exchange-rate timeseries for one base/quote pair; Pass B full-surface expansion covers the current-rate snapshot only",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/exchanges",
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/exchanges\"].get"
+      },
       "covered_by": {
         "stream": "exchanges"
       }
@@ -84,70 +213,183 @@
     {
       "method": "GET",
       "path": "/v1/exchanges/icons/{size}",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "returns branding icon image binaries (PNG), not structured market data"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/exchanges/icons/{size}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "returns branding icon image binaries (PNG), not structured market data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/exchanges/{exchange_id}",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "single-exchange detail is a strict subset of the covered exchanges list stream (same fields, client-side filterable); not implemented as a separate stream"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/exchanges/{exchange_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-exchange detail is a strict subset of the covered exchanges list stream (same fields, client-side filterable); not implemented as a separate stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/asset/current",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/asset/current\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/asset/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/asset/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/asset/listing",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/asset/listing\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/exchange/current",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/exchange/current\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/exchange/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/exchange/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/exchange/listing",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/exchange/listing\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/listing",
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/listing\"].get"
+      },
       "covered_by": {
         "stream": "metrics_listing"
       }
@@ -155,46 +397,120 @@
     {
       "method": "GET",
       "path": "/v1/metrics/symbol/current",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/symbol/current\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/symbol/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/symbol/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/metrics/symbol/listing",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/metrics/symbol/listing\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/ohlcv/exchanges/{exchange_id}/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "exchange-wide aggregated OHLCV history (a distinct resource from the covered per-symbol ohlcv_historical_data stream); out of scope for this pass"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/ohlcv/exchanges/{exchange_id}/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "exchange-wide aggregated OHLCV history (a distinct resource from the covered per-symbol ohlcv_historical_data stream); out of scope for this pass",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/ohlcv/periods",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "static enumeration of valid OHLCV period identifiers, not itself market data"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/ohlcv/periods\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "static enumeration of valid OHLCV period identifiers, not itself market data",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/ohlcv/{symbol_id}/history",
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/ohlcv/{symbol_id}/history\"].get"
+      },
       "covered_by": {
         "stream": "ohlcv_historical_data"
       }
@@ -202,22 +518,57 @@
     {
       "method": "GET",
       "path": "/v1/ohlcv/{symbol_id}/latest",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "latest OHLCV bars are a strict subset of the covered historical OHLCV stream (same fields, most-recent window); not implemented as a separate stream"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/ohlcv/{symbol_id}/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "latest OHLCV bars are a strict subset of the covered historical OHLCV stream (same fields, most-recent window); not implemented as a separate stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/options/{exchange_id}/current",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "options-chain current data, a distinct instrument-type surface from this connector's spot/futures-oriented streams"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/options/{exchange_id}/current\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "options-chain current data, a distinct instrument-type surface from this connector's spot/futures-oriented streams",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/orderbooks/{symbol_id}/current",
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/orderbooks/{symbol_id}/current\"].get"
+      },
       "covered_by": {
         "stream": "orderbook_current"
       }
@@ -225,54 +576,141 @@
     {
       "method": "GET",
       "path": "/v1/orderbooks/{symbol_id}/depth/current",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/orderbooks/{symbol_id}/depth/current\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/orderbooks/{symbol_id}/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/orderbooks/{symbol_id}/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/orderbooks3/current",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/orderbooks3/current\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/orderbooks3/{symbol_id}/current",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/orderbooks3/{symbol_id}/current\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "order-book depth/history/v3-envelope variants of the covered current-order-book stream; Pass B full-surface expansion covers the base current-snapshot shape only",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/quotes/current",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/quotes/current\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/quotes/latest",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/quotes/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/quotes/{symbol_id}/current",
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/quotes/{symbol_id}/current\"].get"
+      },
       "covered_by": {
         "stream": "quotes_current"
       }
@@ -280,22 +718,58 @@
     {
       "method": "GET",
       "path": "/v1/quotes/{symbol_id}/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/quotes/{symbol_id}/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/quotes/{symbol_id}/latest",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/quotes/{symbol_id}/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "all-symbols-current, latest-updates, or historical quote variants of the covered per-symbol current-quote stream; out of scope for this pass",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/symbols",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "CoinAPI Market Data REST API; OpenAPI 3.0.4; info.version v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "existing-surface[GET /v1/symbols]"
+      },
       "covered_by": {
         "stream": "symbols"
       }
@@ -303,38 +777,99 @@
     {
       "method": "GET",
       "path": "/v1/symbols/map/{exchange_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-exchange historical/mapping symbol variants of the covered legacy all-symbols stream"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/symbols/map/{exchange_id}\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-exchange historical/mapping symbol variants of the covered legacy all-symbols stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/symbols/{exchange_id}/active",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "per-exchange active-symbol subset of the covered legacy all-symbols stream; using it as the primary symbols stream would narrow legacy's emitted dataset"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/symbols/{exchange_id}/active\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-exchange active-symbol subset of the covered legacy all-symbols stream; using it as the primary symbols stream would narrow legacy's emitted dataset",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/symbols/{exchange_id}/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-exchange historical/mapping symbol variants of the covered legacy all-symbols stream"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/symbols/{exchange_id}/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-exchange historical/mapping symbol variants of the covered legacy all-symbols stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/trades/latest",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "latest trades are a strict subset of the covered historical trades stream (same fields, most-recent window); not implemented as a separate stream"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/trades/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "latest trades are a strict subset of the covered historical trades stream (same fields, most-recent window); not implemented as a separate stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/trades/{symbol_id}/history",
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/trades/{symbol_id}/history\"].get"
+      },
       "covered_by": {
         "stream": "trades_historical_data"
       }
@@ -342,65 +877,169 @@
     {
       "method": "GET",
       "path": "/v1/trades/{symbol_id}/latest",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "latest trades are a strict subset of the covered historical trades stream (same fields, most-recent window); not implemented as a separate stream"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v1/trades/{symbol_id}/latest\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "latest trades are a strict subset of the covered historical trades stream (same fields, most-recent window); not implemented as a separate stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v2/metrics/asset/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v2/metrics/asset/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v2/metrics/asset/listing",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v2/metrics/asset/listing\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v2/metrics/chain/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v2/metrics/chain/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v2/metrics/chain/listing",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v2/metrics/chain/listing\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v2/metrics/exchange/history",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v2/metrics/exchange/history\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v2/metrics/exchange/listing",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v2/metrics/exchange/listing\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v2/metrics/listing",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself"
+      "provenance": {
+        "artifact": "coin-api-artifact-2026-08-09",
+        "source_url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.4",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5",
+        "coordinate": "paths[\"/v2/metrics/listing\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "per-entity (asset/exchange/symbol/chain) current or historical metrics values; requires selecting from the large metrics catalog covered by metrics_listing, out of scope for this pass beyond the catalog listing itself",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

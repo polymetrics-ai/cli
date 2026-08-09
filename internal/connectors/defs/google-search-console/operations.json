@@ -9,9 +9,15 @@
       "risk": "low",
       "approval": "not_required",
       "output_policy": "json_redacted",
-      "auth_scopes": ["https://www.googleapis.com/auth/webmasters.readonly", "https://www.googleapis.com/auth/webmasters"],
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/webmasters.readonly",
+        "https://www.googleapis.com/auth/webmasters"
+      ],
       "sensitive_policy": {
-        "redact_fields": ["inspectionUrl", "siteUrl"]
+        "redact_fields": [
+          "inspectionUrl",
+          "siteUrl"
+        ]
       },
       "rest": {
         "method": "POST",
@@ -20,11 +26,20 @@
         "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
-          "required": ["inspectionUrl", "siteUrl"],
+          "required": [
+            "inspectionUrl",
+            "siteUrl"
+          ],
           "properties": {
-            "inspectionUrl": { "type": "string" },
-            "siteUrl": { "type": "string" },
-            "languageCode": { "type": "string" }
+            "inspectionUrl": {
+              "type": "string"
+            },
+            "siteUrl": {
+              "type": "string"
+            },
+            "languageCode": {
+              "type": "string"
+            }
           },
           "additionalProperties": false
         }
@@ -39,9 +54,15 @@
       "risk": "low",
       "approval": "not_required",
       "output_policy": "json_redacted",
-      "auth_scopes": ["https://www.googleapis.com/auth/webmasters.readonly", "https://www.googleapis.com/auth/webmasters"],
+      "auth_scopes": [
+        "https://www.googleapis.com/auth/webmasters.readonly",
+        "https://www.googleapis.com/auth/webmasters"
+      ],
       "sensitive_policy": {
-        "redact_fields": ["url", "screenshot"]
+        "redact_fields": [
+          "url",
+          "screenshot"
+        ]
       },
       "rest": {
         "method": "POST",
@@ -50,10 +71,16 @@
         "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
-          "required": ["url"],
+          "required": [
+            "url"
+          ],
           "properties": {
-            "url": { "type": "string" },
-            "requestScreenshot": { "type": "boolean" }
+            "url": {
+              "type": "string"
+            },
+            "requestScreenshot": {
+              "type": "boolean"
+            }
           },
           "additionalProperties": false
         }

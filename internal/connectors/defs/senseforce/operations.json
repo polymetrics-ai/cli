@@ -1,0 +1,20 @@
+{
+  "operations": [
+    {
+      "id": "senseforce.post.api-v1-scripts-script-id-results",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/scripts/{script_id}/results",
+      "description": "executes a published Senseforce SCRIPT (a distinct element type from datasets, addressed by its own script_id, accepting a ScriptFilters body) and returns its computed result set; a fundamentally different resource model from the single configured dataset this bundle reads, requiring its own script_id config surface to model as a second stream",
+      "source_url": "https://manual.senseforce.io/manual/sf-platform/public-api/endpoints.md",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/scripts/{script_id}/results",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

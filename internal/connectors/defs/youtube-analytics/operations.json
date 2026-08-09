@@ -22,10 +22,10 @@
         "path": "https://youtubeanalytics.googleapis.com/v2/reports",
         "max_bytes": 1048576,
         "query": {
-          "ids": "channel==MINE|contentOwner==OWNER_NAME",
-          "startDate": "YYYY-MM-DD",
           "endDate": "YYYY-MM-DD",
-          "metrics": "comma-separated metrics"
+          "ids": "channel==MINE|contentOwner==OWNER_NAME",
+          "metrics": "comma-separated metrics",
+          "startDate": "YYYY-MM-DD"
         }
       }
     },
@@ -46,9 +46,37 @@
       "binary": {
         "method": "GET",
         "path": "/v1/media/{path}?alt=media",
-        "max_bytes": 104857600,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 104857600
+      }
+    },
+    {
+      "id": "youtube-analytics.get.v1-media-resource-name",
+      "kind": "rest_read",
+      "summary": "GET /v1/media/{resource_name}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://youtubereporting.googleapis.com/$discovery/rest?version=v1",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/media/{resource_name}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "youtube-analytics.get.v2-reports",
+      "kind": "rest_read",
+      "summary": "GET /v2/reports",
+      "description": "Official reports.query returns ad-hoc tabular QueryResponse data. Keep it planned solely until typed provider-query foundation issue #2985 provides bounded provider-owned query fields without a raw-query escape hatch.",
+      "source_url": "https://youtubeanalytics.googleapis.com/$discovery/rest?version=v2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reports",
+        "max_bytes": 16777216
       }
     }
   ]

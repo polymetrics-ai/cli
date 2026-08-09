@@ -71,6 +71,10 @@
             "additionalProperties": false,
             "properties": {
               "stream": { "type": "string" },
+              "streams": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
               "write": { "type": "string" },
               "writes": {
                 "type": "array",

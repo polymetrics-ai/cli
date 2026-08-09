@@ -1,0 +1,152 @@
+{
+  "tagline": "Run CIMIS's declared streams and reverse-ETL actions.",
+  "usage": "pm cimis \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api data",
+        "api get api spatialzipcode zipcode",
+        "api get api station stationnumber",
+        "api get api stationzipcode zipcode",
+        "spatial zip codes list",
+        "station zip codes list",
+        "stations list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get api data",
+      "summary": "Documented GET /api/data (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "examples": [
+        "pm cimis api get api data --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/data"
+        }
+      ],
+      "operation": "cimis.get.api-data",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api spatialzipcode zipcode",
+      "summary": "Documented GET /api/spatialzipcode/{zipCode} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "examples": [
+        "pm cimis api get api spatialzipcode zipcode --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/spatialzipcode/{zipCode}"
+        }
+      ],
+      "operation": "cimis.get.api-spatialzipcode-zipcode",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api station stationnumber",
+      "summary": "Documented GET /api/station/{stationNumber} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "examples": [
+        "pm cimis api get api station stationnumber --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/station/{stationNumber}"
+        }
+      ],
+      "operation": "cimis.get.api-station-stationnumber",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api stationzipcode zipcode",
+      "summary": "Documented GET /api/stationzipcode/{zipCode} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "examples": [
+        "pm cimis api get api stationzipcode zipcode --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/stationzipcode/{zipCode}"
+        }
+      ],
+      "operation": "cimis.get.api-stationzipcode-zipcode",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "spatial zip codes list",
+      "summary": "Run the spatial zip codes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "spatial_zip_codes",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "examples": [
+        "pm cimis spatial zip codes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/spatialzipcode"
+        }
+      ]
+    },
+    {
+      "path": "station zip codes list",
+      "summary": "Run the station zip codes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "station_zip_codes",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "examples": [
+        "pm cimis station zip codes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/stationzipcode"
+        }
+      ]
+    },
+    {
+      "path": "stations list",
+      "summary": "Run the stations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "stations",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "examples": [
+        "pm cimis stations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/station"
+        }
+      ]
+    }
+  ]
+}

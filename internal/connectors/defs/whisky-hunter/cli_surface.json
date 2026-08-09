@@ -1,0 +1,140 @@
+{
+  "tagline": "Run Whisky Hunter's declared streams and reverse-ETL actions.",
+  "usage": "pm whisky-hunter \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "auction data list",
+        "auctions data list",
+        "auctions info list",
+        "auctions list",
+        "distilleries info list",
+        "distilleries list",
+        "distillery data list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "auction data list",
+      "summary": "Run the auction data ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "auction_data",
+      "source_url": "https://whiskyhunter.net/api/?format=openapi",
+      "examples": [
+        "pm whisky-hunter auction data list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/auction_data/{slug}/"
+        }
+      ]
+    },
+    {
+      "path": "auctions data list",
+      "summary": "Run the auctions data ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "auctions_data",
+      "source_url": "https://whiskyhunter.net/api/?format=openapi",
+      "examples": [
+        "pm whisky-hunter auctions data list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/auctions_data/"
+        }
+      ]
+    },
+    {
+      "path": "auctions info list",
+      "summary": "Run the auctions info ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "auctions_info",
+      "source_url": "https://whiskyhunter.net/api/?format=openapi",
+      "examples": [
+        "pm whisky-hunter auctions info list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/auctions_info"
+        }
+      ]
+    },
+    {
+      "path": "auctions list",
+      "summary": "Run the auctions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "auctions",
+      "source_url": "https://whiskyhunter.net/api/?format=openapi",
+      "examples": [
+        "pm whisky-hunter auctions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/auctions_data/"
+        }
+      ]
+    },
+    {
+      "path": "distilleries info list",
+      "summary": "Run the distilleries info ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "distilleries_info",
+      "source_url": "https://whiskyhunter.net/api/?format=openapi",
+      "examples": [
+        "pm whisky-hunter distilleries info list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/distilleries_info/"
+        }
+      ]
+    },
+    {
+      "path": "distilleries list",
+      "summary": "Run the distilleries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "distilleries",
+      "source_url": "https://whiskyhunter.net/api/?format=openapi",
+      "examples": [
+        "pm whisky-hunter distilleries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/distilleries_info/"
+        }
+      ]
+    },
+    {
+      "path": "distillery data list",
+      "summary": "Run the distillery data ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "distillery_data",
+      "source_url": "https://whiskyhunter.net/api/?format=openapi",
+      "examples": [
+        "pm whisky-hunter distillery data list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/distillery_data/{slug}/"
+        }
+      ]
+    }
+  ]
+}

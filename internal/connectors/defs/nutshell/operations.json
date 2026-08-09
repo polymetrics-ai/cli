@@ -1,0 +1,131 @@
+{
+  "operations": [
+    {
+      "id": "nutshell.patch.accounts-id",
+      "kind": "rest_write",
+      "summary": "PATCH /accounts/{id}",
+      "description": "Requires a root JSON Patch array body (application/json-patch+json); writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/accounts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nutshell.patch.competitormaps-id",
+      "kind": "rest_write",
+      "summary": "PATCH /competitormaps/{id}",
+      "description": "Requires a root JSON Patch array body; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/competitormaps/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nutshell.patch.contacts-id",
+      "kind": "rest_write",
+      "summary": "PATCH /contacts/{id}",
+      "description": "Requires a root JSON Patch array body (application/json-patch+json); writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nutshell.patch.leads-id",
+      "kind": "rest_write",
+      "summary": "PATCH /leads/{id}",
+      "description": "Requires a root JSON Patch array body (application/json-patch+json); writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/leads/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nutshell.post.leads-id-installments",
+      "kind": "rest_write",
+      "summary": "POST /leads/{id}/installments",
+      "description": "Requires a root JSON array of installment objects; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/{id}/installments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nutshell.patch.productmaps-id",
+      "kind": "rest_write",
+      "summary": "PATCH /productmaps/{id}",
+      "description": "Requires a root JSON Patch array body; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/productmaps/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nutshell.get.stagesets-id-export",
+      "kind": "rest_read",
+      "summary": "GET /stagesets/{id}/export",
+      "description": "Returns a CSV export rather than JSON records, so it is not a declarative JSON stream.",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stagesets/{id}/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nutshell.patch.tasks-id",
+      "kind": "rest_write",
+      "summary": "PATCH /tasks/{id}",
+      "description": "Requires a root JSON Patch array body; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+      "source_url": "https://developers.nutshell.com/reference/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/tasks/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

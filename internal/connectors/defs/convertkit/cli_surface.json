@@ -1,0 +1,830 @@
+{
+  "tagline": "Run ConvertKit's declared streams and reverse-ETL actions.",
+  "usage": "pm convertkit \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v3 account",
+        "api get v3 broadcasts broadcast-id",
+        "api get v3 broadcasts broadcast-id stats",
+        "api get v3 forms form-id subscriptions",
+        "api get v3 purchases purchase-id",
+        "api get v3 sequences sequence-id subscriptions",
+        "api get v3 subscribers subscriber-id",
+        "api get v3 subscribers subscriber-id tags",
+        "api get v3 tags tag-id subscriptions",
+        "broadcasts list",
+        "custom fields list",
+        "forms list",
+        "purchases list",
+        "sequences list",
+        "subscribers list",
+        "tags list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v3 custom-fields custom-field-id",
+        "api post v3 tags tag-id unsubscribe",
+        "api put v3 unsubscribe",
+        "create broadcast apply",
+        "create custom field apply",
+        "create purchase apply",
+        "create tag apply",
+        "create webhook apply",
+        "delete broadcast apply",
+        "delete webhook apply",
+        "remove tag from subscriber apply",
+        "subscribe to form apply",
+        "subscribe to sequence apply",
+        "tag subscriber apply",
+        "update broadcast apply",
+        "update custom field apply",
+        "update subscriber apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v3 custom-fields custom-field-id",
+      "summary": "Documented DELETE /v3/custom_fields/{custom_field_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api delete v3 custom-fields custom-field-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/custom_fields/{custom_field_id}"
+        }
+      ],
+      "operation": "convertkit.delete.v3-custom-fields-custom-field-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v3 account",
+      "summary": "Documented GET /v3/account (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api get v3 account --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/account"
+        }
+      ],
+      "operation": "convertkit.get.v3-account",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 broadcasts broadcast-id",
+      "summary": "Documented GET /v3/broadcasts/{broadcast_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api get v3 broadcasts broadcast-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/broadcasts/{broadcast_id}"
+        }
+      ],
+      "operation": "convertkit.get.v3-broadcasts-broadcast-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 broadcasts broadcast-id stats",
+      "summary": "Documented GET /v3/broadcasts/{broadcast_id}/stats (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api get v3 broadcasts broadcast-id stats --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/broadcasts/{broadcast_id}/stats"
+        }
+      ],
+      "operation": "convertkit.get.v3-broadcasts-broadcast-id-stats",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 forms form-id subscriptions",
+      "summary": "Documented GET /v3/forms/{form_id}/subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api get v3 forms form-id subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/forms/{form_id}/subscriptions"
+        }
+      ],
+      "operation": "convertkit.get.v3-forms-form-id-subscriptions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 purchases purchase-id",
+      "summary": "Documented GET /v3/purchases/{purchase_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api get v3 purchases purchase-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/purchases/{purchase_id}"
+        }
+      ],
+      "operation": "convertkit.get.v3-purchases-purchase-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 sequences sequence-id subscriptions",
+      "summary": "Documented GET /v3/sequences/{sequence_id}/subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api get v3 sequences sequence-id subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sequences/{sequence_id}/subscriptions"
+        }
+      ],
+      "operation": "convertkit.get.v3-sequences-sequence-id-subscriptions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 subscribers subscriber-id",
+      "summary": "Documented GET /v3/subscribers/{subscriber_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api get v3 subscribers subscriber-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/subscribers/{subscriber_id}"
+        }
+      ],
+      "operation": "convertkit.get.v3-subscribers-subscriber-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 subscribers subscriber-id tags",
+      "summary": "Documented GET /v3/subscribers/{subscriber_id}/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api get v3 subscribers subscriber-id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/subscribers/{subscriber_id}/tags"
+        }
+      ],
+      "operation": "convertkit.get.v3-subscribers-subscriber-id-tags",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 tags tag-id subscriptions",
+      "summary": "Documented GET /v3/tags/{tag_id}/subscriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api get v3 tags tag-id subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/tags/{tag_id}/subscriptions"
+        }
+      ],
+      "operation": "convertkit.get.v3-tags-tag-id-subscriptions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v3 tags tag-id unsubscribe",
+      "summary": "Documented POST /v3/tags/{tag_id}/unsubscribe (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api post v3 tags tag-id unsubscribe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/tags/{tag_id}/unsubscribe"
+        }
+      ],
+      "operation": "convertkit.post.v3-tags-tag-id-unsubscribe",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 unsubscribe",
+      "summary": "Documented PUT /v3/unsubscribe (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit api put v3 unsubscribe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/unsubscribe"
+        }
+      ],
+      "operation": "convertkit.put.v3-unsubscribe",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "broadcasts list",
+      "summary": "Run the broadcasts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "broadcasts",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit broadcasts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/broadcasts"
+        }
+      ]
+    },
+    {
+      "path": "create broadcast apply",
+      "summary": "Plan and execute the create broadcast reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_broadcast",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "content",
+          "type": "string",
+          "summary": "Required content record field.",
+          "maps_to": "record.content",
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Required subject record field.",
+          "maps_to": "record.subject",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit create broadcast apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/broadcasts"
+        }
+      ],
+      "risk": "creates a draft or scheduled email broadcast; a scheduled broadcast (send_at/published_at set) will send to the account's live subscriber list, external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create custom field apply",
+      "summary": "Plan and execute the create custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_custom_field",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Required label record field.",
+          "maps_to": "record.label",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit create custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/custom_fields"
+        }
+      ],
+      "risk": "creates a new custom subscriber field on the account (up to 140 total); low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create purchase apply",
+      "summary": "Plan and execute the create purchase reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_purchase",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit create purchase apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/purchases"
+        }
+      ],
+      "risk": "records a new purchase-tracking transaction for a subscriber; external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create tag apply",
+      "summary": "Plan and execute the create tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_tag",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit create tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/tags"
+        }
+      ],
+      "risk": "creates a new tag on the account; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_webhook",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/automations/hooks"
+        }
+      ],
+      "risk": "creates a webhook that POSTs subscriber-event payloads to an external URL the caller controls; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "custom fields list",
+      "summary": "Run the custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/custom_fields"
+        }
+      ]
+    },
+    {
+      "path": "delete broadcast apply",
+      "summary": "Plan and execute the delete broadcast reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_broadcast",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit delete broadcast apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/broadcasts/{broadcast_id}"
+        }
+      ],
+      "risk": "permanently deletes a draft or scheduled broadcast record; irreversible, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "rule_id",
+          "type": "integer",
+          "summary": "Required rule id record field.",
+          "maps_to": "record.rule_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/automations/hooks/{rule_id}"
+        }
+      ],
+      "risk": "permanently deletes a webhook automation; irreversible, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "forms list",
+      "summary": "Run the forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forms",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/forms"
+        }
+      ]
+    },
+    {
+      "path": "purchases list",
+      "summary": "Run the purchases ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "purchases",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit purchases list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/purchases"
+        }
+      ]
+    },
+    {
+      "path": "remove tag from subscriber apply",
+      "summary": "Plan and execute the remove tag from subscriber reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "remove_tag_from_subscriber",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "subscriber_id",
+          "type": "integer",
+          "summary": "Required subscriber id record field.",
+          "maps_to": "record.subscriber_id",
+          "required": true
+        },
+        {
+          "name": "tag_id",
+          "type": "integer",
+          "summary": "Required tag id record field.",
+          "maps_to": "record.tag_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit remove tag from subscriber apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/subscribers/{subscriber_id}/tags/{tag_id}"
+        }
+      ],
+      "risk": "removes a tag from a subscriber; external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "sequences list",
+      "summary": "Run the sequences ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sequences",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit sequences list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/sequences"
+        }
+      ]
+    },
+    {
+      "path": "subscribe to form apply",
+      "summary": "Plan and execute the subscribe to form reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "subscribe_to_form",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "form_id",
+          "type": "integer",
+          "summary": "Required form id record field.",
+          "maps_to": "record.form_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit subscribe to form apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/forms/{form_id}/subscribe"
+        }
+      ],
+      "risk": "subscribes an email address to a form (creating the subscriber if the email is new); external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "subscribe to sequence apply",
+      "summary": "Plan and execute the subscribe to sequence reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "subscribe_to_sequence",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "sequence_id",
+          "type": "integer",
+          "summary": "Required sequence id record field.",
+          "maps_to": "record.sequence_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit subscribe to sequence apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/sequences/{sequence_id}/subscribe"
+        }
+      ],
+      "risk": "subscribes an email address to a sequence (creating the subscriber if the email is new); external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "subscribers list",
+      "summary": "Run the subscribers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscribers",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit subscribers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/subscribers"
+        }
+      ]
+    },
+    {
+      "path": "tag subscriber apply",
+      "summary": "Plan and execute the tag subscriber reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "tag_subscriber",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "tag_id",
+          "type": "integer",
+          "summary": "Required tag id record field.",
+          "maps_to": "record.tag_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit tag subscriber apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/tags/{tag_id}/subscribe"
+        }
+      ],
+      "risk": "applies a tag to a subscriber (creating the subscriber if the email is new); external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "tags list",
+      "summary": "Run the tags ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "examples": [
+        "pm convertkit tags list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/tags"
+        }
+      ]
+    },
+    {
+      "path": "update broadcast apply",
+      "summary": "Plan and execute the update broadcast reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_broadcast",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit update broadcast apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/broadcasts/{broadcast_id}"
+        }
+      ],
+      "risk": "mutates a draft or scheduled broadcast's content/send time; external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update custom field apply",
+      "summary": "Plan and execute the update custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_custom_field",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Required label record field.",
+          "maps_to": "record.label",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit update custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/custom_fields/{custom_field_id}"
+        }
+      ],
+      "risk": "renames a custom field's label (the underlying key is unchanged per Kit's own docs); external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update subscriber apply",
+      "summary": "Plan and execute the update subscriber reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_subscriber",
+      "source_url": "https://developers.kit.com/api-reference/v3/overview",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm convertkit update subscriber apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/subscribers/{subscriber_id}"
+        }
+      ],
+      "risk": "mutates an existing subscriber's name/email/custom-field values; external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

@@ -1,0 +1,169 @@
+{
+  "operations": [
+    {
+      "id": "wikipedia-pageviews.get.api-rest-v1-metrics-mediarequests-per-file-project-referer-agent-file-granularity-start-end",
+      "kind": "rest_read",
+      "summary": "GET /api/rest_v1/metrics/mediarequests/per-file/{project}/{referer}/{agent}/{file}/{granularity}/{start}/{end}",
+      "description": "returns or manages file/download payloads rather than JSON records expressible by this connector bundle",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest_v1/metrics/mediarequests/per-file/{project}/{referer}/{agent}/{file}/{granularity}/{start}/{end}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.api-rest-v1-metrics-pageviews-aggregate-project-access-agent-granularity-start-end",
+      "kind": "rest_read",
+      "summary": "GET /api/rest_v1/metrics/pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest_v1/metrics/pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.api-rest-v1-metrics-pageviews-top-project-access-year-month-day",
+      "kind": "rest_read",
+      "summary": "GET /api/rest_v1/metrics/pageviews/top/{project}/{access}/{year}/{month}/{day}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/rest_v1/metrics/pageviews/top/{project}/{access}/{year}/{month}/{day}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.legacy-pagecounts-aggregate-project-access-site-granularity-start-end",
+      "kind": "rest_read",
+      "summary": "GET /legacy/pagecounts/aggregate/{project}/{access-site}/{granularity}/{start}/{end}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/legacy/pagecounts/aggregate/{project}/{access-site}/{granularity}/{start}/{end}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.pageviews-aggregate-project-access-agent-granularity-start-end",
+      "kind": "rest_read",
+      "summary": "GET /pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pageviews/aggregate/{project}/{access}/{agent}/{granularity}/{start}/{end}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.pageviews-per-article-project-access-agent-article-granularity-start-end",
+      "kind": "rest_read",
+      "summary": "GET /pageviews/per-article/{project}/{access}/{agent}/{article}/{granularity}/{start}/{end}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pageviews/per-article/{project}/{access}/{agent}/{article}/{granularity}/{start}/{end}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.pageviews-top-by-country-project-access-year-month",
+      "kind": "rest_read",
+      "summary": "GET /pageviews/top-by-country/{project}/{access}/{year}/{month}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pageviews/top-by-country/{project}/{access}/{year}/{month}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.pageviews-top-per-country-country-access-year-month-day",
+      "kind": "rest_read",
+      "summary": "GET /pageviews/top-per-country/{country}/{access}/{year}/{month}/{day}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pageviews/top-per-country/{country}/{access}/{year}/{month}/{day}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.pageviews-top-project-access-year-month-day",
+      "kind": "rest_read",
+      "summary": "GET /pageviews/top/{project}/{access}/{year}/{month}/{day}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pageviews/top/{project}/{access}/{year}/{month}/{day}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.pageviews-v3-per-editor-user-central-id-granularity-start-end",
+      "kind": "rest_read",
+      "summary": "GET /pageviews/v3/per_editor/{user_central_id}/{granularity}/{start}/{end}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pageviews/v3/per_editor/{user_central_id}/{granularity}/{start}/{end}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "wikipedia-pageviews.get.pageviews-v3-top-pages-per-editor-user-central-id-granularity-start-end",
+      "kind": "rest_read",
+      "summary": "GET /pageviews/v3/top_pages_per_editor/{user_central_id}/{granularity}/{start}/{end}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://wikimedia.org/api/rest_v1/metrics/pageviews/api-spec.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/pageviews/v3/top_pages_per_editor/{user_central_id}/{granularity}/{start}/{end}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

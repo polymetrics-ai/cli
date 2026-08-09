@@ -1,12 +1,2363 @@
 {
-  "api": "Twitter (X) API v2 (https://api.twitter.com/2)",
+  "api": "Twitter (X) API v2 (https://api.twitter.com/2); provider artifact version: OpenAPI 3.0.0; X API v2 info.version 2.167",
   "docs": "https://developer.twitter.com/en/docs/twitter-api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams (tweets, authors) derived from the recent-search endpoint only; the full Twitter v2 API surface (full-archive search, spaces, DMs, lists, likes, follows, streaming filtered rules, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (177 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "twitter-artifact-2026-08-09",
+      "url": "https://api.twitter.com/2/openapi.json",
+      "kind": "openapi",
+      "version": "3.0.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/2/account_activity/subscriptions/count",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/account_activity/subscriptions/count\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/all",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/account_activity/webhooks/{webhook_id}/subscriptions/all\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/all",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/account_activity/webhooks/{webhook_id}/subscriptions/all\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/all/list",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/account_activity/webhooks/{webhook_id}/subscriptions/all/list\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/account_activity/webhooks/{webhook_id}/subscriptions/{user_id}/all",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/account_activity/webhooks/{webhook_id}/subscriptions/{user_id}/all\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/activity/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/activity/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/activity/subscriptions",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/activity/subscriptions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/activity/subscriptions",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/activity/subscriptions\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/activity/subscriptions",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/activity/subscriptions\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/2/activity/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/activity/subscriptions/{subscription_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/activity/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/activity/subscriptions/{subscription_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/articles/draft",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/articles/draft\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/articles/{article_id}/publish",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/articles/{article_id}/publish\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/broadcasts",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/broadcasts/scheduled",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/scheduled\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/broadcasts/scheduled",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/scheduled\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/broadcasts/scheduled/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/scheduled/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/2/broadcasts/scheduled/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/scheduled/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/broadcasts/scheduled/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/scheduled/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/broadcasts/scheduled/{id}/live",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/scheduled/{id}/live\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/broadcasts/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/broadcasts/{id}/chat",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/{id}/chat\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/broadcasts/{id}/chat/mutes",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/{id}/chat/mutes\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/broadcasts/{id}/chat/mutes/{user_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/{id}/chat/mutes/{user_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/broadcasts/{id}/chat/{message_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/broadcasts/{id}/chat/{message_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/chat/conversations",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/conversations/group",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/group\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/conversations/group/initialize",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/group/initialize\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/chat/conversations/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/chat/conversations/{id}/events",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/{id}/events\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/conversations/{id}/keys",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/{id}/keys\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/conversations/{id}/members",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/{id}/members\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/conversations/{id}/messages",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/{id}/messages\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/conversations/{id}/messages/delete",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/{id}/messages/delete\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/conversations/{id}/read",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/{id}/read\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/conversations/{id}/typing",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/conversations/{id}/typing\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/media/upload/initialize",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/media/upload/initialize\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/media/upload/{id}/append",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/media/upload/{id}/append\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/chat/media/upload/{id}/finalize",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/media/upload/{id}/finalize\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/chat/media/{id}/{media_hash_key}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/chat/media/{id}/{media_hash_key}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/communities/search",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/communities/search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/communities/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/communities/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/compliance/jobs",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/compliance/jobs\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/compliance/jobs",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/compliance/jobs\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/compliance/jobs/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/compliance/jobs/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/connections",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/connections\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/connections",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/connections\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/connections/all",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/connections/all\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/connections/{endpoint_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/connections/{endpoint_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/dm_conversations",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/dm_conversations\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/dm_conversations/media/{dm_id}/{media_id}/{resource_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/dm_conversations/media/{dm_id}/{media_id}/{resource_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/dm_conversations/with/{participant_id}/dm_events",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/dm_conversations/with/{participant_id}/dm_events\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/dm_conversations/with/{participant_id}/messages",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/dm_conversations/with/{participant_id}/messages\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/dm_conversations/{dm_conversation_id}/messages",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/dm_conversations/{dm_conversation_id}/messages\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/dm_conversations/{id}/dm_events",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/dm_conversations/{id}/dm_events\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/dm_events",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/dm_events\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/dm_events/{event_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/dm_events/{event_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/dm_events/{event_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/dm_events/{event_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/likes/compliance/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/likes/compliance/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/likes/firehose/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/likes/firehose/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/likes/sample10/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/likes/sample10/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/lists",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/lists\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/lists/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/lists/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/2/lists/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/lists/{id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/lists/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/lists/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/lists/{id}/followers",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/lists/{id}/followers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/lists/{id}/members",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/lists/{id}/members\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/lists/{id}/members",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/lists/{id}/members\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/lists/{id}/members/{user_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/lists/{id}/members/{user_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/lists/{id}/tweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/lists/{id}/tweets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/media",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/media/analytics",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/analytics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/media/metadata",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/metadata\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/media/subtitles",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/subtitles\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/media/subtitles",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/subtitles\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/media/upload",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/upload\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/media/upload",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/upload\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/media/upload/initialize",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/upload/initialize\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/media/upload/{id}/append",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/upload/{id}/append\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/media/upload/{id}/finalize",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/upload/{id}/finalize\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/media/{media_key}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/media/{media_key}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/news/search",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/news/search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/news/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/news/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/notes",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/notes\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/notes/evaluate",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/notes/evaluate\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/notes/search/notes_written",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/notes/search/notes_written\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/notes/search/posts_eligible_for_notes",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/notes/search/posts_eligible_for_notes\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/notes/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/notes/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/openapi.json",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/openapi.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/spaces",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/spaces\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/2/spaces is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/spaces/by/creator_ids",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/spaces/by/creator_ids\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/spaces/search",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/spaces/search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/spaces/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/spaces/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/spaces/{id}/buyers",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/spaces/{id}/buyers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/spaces/{id}/tweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/spaces/{id}/tweets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/trends/by/woeid/{woeid}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/trends/by/woeid/{woeid}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/2/tweets is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/tweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "/2/tweets is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/analytics",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/analytics\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/compliance/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/compliance/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/counts/all",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/counts/all\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/counts/recent",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/counts/recent\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/firehose/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/firehose/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/firehose/stream/lang/en",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/firehose/stream/lang/en\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/firehose/stream/lang/ja",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/firehose/stream/lang/ja\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/firehose/stream/lang/ko",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/firehose/stream/lang/ko\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/firehose/stream/lang/pt",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/firehose/stream/lang/pt\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/label/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/label/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/sample/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/sample/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/sample10/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/sample10/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/search/all",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/search/all\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "full-archive search requires Academic/Enterprise access tier, not exercised by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/2/tweets/search/recent",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/search/recent\"].get"
+      },
       "covered_by": {
         "stream": "tweets"
       }
@@ -14,48 +2365,1383 @@
     {
       "method": "GET",
       "path": "/2/tweets/search/recent (includes.users expansion)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "OpenAPI 3.0.0; X API v2 info.version 2.167",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "existing-surface[GET /2/tweets/search/recent (includes.users expansion)]"
+      },
       "covered_by": {
         "stream": "authors"
       }
     },
     {
       "method": "GET",
-      "path": "/2/tweets/search/all",
-      "excluded": {
-        "category": "requires_elevated_scope",
-        "reason": "full-archive search requires Academic/Enterprise access tier, not exercised by legacy"
+      "path": "/2/tweets/search/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/search/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/2/tweets",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/2/tweets is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/2/tweets/search/stream/rules",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/search/stream/rules\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/tweets/search/stream/rules",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/search/stream/rules\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/search/stream/rules/counts",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/search/stream/rules/counts\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/search/webhooks",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/search/webhooks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/tweets/search/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/search/webhooks/{webhook_id}\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/tweets/search/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/search/webhooks/{webhook_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/tweets/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/{id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/{id}/liking_users",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/{id}/liking_users\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/{id}/quote_tweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/{id}/quote_tweets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/{id}/retweeted_by",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/{id}/retweeted_by\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/tweets/{id}/retweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/{id}/retweets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/2/tweets/{tweet_id}/hidden",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/tweets/{tweet_id}/hidden\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/usage/tweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/usage/tweets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/2/users",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/2/users is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/2/users is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/2/spaces",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/2/spaces is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures"
+      "path": "/2/users/by",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/by\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/by/username/{username}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/by/username/{username}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/compliance/stream",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/compliance/stream\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/me",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/me\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/personalized_trends",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/personalized_trends\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/public_keys",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/public_keys\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/reposts_of_me",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/reposts_of_me\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/search",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/search\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/affiliates",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/affiliates\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/blocking",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/blocking\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/bookmarks",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/bookmarks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/2/tweets",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/2/tweets is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation"
+      "path": "/2/users/{id}/bookmarks",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/bookmarks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/bookmarks/folders",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/bookmarks/folders\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/bookmarks/folders",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/bookmarks/folders\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/bookmarks/folders/{folder_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/bookmarks/folders/{folder_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/users/{id}/bookmarks/{tweet_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/bookmarks/{tweet_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/dm/block",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/dm/block\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/dm/unblock",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/dm/unblock\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/followed_lists",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/followed_lists\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/followed_lists",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/followed_lists\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/users/{id}/followed_lists/{list_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/followed_lists/{list_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/followers",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/followers\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/following",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/following\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/following",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/following\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/liked_tweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/liked_tweets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/likes",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/likes\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/users/{id}/likes/{tweet_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/likes/{tweet_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/list_memberships",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/list_memberships\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/mentions",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/mentions\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/muting",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/muting\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/muting",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/muting\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/owned_lists",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/owned_lists\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/pinned_lists",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/pinned_lists\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/pinned_lists",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/pinned_lists\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/users/{id}/pinned_lists/{list_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/pinned_lists/{list_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/public_keys",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/public_keys\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/public_keys",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/public_keys\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/users/{id}/retweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/retweets\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/users/{id}/retweets/{source_tweet_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/retweets/{source_tweet_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/timelines/reverse_chronological",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/timelines/reverse_chronological\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/users/{id}/tweets",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{id}/tweets\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/users/{source_user_id}/following/{target_user_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{source_user_id}/following/{target_user_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/users/{source_user_id}/muting/{target_user_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/users/{source_user_id}/muting/{target_user_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/2/webhooks",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/webhooks\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/webhooks",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/webhooks\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/2/webhooks/replay",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/webhooks/replay\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/2/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/webhooks/{webhook_id}\"].put"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/2/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "twitter-artifact-2026-08-09",
+        "source_url": "https://api.twitter.com/2/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a1cfbb68e74eb08293473b5479d56a5ac8801bcc5a6486c7d1caf644e57b2eeb",
+        "coordinate": "paths[\"/2/webhooks/{webhook_id}\"].delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

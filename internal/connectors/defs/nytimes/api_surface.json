@@ -1,19 +1,98 @@
 {
-  "api": "NYTimes Developer APIs (https://api.nytimes.com/svc)",
+  "api": "NYTimes Developer APIs (https://api.nytimes.com/svc); provider artifact version: 2.0.0",
   "docs": "https://developer.nytimes.com/apis",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 3 Most Popular read streams only; the Archive API stream is blocked (ENGINE_GAP — month-window fan-out has no declarative primitive) and stays on the legacy implementation; the full NYTimes surface (Books, Top Stories, Article Search, etc.) is out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited swagger artifact (4 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "nytimes-artifact-2026-08-09",
+      "url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "kind": "swagger",
+      "version": "2.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/mostpopular/v2/viewed/{period}.json",
-      "covered_by": {
-        "stream": "most_popular_viewed"
+      "path": "/archive/v1/{year}/{month}.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "existing-surface[GET /archive/v1/{year}/{month}.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/archive/v1/{year}/{month}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/books/v3/lists/current/{list}.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "existing-surface[GET /books/v3/lists/current/{list}.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/books/v3/lists/current/{list}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/emailed/{period}.json",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "paths[\"/emailed/{period}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/mostpopular/v2/emailed/{period}.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "existing-surface[GET /mostpopular/v2/emailed/{period}.json]"
+      },
       "covered_by": {
         "stream": "most_popular_emailed"
       }
@@ -21,6 +100,16 @@
     {
       "method": "GET",
       "path": "/mostpopular/v2/shared/{period}.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "existing-surface[GET /mostpopular/v2/shared/{period}.json]"
+      },
       "covered_by": {
         "stream": "most_popular_shared"
       }
@@ -28,41 +117,147 @@
     {
       "method": "GET",
       "path": "/mostpopular/v2/shared/{period}/{share_type}.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/mostpopular/v2/shared/{period}/{share_type}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "existing-surface[GET /mostpopular/v2/shared/{period}/{share_type}.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/mostpopular/v2/shared/{period}/{share_type}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/archive/v1/{year}/{month}.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/archive/v1/{year}/{month}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      "path": "/mostpopular/v2/viewed/{period}.json",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "existing-surface[GET /mostpopular/v2/viewed/{period}.json]"
+      },
+      "covered_by": {
+        "stream": "most_popular_viewed"
       }
     },
     {
       "method": "GET",
       "path": "/search/v2/articlesearch.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/search/v2/articlesearch.json is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "existing-surface[GET /search/v2/articlesearch.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/search/v2/articlesearch.json is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shared/{period}.json",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "paths[\"/shared/{period}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shared/{period}/{share_type}.json",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "paths[\"/shared/{period}/{share_type}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/topstories/v2/{section}.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/topstories/v2/{section}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "existing-surface[GET /topstories/v2/{section}.json]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "/topstories/v2/{section}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/books/v3/lists/current/{list}.json",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "/books/v3/lists/current/{list}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable"
+      "path": "/viewed/{period}.json",
+      "provenance": {
+        "artifact": "nytimes-artifact-2026-08-09",
+        "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+        "source_kind": "swagger",
+        "version": "2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2533cc81bf66c4f969079849d912bcd12c2ac2b22f73d7ceebafa41e9ef3586f",
+        "coordinate": "paths[\"/viewed/{period}.json\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

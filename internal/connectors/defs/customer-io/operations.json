@@ -1,0 +1,2177 @@
+{
+  "operations": [
+    {
+      "id": "customer-io.get.v1-assets",
+      "kind": "rest_read",
+      "summary": "GET /v1/assets",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/assets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-assets-files",
+      "kind": "rest_write",
+      "summary": "POST /v1/assets/files",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/assets/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-assets-files-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/assets/files/{id}",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/assets/files/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-assets-files-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/assets/files/{id}",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/assets/files/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-assets-files-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/assets/files/{id}",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/assets/files/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-assets-folders",
+      "kind": "rest_read",
+      "summary": "GET /v1/assets/folders",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/assets/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-assets-folders",
+      "kind": "rest_write",
+      "summary": "POST /v1/assets/folders",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/assets/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-assets-folders-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/assets/folders/{id}",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/assets/folders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-assets-folders-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/assets/folders/{id}",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/assets/folders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-assets-folders-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/assets/folders/{id}",
+      "description": "file/image asset library management (upload, folder tree) -- a media-library CMS surface, not campaign/customer/reporting data; out of scope for this connector's read/write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/assets/folders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id-actions",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}/actions",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id-actions-action-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}/actions/{action_id}",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-broadcasts-broadcast-id-actions-action-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/broadcasts/{broadcast_id}/actions/{action_id}",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id-actions-action-id-language-language",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-broadcasts-broadcast-id-actions-action-id-language-language",
+      "kind": "rest_write",
+      "summary": "PUT /v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id-actions-action-id-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id-actions-action-id-metrics-links",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics/links",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/actions/{action_id}/metrics/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}/messages",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}/metrics",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id-metrics-links",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}/metrics/links",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/metrics/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-broadcasts-broadcast-id-triggers",
+      "kind": "rest_read",
+      "summary": "GET /v1/broadcasts/{broadcast_id}/triggers",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/broadcasts/{broadcast_id}/triggers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-broadcast-id-triggers-trigger-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{broadcast_id}/triggers/{trigger_id}",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-broadcast-id-triggers-trigger-id-errors",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{broadcast_id}/triggers/{trigger_id}/errors",
+      "description": "per-broadcast detail/action/metrics/trigger-status sub-resource, keyed by a single broadcast_id already enumerated by the broadcasts stream; no bulk/list-all variant exists and the dialect's fan_out needs a parent id LIST (not a per-record detail fetch) to express a 1-request-per-parent-id read declaratively without a Tier-2 hook",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{broadcast_id}/triggers/{trigger_id}/errors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id-actions",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}/actions",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id-actions-action-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}/actions/{action_id}",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-campaigns-campaign-id-actions-action-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/campaigns/{campaign_id}/actions/{action_id}",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id-actions-action-id-language-language",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-campaigns-campaign-id-actions-action-id-language-language",
+      "kind": "rest_write",
+      "summary": "PUT /v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id-actions-action-id-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}/actions/{action_id}/metrics",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id-actions-action-id-metrics-links",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}/actions/{action_id}/metrics/links",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/actions/{action_id}/metrics/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id-journey-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}/journey_metrics",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/journey_metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}/messages",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}/metrics",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-campaigns-campaign-id-metrics-links",
+      "kind": "rest_read",
+      "summary": "GET /v1/campaigns/{campaign_id}/metrics/links",
+      "description": "per-campaign detail/action/metrics sub-resource, keyed by a single campaign_id already enumerated by the campaigns stream; same fan-out-needs-a-parent-id-list limitation as the broadcast sub-resources above",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/campaigns/{campaign_id}/metrics/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-collections",
+      "kind": "rest_write",
+      "summary": "POST /v1/collections",
+      "description": "creates a new liquid-data collection from an inline data array OR a hosted-file URL (oneOf request body); the dialect's write body construction has no oneOf-discriminated body shape, and the primary practical use (large tabular reference data upload) is a bulk-data-loading operation, not a small-record CRM/reporting mutation this connector's write scope targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/collections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-collections-collection-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/collections/{collection_id}",
+      "description": "per-collection detail/delete/update, keyed by a single collection_id already enumerated by the collections stream; same fan-out limitation as broadcast/campaign sub-resources",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/collections/{collection_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-collections-collection-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/collections/{collection_id}",
+      "description": "per-collection detail/delete/update, keyed by a single collection_id already enumerated by the collections stream; same fan-out limitation as broadcast/campaign sub-resources",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/collections/{collection_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-collections-collection-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/collections/{collection_id}",
+      "description": "per-collection detail/delete/update, keyed by a single collection_id already enumerated by the collections stream; same fan-out limitation as broadcast/campaign sub-resources",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/collections/{collection_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-collections-collection-id-content",
+      "kind": "rest_read",
+      "summary": "GET /v1/collections/{collection_id}/content",
+      "description": "per-collection content-rows fetch, keyed by a single collection_id already enumerated by the collections stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/collections/{collection_id}/content",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-collections-collection-id-content",
+      "kind": "rest_write",
+      "summary": "PUT /v1/collections/{collection_id}/content",
+      "description": "replaces an entire collection's data rows in one request (bulk tabular data replacement) -- same bulk-data-loading rationale as create above, not a small-record mutation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/collections/{collection_id}/content",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-customers",
+      "kind": "rest_read",
+      "summary": "GET /v1/customers",
+      "description": "single-customer lookup requiring a specific email as a REQUIRED query param (not a bulk list) -- there is no list-all-customers endpoint in the App API by design (person/profile data is meant to be looked up by identifier, not paginated wholesale); no declarative list stream can be built from a lookup-only endpoint",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-customers",
+      "kind": "rest_write",
+      "summary": "POST /v1/customers",
+      "description": "bulk customer-search-by-filter endpoint (POST body carries filter criteria, JSONata-like query object) -- a query/filter surface, not a syncable list or a simple flat-body mutation; capabilities.query is false for this connector",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-customers-attributes",
+      "kind": "rest_write",
+      "summary": "POST /v1/customers/attributes",
+      "description": "bulk customer lookup by a list of ids in the POST body -- a batch-lookup surface, not a syncable list stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/customers/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-customers-customer-id-activities",
+      "kind": "rest_read",
+      "summary": "GET /v1/customers/{customer_id}/activities",
+      "description": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/activities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-customers-customer-id-attributes",
+      "kind": "rest_read",
+      "summary": "GET /v1/customers/{customer_id}/attributes",
+      "description": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-customers-customer-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /v1/customers/{customer_id}/messages",
+      "description": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-customers-customer-id-optouts",
+      "kind": "rest_read",
+      "summary": "GET /v1/customers/{customer_id}/optouts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/optouts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-customers-customer-id-optouts",
+      "kind": "rest_write",
+      "summary": "PUT /v1/customers/{customer_id}/optouts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/customers/{customer_id}/optouts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-customers-customer-id-relationships",
+      "kind": "rest_read",
+      "summary": "GET /v1/customers/{customer_id}/relationships",
+      "description": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/relationships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-customers-customer-id-segments",
+      "kind": "rest_read",
+      "summary": "GET /v1/customers/{customer_id}/segments",
+      "description": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/segments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-customers-customer-id-subscription-preferences",
+      "kind": "rest_read",
+      "summary": "GET /v1/customers/{customer_id}/subscription_preferences",
+      "description": "per-customer detail sub-resource, keyed by a single customer_id with no bulk/list-all variant at this connector's scope (person-level PII drill-down, not workspace-level catalog data)",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/customers/{customer_id}/subscription_preferences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-data-index-attributes",
+      "kind": "rest_write",
+      "summary": "POST /v1/data_index/attributes",
+      "description": "updates workspace-level attribute/event metadata definitions (data dictionary configuration), not a data-stream mutation of a customer/campaign/message record",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/data_index/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-data-index-events",
+      "kind": "rest_write",
+      "summary": "POST /v1/data_index/events",
+      "description": "updates workspace-level attribute/event metadata definitions (data dictionary configuration), not a data-stream mutation of a customer/campaign/message record",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/data_index/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-design-studio-components",
+      "kind": "rest_read",
+      "summary": "GET /v1/design_studio/components",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/design_studio/components",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-design-studio-components",
+      "kind": "rest_write",
+      "summary": "POST /v1/design_studio/components",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/design_studio/components",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-design-studio-components-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/design_studio/components/{id}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/design_studio/components/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-design-studio-components-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/design_studio/components/{id}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/design_studio/components/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-design-studio-components-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/design_studio/components/{id}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/design_studio/components/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-design-studio-emails",
+      "kind": "rest_read",
+      "summary": "GET /v1/design_studio/emails",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/design_studio/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-design-studio-emails",
+      "kind": "rest_write",
+      "summary": "POST /v1/design_studio/emails",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/design_studio/emails",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-design-studio-emails-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/design_studio/emails/{id}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/design_studio/emails/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-design-studio-emails-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/design_studio/emails/{id}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/design_studio/emails/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-design-studio-emails-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/design_studio/emails/{id}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/design_studio/emails/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-design-studio-emails-id-languages",
+      "kind": "rest_read",
+      "summary": "GET /v1/design_studio/emails/{id}/languages",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/design_studio/emails/{id}/languages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-design-studio-emails-id-languages",
+      "kind": "rest_write",
+      "summary": "POST /v1/design_studio/emails/{id}/languages",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/design_studio/emails/{id}/languages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-design-studio-emails-id-languages-language",
+      "kind": "rest_read",
+      "summary": "GET /v1/design_studio/emails/{id}/languages/{language}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/design_studio/emails/{id}/languages/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-design-studio-emails-id-languages-language",
+      "kind": "rest_write",
+      "summary": "PUT /v1/design_studio/emails/{id}/languages/{language}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/design_studio/emails/{id}/languages/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-design-studio-emails-id-languages-language",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/design_studio/emails/{id}/languages/{language}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/design_studio/emails/{id}/languages/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-design-studio-folders",
+      "kind": "rest_read",
+      "summary": "GET /v1/design_studio/folders",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/design_studio/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-design-studio-folders",
+      "kind": "rest_write",
+      "summary": "POST /v1/design_studio/folders",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/design_studio/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-design-studio-folders-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/design_studio/folders/{id}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/design_studio/folders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-design-studio-folders-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/design_studio/folders/{id}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/design_studio/folders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-design-studio-folders-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/design_studio/folders/{id}",
+      "description": "Design Studio email/component/folder template-authoring CMS surface -- visual email-builder content management, a distinct product surface from campaign/customer/reporting data this connector targets",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/design_studio/folders/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-esp-domains-domain-name-suppression-suppression-type",
+      "kind": "rest_read",
+      "summary": "GET /v1/esp/domains/{domain_name}/suppression/{suppression_type}",
+      "description": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/esp/domains/{domain_name}/suppression/{suppression_type}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-esp-search-suppression-email-address",
+      "kind": "rest_read",
+      "summary": "GET /v1/esp/search_suppression/{email_address}",
+      "description": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/esp/search_suppression/{email_address}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-esp-suppression-suppression-type",
+      "kind": "rest_read",
+      "summary": "GET /v1/esp/suppression/{suppression_type}",
+      "description": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/esp/suppression/{suppression_type}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-esp-suppression-suppression-type-email-address",
+      "kind": "rest_write",
+      "summary": "POST /v1/esp/suppression/{suppression_type}/{email_address}",
+      "description": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/esp/suppression/{suppression_type}/{email_address}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-esp-suppression-suppression-type-email-address",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/esp/suppression/{suppression_type}/{email_address}",
+      "description": "email service provider (ESP) deliverability suppression-list management (bounce/complaint/unsubscribe address blocklists) -- an email-infrastructure administration surface, not campaign/customer/reporting data",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/esp/suppression/{suppression_type}/{email_address}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-exports-customers",
+      "kind": "rest_write",
+      "summary": "POST /v1/exports/customers",
+      "description": "kicks off an asynchronous bulk-export JOB (people or deliveries data dump); the exports stream already reads the resulting job metadata list, but starting a new export job is an async-job-creation action outside this connector's flat-record write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/exports/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-exports-deliveries",
+      "kind": "rest_write",
+      "summary": "POST /v1/exports/deliveries",
+      "description": "kicks off an asynchronous bulk-export JOB (people or deliveries data dump); the exports stream already reads the resulting job metadata list, but starting a new export job is an async-job-creation action outside this connector's flat-record write scope",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/exports/deliveries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-exports-export-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/exports/{export_id}",
+      "description": "per-export detail sub-resource, keyed by a single export_id already enumerated by the exports stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exports/{export_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-exports-export-id-download",
+      "kind": "rest_read",
+      "summary": "GET /v1/exports/{export_id}/download",
+      "description": "per-export detail/download sub-resource, keyed by a single export_id already enumerated by the exports stream; download in particular returns a binary/zip payload",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/exports/{export_id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-imports",
+      "kind": "rest_write",
+      "summary": "POST /v1/imports",
+      "description": "kicks off an asynchronous bulk people-IMPORT job from an uploaded file URL -- an async bulk-load action, not a flat-record write",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/imports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-imports-import-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/imports/{import_id}",
+      "description": "per-import-job status lookup; this connector implements no import-job-creation action to produce an import_id to look up, so there is no corresponding list/catalog surface for this detail endpoint",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/imports/{import_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-info-ip-addresses",
+      "kind": "rest_read",
+      "summary": "GET /v1/info/ip_addresses",
+      "description": "returns Customer.io's own outbound IP allowlist (a static reference list for firewall configuration), not workspace data",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/info/ip_addresses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-live-notifications-end",
+      "kind": "rest_write",
+      "summary": "POST /v1/live_notifications/end",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/live_notifications/end",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-live-notifications-start",
+      "kind": "rest_write",
+      "summary": "POST /v1/live_notifications/start",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/live_notifications/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-live-notifications-update",
+      "kind": "rest_write",
+      "summary": "POST /v1/live_notifications/update",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/live_notifications/update",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-live-notifications-instance-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/live_notifications/{instance_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/live_notifications/{instance_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-messages-message-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/messages/{message_id}",
+      "description": "per-message detail/archived-content sub-resource, keyed by a single message_id already enumerated by the messages stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/messages/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-messages-message-id-archived-message",
+      "kind": "rest_read",
+      "summary": "GET /v1/messages/{message_id}/archived_message",
+      "description": "per-message detail/archived-content sub-resource, keyed by a single message_id already enumerated by the messages stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/messages/{message_id}/archived_message",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-newsletters",
+      "kind": "rest_write",
+      "summary": "POST /v1/newsletters",
+      "description": "creates a new newsletter; body is a 6-way oneOf discriminated by message channel type (email/sms/push/in_app/webhook/inbox), each with a different required-field shape -- the dialect's single flat record_schema per write action has no oneOf/discriminator primitive to express six mutually-exclusive body shapes under one action name",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/newsletters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}",
+      "description": "per-newsletter detail, keyed by a single newsletter_id already enumerated by the newsletters stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-newsletters-newsletter-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/newsletters/{newsletter_id}",
+      "description": "permanently deletes a newsletter and all its variants/metrics; omitted pending product-owner sign-off on adding a destructive per-object delete beyond the two already-covered destructive deletes (delete_manual_segment/delete_reporting_webhook) -- flaggable for a future increment, not a dialect limitation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/newsletters/{newsletter_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-contents",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/contents",
+      "description": "per-newsletter variant-content list, keyed by a single newsletter_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/contents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-contents-content-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/contents/{content_id}",
+      "description": "per-newsletter-variant detail, keyed by newsletter_id+content_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-newsletters-newsletter-id-contents-content-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/newsletters/{newsletter_id}/contents/{content_id}",
+      "description": "updates a specific newsletter language/test variant's subject/body content -- content-authoring mutation, a CMS-shaped write distinct from this connector's flat-record CRM/reporting mutations",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-contents-content-id-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/contents/{content_id}/metrics",
+      "description": "per-newsletter-variant metrics, keyed by newsletter_id+content_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-contents-content-id-metrics-links",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/contents/{content_id}/metrics/links",
+      "description": "per-newsletter-variant link-click metrics, keyed by newsletter_id+content_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/contents/{content_id}/metrics/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-newsletters-newsletter-id-language",
+      "kind": "rest_write",
+      "summary": "POST /v1/newsletters/{newsletter_id}/language",
+      "description": "creates a new language variant of a newsletter's content -- content-authoring mutation, not a flat-record CRM/reporting write",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/language",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-language-language",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/language/{language}",
+      "description": "per-newsletter-language-variant detail, keyed by newsletter_id+language",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-newsletters-newsletter-id-language-language",
+      "kind": "rest_write",
+      "summary": "PUT /v1/newsletters/{newsletter_id}/language/{language}",
+      "description": "updates a newsletter's language-variant content -- content-authoring mutation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-newsletters-newsletter-id-language-language",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/newsletters/{newsletter_id}/language/{language}",
+      "description": "deletes a newsletter's language variant -- content-authoring mutation, omitted pending product sign-off on adding it as a destructive action",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/newsletters/{newsletter_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/messages",
+      "description": "per-newsletter delivery-message list, keyed by a single newsletter_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/metrics",
+      "description": "per-newsletter aggregate metrics, keyed by a single newsletter_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-metrics-links",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/metrics/links",
+      "description": "per-newsletter link-click metrics, keyed by a single newsletter_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/metrics/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-newsletters-newsletter-id-schedule",
+      "kind": "rest_write",
+      "summary": "POST /v1/newsletters/{newsletter_id}/schedule",
+      "description": "schedules a newsletter to send at a future time -- a send-lifecycle action tightly coupled to Design Studio content authoring, out of scope alongside it",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-newsletters-newsletter-id-send",
+      "kind": "rest_write",
+      "summary": "POST /v1/newsletters/{newsletter_id}/send",
+      "description": "sends a newsletter immediately -- a send-lifecycle action; sends real messages to a newsletter's full recipient list with no dry-run, higher blast-radius than the already-covered trigger_broadcast (which targets one specific broadcast_id's configured audience) and design_studio-adjacent content authoring",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-newsletters-newsletter-id-test-group-test-group-id-language",
+      "kind": "rest_write",
+      "summary": "POST /v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language",
+      "description": "creates a language variant for an A/B test group -- content-authoring mutation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-test-group-test-group-id-language-language",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+      "description": "per-test-group-language-variant detail, keyed by newsletter_id+test_group_id+language",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-newsletters-newsletter-id-test-group-test-group-id-language-language",
+      "kind": "rest_write",
+      "summary": "PUT /v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+      "description": "updates an A/B test group's language variant -- content-authoring mutation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.delete.v1-newsletters-newsletter-id-test-group-test-group-id-language-language",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+      "description": "deletes an A/B test group's language variant -- content-authoring mutation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/newsletters/{newsletter_id}/test_group/{test_group_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-newsletters-newsletter-id-test-groups",
+      "kind": "rest_read",
+      "summary": "GET /v1/newsletters/{newsletter_id}/test_groups",
+      "description": "per-newsletter A/B test-group list, keyed by a single newsletter_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/newsletters/{newsletter_id}/test_groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-newsletters-newsletter-id-test-groups",
+      "kind": "rest_write",
+      "summary": "POST /v1/newsletters/{newsletter_id}/test_groups",
+      "description": "creates an A/B test group on a newsletter -- content-authoring/experiment-configuration mutation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/newsletters/{newsletter_id}/test_groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-objects",
+      "kind": "rest_write",
+      "summary": "POST /v1/objects",
+      "description": "bulk custom-object lookup by filter/query in the POST body -- a query/filter surface (capabilities.query is false), not a syncable list stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/objects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-objects-object-type-id-object-id-attributes",
+      "kind": "rest_read",
+      "summary": "GET /v1/objects/{object_type_id}/{object_id}/attributes",
+      "description": "per-object-instance attribute detail, keyed by object_type_id+object_id with no bulk list-all-instances endpoint documented for a given object_type_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/objects/{object_type_id}/{object_id}/attributes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-objects-object-type-id-object-id-relationships",
+      "kind": "rest_read",
+      "summary": "GET /v1/objects/{object_type_id}/{object_id}/relationships",
+      "description": "per-object-instance relationship detail, keyed by object_type_id+object_id, same no-bulk-list limitation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/objects/{object_type_id}/{object_id}/relationships",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-optouts",
+      "kind": "rest_read",
+      "summary": "GET /v1/optouts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/optouts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-reporting-webhooks-webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/reporting_webhooks/{webhook_id}",
+      "description": "per-webhook detail, keyed by a single webhook_id already enumerated by the reporting_webhooks stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/reporting_webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-segments-segment-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/segments/{segment_id}",
+      "description": "per-segment detail, keyed by a single segment_id already enumerated by the segments stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/segments/{segment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-segments-segment-id-customer-count",
+      "kind": "rest_read",
+      "summary": "GET /v1/segments/{segment_id}/customer_count",
+      "description": "per-segment membership count, keyed by a single segment_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/segments/{segment_id}/customer_count",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-segments-segment-id-membership",
+      "kind": "rest_read",
+      "summary": "GET /v1/segments/{segment_id}/membership",
+      "description": "per-segment membership list, keyed by a single segment_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/segments/{segment_id}/membership",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-segments-segment-id-used-by",
+      "kind": "rest_read",
+      "summary": "GET /v1/segments/{segment_id}/used_by",
+      "description": "per-segment dependency (\"what references this segment\") lookup, keyed by a single segment_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/segments/{segment_id}/used_by",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-send-in-app",
+      "kind": "rest_write",
+      "summary": "POST /v1/send/in_app",
+      "description": "sends a live transactional in-app message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/send/in_app",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-send-inbox-message",
+      "kind": "rest_write",
+      "summary": "POST /v1/send/inbox_message",
+      "description": "sends a live transactional inbox message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/send/inbox_message",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-send-push",
+      "kind": "rest_write",
+      "summary": "POST /v1/send/push",
+      "description": "sends a live transactional push message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/send/push",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.post.v1-send-sms",
+      "kind": "rest_write",
+      "summary": "POST /v1/send/sms",
+      "description": "sends a live transactional SMS message; this connector's send-message write scope covers send_email only (the most broadly applicable channel) for wave2-Pass-B breadth -- each of these four channels has its own distinct required-field shape (device tokens, phone numbers, in-app message targeting) and can be added in a future increment without an engine change",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/send/sms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-sender-identities-sender-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/sender_identities/{sender_id}",
+      "description": "per-sender-identity detail, keyed by a single sender_id already enumerated by the sender_identities stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/sender_identities/{sender_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-sender-identities-sender-id-used-by",
+      "kind": "rest_read",
+      "summary": "GET /v1/sender_identities/{sender_id}/used_by",
+      "description": "per-sender-identity dependency lookup, keyed by a single sender_id",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/sender_identities/{sender_id}/used_by",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-subscription-center-customer-id-token",
+      "kind": "rest_read",
+      "summary": "GET /v1/subscription_center/{customer_id}/token",
+      "description": "mints a signed subscription-preferences-center token for one specific customer_id, for embedding in an outbound email link -- a per-request token-generation action, not catalog data or a flat-record mutation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/subscription_center/{customer_id}/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-transactional-transactional-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/transactional/{transactional_id}",
+      "description": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-transactional-transactional-id-content-content-id",
+      "kind": "rest_write",
+      "summary": "PUT /v1/transactional/{transactional_id}/content/{content_id}",
+      "description": "updates a transactional template's content body -- content-authoring mutation, a CMS-shaped write distinct from this connector's flat-record mutations",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/transactional/{transactional_id}/content/{content_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-transactional-transactional-id-contents",
+      "kind": "rest_read",
+      "summary": "GET /v1/transactional/{transactional_id}/contents",
+      "description": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/contents",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-transactional-transactional-id-language-language",
+      "kind": "rest_read",
+      "summary": "GET /v1/transactional/{transactional_id}/language/{language}",
+      "description": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.put.v1-transactional-transactional-id-language-language",
+      "kind": "rest_write",
+      "summary": "PUT /v1/transactional/{transactional_id}/language/{language}",
+      "description": "updates a transactional template's language-variant content -- content-authoring mutation",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v1/transactional/{transactional_id}/language/{language}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-transactional-transactional-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /v1/transactional/{transactional_id}/messages",
+      "description": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-transactional-transactional-id-metrics",
+      "kind": "rest_read",
+      "summary": "GET /v1/transactional/{transactional_id}/metrics",
+      "description": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/metrics",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.get.v1-transactional-transactional-id-metrics-links",
+      "kind": "rest_read",
+      "summary": "GET /v1/transactional/{transactional_id}/metrics/links",
+      "description": "per-transactional-template detail/content/metrics sub-resource, keyed by a single transactional_id already enumerated by the transactional stream",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/transactional/{transactional_id}/metrics/links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customer-io.webhook.reportingwebhook-post",
+      "kind": "composite",
+      "summary": "WEBHOOK reportingWebhook#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.customer.io/files/journeys-app.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK reportingWebhook#POST"
+        ]
+      }
+    }
+  ]
+}

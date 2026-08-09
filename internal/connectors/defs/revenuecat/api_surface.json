@@ -1,349 +1,112 @@
 {
-  "api": "RevenueCat REST API v2",
+  "api": "RevenueCat REST API v2; provider artifact version: RevenueCat Developer API v2.0.0; OpenAPI 3.0.3",
   "docs": "https://www.revenuecat.com/docs/api-v2",
-  "reviewed_at": "2026-07-04",
-  "scope": "RevenueCat REST API v2 project, app, customer, entitlement, offering, package, product, purchase, subscription, invoice, paywall, webhook integration, virtual currency, audit log, chart, and metrics endpoints. API v1 is a separate key family and is not mixed into this v2 connector surface.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (105 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "revenuecat-artifact-2026-08-09",
+      "url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+      "kind": "openapi",
+      "version": "3.0.3",
+      "retrieved_at": "2026-08-09",
+      "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/projects",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects\"].get"
+      },
       "covered_by": {
         "stream": "projects"
       }
     },
     {
-      "method": "GET",
-      "path": "/projects/{project_id}/apps",
-      "covered_by": {
-        "stream": "apps"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/products",
-      "covered_by": {
-        "stream": "products"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/offerings",
-      "covered_by": {
-        "stream": "offerings"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers",
-      "covered_by": {
-        "stream": "customers"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/apps/{app_id}",
-      "covered_by": {
-        "stream": "app"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/apps/{app_id}/public_api_keys",
-      "covered_by": {
-        "stream": "app_public_api_keys"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/apps/{app_id}/store_kit_config",
-      "covered_by": {
-        "stream": "app_store_kit_config"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/audit_logs",
-      "covered_by": {
-        "stream": "audit_logs"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/charts/{chart_name}",
-      "covered_by": {
-        "stream": "chart_data"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/charts/{chart_name}/options",
-      "covered_by": {
-        "stream": "chart_options"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/collaborators",
-      "covered_by": {
-        "stream": "collaborators"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}",
-      "covered_by": {
-        "stream": "customer"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}/active_entitlements",
-      "covered_by": {
-        "stream": "customer_active_entitlements"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}/aliases",
-      "covered_by": {
-        "stream": "customer_aliases"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}/attributes",
-      "covered_by": {
-        "stream": "customer_attributes"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}/customer_center",
-      "covered_by": {
-        "stream": "customer_center"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}/invoices",
-      "covered_by": {
-        "stream": "customer_invoices"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}/purchases",
-      "covered_by": {
-        "stream": "customer_purchases"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}/subscriptions",
-      "covered_by": {
-        "stream": "customer_subscriptions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies",
-      "covered_by": {
-        "stream": "customer_virtual_currencies"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/entitlements",
-      "covered_by": {
-        "stream": "entitlements"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/entitlements/{entitlement_id}",
-      "covered_by": {
-        "stream": "entitlement"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/entitlements/{entitlement_id}/products",
-      "covered_by": {
-        "stream": "entitlement_products"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/integrations/webhooks",
-      "covered_by": {
-        "stream": "webhook_integrations"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}",
-      "covered_by": {
-        "stream": "webhook_integration"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/metrics/overview",
-      "covered_by": {
-        "stream": "overview_metrics"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/metrics/revenue",
-      "covered_by": {
-        "stream": "revenue_metric"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/offerings/{offering_id}",
-      "covered_by": {
-        "stream": "offering"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/offerings/{offering_id}/packages",
-      "covered_by": {
-        "stream": "offering_packages"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/packages/{package_id}",
-      "covered_by": {
-        "stream": "package"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/packages/{package_id}/products",
-      "covered_by": {
-        "stream": "package_products"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/paywalls",
-      "covered_by": {
-        "stream": "paywalls"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/paywalls/{paywall_id}",
-      "covered_by": {
-        "stream": "paywall"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/products/{product_id}",
-      "covered_by": {
-        "stream": "product"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/purchases",
-      "covered_by": {
-        "stream": "purchases"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/purchases/{purchase_id}",
-      "covered_by": {
-        "stream": "purchase"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/purchases/{purchase_id}/entitlements",
-      "covered_by": {
-        "stream": "purchase_entitlements"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/subscriptions",
-      "covered_by": {
-        "stream": "subscriptions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/subscriptions/{subscription_id}",
-      "covered_by": {
-        "stream": "subscription"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/subscriptions/{subscription_id}/authenticated_management_url",
-      "covered_by": {
-        "stream": "subscription_authenticated_management_url"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/subscriptions/{subscription_id}/entitlements",
-      "covered_by": {
-        "stream": "subscription_entitlements"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/subscriptions/{subscription_id}/transactions",
-      "covered_by": {
-        "stream": "subscription_transactions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/virtual_currencies",
-      "covered_by": {
-        "stream": "virtual_currencies"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}",
-      "covered_by": {
-        "stream": "virtual_currency"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/projects/{project_id}/customers/{customer_id}/invoices/{invoice_id}/file",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "invoice file endpoint returns a binary or document payload rather than JSON records"
-      }
-    },
-    {
       "method": "POST",
       "path": "/projects",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects\"].post"
+      },
       "covered_by": {
         "write": "create_project"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/apps",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/apps\"].get"
+      },
+      "covered_by": {
+        "stream": "apps"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/apps",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/apps\"].post"
+      },
       "covered_by": {
         "write": "create_app"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/apps/{app_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/apps/{app_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "app"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/apps/{app_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/apps/{app_id}\"].post"
+      },
       "covered_by": {
         "write": "update_app"
       }
@@ -351,20 +114,175 @@
     {
       "method": "DELETE",
       "path": "/projects/{project_id}/apps/{app_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/apps/{app_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_app"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/apps/{app_id}/public_api_keys",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/apps/{app_id}/public_api_keys\"].get"
+      },
+      "covered_by": {
+        "stream": "app_public_api_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/apps/{app_id}/store_kit_config",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/apps/{app_id}/store_kit_config\"].get"
+      },
+      "covered_by": {
+        "stream": "app_store_kit_config"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/audit_logs",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/audit_logs\"].get"
+      },
+      "covered_by": {
+        "stream": "audit_logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/charts/{chart_name}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/charts/{chart_name}\"].get"
+      },
+      "covered_by": {
+        "stream": "chart_data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/charts/{chart_name}/options",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/charts/{chart_name}/options\"].get"
+      },
+      "covered_by": {
+        "stream": "chart_options"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/collaborators",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/collaborators\"].get"
+      },
+      "covered_by": {
+        "stream": "collaborators"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers\"].get"
+      },
+      "covered_by": {
+        "stream": "customers"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/customers",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers\"].post"
+      },
       "covered_by": {
         "write": "create_customer"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "customer"
+      }
+    },
+    {
       "method": "DELETE",
       "path": "/projects/{project_id}/customers/{customer_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_customer"
       }
@@ -372,6 +290,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/customers/{customer_id}/actions/assign_offering",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/actions/assign_offering\"].post"
+      },
       "covered_by": {
         "write": "assign_customer_offering"
       }
@@ -379,6 +306,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/customers/{customer_id}/actions/grant_entitlement",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/actions/grant_entitlement\"].post"
+      },
       "covered_by": {
         "write": "grant_customer_entitlement"
       }
@@ -386,6 +322,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/customers/{customer_id}/actions/restore_purchase_by_order_id",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/actions/restore_purchase_by_order_id\"].post"
+      },
       "covered_by": {
         "write": "restore_purchase_by_order_id"
       }
@@ -393,6 +338,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/customers/{customer_id}/actions/revoke_granted_entitlement",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/actions/revoke_granted_entitlement\"].post"
+      },
       "covered_by": {
         "write": "revoke_customer_granted_entitlement"
       }
@@ -400,20 +354,217 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/customers/{customer_id}/actions/transfer",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/actions/transfer\"].post"
+      },
       "covered_by": {
         "write": "transfer_customer_data"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/active_entitlements",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/active_entitlements\"].get"
+      },
+      "covered_by": {
+        "stream": "customer_active_entitlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/aliases",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/aliases\"].get"
+      },
+      "covered_by": {
+        "stream": "customer_aliases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/attributes",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/attributes\"].get"
+      },
+      "covered_by": {
+        "stream": "customer_attributes"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/customers/{customer_id}/attributes",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/attributes\"].post"
+      },
       "covered_by": {
         "write": "set_customer_attributes"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/customer_center",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/customer_center\"].get"
+      },
+      "covered_by": {
+        "stream": "customer_center"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/events",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/events\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/invoices",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/invoices\"].get"
+      },
+      "covered_by": {
+        "stream": "customer_invoices"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/invoices/{invoice_id}/file",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/invoices/{invoice_id}/file\"].get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "invoice file endpoint returns a binary or document payload rather than JSON records",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/purchases",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/purchases\"].get"
+      },
+      "covered_by": {
+        "stream": "customer_purchases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/subscriptions",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/subscriptions\"].get"
+      },
+      "covered_by": {
+        "stream": "customer_subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/virtual_currencies\"].get"
+      },
+      "covered_by": {
+        "stream": "customer_virtual_currencies"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies/transactions",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/virtual_currencies/transactions\"].post"
+      },
       "covered_by": {
         "write": "create_virtual_currencies_transaction"
       }
@@ -421,20 +572,79 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/customers/{customer_id}/virtual_currencies/update_balance",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/customers/{customer_id}/virtual_currencies/update_balance\"].post"
+      },
       "covered_by": {
         "write": "update_virtual_currencies_balance"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/entitlements",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements\"].get"
+      },
+      "covered_by": {
+        "stream": "entitlements"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/entitlements",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements\"].post"
+      },
       "covered_by": {
         "write": "create_entitlement"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements/{entitlement_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "entitlement"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/entitlements/{entitlement_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements/{entitlement_id}\"].post"
+      },
       "covered_by": {
         "write": "update_entitlement"
       }
@@ -442,6 +652,15 @@
     {
       "method": "DELETE",
       "path": "/projects/{project_id}/entitlements/{entitlement_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements/{entitlement_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_entitlement"
       }
@@ -449,20 +668,31 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/archive",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements/{entitlement_id}/actions/archive\"].post"
+      },
       "covered_by": {
         "write": "archive_entitlement"
       }
     },
     {
       "method": "POST",
-      "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/unarchive",
-      "covered_by": {
-        "write": "unarchive_entitlement"
-      }
-    },
-    {
-      "method": "POST",
       "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/attach_products",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements/{entitlement_id}/actions/attach_products\"].post"
+      },
       "covered_by": {
         "write": "attach_products_to_entitlement"
       }
@@ -470,20 +700,111 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/detach_products",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements/{entitlement_id}/actions/detach_products\"].post"
+      },
       "covered_by": {
         "write": "detach_products_from_entitlement"
       }
     },
     {
       "method": "POST",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}/actions/unarchive",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements/{entitlement_id}/actions/unarchive\"].post"
+      },
+      "covered_by": {
+        "write": "unarchive_entitlement"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/entitlements/{entitlement_id}/products",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/entitlements/{entitlement_id}/products\"].get"
+      },
+      "covered_by": {
+        "stream": "entitlement_products"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/projects/{project_id}/integrations/webhooks",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/integrations/webhooks\"].get"
+      },
+      "covered_by": {
+        "stream": "webhook_integrations"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/integrations/webhooks",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/integrations/webhooks\"].post"
+      },
       "covered_by": {
         "write": "create_webhook_integration"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/integrations/webhooks/{webhook_integration_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "webhook_integration"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/integrations/webhooks/{webhook_integration_id}\"].post"
+      },
       "covered_by": {
         "write": "update_webhook_integration"
       }
@@ -491,20 +812,132 @@
     {
       "method": "DELETE",
       "path": "/projects/{project_id}/integrations/webhooks/{webhook_integration_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/integrations/webhooks/{webhook_integration_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_webhook_integration"
       }
     },
     {
       "method": "POST",
+      "path": "/projects/{project_id}/media_assets",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/media_assets\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "media asset upload is multipart/binary payload handling outside the declarative JSON write dialect",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/metrics/overview",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/metrics/overview\"].get"
+      },
+      "covered_by": {
+        "stream": "overview_metrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/metrics/revenue",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/metrics/revenue\"].get"
+      },
+      "covered_by": {
+        "stream": "revenue_metric"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/projects/{project_id}/offerings",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/offerings\"].get"
+      },
+      "covered_by": {
+        "stream": "offerings"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/offerings",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/offerings\"].post"
+      },
       "covered_by": {
         "write": "create_offering"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/offerings/{offering_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/offerings/{offering_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "offering"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/offerings/{offering_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/offerings/{offering_id}\"].post"
+      },
       "covered_by": {
         "write": "update_offering"
       }
@@ -512,6 +945,15 @@
     {
       "method": "DELETE",
       "path": "/projects/{project_id}/offerings/{offering_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/offerings/{offering_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_offering"
       }
@@ -519,6 +961,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/offerings/{offering_id}/actions/archive",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/offerings/{offering_id}/actions/archive\"].post"
+      },
       "covered_by": {
         "write": "archive_offering"
       }
@@ -526,20 +977,79 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/offerings/{offering_id}/actions/unarchive",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/offerings/{offering_id}/actions/unarchive\"].post"
+      },
       "covered_by": {
         "write": "unarchive_offering"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/offerings/{offering_id}/packages",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/offerings/{offering_id}/packages\"].get"
+      },
+      "covered_by": {
+        "stream": "offering_packages"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/offerings/{offering_id}/packages",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/offerings/{offering_id}/packages\"].post"
+      },
       "covered_by": {
         "write": "create_package"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/packages/{package_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/packages/{package_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "package"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/packages/{package_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/packages/{package_id}\"].post"
+      },
       "covered_by": {
         "write": "update_package"
       }
@@ -547,6 +1057,15 @@
     {
       "method": "DELETE",
       "path": "/projects/{project_id}/packages/{package_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/packages/{package_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_package"
       }
@@ -554,6 +1073,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/packages/{package_id}/actions/attach_products",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/packages/{package_id}/actions/attach_products\"].post"
+      },
       "covered_by": {
         "write": "attach_products_to_package"
       }
@@ -561,20 +1089,95 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/packages/{package_id}/actions/detach_products",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/packages/{package_id}/actions/detach_products\"].post"
+      },
       "covered_by": {
         "write": "detach_products_from_package"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/packages/{package_id}/products",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/packages/{package_id}/products\"].get"
+      },
+      "covered_by": {
+        "stream": "package_products"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/paywalls",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/paywalls\"].get"
+      },
+      "covered_by": {
+        "stream": "paywalls"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/paywalls",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/paywalls\"].post"
+      },
       "covered_by": {
         "write": "create_paywall"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/paywalls/{paywall_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/paywalls/{paywall_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "paywall"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/projects/{project_id}/paywalls/{paywall_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/paywalls/{paywall_id}\"].patch"
+      },
       "covered_by": {
         "write": "update_paywall"
       }
@@ -582,27 +1185,158 @@
     {
       "method": "DELETE",
       "path": "/projects/{project_id}/paywalls/{paywall_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/paywalls/{paywall_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_paywall"
       }
     },
     {
       "method": "POST",
+      "path": "/projects/{project_id}/paywalls/{paywall_id}/actions/publish",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/paywalls/{paywall_id}/actions/publish\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{project_id}/paywalls/{paywall_id}/actions/unpublish",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/paywalls/{paywall_id}/actions/unpublish\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
       "path": "/projects/{project_id}/paywalls/{paywall_id}/versions",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/paywalls/{paywall_id}/versions\"].post"
+      },
       "covered_by": {
         "write": "create_paywall_version"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/paywalls/{paywall_id}/versions/{version_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/paywalls/{paywall_id}/versions/{version_id}\"].get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/products",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/products\"].get"
+      },
+      "covered_by": {
+        "stream": "products"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/products",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/products\"].post"
+      },
       "covered_by": {
         "write": "create_product"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/products/{product_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/products/{product_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "product"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/products/{product_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/products/{product_id}\"].post"
+      },
       "covered_by": {
         "write": "update_product"
       }
@@ -610,6 +1344,15 @@
     {
       "method": "DELETE",
       "path": "/projects/{project_id}/products/{product_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/products/{product_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_product"
       }
@@ -617,6 +1360,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/products/{product_id}/actions/archive",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/products/{product_id}/actions/archive\"].post"
+      },
       "covered_by": {
         "write": "archive_product"
       }
@@ -624,6 +1376,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/products/{product_id}/actions/unarchive",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/products/{product_id}/actions/unarchive\"].post"
+      },
       "covered_by": {
         "write": "unarchive_product"
       }
@@ -631,20 +1392,127 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/products/{product_id}/create_in_store",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/products/{product_id}/create_in_store\"].post"
+      },
       "covered_by": {
         "write": "create_product_in_store"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/purchases",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/purchases\"].get"
+      },
+      "covered_by": {
+        "stream": "purchases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/purchases/{purchase_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/purchases/{purchase_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "purchase"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/purchases/{purchase_id}/actions/refund",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/purchases/{purchase_id}/actions/refund\"].post"
+      },
       "covered_by": {
         "write": "refund_purchase"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/purchases/{purchase_id}/entitlements",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/purchases/{purchase_id}/entitlements\"].get"
+      },
+      "covered_by": {
+        "stream": "purchase_entitlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/subscriptions\"].get"
+      },
+      "covered_by": {
+        "stream": "subscriptions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/subscriptions/{subscription_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "subscription"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/subscriptions/{subscription_id}/actions/cancel",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/subscriptions/{subscription_id}/actions/cancel\"].post"
+      },
       "covered_by": {
         "write": "cancel_subscription"
       }
@@ -652,6 +1520,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/subscriptions/{subscription_id}/actions/extend",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/subscriptions/{subscription_id}/actions/extend\"].post"
+      },
       "covered_by": {
         "write": "extend_subscription"
       }
@@ -659,27 +1536,143 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/subscriptions/{subscription_id}/actions/refund",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/subscriptions/{subscription_id}/actions/refund\"].post"
+      },
       "covered_by": {
         "write": "refund_subscription"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/authenticated_management_url",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/subscriptions/{subscription_id}/authenticated_management_url\"].get"
+      },
+      "covered_by": {
+        "stream": "subscription_authenticated_management_url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/entitlements",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/subscriptions/{subscription_id}/entitlements\"].get"
+      },
+      "covered_by": {
+        "stream": "subscription_entitlements"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}/subscriptions/{subscription_id}/transactions",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/subscriptions/{subscription_id}/transactions\"].get"
+      },
+      "covered_by": {
+        "stream": "subscription_transactions"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/subscriptions/{subscription_id}/transactions/{transaction_id}/actions/refund",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/subscriptions/{subscription_id}/transactions/{transaction_id}/actions/refund\"].post"
+      },
       "covered_by": {
         "write": "refund_subscription_transaction"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/virtual_currencies",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/virtual_currencies\"].get"
+      },
+      "covered_by": {
+        "stream": "virtual_currencies"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/virtual_currencies",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/virtual_currencies\"].post"
+      },
       "covered_by": {
         "write": "create_virtual_currency"
       }
     },
     {
+      "method": "GET",
+      "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/virtual_currencies/{virtual_currency_code}\"].get"
+      },
+      "covered_by": {
+        "stream": "virtual_currency"
+      }
+    },
+    {
       "method": "POST",
       "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/virtual_currencies/{virtual_currency_code}\"].post"
+      },
       "covered_by": {
         "write": "update_virtual_currency"
       }
@@ -687,6 +1680,15 @@
     {
       "method": "DELETE",
       "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/virtual_currencies/{virtual_currency_code}\"].delete"
+      },
       "covered_by": {
         "write": "delete_virtual_currency"
       }
@@ -694,6 +1696,15 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}/actions/archive",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/virtual_currencies/{virtual_currency_code}/actions/archive\"].post"
+      },
       "covered_by": {
         "write": "archive_virtual_currency"
       }
@@ -701,16 +1712,17 @@
     {
       "method": "POST",
       "path": "/projects/{project_id}/virtual_currencies/{virtual_currency_code}/actions/unarchive",
+      "provenance": {
+        "artifact": "revenuecat-artifact-2026-08-09",
+        "source_url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "source_kind": "openapi",
+        "version": "3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a",
+        "coordinate": "paths[\"/projects/{project_id}/virtual_currencies/{virtual_currency_code}/actions/unarchive\"].post"
+      },
       "covered_by": {
         "write": "unarchive_virtual_currency"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/projects/{project_id}/media_assets",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "media asset upload is multipart/binary payload handling outside the declarative JSON write dialect"
       }
     }
   ]

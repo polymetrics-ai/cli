@@ -1,0 +1,3349 @@
+{
+  "tagline": "Run Fulcrum's declared streams and reverse-ETL actions.",
+  "usage": "pm fulcrum \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v2 memberships-json",
+        "api get api v2 photos-json",
+        "api get api v2 roles-json",
+        "api get api v2 signatures-json",
+        "api get api v2 videos-json",
+        "api get api v2 webhooks-json",
+        "api get v2 attachments",
+        "api get v2 attachments attachment-id",
+        "api get v2 audio audio-id json",
+        "api get v2 audio audio-id mp4",
+        "api get v2 audio audio-id track-geojson",
+        "api get v2 audio audio-id track-gpx",
+        "api get v2 audio audio-id track-json",
+        "api get v2 audio audio-id track-kml",
+        "api get v2 audio tracks-geojson",
+        "api get v2 audio tracks-gpx",
+        "api get v2 audio tracks-json",
+        "api get v2 audio tracks-kml",
+        "api get v2 audio-json",
+        "api get v2 audit-logs audit-log-id json",
+        "api get v2 audit-logs-json",
+        "api get v2 authorizations authorization-id json",
+        "api get v2 authorizations-json",
+        "api get v2 batch batch-id json",
+        "api get v2 batch-json",
+        "api get v2 changesets changeset-id json",
+        "api get v2 changesets-json",
+        "api get v2 choice-lists choice-list-id json",
+        "api get v2 choice-lists-json",
+        "api get v2 classification-sets classification-set-id json",
+        "api get v2 classification-sets-json",
+        "api get v2 forms form-id history-json",
+        "api get v2 forms form-id json",
+        "api get v2 forms-json",
+        "api get v2 groups group-id json",
+        "api get v2 groups group-id resource json",
+        "api get v2 groups-json",
+        "api get v2 layers layer-id json",
+        "api get v2 layers-json",
+        "api get v2 memberships membership-id json",
+        "api get v2 memberships-json",
+        "api get v2 permissions-json",
+        "api get v2 photos photo-id jpg",
+        "api get v2 photos photo-id json",
+        "api get v2 photos photo-id large-jpg",
+        "api get v2 photos photo-id large-json",
+        "api get v2 photos photo-id thumbnail-jpg",
+        "api get v2 photos photo-id thumbnail-json",
+        "api get v2 photos-json",
+        "api get v2 projects project-id json",
+        "api get v2 projects-json",
+        "api get v2 query",
+        "api get v2 records history-json",
+        "api get v2 records record-id history-json",
+        "api get v2 records record-id json",
+        "api get v2 records-json",
+        "api get v2 report-templates id json",
+        "api get v2 report-templates-json",
+        "api get v2 reports report-id pdf",
+        "api get v2 roles-json",
+        "api get v2 signatures signature-id json",
+        "api get v2 signatures signature-id png",
+        "api get v2 signatures signature-id thumbnail-json",
+        "api get v2 signatures signature-id thumbnail-png",
+        "api get v2 signatures-json",
+        "api get v2 sketches sketch-id jpg",
+        "api get v2 sketches sketch-id json",
+        "api get v2 sketches sketch-id large-jpg",
+        "api get v2 sketches sketch-id large-json",
+        "api get v2 sketches sketch-id thumbnail-jpg",
+        "api get v2 sketches sketch-id thumbnail-json",
+        "api get v2 sketches-json",
+        "api get v2 users-json",
+        "api get v2 videos tracks-geojson",
+        "api get v2 videos tracks-gpx",
+        "api get v2 videos tracks-kml",
+        "api get v2 videos video-id json",
+        "api get v2 videos video-id medium-mp4",
+        "api get v2 videos video-id mp4",
+        "api get v2 videos video-id small-mp4",
+        "api get v2 videos video-id thumbnail-huge-jpg",
+        "api get v2 videos video-id thumbnail-huge-square-jpg",
+        "api get v2 videos video-id thumbnail-large-jpg",
+        "api get v2 videos video-id thumbnail-large-square-jpg",
+        "api get v2 videos video-id thumbnail-medium-jpg",
+        "api get v2 videos video-id thumbnail-medium-square-jpg",
+        "api get v2 videos video-id thumbnail-small-jpg",
+        "api get v2 videos video-id thumbnail-small-square-jpg",
+        "api get v2 videos video-id track-geojson",
+        "api get v2 videos video-id track-gpx",
+        "api get v2 videos video-id track-json",
+        "api get v2 videos video-id track-kml",
+        "api get v2 videos-json",
+        "api get v2 webhooks webhook-id json",
+        "api get v2 webhooks-json",
+        "api get v2 workflows workflow-id json",
+        "api get v2 workflows-json",
+        "choice lists list",
+        "classification sets list",
+        "forms list",
+        "projects list",
+        "records list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v2 attachments attachment-id",
+        "api delete v2 authorizations authorization-id json",
+        "api delete v2 choice-lists choice-list-id json",
+        "api delete v2 classification-sets classification-set-id json",
+        "api delete v2 forms form-id json",
+        "api delete v2 groups group-id json",
+        "api delete v2 layers layer-id json",
+        "api delete v2 memberships membership-id json",
+        "api delete v2 projects project-id json",
+        "api delete v2 records record-id json",
+        "api delete v2 report-templates id json",
+        "api delete v2 webhooks webhook-id json",
+        "api delete v2 workflows workflow-id json",
+        "api patch v2 records record-id json",
+        "api post api v2 records-json",
+        "api post v2 attachments",
+        "api post v2 attachments copy-all",
+        "api post v2 attachments finalize",
+        "api post v2 audio upload-json",
+        "api post v2 authorizations-json",
+        "api post v2 batch batch-id operations-json",
+        "api post v2 batch batch-id start-json",
+        "api post v2 batch-json",
+        "api post v2 changesets-json",
+        "api post v2 choice-lists-json",
+        "api post v2 classification-sets-json",
+        "api post v2 forms-json",
+        "api post v2 groups change-permissions-json",
+        "api post v2 groups-json",
+        "api post v2 layers-json",
+        "api post v2 memberships change-permissions-json",
+        "api post v2 memberships-json",
+        "api post v2 photos-json",
+        "api post v2 projects-json",
+        "api post v2 query",
+        "api post v2 records-json",
+        "api post v2 report-templates-json",
+        "api post v2 reports-json",
+        "api post v2 signatures-json",
+        "api post v2 sketches-json",
+        "api post v2 videos upload-json",
+        "api post v2 webhooks-json",
+        "api post v2 workflows-json",
+        "api put v2 authorizations authorization-id json",
+        "api put v2 changesets changeset-id close-json",
+        "api put v2 changesets changeset-id json",
+        "api put v2 choice-lists choice-list-id json",
+        "api put v2 classification-sets classification-set-id json",
+        "api put v2 forms form-id json",
+        "api put v2 groups group-id json",
+        "api put v2 layers layer-id json",
+        "api put v2 memberships membership-id json",
+        "api put v2 projects project-id json",
+        "api put v2 records record-id json",
+        "api put v2 report-templates id json",
+        "api put v2 webhooks webhook-id json",
+        "api put v2 workflows workflow-id json"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v2 attachments attachment-id",
+      "summary": "Documented DELETE /v2/attachments/{attachment_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 attachments attachment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/attachments/{attachment_id}"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-attachments-attachment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 authorizations authorization-id json",
+      "summary": "Documented DELETE /v2/authorizations/{authorization_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 authorizations authorization-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/authorizations/{authorization_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-authorizations-authorization-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 choice-lists choice-list-id json",
+      "summary": "Documented DELETE /v2/choice_lists/{choice_list_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 choice-lists choice-list-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/choice_lists/{choice_list_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-choice-lists-choice-list-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 classification-sets classification-set-id json",
+      "summary": "Documented DELETE /v2/classification_sets/{classification_set_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 classification-sets classification-set-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/classification_sets/{classification_set_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-classification-sets-classification-set-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 forms form-id json",
+      "summary": "Documented DELETE /v2/forms/{form_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 forms form-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/forms/{form_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-forms-form-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 groups group-id json",
+      "summary": "Documented DELETE /v2/groups/{group_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 groups group-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/groups/{group_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-groups-group-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 layers layer-id json",
+      "summary": "Documented DELETE /v2/layers/{layer_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 layers layer-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/layers/{layer_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-layers-layer-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 memberships membership-id json",
+      "summary": "Documented DELETE /v2/memberships/{membership_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 memberships membership-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/memberships/{membership_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-memberships-membership-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 projects project-id json",
+      "summary": "Documented DELETE /v2/projects/{project_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 projects project-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/projects/{project_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-projects-project-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 records record-id json",
+      "summary": "Documented DELETE /v2/records/{record_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 records record-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/records/{record_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-records-record-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 report-templates id json",
+      "summary": "Documented DELETE /v2/report_templates/{id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 report-templates id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/report_templates/{id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-report-templates-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 webhooks webhook-id json",
+      "summary": "Documented DELETE /v2/webhooks/{webhook_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 webhooks webhook-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/webhooks/{webhook_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-webhooks-webhook-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 workflows workflow-id json",
+      "summary": "Documented DELETE /v2/workflows/{workflow_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api delete v2 workflows workflow-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/workflows/{workflow_id}.json"
+        }
+      ],
+      "operation": "fulcrum.delete.v2-workflows-workflow-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v2 memberships-json",
+      "summary": "Documented GET /api/v2/memberships.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get api v2 memberships-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/memberships.json"
+        }
+      ],
+      "operation": "fulcrum.get.api-v2-memberships-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 photos-json",
+      "summary": "Documented GET /api/v2/photos.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get api v2 photos-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/photos.json"
+        }
+      ],
+      "operation": "fulcrum.get.api-v2-photos-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 roles-json",
+      "summary": "Documented GET /api/v2/roles.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get api v2 roles-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/roles.json"
+        }
+      ],
+      "operation": "fulcrum.get.api-v2-roles-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 signatures-json",
+      "summary": "Documented GET /api/v2/signatures.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get api v2 signatures-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/signatures.json"
+        }
+      ],
+      "operation": "fulcrum.get.api-v2-signatures-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 videos-json",
+      "summary": "Documented GET /api/v2/videos.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get api v2 videos-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/videos.json"
+        }
+      ],
+      "operation": "fulcrum.get.api-v2-videos-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 webhooks-json",
+      "summary": "Documented GET /api/v2/webhooks.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get api v2 webhooks-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/webhooks.json"
+        }
+      ],
+      "operation": "fulcrum.get.api-v2-webhooks-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 attachments",
+      "summary": "Documented GET /v2/attachments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/attachments"
+        }
+      ],
+      "operation": "fulcrum.get.v2-attachments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 attachments attachment-id",
+      "summary": "Documented GET /v2/attachments/{attachment_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 attachments attachment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/attachments/{attachment_id}"
+        }
+      ],
+      "operation": "fulcrum.get.v2-attachments-attachment-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio audio-id json",
+      "summary": "Documented GET /v2/audio/{audio_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio audio-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/{audio_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-audio-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio audio-id mp4",
+      "summary": "Documented GET /v2/audio/{audio_id}.mp4 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio audio-id mp4 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/{audio_id}.mp4"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-audio-id-mp4",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio audio-id track-geojson",
+      "summary": "Documented GET /v2/audio/{audio_id}/track.geojson (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio audio-id track-geojson --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/{audio_id}/track.geojson"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-audio-id-track-geojson",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio audio-id track-gpx",
+      "summary": "Documented GET /v2/audio/{audio_id}/track.gpx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio audio-id track-gpx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/{audio_id}/track.gpx"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-audio-id-track-gpx",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio audio-id track-json",
+      "summary": "Documented GET /v2/audio/{audio_id}/track.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio audio-id track-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/{audio_id}/track.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-audio-id-track-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio audio-id track-kml",
+      "summary": "Documented GET /v2/audio/{audio_id}/track.kml (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio audio-id track-kml --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/{audio_id}/track.kml"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-audio-id-track-kml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio tracks-geojson",
+      "summary": "Documented GET /v2/audio/tracks.geojson (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio tracks-geojson --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/tracks.geojson"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-tracks-geojson",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio tracks-gpx",
+      "summary": "Documented GET /v2/audio/tracks.gpx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio tracks-gpx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/tracks.gpx"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-tracks-gpx",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio tracks-json",
+      "summary": "Documented GET /v2/audio/tracks.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio tracks-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/tracks.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-tracks-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio tracks-kml",
+      "summary": "Documented GET /v2/audio/tracks.kml (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio tracks-kml --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio/tracks.kml"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-tracks-kml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audio-json",
+      "summary": "Documented GET /v2/audio.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audio-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audio.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audio-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audit-logs audit-log-id json",
+      "summary": "Documented GET /v2/audit_logs/{audit_log_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audit-logs audit-log-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audit_logs/{audit_log_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audit-logs-audit-log-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 audit-logs-json",
+      "summary": "Documented GET /v2/audit_logs.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 audit-logs-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/audit_logs.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-audit-logs-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 authorizations authorization-id json",
+      "summary": "Documented GET /v2/authorizations/{authorization_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 authorizations authorization-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/authorizations/{authorization_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-authorizations-authorization-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 authorizations-json",
+      "summary": "Documented GET /v2/authorizations.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 authorizations-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/authorizations.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-authorizations-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 batch batch-id json",
+      "summary": "Documented GET /v2/batch/{batch_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 batch batch-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/batch/{batch_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-batch-batch-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 batch-json",
+      "summary": "Documented GET /v2/batch.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 batch-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/batch.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-batch-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 changesets changeset-id json",
+      "summary": "Documented GET /v2/changesets/{changeset_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 changesets changeset-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/changesets/{changeset_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-changesets-changeset-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 changesets-json",
+      "summary": "Documented GET /v2/changesets.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 changesets-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/changesets.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-changesets-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 choice-lists choice-list-id json",
+      "summary": "Documented GET /v2/choice_lists/{choice_list_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 choice-lists choice-list-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/choice_lists/{choice_list_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-choice-lists-choice-list-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 choice-lists-json",
+      "summary": "Documented GET /v2/choice_lists.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 choice-lists-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/choice_lists.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-choice-lists-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 classification-sets classification-set-id json",
+      "summary": "Documented GET /v2/classification_sets/{classification_set_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 classification-sets classification-set-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/classification_sets/{classification_set_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-classification-sets-classification-set-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 classification-sets-json",
+      "summary": "Documented GET /v2/classification_sets.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 classification-sets-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/classification_sets.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-classification-sets-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 forms form-id history-json",
+      "summary": "Documented GET /v2/forms/{form_id}/history.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 forms form-id history-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/forms/{form_id}/history.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-forms-form-id-history-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 forms form-id json",
+      "summary": "Documented GET /v2/forms/{form_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 forms form-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/forms/{form_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-forms-form-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 forms-json",
+      "summary": "Documented GET /v2/forms.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 forms-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/forms.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-forms-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 groups group-id json",
+      "summary": "Documented GET /v2/groups/{group_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 groups group-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/groups/{group_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-groups-group-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 groups group-id resource json",
+      "summary": "Documented GET /v2/groups/{group_id}/{resource}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 groups group-id resource json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/groups/{group_id}/{resource}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-groups-group-id-resource-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 groups-json",
+      "summary": "Documented GET /v2/groups.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 groups-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/groups.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-groups-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 layers layer-id json",
+      "summary": "Documented GET /v2/layers/{layer_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 layers layer-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/layers/{layer_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-layers-layer-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 layers-json",
+      "summary": "Documented GET /v2/layers.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 layers-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/layers.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-layers-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 memberships membership-id json",
+      "summary": "Documented GET /v2/memberships/{membership_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 memberships membership-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/memberships/{membership_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-memberships-membership-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 memberships-json",
+      "summary": "Documented GET /v2/memberships.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 memberships-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/memberships.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-memberships-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 permissions-json",
+      "summary": "Documented GET /v2/permissions.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 permissions-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/permissions.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-permissions-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 photos photo-id jpg",
+      "summary": "Documented GET /v2/photos/{photo_id}.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 photos photo-id jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/photos/{photo_id}.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-photos-photo-id-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 photos photo-id json",
+      "summary": "Documented GET /v2/photos/{photo_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 photos photo-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/photos/{photo_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-photos-photo-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 photos photo-id large-jpg",
+      "summary": "Documented GET /v2/photos/{photo_id}/large.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 photos photo-id large-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/photos/{photo_id}/large.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-photos-photo-id-large-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 photos photo-id large-json",
+      "summary": "Documented GET /v2/photos/{photo_id}/large.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 photos photo-id large-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/photos/{photo_id}/large.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-photos-photo-id-large-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 photos photo-id thumbnail-jpg",
+      "summary": "Documented GET /v2/photos/{photo_id}/thumbnail.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 photos photo-id thumbnail-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/photos/{photo_id}/thumbnail.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-photos-photo-id-thumbnail-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 photos photo-id thumbnail-json",
+      "summary": "Documented GET /v2/photos/{photo_id}/thumbnail.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 photos photo-id thumbnail-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/photos/{photo_id}/thumbnail.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-photos-photo-id-thumbnail-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 photos-json",
+      "summary": "Documented GET /v2/photos.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 photos-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/photos.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-photos-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 projects project-id json",
+      "summary": "Documented GET /v2/projects/{project_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 projects project-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/projects/{project_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-projects-project-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 projects-json",
+      "summary": "Documented GET /v2/projects.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 projects-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/projects.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-projects-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 query",
+      "summary": "Documented GET /v2/query (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/query"
+        }
+      ],
+      "operation": "fulcrum.get.v2-query",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 records history-json",
+      "summary": "Documented GET /v2/records/history.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 records history-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/records/history.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-records-history-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 records record-id history-json",
+      "summary": "Documented GET /v2/records/{record_id}/history.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 records record-id history-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/records/{record_id}/history.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-records-record-id-history-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 records record-id json",
+      "summary": "Documented GET /v2/records/{record_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 records record-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/records/{record_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-records-record-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 records-json",
+      "summary": "Documented GET /v2/records.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 records-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/records.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-records-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 report-templates id json",
+      "summary": "Documented GET /v2/report_templates/{id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 report-templates id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/report_templates/{id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-report-templates-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 report-templates-json",
+      "summary": "Documented GET /v2/report_templates.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 report-templates-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/report_templates.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-report-templates-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 reports report-id pdf",
+      "summary": "Documented GET /v2/reports/{report_id}.pdf (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 reports report-id pdf --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/{report_id}.pdf"
+        }
+      ],
+      "operation": "fulcrum.get.v2-reports-report-id-pdf",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 roles-json",
+      "summary": "Documented GET /v2/roles.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 roles-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/roles.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-roles-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 signatures signature-id json",
+      "summary": "Documented GET /v2/signatures/{signature_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 signatures signature-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/signatures/{signature_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-signatures-signature-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 signatures signature-id png",
+      "summary": "Documented GET /v2/signatures/{signature_id}.png (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 signatures signature-id png --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/signatures/{signature_id}.png"
+        }
+      ],
+      "operation": "fulcrum.get.v2-signatures-signature-id-png",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 signatures signature-id thumbnail-json",
+      "summary": "Documented GET /v2/signatures/{signature_id}/thumbnail.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 signatures signature-id thumbnail-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/signatures/{signature_id}/thumbnail.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-signatures-signature-id-thumbnail-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 signatures signature-id thumbnail-png",
+      "summary": "Documented GET /v2/signatures/{signature_id}/thumbnail.png (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 signatures signature-id thumbnail-png --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/signatures/{signature_id}/thumbnail.png"
+        }
+      ],
+      "operation": "fulcrum.get.v2-signatures-signature-id-thumbnail-png",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 signatures-json",
+      "summary": "Documented GET /v2/signatures.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 signatures-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/signatures.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-signatures-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 sketches sketch-id jpg",
+      "summary": "Documented GET /v2/sketches/{sketch_id}.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 sketches sketch-id jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/sketches/{sketch_id}.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-sketches-sketch-id-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 sketches sketch-id json",
+      "summary": "Documented GET /v2/sketches/{sketch_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 sketches sketch-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/sketches/{sketch_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-sketches-sketch-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 sketches sketch-id large-jpg",
+      "summary": "Documented GET /v2/sketches/{sketch_id}/large.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 sketches sketch-id large-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/sketches/{sketch_id}/large.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-sketches-sketch-id-large-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 sketches sketch-id large-json",
+      "summary": "Documented GET /v2/sketches/{sketch_id}/large.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 sketches sketch-id large-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/sketches/{sketch_id}/large.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-sketches-sketch-id-large-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 sketches sketch-id thumbnail-jpg",
+      "summary": "Documented GET /v2/sketches/{sketch_id}/thumbnail.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 sketches sketch-id thumbnail-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/sketches/{sketch_id}/thumbnail.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-sketches-sketch-id-thumbnail-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 sketches sketch-id thumbnail-json",
+      "summary": "Documented GET /v2/sketches/{sketch_id}/thumbnail.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 sketches sketch-id thumbnail-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/sketches/{sketch_id}/thumbnail.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-sketches-sketch-id-thumbnail-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 sketches-json",
+      "summary": "Documented GET /v2/sketches.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 sketches-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/sketches.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-sketches-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 users-json",
+      "summary": "Documented GET /v2/users.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 users-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/users.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-users-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos tracks-geojson",
+      "summary": "Documented GET /v2/videos/tracks.geojson (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos tracks-geojson --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/tracks.geojson"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-tracks-geojson",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos tracks-gpx",
+      "summary": "Documented GET /v2/videos/tracks.gpx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos tracks-gpx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/tracks.gpx"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-tracks-gpx",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos tracks-kml",
+      "summary": "Documented GET /v2/videos/tracks.kml (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos tracks-kml --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/tracks.kml"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-tracks-kml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id json",
+      "summary": "Documented GET /v2/videos/{video_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id medium-mp4",
+      "summary": "Documented GET /v2/videos/{video_id}/medium.mp4 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id medium-mp4 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/medium.mp4"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-medium-mp4",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id mp4",
+      "summary": "Documented GET /v2/videos/{video_id}.mp4 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id mp4 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}.mp4"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-mp4",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id small-mp4",
+      "summary": "Documented GET /v2/videos/{video_id}/small.mp4 (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id small-mp4 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/small.mp4"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-small-mp4",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id thumbnail-huge-jpg",
+      "summary": "Documented GET /v2/videos/{video_id}/thumbnail_huge.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id thumbnail-huge-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/thumbnail_huge.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-thumbnail-huge-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id thumbnail-huge-square-jpg",
+      "summary": "Documented GET /v2/videos/{video_id}/thumbnail_huge_square.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id thumbnail-huge-square-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/thumbnail_huge_square.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-thumbnail-huge-square-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id thumbnail-large-jpg",
+      "summary": "Documented GET /v2/videos/{video_id}/thumbnail_large.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id thumbnail-large-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/thumbnail_large.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-thumbnail-large-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id thumbnail-large-square-jpg",
+      "summary": "Documented GET /v2/videos/{video_id}/thumbnail_large_square.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id thumbnail-large-square-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/thumbnail_large_square.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-thumbnail-large-square-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id thumbnail-medium-jpg",
+      "summary": "Documented GET /v2/videos/{video_id}/thumbnail_medium.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id thumbnail-medium-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/thumbnail_medium.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-thumbnail-medium-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id thumbnail-medium-square-jpg",
+      "summary": "Documented GET /v2/videos/{video_id}/thumbnail_medium_square.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id thumbnail-medium-square-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/thumbnail_medium_square.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-thumbnail-medium-square-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id thumbnail-small-jpg",
+      "summary": "Documented GET /v2/videos/{video_id}/thumbnail_small.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id thumbnail-small-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/thumbnail_small.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-thumbnail-small-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id thumbnail-small-square-jpg",
+      "summary": "Documented GET /v2/videos/{video_id}/thumbnail_small_square.jpg (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id thumbnail-small-square-jpg --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/thumbnail_small_square.jpg"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-thumbnail-small-square-jpg",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id track-geojson",
+      "summary": "Documented GET /v2/videos/{video_id}/track.geojson (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id track-geojson --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/track.geojson"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-track-geojson",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id track-gpx",
+      "summary": "Documented GET /v2/videos/{video_id}/track.gpx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id track-gpx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/track.gpx"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-track-gpx",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id track-json",
+      "summary": "Documented GET /v2/videos/{video_id}/track.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id track-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/track.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-track-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id track-kml",
+      "summary": "Documented GET /v2/videos/{video_id}/track.kml (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos video-id track-kml --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}/track.kml"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-video-id-track-kml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos-json",
+      "summary": "Documented GET /v2/videos.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 videos-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-videos-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 webhooks webhook-id json",
+      "summary": "Documented GET /v2/webhooks/{webhook_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 webhooks webhook-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhooks/{webhook_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-webhooks-webhook-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 webhooks-json",
+      "summary": "Documented GET /v2/webhooks.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 webhooks-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/webhooks.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-webhooks-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workflows workflow-id json",
+      "summary": "Documented GET /v2/workflows/{workflow_id}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 workflows workflow-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workflows/{workflow_id}.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-workflows-workflow-id-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 workflows-json",
+      "summary": "Documented GET /v2/workflows.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api get v2 workflows-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/workflows.json"
+        }
+      ],
+      "operation": "fulcrum.get.v2-workflows-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v2 records record-id json",
+      "summary": "Documented PATCH /v2/records/{record_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api patch v2 records record-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/records/{record_id}.json"
+        }
+      ],
+      "operation": "fulcrum.patch.v2-records-record-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 records-json",
+      "summary": "Documented POST /api/v2/records.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post api v2 records-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/records.json"
+        }
+      ],
+      "operation": "fulcrum.post.api-v2-records-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 attachments",
+      "summary": "Documented POST /v2/attachments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 attachments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/attachments"
+        }
+      ],
+      "operation": "fulcrum.post.v2-attachments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 attachments copy-all",
+      "summary": "Documented POST /v2/attachments/copy_all (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 attachments copy-all --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/attachments/copy_all"
+        }
+      ],
+      "operation": "fulcrum.post.v2-attachments-copy-all",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 attachments finalize",
+      "summary": "Documented POST /v2/attachments/finalize (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 attachments finalize --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/attachments/finalize"
+        }
+      ],
+      "operation": "fulcrum.post.v2-attachments-finalize",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 audio upload-json",
+      "summary": "Documented POST /v2/audio/upload.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 audio upload-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/audio/upload.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-audio-upload-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 authorizations-json",
+      "summary": "Documented POST /v2/authorizations.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 authorizations-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/authorizations.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-authorizations-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 batch batch-id operations-json",
+      "summary": "Documented POST /v2/batch/{batch_id}/operations.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 batch batch-id operations-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/batch/{batch_id}/operations.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-batch-batch-id-operations-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 batch batch-id start-json",
+      "summary": "Documented POST /v2/batch/{batch_id}/start.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 batch batch-id start-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/batch/{batch_id}/start.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-batch-batch-id-start-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 batch-json",
+      "summary": "Documented POST /v2/batch.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 batch-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/batch.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-batch-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 changesets-json",
+      "summary": "Documented POST /v2/changesets.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 changesets-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/changesets.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-changesets-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 choice-lists-json",
+      "summary": "Documented POST /v2/choice_lists.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 choice-lists-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/choice_lists.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-choice-lists-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 classification-sets-json",
+      "summary": "Documented POST /v2/classification_sets.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 classification-sets-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/classification_sets.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-classification-sets-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 forms-json",
+      "summary": "Documented POST /v2/forms.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 forms-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/forms.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-forms-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 groups change-permissions-json",
+      "summary": "Documented POST /v2/groups/change_permissions.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 groups change-permissions-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/groups/change_permissions.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-groups-change-permissions-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 groups-json",
+      "summary": "Documented POST /v2/groups.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 groups-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/groups.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-groups-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 layers-json",
+      "summary": "Documented POST /v2/layers.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 layers-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/layers.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-layers-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 memberships change-permissions-json",
+      "summary": "Documented POST /v2/memberships/change_permissions.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 memberships change-permissions-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/memberships/change_permissions.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-memberships-change-permissions-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 memberships-json",
+      "summary": "Documented POST /v2/memberships.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 memberships-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/memberships.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-memberships-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 photos-json",
+      "summary": "Documented POST /v2/photos.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 photos-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/photos.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-photos-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 projects-json",
+      "summary": "Documented POST /v2/projects.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 projects-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/projects.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-projects-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 query",
+      "summary": "Documented POST /v2/query (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 query --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/query"
+        }
+      ],
+      "operation": "fulcrum.post.v2-query",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 records-json",
+      "summary": "Documented POST /v2/records.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 records-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/records.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-records-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 report-templates-json",
+      "summary": "Documented POST /v2/report_templates.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 report-templates-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/report_templates.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-report-templates-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 reports-json",
+      "summary": "Documented POST /v2/reports.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 reports-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/reports.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-reports-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 signatures-json",
+      "summary": "Documented POST /v2/signatures.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 signatures-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/signatures.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-signatures-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 sketches-json",
+      "summary": "Documented POST /v2/sketches.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 sketches-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/sketches.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-sketches-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 videos upload-json",
+      "summary": "Documented POST /v2/videos/upload.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 videos upload-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/videos/upload.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-videos-upload-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 webhooks-json",
+      "summary": "Documented POST /v2/webhooks.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 webhooks-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/webhooks.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-webhooks-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 workflows-json",
+      "summary": "Documented POST /v2/workflows.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api post v2 workflows-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/workflows.json"
+        }
+      ],
+      "operation": "fulcrum.post.v2-workflows-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 authorizations authorization-id json",
+      "summary": "Documented PUT /v2/authorizations/{authorization_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 authorizations authorization-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/authorizations/{authorization_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-authorizations-authorization-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 changesets changeset-id close-json",
+      "summary": "Documented PUT /v2/changesets/{changeset_id}/close.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 changesets changeset-id close-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/changesets/{changeset_id}/close.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-changesets-changeset-id-close-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 changesets changeset-id json",
+      "summary": "Documented PUT /v2/changesets/{changeset_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 changesets changeset-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/changesets/{changeset_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-changesets-changeset-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 choice-lists choice-list-id json",
+      "summary": "Documented PUT /v2/choice_lists/{choice_list_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 choice-lists choice-list-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/choice_lists/{choice_list_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-choice-lists-choice-list-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 classification-sets classification-set-id json",
+      "summary": "Documented PUT /v2/classification_sets/{classification_set_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 classification-sets classification-set-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/classification_sets/{classification_set_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-classification-sets-classification-set-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 forms form-id json",
+      "summary": "Documented PUT /v2/forms/{form_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 forms form-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/forms/{form_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-forms-form-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 groups group-id json",
+      "summary": "Documented PUT /v2/groups/{group_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 groups group-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/groups/{group_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-groups-group-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 layers layer-id json",
+      "summary": "Documented PUT /v2/layers/{layer_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 layers layer-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/layers/{layer_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-layers-layer-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 memberships membership-id json",
+      "summary": "Documented PUT /v2/memberships/{membership_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 memberships membership-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/memberships/{membership_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-memberships-membership-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 projects project-id json",
+      "summary": "Documented PUT /v2/projects/{project_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 projects project-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/projects/{project_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-projects-project-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 records record-id json",
+      "summary": "Documented PUT /v2/records/{record_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 records record-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/records/{record_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-records-record-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 report-templates id json",
+      "summary": "Documented PUT /v2/report_templates/{id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 report-templates id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/report_templates/{id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-report-templates-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 webhooks webhook-id json",
+      "summary": "Documented PUT /v2/webhooks/{webhook_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 webhooks webhook-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/webhooks/{webhook_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-webhooks-webhook-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 workflows workflow-id json",
+      "summary": "Documented PUT /v2/workflows/{workflow_id}.json (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum api put v2 workflows workflow-id json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/workflows/{workflow_id}.json"
+        }
+      ],
+      "operation": "fulcrum.put.v2-workflows-workflow-id-json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "choice lists list",
+      "summary": "Run the choice lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "choice_lists",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum choice lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/choice_lists.json"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "classification sets list",
+      "summary": "Run the classification sets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "classification_sets",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum classification sets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/classification_sets.json"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "forms list",
+      "summary": "Run the forms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forms",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum forms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/forms.json"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/projects.json"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "records list",
+      "summary": "Run the records ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "records",
+      "source_url": "https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json",
+      "examples": [
+        "pm fulcrum records list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/records.json"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

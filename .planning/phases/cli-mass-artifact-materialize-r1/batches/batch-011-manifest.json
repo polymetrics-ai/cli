@@ -1,0 +1,770 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "connectors": [
+    {
+      "connector": "google-analytics-data-api",
+      "operations_total": 24,
+      "operations_read": 20,
+      "operations_write": 4,
+      "artifact": {
+        "url": "https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta",
+        "kind": "openapi",
+        "version": "v1beta and v1alpha",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Union of official v1beta (11) and v1alpha (15) Discovery methods, de-duplicated by semantic operation ID. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "youtube-analytics",
+      "operations_total": 16,
+      "operations_read": 9,
+      "operations_write": 7,
+      "artifact": {
+        "url": "https://youtubeanalytics.googleapis.com/$discovery/rest?version=v2",
+        "kind": "openapi",
+        "version": "v2 plus Reporting v1",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.google.com/youtube/analytics/reference",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "YouTube Analytics v2 plus Reporting v1 Discovery methods. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "gong",
+      "operations_total": 69,
+      "operations_read": 29,
+      "operations_write": 40,
+      "artifact": {
+        "url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+        "kind": "openapi",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://gong.app.gong.io/settings/api/documentation",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "JSON specification served by official API documentation. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-ads",
+      "operations_total": 163,
+      "operations_read": 45,
+      "operations_write": 118,
+      "artifact": {
+        "url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
+        "kind": "openapi",
+        "version": "v22",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.google.com/google-ads/api/rest/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official Ads v22 Discovery methods; RPC actions classified semantically. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-search-console",
+      "operations_total": 11,
+      "operations_read": 7,
+      "operations_write": 4,
+      "artifact": {
+        "url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
+        "kind": "openapi",
+        "version": "v1",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.google.com/webmaster-tools/v1/api_reference_index",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official Search Console v1 Discovery methods; query/test/inspect POSTs are reads. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "bing-ads",
+      "operations_total": 222,
+      "operations_read": 99,
+      "operations_write": 123,
+      "artifact": {
+        "url": "https://learn.microsoft.com/en-us/advertising/campaign-management-service/campaign-management-service-operations?view=bingads-13",
+        "kind": "html_reference",
+        "version": "v13",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://learn.microsoft.com/en-us/advertising/customer-management-service/customer-management-service-operations?view=bingads-13",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Microsoft Learn v13 Campaign Management and Customer Management service-operation indexes",
+      "counting_note": "The connector's named v13 surface is Customer Management plus Campaign Management. Counted the first-column operation links from Microsoft’s complete provider-published service-operation indexes: Campaign Management has 191 (81 read Get/Search actions; 110 Add/Apply/Create/Delete/Refine/Set/Update actions) and Customer Management has 31 (18 read Find/Get/Search/Validate actions; 13 Add/Delete/Dismiss/Send/Signup/Update actions). POST query actions such as GetCampaignsByIds are classified semantically as reads; this excludes the unrelated Content API and legacy SOAP versions.",
+      "processed_at": "2026-08-05T17:43:37Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "care-quality-commission",
+      "operations_total": 14,
+      "operations_read": 14,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://api-portal.service.cqc.org.uk/developer/apis/syndication?export=true&format=openapi%2Bjson&api-version=2022-04-01-preview",
+        "kind": "html_reference",
+        "version": "Syndication API; portal exposes OpenAPI 3.0.1 export",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://api-portal.service.cqc.org.uk/api-details",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Care Quality Commission developer portal Syndication API, its public operation index, and public OpenAPI-definition export selector",
+      "counting_note": "CQC's provider-published developer portal lists 14 exhaustive Syndication operations through its API-management operations index. Every documented action is GET: changes, inspection areas, location/provider records and relationships, and reports. The portal's downloadable OAS 3.0.1 export was available but did not expose its path inventory to an unauthenticated download; the provider's systematic operation list, which the portal renders from the same API management publication, is the counted artifact. Webhook/event material is not present and was not counted.",
+      "processed_at": "2026-08-06T00:00:00Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "castor-edc",
+      "operations_total": 172,
+      "operations_read": 128,
+      "operations_write": 44,
+      "artifact": {
+        "url": "https://data.castoredc.com/api/swagger?format=json",
+        "kind": "swagger",
+        "version": "OpenAPI/Swagger 2.0; Castor EDC API Documentation 2026.1.4.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://data.castoredc.com/api",
+      "auth_model": "oauth2_client_credentials",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-published Castor EDC API Swagger 2.0 JSON and rendered API reference",
+      "counting_note": "Counted each documented method/path in Castor's provider-published Swagger 2.0 definition: 127 GET actions plus 31 POST, seven PATCH, one PUT, and six DELETE actions. POST /study/{study_id}/compliance explicitly retrieves participant survey compliance and is therefore a semantic read; every remaining non-GET action creates, updates, randomizes, sends, uploads, locks/unlocks, or deletes clinical-study state. OAuth token acquisition is authentication support and is not a data operation.",
+      "processed_at": "2026-08-06T00:10:00Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "confluence",
+      "operations_total": 218,
+      "operations_read": 137,
+      "operations_write": 81,
+      "artifact": {
+        "url": "https://dac-static.atlassian.com/cloud/confluence/openapi-v2.v3.json?_v=1.8516.73",
+        "kind": "openapi",
+        "version": "Confluence Cloud REST API v2; OpenAPI 3.0.3; info.version 2.0.0",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.atlassian.com/cloud/confluence/rest/v2/intro/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Atlassian's Confluence REST API v2 reference page directly links this static OpenAPI definition and declares it downloadable",
+      "counting_note": "Counted every HTTP operation object in Atlassian's provider-published Confluence Cloud REST API v2 OpenAPI artifact: 134 GET reads, 36 POST, 24 PUT, and 24 DELETE. Three POST actions are documented semantic reads: content-ID-to-type conversion, bulk user lookup, and checking site access by email. The other 33 POST actions plus PUT and DELETE actions enable or revoke admin/key access, create, redact, reset, modify, assign, invite, upload, or remove Confluence state. Inbound webhook delivery event types are excluded; callable webhook-related management actions would remain included.",
+      "processed_at": "2026-08-05T20:37:25Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "flowlu",
+      "operations_total": 608,
+      "operations_read": 248,
+      "operations_write": 360,
+      "artifact": {
+        "url": "https://www.flowlu.com/api/json/openapien.json?ver=1785972282755",
+        "kind": "openapi",
+        "version": "Flowlu Rest API Documentation 1.0 (OpenAPI 3.0.1)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.flowlu.com/api/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; Flowlu's provider Redoc reference and its loaded `openapien.json` definition; direct parse of paths and documented action segments",
+      "counting_note": "Parsed all 608 operation objects in Flowlu's provider-loaded OpenAPI JSON: 368 GET and 240 POST. This is an RPC-style API rather than ordinary REST: its own Common structure declares action segments `create`, `get`, `list`, `delete`, and `update`. The 240 POST paths are exactly 120 create and 120 update actions; 120 GET paths are explicitly `/delete/{id}` actions. Those 360 documented mutations are writes, leaving 248 GET get/list actions as reads.",
+      "processed_at": "2026-08-06T01:40:00Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-classroom",
+      "operations_total": 104,
+      "operations_read": 43,
+      "operations_write": 61,
+      "artifact": {
+        "url": "https://classroom.googleapis.com/$discovery/rest?version=v1",
+        "kind": "openapi",
+        "version": "Google Classroom API v1; discovery revision 20260803",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/workspace/classroom/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; live Google Classroom REST reference which directly links its provider-published v1 Discovery document",
+      "counting_note": "Recursively counted every provider-documented method in the live Google Classroom v1 Discovery document: 43 GET, 25 POST, 17 PATCH, one PUT, and 18 DELETE. GET methods are reads. All POST methods explicitly create, accept, modify, return/reclaim/turn-in, or register notification delivery; none is a semantic query. PATCH/PUT/DELETE methods are writes. The Registration API creates a notification registration and is callable configuration, so it is retained; inbound notifications are not Discovery-method rows.",
+      "processed_at": "2026-08-06T03:30:00Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-directory",
+      "operations_total": 128,
+      "operations_read": 46,
+      "operations_write": 82,
+      "artifact": {
+        "url": "https://admin.googleapis.com/$discovery/rest?version=directory_v1",
+        "kind": "openapi",
+        "version": "Admin SDK Directory API directory_v1; discovery revision 20260802",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/admin-sdk/directory/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "enterprise",
+      "evidence_source": "metadata docs_url; live Google Admin SDK Directory provider Discovery document",
+      "counting_note": "Recursively counted every provider-documented method in the live Admin SDK Directory Discovery document: 46 GET, 36 POST, 14 PATCH, 12 PUT, and 20 DELETE. GET methods are reads. Every POST explicitly inserts, issues an administrative command, changes status, creates a watch registration, manages users/devices/groups/resources, or changes verification/authentication state; none is a semantic query. PATCH/PUT/DELETE methods are writes. Watch registrations are callable configuration and retained; inbound change notifications are not method rows.",
+      "processed_at": "2026-08-06T03:35:00Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-forms",
+      "operations_total": 10,
+      "operations_read": 4,
+      "operations_write": 6,
+      "artifact": {
+        "url": "https://forms.googleapis.com/$discovery/rest?version=v1",
+        "kind": "openapi",
+        "version": "Google Forms API v1; discovery revision 20260729",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/workspace/forms/api/reference/rest",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; live Google Forms provider Discovery document linked from its official REST reference",
+      "counting_note": "Recursively counted every provider-documented method in the live Google Forms v1 Discovery document: four GET, five POST, and one DELETE. GET methods are reads. The POST methods create a form, batch-update a form, update publish settings, create a watch, or renew a watch, so all are writes; watch registrations are callable configuration and retained. The DELETE removes a watch. Inbound watch deliveries are not method rows and are excluded.",
+      "processed_at": "2026-08-06T00:37:39Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "google-pagespeed-insights",
+      "operations_total": 1,
+      "operations_read": 1,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://pagespeedonline.googleapis.com/$discovery/rest?version=v5",
+        "kind": "openapi",
+        "version": "PageSpeed Insights API v5; discovery revision 20260804",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.google.com/speed/docs/insights/rest/v5/pagespeedapi/runpagespeed",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; official Google PageSpeed Insights documentation and live provider Discovery document",
+      "counting_note": "The live provider Discovery document contains one documented callable method: GET pagespeedapi.runpagespeed. It runs analysis and returns scores/suggestions, so it is a read.",
+      "processed_at": "2026-08-06T00:38:23Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "guru",
+      "operations_total": 251,
+      "operations_read": 130,
+      "operations_write": 121,
+      "artifact": {
+        "url": "https://developer.getguru.com/getguru/api-next/v2/branches/1.0/reference/postv1searchkeyworddocumentsearch?reduce=false",
+        "kind": "openapi",
+        "version": "Guru API v1; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.getguru.com/reference",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; public Guru ReadMe reference and its provider API response containing the complete OpenAPI document",
+      "counting_note": "Parsed the complete provider-published OpenAPI 3.1.0 document embedded in the public Guru reference response: 119 GET, 59 POST, 40 PUT, and 33 DELETE operations across 175 paths. GET methods are reads. Eleven POST operations are explicitly semantic reads: announcement-user export; three AI answer requests (including streaming); synchronous chat ask; draft search; knowledge-agent test prompt; quality-run simulation; and three card/source/document searches. The other 48 POST operations plus every PUT/DELETE create, alter, send, administer, upload, restore, migrate, or remove state and are writes. The public sidebar exposes only 124 endpoint pages, so the complete OAS—not a partial sidebar count—is the counted artifact.",
+      "processed_at": "2026-08-06T00:49:20Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "hibob",
+      "operations_total": 61,
+      "operations_read": 26,
+      "operations_write": 35,
+      "artifact": {
+        "url": "https://apidocs.hibob.com/hibob/api-next/v2/branches/1/reference/post_people-search?reduce=false",
+        "kind": "openapi",
+        "version": "Employee data API v1.0.0; OpenAPI 3.1.1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://apidocs.hibob.com/reference",
+      "auth_model": "basic",
+      "access_model": "enterprise",
+      "evidence_source": "metadata docs_url; public HiBob ReadMe API reference response embedding the provider OAS",
+      "counting_note": "The provider-published OAS contains 42 paths and 61 callable methods (GET 23, POST 18, PUT 10, DELETE 10). GET methods are reads; three POST operations are explicitly named Search for employees, Read company employee fields, and Search for actual payments, so they are semantic reads. The other 15 POSTs, all PUTs, and all DELETEs are writes. The OAS has no webhook/event-delivery paths.",
+      "processed_at": "2026-08-06T01:02:19Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "insightful",
+      "operations_total": 112,
+      "operations_read": 62,
+      "operations_write": 50,
+      "artifact": {
+        "url": "https://developers.insightful.io/api/collections/10755095/Szzq4Eoa?environment=10754747-cee77158-1d26-446e-a4ab-fe597277f032&segregateAuth=true&versionTag=latest",
+        "kind": "postman",
+        "version": "Insightful Developer Portal | Insightful API Postman collection Szzq4Eoa (latest)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.insightful.io/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "metadata docs_url; provider-owned Insightful Developer Portal and its live provider-published Postman collection endpoint",
+      "counting_note": "The provider portal states that its Postman collection is the documentation source of truth. Recursively enumerating its 22 folders yields 112 documented request items: GET 62, POST 16, PUT 21, DELETE 13. Each POST is a named creation, import, merge, or other persistent action; no POST is a query-style read. The sole exact method/raw-URL duplicate is two explicitly named GET app-category actions (one organization-label lookup and one category list); they are retained as distinct provider-named action blocks under the counting policy.",
+      "processed_at": "2026-08-06T01:31:58Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "mailersend",
+      "operations_total": 97,
+      "operations_read": 52,
+      "operations_write": 45,
+      "artifact": {
+        "url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+        "kind": "openapi",
+        "version": "1.0.0-oas3.1 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.mailersend.com/",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "Metadata docs_url; MailerSend’s provider-hosted developer landing page links its MailerSend OpenAPI collection, whose resolved SwaggerHub document was enumerated directly.",
+      "counting_note": "The provider's developer landing page directly links this resolved complete OpenAPI 3.1.0 collection. It has 97 non-deprecated path-method operations: 51 GET, 17 POST, 12 PUT, and 17 DELETE. POST /email-verification/verify takes an email and returns verification status, so it is the single semantic POST read; all other POST and non-GET operations are writes. Inbound webhook event types are excluded while callable webhook endpoint-management actions are included.",
+      "processed_at": "2026-08-06T03:29:11Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "mailgun",
+      "operations_total": 239,
+      "operations_read": 85,
+      "operations_write": 154,
+      "artifact": {
+        "url": "https://documentation.mailgun.com/_bundle/docs/mailgun/api-reference/send/mailgun.json?download",
+        "kind": "openapi",
+        "version": "3.0.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://documentation.mailgun.com/docs/mailgun/api-reference/api-overview",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "Metadata docs_url now renders a provider 404, but Mailgun’s current provider API reference offers the complete `mailgun.json` download, enumerated directly.",
+      "counting_note": "The provider’s current Mailgun API reference exposes its complete downloadable OpenAPI 3.1.0 document. It contains 265 operations, of which 26 are explicitly marked deprecated and excluded, leaving 239 active actions: 81 GET, 59 POST, 45 PUT, 49 DELETE, and 5 PATCH. Four POST analytics/statistics actions are semantic reads (account metrics, usage metrics, logs, and bounce-classification metrics); all other active POST and non-GET methods are writes. Inbound webhook event types are excluded while webhook endpoint-management operations are included.",
+      "processed_at": "2026-08-06T03:31:22Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "mendeley",
+      "operations_total": 67,
+      "operations_read": 31,
+      "operations_write": 36,
+      "artifact": {
+        "url": "https://api.mendeley.com/apidocs/apis?convertToOpenApi=true",
+        "kind": "openapi",
+        "version": "Mendeley API Documentation v1 catalog (with current v2 Groups and Profiles resource specifications)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://api.mendeley.com/apidocs/openapi",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "Provider-hosted Mendeley OpenAPI documentation portal and its JSON OAS catalog. Each of the catalog’s 16 resource specifications was retrieved from the same provider endpoint with convertToOpenApi=true and enumerated without credentials. The provider Authorization reference identifies OAuth 2.0 authorization-code flow.",
+      "counting_note": "The provider OpenAPI catalog exposes 16 resource specifications. Resolving all yielded 71 raw operations and 70 unique normalized method/path pairs; POST /documents appears in two catalog groups and was de-duplicated. The three legacy V1 /groups GET operations were excluded because their provider summaries say Deprecated and a current /groups/v2 resource API is published; the connector does not explicitly name both versions. The remaining 67 operations are 31 GET reads, 19 POST writes, 6 PATCH writes, and 11 DELETE writes; no POST is documented as a query-only read.",
+      "processed_at": "2026-08-06T03:51:26Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "mixmax",
+      "operations_total": 83,
+      "operations_read": 47,
+      "operations_write": 36,
+      "artifact": {
+        "url": "https://developer.mixmax.com/mixmax/api-next/v2/branches/1.0/reference/reportsdatatable?reduce=false",
+        "kind": "openapi",
+        "version": "Mixmax REST API v1.0 (OpenAPI 3.1.0 embedded in provider reference)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.mixmax.com/reference/getting-started-with-the-api",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Provider-hosted Mixmax developer reference response, which embeds a complete OpenAPI schema in its public rendered reference page. The schema was enumerated without credentials.",
+      "counting_note": "The provider's ReadMe reference response embeds its REST API v1.0 OpenAPI 3.1.0 schema with 101 method/path operations. Eighteen operations whose provider summaries are explicitly labelled [deprecated] were excluded, leaving 46 GET, 16 POST, 3 PUT, 10 PATCH, and 8 DELETE operations. POST /v1/reports/data/table is explicitly described as querying messages and meetings, so it is a semantic read; all other POST/PUT/PATCH/DELETE operations create, update, send, cancel, add, or delete resources and are writes.",
+      "processed_at": "2026-08-06T08:27:33Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "pendo",
+      "operations_total": 65,
+      "operations_read": 36,
+      "operations_write": 29,
+      "artifact": {
+        "url": "https://engageapi.pendo.io/api/collections/16265887/Tzm6jvKG?segregateAuth=true&versionTag=latest",
+        "kind": "postman",
+        "version": "Pendo API Postman Collection, latest",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://engageapi.pendo.io/",
+      "auth_model": "api_key",
+      "access_model": "enterprise",
+      "evidence_source": "Pendo's official API documentation says the Postman collection is the source of truth and exposes this exact collection endpoint; parsed without credentials.",
+      "counting_note": "Parsed Pendo's provider-published source-of-truth Postman collection and deduplicated documented requests by normalized HTTP method/path. Its 119 collection items collapse to 65 distinct actions: 33 GET, 16 POST, ten PUT, two PATCH, and four DELETE. Forty-nine aggregation examples all target the single POST /api/v1/aggregation operation and are counted once; repeated list/specific-object examples likewise collapse to their respective GET paths. Three POST actions are semantic reads: aggregation query, asynchronous segment-visitor export, and guide-experiment CSV export. The other POST, PUT, PATCH, and DELETE operations record events, delete data, reset guides, import, create/update metadata, create feedback, or mutate Pendo state. Inbound webhook event deliveries are excluded.",
+      "processed_at": "2026-08-06T12:44:45Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "productive",
+      "operations_total": 648,
+      "operations_read": 239,
+      "operations_write": 409,
+      "artifact": {
+        "url": "https://developer.productive.io/reference/download_spec?format=json",
+        "kind": "openapi",
+        "version": "Productive API v2 current reference; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.productive.io/reference",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Productive's provider-owned API Reference renders a Download Spec link to this artifact and documents the v2 base URL. The downloaded OAS exposes the complete operation inventory and defines header_token as an X-Auth-Token API-key scheme; provider summaries supplied the POST semantic classification.",
+      "counting_note": "The provider's Reference page directly links this complete downloadable OpenAPI artifact and says it covers all available endpoints, schemas, and query parameters. The OAS has 648 HTTP operation objects across 390 paths: 239 GET, 112 POST, 219 PATCH, 77 DELETE, and 1 PUT. GET actions are reads. Every POST operation's provider summary explicitly describes a state-changing create, copy, generate, resolve, or session action; none is a query/retrieval action. All POST, PATCH, DELETE, and PUT actions are therefore writes, yielding 239 reads and 409 writes. Inbound webhook deliveries are excluded; callable webhook configuration CRUD is included.",
+      "processed_at": "2026-08-06T14:09:58Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "ringcentral",
+      "operations_total": 499,
+      "operations_read": 261,
+      "operations_write": 238,
+      "artifact": {
+        "url": "https://assets-developers.ringcentral.com/dpw/api-reference/specs/public/office/rc-platform.yml?v=2026080620260803-0657",
+        "kind": "openapi",
+        "version": "RingCentral API 1.0.60-20260730-142b4d22; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.ringcentral.com/api-reference",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "RingCentral's live provider-owned RingEX API Reference says it is generated from this complete OpenAPI 3.0.3 specification and exposes the artifact's version identifier. The reference links self-service developer-account creation and its public developer sign-up flow, supporting the public access classification. The artifact declares a global OAuth 2.0 authorization-code security scheme with provider authorization, token, and refresh URLs. No RingCentral developer account, OAuth credential, API request, extension, call log, message, contact, device, or other provider data was accessed.",
+      "counting_note": "RingCentral's complete current RingEX OpenAPI artifact has 520 HTTP operation objects: 258 GET, 133 POST, 51 PUT, 24 PATCH, and 54 DELETE. Thirteen objects explicitly carry the deprecated flag (four GET, eight POST, one DELETE) and are excluded under the current-versus-legacy policy. Eight active OAuth/OIDC authorization, token, revocation, WebSocket-token, discovery, key-set, and user-info routes are excluded as direct credential/authentication support. The remaining 499 data actions are 250 GET, 121 POST, 51 PUT, 24 PATCH, and 53 DELETE. All retained GET actions are reads, and eleven provider-described POST actions are semantic reads: user/directory/audit/SMS-consent searches, two call-analytics fetches, two non-persistent validation checks, phone-number parsing, and two asynchronous data/message exports. The remaining POST, PUT, PATCH, and DELETE actions create, upload, provision, send, control, update, archive, delete, or otherwise change RingCentral state, yielding 261 reads and 238 writes. Inbound notification events, schemas, parameters, examples, and the credential-support routes do not add actions.",
+      "processed_at": "2026-08-06T16:02:26Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "smartsheets",
+      "operations_total": 180,
+      "operations_read": 75,
+      "operations_write": 105,
+      "artifact": {
+        "url": "https://developers.smartsheet.com/_bundle/api/smartsheet/openapi.json?download",
+        "kind": "openapi",
+        "version": "OpenAPI 3.0.3; Smartsheet OpenAPI Reference 2.0.0",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.smartsheet.com/api/smartsheet/openapi/home",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "enterprise",
+      "evidence_source": "The active provider OpenAPI Reference links its downloadable complete JSON artifact, identifies it as API version 2.0.0, and states that use is restricted to Business and Enterprise plans. The artifact declares OAuth2 authorization-code and bearer API-token security, exact operation metadata, and deprecation flags. It was retrieved read-only; no Smartsheet account, authorization, API token, API request, sheet, report, dashboard, user, webhook, attachment, discussion, proof, update request, workspace, event, or other provider data was accessed.",
+      "counting_note": "The current provider OpenAPI contains 187 HTTP operation objects. Five explicitly deprecated actions (two GET and three POST) and the POST/DELETE OAuth/API-token lifecycle endpoints were excluded, leaving 180 data actions: 73 GET reads plus two semantic POST reads (List filtered events and List image URLs), and 105 state-changing POST/PUT/PATCH/DELETE actions. Inbound webhook deliveries and separately documented event-type catalog entries are not callable API actions and were excluded.",
+      "processed_at": "2026-08-06T19:03:40Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "teamtailor",
+      "operations_total": 129,
+      "operations_read": 80,
+      "operations_write": 49,
+      "artifact": {
+        "url": "https://docs.teamtailor.com/api/collections/14157246/TVzSiGxA?environment=14157246-0a1d21ed-80bf-49dc-afe7-a54fc680be99&segregateAuth=true&versionTag=latest",
+        "kind": "postman",
+        "version": "Teamtailor API public Postman Collection v2.0.0 (versionTag=latest)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://docs.teamtailor.com/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Teamtailor's live documentation renders its own public Teamtailor API collection and loads this provider-hosted collection URL with versionTag=latest. The collection metadata identifies it as public, names Teamtailor API, uses Postman Collection schema v2.0.0, and provides the complete named request inventory. The provider documentation describes its JSON:API and API-key authentication. Research was limited to the public documentation artifact; no Teamtailor account, credential value, recruiting record, candidate, job, application, or other provider data was accessed.",
+      "counting_note": "The provider's public latest-version Postman collection has 45 resource sections and 129 named HTTP request entries: 80 GET, 22 POST, 18 PATCH, and 9 DELETE. GET entries are reads; every non-GET entry is explicitly named create, update, or delete and is a write, with no semantic POST query. Two literal sample method/path pairs recur, but each occurs under a distinct named provider action (Show stage versus Show trigger, and Update requisition versus Update requisition step verdict), so those documented action entries are retained separately rather than erased by a URL-only de-duplication. No request entry is explicitly marked deprecated, and no inbound webhook-delivery action is included.",
+      "processed_at": "2026-08-06T20:35:21Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "teamwork",
+      "operations_total": 404,
+      "operations_read": 237,
+      "operations_write": 167,
+      "artifact": {
+        "url": "https://apidocs.teamwork.com/api/oas/download?slug=teamwork&api_version=v3",
+        "kind": "swagger",
+        "version": "Teamwork API V3 v3.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://apidocs.teamwork.com/docs/teamwork/v3/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "Teamwork.com's live V3 API reference links directly to this provider-hosted Swagger download. The artifact identifies itself as Teamwork API V3 v3.0 and Swagger 2.0 and supplies the complete method/path inventory. The provider's current API landing page identifies V1 as legacy, V2 as internal-product oriented, and recommends V3 wherever possible; its V3 reference documents Basic authentication. Research was limited to public documentation and the downloadable artifact; no Teamwork site, account, credential value, project, person, task, time entry, or other provider data was accessed.",
+      "counting_note": "The provider-hosted V3 Swagger has 409 method/path operations across 303 paths (239 GET, 68 POST, 37 PATCH, 41 DELETE, 24 PUT) and no explicit deprecated flag. Five GET credential/session-support routes are excluded: four reporting OAuth flow/status routes and the public-form pre-signed upload-URL issuer. The resulting 404 data actions are 234 GET, 68 POST, 37 PATCH, 41 DELETE, and 24 PUT. Two formula-validation POSTs and the AI expense-receipt parsing POST explicitly return validation/extraction results without persisting data, so they are semantic reads. All other non-GET actions are documented creation, update, deletion, assignment, scheduling, workflow, or lifecycle changes. No inbound webhook-delivery action is present.",
+      "processed_at": "2026-08-06T20:38:10Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "whisky-hunter",
+      "operations_total": 5,
+      "operations_read": 5,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://whiskyhunter.net/api/?format=openapi",
+        "kind": "swagger",
+        "version": "Swagger 2.0; Whisky Hunter API v1",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://whiskyhunter.net/api/",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "The metadata-linked Whisky Hunter API page is live and renders this exact provider-owned Swagger download as its v1 OAS 2.0 reference. The contract's global security declaration names the Basic scheme; its provider-published documentation is publicly reachable. Research was limited to public documentation and the provider artifact; no Whisky Hunter account, credential value, auction, bid, trading volume, distillery, whisky, or other market data was accessed.",
+      "counting_note": "The live provider-published Swagger 2.0 artifact contains exactly five active HTTP operations across five paths: auction-data detail, aggregate auction data, auction information, distillery information, and distillery-data detail. Every operation is GET; the contract declares no deprecated operation, callable write action, or webhook object. The result is 5 data actions: 5 reads and 0 writes.",
+      "processed_at": "2026-08-06T23:20:43Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "square",
+      "operations_total": 334,
+      "operations_read": 121,
+      "operations_write": 213,
+      "artifact": {
+        "url": "https://raw.githubusercontent.com/square/connect-api-specification/master/api.json",
+        "kind": "openapi",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.squareup.com/reference/square",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official Square OpenAPI operations. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "trello",
+      "operations_total": 261,
+      "operations_read": 128,
+      "operations_write": 133,
+      "artifact": {
+        "url": "https://developer.atlassian.com/cloud/trello/swagger.v3.json",
+        "kind": "swagger",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.atlassian.com/cloud/trello/rest/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official Trello OpenAPI operations. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "front",
+      "operations_total": 255,
+      "operations_read": 123,
+      "operations_write": 132,
+      "artifact": {
+        "url": "https://github.com/frontapp/front-api-specs",
+        "kind": "openapi",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://dev.frontapp.com/reference/introduction",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official core-api.json plus channel-api.json operations. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "bitbucket",
+      "operations_total": 331,
+      "operations_read": 179,
+      "operations_write": 152,
+      "artifact": {
+        "url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+        "kind": "swagger",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.atlassian.com/cloud/bitbucket/rest/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Official Bitbucket Cloud OpenAPI operations. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "hubplanner",
+      "operations_total": 98,
+      "operations_read": 35,
+      "operations_write": 63,
+      "artifact": {
+        "url": "https://github.com/hubplanner/API",
+        "kind": "openapi",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://github.com/hubplanner/API/tree/master/Sections",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Unique normalized callable method/path declarations in official docs repo. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "employment-hero",
+      "operations_total": 124,
+      "operations_read": 63,
+      "operations_write": 61,
+      "artifact": {
+        "url": "https://developer.employmenthero.com/postman-collection.json",
+        "kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.employmenthero.com/api-references/introduction",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "enterprise",
+      "evidence_source": "metadata docs_url; Employment Hero's provider-published API References introduction linking its downloadable Postman collection; direct parse of every collection request; API Versioning Policy and Authentication sections",
+      "counting_note": "Employment Hero's provider-linked downloadable Postman collection has 127 request items. Its top-level Authentication folder contains the OAuth authorization GET plus access-token and refresh-token POST flows; those three credential-minting/support actions are excluded under r1's established token-flow convention. The remaining 124 callable data actions are 63 GET reads, 27 POST, 22 PATCH, four PUT, and eight DELETE writes. The POST actions create, upload, onboard, assign, publish, approve/decline, archive, generate, or bulk-create state; in particular, onboarding status is separately documented as GET, so no POST is a semantic retrieval. The currently published collection explicitly retains separate named v1/v2 variants for bank accounts, superannuation detail, and tax declaration, so those distinct published routes are retained rather than supplemented with a separate legacy artifact. The reference's webhook material is inbound-event documentation and excluded.",
+      "processed_at": "2026-08-05T22:18:41Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "zoom",
+      "operations_total": 1913,
+      "operations_read": 881,
+      "operations_write": 1032,
+      "artifact": {
+        "url": "https://developers.zoom.us/docs/api/",
+        "kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.zoom.us/docs/api/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "35 official index modules; counted rendered Method fields. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "marketo",
+      "operations_total": 322,
+      "operations_read": 150,
+      "operations_write": 172,
+      "artifact": {
+        "url": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/rest/endpoint-reference",
+        "kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/rest/endpoint-reference",
+      "auth_model": "oauth2_client_credentials",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Rows in Adobe's official endpoint reference; GET is read. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "monday",
+      "operations_total": 280,
+      "operations_read": 72,
+      "operations_write": 208,
+      "artifact": {
+        "url": "https://developer.monday.com/api-reference/reference/about-the-api-reference",
+        "kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developer.monday.com/api-reference/reference/about-the-api-reference",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Unique GraphQL root fields in official query/mutation examples. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "reddit",
+      "operations_total": 145,
+      "operations_read": 52,
+      "operations_write": 93,
+      "artifact": {
+        "url": "https://www.reddit.com/dev/api/",
+        "kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://www.reddit.com/dev/api/",
+      "auth_model": "oauth2_auth_code",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Method sections in official API reference. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "gorgias",
+      "operations_total": 114,
+      "operations_read": 46,
+      "operations_write": 68,
+      "artifact": {
+        "url": "https://developers.gorgias.com/reference",
+        "kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://developers.gorgias.com/reference",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Endpoint nodes and methods in official reference navigation. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    },
+    {
+      "connector": "airtable",
+      "operations_total": 103,
+      "operations_read": 31,
+      "operations_write": 72,
+      "artifact": {
+        "url": "https://airtable.com/developers/web/api/introduction",
+        "kind": "html_reference",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-05"
+      },
+      "provider_reference_url": "https://airtable.com/developers/web/api/introduction",
+      "auth_model": "bearer",
+      "access_model": "public",
+      "evidence_source": "data/cli-top50-surface-audit-r1/cli-top50-provider-surface-audit-r1.json",
+      "counting_note": "Operations in embedded official OpenAPI 3.1 document. Carried forward from cli-top50-surface-audit-r1.",
+      "processed_at": "2026-08-05T16:05:35Z",
+      "selection_reason": "manual static materialization from the cited official provider artifact; account access is not an execution prerequisite"
+    }
+  ]
+}

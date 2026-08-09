@@ -1,0 +1,50 @@
+{
+  "operations": [
+    {
+      "id": "campayn.get.contacts-contact-id-json",
+      "kind": "rest_read",
+      "summary": "GET /contacts/{contact_id}.json",
+      "description": "single-contact detail; the docs show it returns a superset of fields (title, company, address, country, city, state, zip, birthday, phones[], sites[], social[], custom_fields[]) versus the list endpoint's documented email/first_name/last_name/image_url subset only - modeling it as its own stream would require an id already discovered from the contacts stream and would emit a fundamentally different (richer) record shape for the same logical resource, which one schema-per-stream projection cannot express as a variant of the already-covered contacts stream without misrepresenting what the list variant actually returns",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/{contact_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "campayn.get.lists-list-id-forms-form-id-json",
+      "kind": "rest_read",
+      "summary": "GET /lists/{list_id}/forms/{form_id}.json",
+      "description": "single-form detail; identical record shape to the forms stream's per-item object (id, contact_list_id, form_title, form_type, form_html, signup_count), already covered by that stream; the docs show no additional fields on the detail response",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lists/{list_id}/forms/{form_id}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "campayn.post.signup",
+      "kind": "rest_write",
+      "summary": "POST /signup",
+      "description": "creates an entirely new Campayn account/tenant (not a data record within an existing account) and is documented as requiring separate, privileged API-key authorization from Campayn support; the docs' own 'most likely error' example shows this call rejected for unauthorized keys by default",
+      "source_url": "https://github.com/nebojsac/Campayn-API",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/signup",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

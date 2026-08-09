@@ -1,0 +1,2341 @@
+{
+  "tagline": "Run Eventbrite's declared streams and reverse-ETL actions.",
+  "usage": "pm eventbrite \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get balance",
+        "api get categories id operation",
+        "api get categories operation",
+        "api get discounts discount-id operation",
+        "api get event event-id canned-questions question-id operation",
+        "api get events event-id attendees attendee-id operation",
+        "api get events event-id attendees operation",
+        "api get events event-id canned-questions operation",
+        "api get events event-id capacity-tier operation",
+        "api get events event-id description operation",
+        "api get events event-id display-settings operation",
+        "api get events event-id inventory-tiers inventory-tier-id operation",
+        "api get events event-id inventory-tiers operation",
+        "api get events event-id operation",
+        "api get events event-id orders operation",
+        "api get events event-id questions operation",
+        "api get events event-id questions question-id operation",
+        "api get events event-id teams operation",
+        "api get events event-id teams search",
+        "api get events event-id teams team-id attendees operation",
+        "api get events event-id teams team-id operation",
+        "api get events event-id ticket-buyer-settings operation",
+        "api get events event-id ticket-classes for-sale operation",
+        "api get events event-id ticket-classes operation",
+        "api get events event-id ticket-classes ticket-class-id operation",
+        "api get events id structured-content edit operation",
+        "api get events id structured-content operation",
+        "api get events search operation",
+        "api get formats format-id operation",
+        "api get formats operation",
+        "api get media media-id",
+        "api get media upload operation",
+        "api get orders order-id operation",
+        "api get organizations organization-id attendees operation",
+        "api get organizations organization-id discounts",
+        "api get organizations organization-id events operation",
+        "api get organizations organization-id members operation",
+        "api get organizations organization-id orders operation",
+        "api get organizations organization-id roles operation",
+        "api get organizations organization-id seatmaps",
+        "api get organizations organization-id text-overrides",
+        "api get organizations organization-id ticket-groups operation",
+        "api get organizations organization-id venues operation",
+        "api get organizations organization-id webhooks operation",
+        "api get pricing fee-rates",
+        "api get reports attendees operation",
+        "api get reports sales operation",
+        "api get series event-series-id events operation",
+        "api get series event-series-id operation",
+        "api get subcategories operation",
+        "api get subcategories subcategory-id operation",
+        "api get ticket-groups ticket-group-id operation",
+        "api get users me operation",
+        "api get users me organizations operation",
+        "api get users user-id operation",
+        "api get users user-id orders operation",
+        "api get users user-id organizations operation",
+        "api get v3 events 12345",
+        "api get v3 events event-id",
+        "api get v3 events event-id attendees attendee-id",
+        "api get v3 users me",
+        "api get v3 venues venue-id",
+        "api get venues venue-id events operation",
+        "api get venues venue-id operation",
+        "api get webhooks operation",
+        "attendees list",
+        "events list",
+        "orders list",
+        "organizations list",
+        "ticket classes list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete discounts discount-id operation",
+        "api delete event event-id canned-questions question-id operation",
+        "api delete events event-id inventory-tiers inventory-tier-id operation",
+        "api delete events event-id operation",
+        "api delete events event-id questions question-id operation",
+        "api delete ticket-groups ticket-group-id operation",
+        "api delete webhooks id operation",
+        "api post discounts discount-id operation",
+        "api post event event-id canned-questions question-id operation",
+        "api post events event-id cancel operation",
+        "api post events event-id canned-questions operation",
+        "api post events event-id capacity-tier operation",
+        "api post events event-id copy operation",
+        "api post events event-id display-settings operation",
+        "api post events event-id inventory-tiers inventory-tier-id operation",
+        "api post events event-id inventory-tiers operation",
+        "api post events event-id operation",
+        "api post events event-id publish operation",
+        "api post events event-id questions operation",
+        "api post events event-id schedules operation",
+        "api post events event-id seatmaps operation",
+        "api post events event-id teams create operation",
+        "api post events event-id teams team-id check-password operation",
+        "api post events event-id ticket-buyer-settings operation",
+        "api post events event-id ticket-classes operation",
+        "api post events event-id ticket-classes ticket-class-id operation",
+        "api post events event-id unpublish operation",
+        "api post events id structured-content version operation",
+        "api post media upload operation",
+        "api post organizations organization-id discounts operation",
+        "api post organizations organization-id events event-id ticket-classes ticket-class-id ticket-groups operation",
+        "api post organizations organization-id events operation",
+        "api post organizations organization-id text-overrides operation",
+        "api post organizations organization-id ticket-groups operation",
+        "api post organizations organization-id venues operation",
+        "api post organizations organization-id webhooks operation",
+        "api post pricing calculate-price-for-item operation",
+        "api post ticket-groups ticket-group-id operation",
+        "api post v3 organizations organization-id events",
+        "api post venues venue-id operation",
+        "api post webhooks operation"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete discounts discount-id operation",
+      "summary": "Documented DELETE /discounts/{discount_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api delete discounts discount-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/discounts/{discount_id}/]"
+        }
+      ],
+      "operation": "eventbrite.delete.discounts-discount-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete event event-id canned-questions question-id operation",
+      "summary": "Documented DELETE /event/{event_id}/canned_questions/{question_id}] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api delete event event-id canned-questions question-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/event/{event_id}/canned_questions/{question_id}]"
+        }
+      ],
+      "operation": "eventbrite.delete.event-event-id-canned-questions-question-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete events event-id inventory-tiers inventory-tier-id operation",
+      "summary": "Documented DELETE /events/{event_id}/inventory_tiers/{inventory_tier_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api delete events event-id inventory-tiers inventory-tier-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/events/{event_id}/inventory_tiers/{inventory_tier_id}/]"
+        }
+      ],
+      "operation": "eventbrite.delete.events-event-id-inventory-tiers-inventory-tier-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete events event-id operation",
+      "summary": "Documented DELETE /events/{event_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api delete events event-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/events/{event_id}/]"
+        }
+      ],
+      "operation": "eventbrite.delete.events-event-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete events event-id questions question-id operation",
+      "summary": "Documented DELETE /events/{event_id}/questions/{question_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api delete events event-id questions question-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/events/{event_id}/questions/{question_id}/]"
+        }
+      ],
+      "operation": "eventbrite.delete.events-event-id-questions-question-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete ticket-groups ticket-group-id operation",
+      "summary": "Documented DELETE /ticket_groups/{ticket_group_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api delete ticket-groups ticket-group-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/ticket_groups/{ticket_group_id}/]"
+        }
+      ],
+      "operation": "eventbrite.delete.ticket-groups-ticket-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete webhooks id operation",
+      "summary": "Documented DELETE /webhooks/{id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api delete webhooks id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{id}/]"
+        }
+      ],
+      "operation": "eventbrite.delete.webhooks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get balance",
+      "summary": "Documented GET /balance/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get balance --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/balance/"
+        }
+      ],
+      "operation": "eventbrite.get.balance",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get categories id operation",
+      "summary": "Documented GET /categories/{id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get categories id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories/{id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.categories-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get categories operation",
+      "summary": "Documented GET /categories/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get categories operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/categories/]"
+        }
+      ],
+      "operation": "eventbrite.get.categories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get discounts discount-id operation",
+      "summary": "Documented GET /discounts/{discount_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get discounts discount-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/discounts/{discount_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.discounts-discount-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get event event-id canned-questions question-id operation",
+      "summary": "Documented GET /event/{event_id}/canned_questions/{question_id}] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get event event-id canned-questions question-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/event/{event_id}/canned_questions/{question_id}]"
+        }
+      ],
+      "operation": "eventbrite.get.event-event-id-canned-questions-question-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id attendees attendee-id operation",
+      "summary": "Documented GET /events/{event_id}/attendees/{attendee_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id attendees attendee-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/attendees/{attendee_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-attendees-attendee-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id attendees operation",
+      "summary": "Documented GET /events/{event_id}/attendees/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id attendees operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/attendees/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-attendees",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id canned-questions operation",
+      "summary": "Documented GET /events/{event_id}/canned_questions/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id canned-questions operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/canned_questions/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-canned-questions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id capacity-tier operation",
+      "summary": "Documented GET /events/{event_id}/capacity_tier/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id capacity-tier operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/capacity_tier/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-capacity-tier",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id description operation",
+      "summary": "Documented GET /events/{event_id}/description/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id description operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/description/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-description",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id display-settings operation",
+      "summary": "Documented GET /events/{event_id}/display_settings/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id display-settings operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/display_settings/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-display-settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id inventory-tiers inventory-tier-id operation",
+      "summary": "Documented GET /events/{event_id}/inventory_tiers/{inventory_tier_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id inventory-tiers inventory-tier-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/inventory_tiers/{inventory_tier_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-inventory-tiers-inventory-tier-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id inventory-tiers operation",
+      "summary": "Documented GET /events/{event_id}/inventory_tiers/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id inventory-tiers operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/inventory_tiers/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-inventory-tiers",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id operation",
+      "summary": "Documented GET /events/{event_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id orders operation",
+      "summary": "Documented GET /events/{event_id}/orders/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id orders operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/orders/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-orders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id questions operation",
+      "summary": "Documented GET /events/{event_id}/questions/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id questions operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/questions/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-questions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id questions question-id operation",
+      "summary": "Documented GET /events/{event_id}/questions/{question_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id questions question-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/questions/{question_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-questions-question-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id teams operation",
+      "summary": "Documented GET /events/{event_id}/teams/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id teams operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/teams/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-teams",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id teams search",
+      "summary": "Documented GET /events/{event_id}/teams/search/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id teams search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/teams/search/"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-teams-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id teams team-id attendees operation",
+      "summary": "Documented GET /events/{event_id}/teams/{team_id}/attendees/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id teams team-id attendees operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/teams/{team_id}/attendees/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-teams-team-id-attendees",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id teams team-id operation",
+      "summary": "Documented GET /events/{event_id}/teams/{team_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id teams team-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/teams/{team_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-teams-team-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id ticket-buyer-settings operation",
+      "summary": "Documented GET /events/{event_id}/ticket_buyer_settings/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id ticket-buyer-settings operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/ticket_buyer_settings/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-ticket-buyer-settings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id ticket-classes for-sale operation",
+      "summary": "Documented GET /events/{event_id}/ticket_classes/for_sale/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id ticket-classes for-sale operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/ticket_classes/for_sale/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-ticket-classes-for-sale",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id ticket-classes operation",
+      "summary": "Documented GET /events/{event_id}/ticket_classes/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id ticket-classes operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/ticket_classes/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-ticket-classes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events event-id ticket-classes ticket-class-id operation",
+      "summary": "Documented GET /events/{event_id}/ticket_classes/{ticket_class_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events event-id ticket-classes ticket-class-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{event_id}/ticket_classes/{ticket_class_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-event-id-ticket-classes-ticket-class-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events id structured-content edit operation",
+      "summary": "Documented GET /events/{id}/structured_content/edit/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events id structured-content edit operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{id}/structured_content/edit/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-id-structured-content-edit",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events id structured-content operation",
+      "summary": "Documented GET /events/{id}/structured_content/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events id structured-content operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{id}/structured_content/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-id-structured-content",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events search operation",
+      "summary": "Documented GET /events/search/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get events search operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/search/]"
+        }
+      ],
+      "operation": "eventbrite.get.events-search",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get formats format-id operation",
+      "summary": "Documented GET /formats/{format_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get formats format-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/formats/{format_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.formats-format-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get formats operation",
+      "summary": "Documented GET /formats/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get formats operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/formats/]"
+        }
+      ],
+      "operation": "eventbrite.get.formats",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get media media-id",
+      "summary": "Documented GET /media/{media_id}/{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get media media-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/media/{media_id}/{"
+        }
+      ],
+      "operation": "eventbrite.get.media-media-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get media upload operation",
+      "summary": "Documented GET /media/upload/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get media upload operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/media/upload/]"
+        }
+      ],
+      "operation": "eventbrite.get.media-upload",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get orders order-id operation",
+      "summary": "Documented GET /orders/{order_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get orders order-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/orders/{order_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.orders-order-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id attendees operation",
+      "summary": "Documented GET /organizations/{organization_id}/attendees/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id attendees operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/attendees/]"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-attendees",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id discounts",
+      "summary": "Documented GET /organizations/{organization_id}/discounts/{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id discounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/discounts/{"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-discounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id events operation",
+      "summary": "Documented GET /organizations/{organization_id}/events/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id events operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/events/]"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id members operation",
+      "summary": "Documented GET /organizations/{organization_id}/members/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id members operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/members/]"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-members",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id orders operation",
+      "summary": "Documented GET /organizations/{organization_id}/orders/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id orders operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/orders/]"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-orders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id roles operation",
+      "summary": "Documented GET /organizations/{organization_id}/roles/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id roles operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/roles/]"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-roles",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id seatmaps",
+      "summary": "Documented GET /organizations/{organization_id}/seatmaps/{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id seatmaps --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/seatmaps/{"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-seatmaps",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id text-overrides",
+      "summary": "Documented GET /organizations/{organization_id}/text_overrides/{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id text-overrides --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/text_overrides/{"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-text-overrides",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id ticket-groups operation",
+      "summary": "Documented GET /organizations/{organization_id}/ticket_groups/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id ticket-groups operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/ticket_groups/]"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-ticket-groups",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id venues operation",
+      "summary": "Documented GET /organizations/{organization_id}/venues/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id venues operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/venues/]"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-venues",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get organizations organization-id webhooks operation",
+      "summary": "Documented GET /organizations/{organization_id}/webhooks/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get organizations organization-id webhooks operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/organizations/{organization_id}/webhooks/]"
+        }
+      ],
+      "operation": "eventbrite.get.organizations-organization-id-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get pricing fee-rates",
+      "summary": "Documented GET /pricing/fee_rates{ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get pricing fee-rates --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pricing/fee_rates{"
+        }
+      ],
+      "operation": "eventbrite.get.pricing-fee-rates",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports attendees operation",
+      "summary": "Documented GET /reports/attendees/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get reports attendees operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/attendees/]"
+        }
+      ],
+      "operation": "eventbrite.get.reports-attendees",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get reports sales operation",
+      "summary": "Documented GET /reports/sales/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get reports sales operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/reports/sales/]"
+        }
+      ],
+      "operation": "eventbrite.get.reports-sales",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get series event-series-id events operation",
+      "summary": "Documented GET /series/{event_series_id}/events/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get series event-series-id events operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/series/{event_series_id}/events/]"
+        }
+      ],
+      "operation": "eventbrite.get.series-event-series-id-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get series event-series-id operation",
+      "summary": "Documented GET /series/{event_series_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get series event-series-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/series/{event_series_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.series-event-series-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subcategories operation",
+      "summary": "Documented GET /subcategories/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get subcategories operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subcategories/]"
+        }
+      ],
+      "operation": "eventbrite.get.subcategories",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subcategories subcategory-id operation",
+      "summary": "Documented GET /subcategories/{subcategory_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get subcategories subcategory-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subcategories/{subcategory_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.subcategories-subcategory-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get ticket-groups ticket-group-id operation",
+      "summary": "Documented GET /ticket_groups/{ticket_group_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get ticket-groups ticket-group-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket_groups/{ticket_group_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.ticket-groups-ticket-group-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users me operation",
+      "summary": "Documented GET /users/me/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get users me operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me/]"
+        }
+      ],
+      "operation": "eventbrite.get.users-me",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users me organizations operation",
+      "summary": "Documented GET /users/me/organizations/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get users me organizations operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/me/organizations/]"
+        }
+      ],
+      "operation": "eventbrite.get.users-me-organizations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users user-id operation",
+      "summary": "Documented GET /users/{user_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get users user-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{user_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.users-user-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users user-id orders operation",
+      "summary": "Documented GET /users/{user_id}/orders/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get users user-id orders operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{user_id}/orders/]"
+        }
+      ],
+      "operation": "eventbrite.get.users-user-id-orders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get users user-id organizations operation",
+      "summary": "Documented GET /users/{user_id}/organizations/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get users user-id organizations operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{user_id}/organizations/]"
+        }
+      ],
+      "operation": "eventbrite.get.users-user-id-organizations",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 events 12345",
+      "summary": "Documented GET /v3/events/12345/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get v3 events 12345 --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/events/12345/"
+        }
+      ],
+      "operation": "eventbrite.get.v3-events-12345",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 events event-id",
+      "summary": "Documented GET /v3/events/{event_id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get v3 events event-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/events/{event_id}/"
+        }
+      ],
+      "operation": "eventbrite.get.v3-events-event-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 events event-id attendees attendee-id",
+      "summary": "Documented GET /v3/events/{event_id}/attendees/{attendee_id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get v3 events event-id attendees attendee-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/events/{event_id}/attendees/{attendee_id}/"
+        }
+      ],
+      "operation": "eventbrite.get.v3-events-event-id-attendees-attendee-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 users me",
+      "summary": "Documented GET /v3/users/me/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get v3 users me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/me/"
+        }
+      ],
+      "operation": "eventbrite.get.v3-users-me",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 venues venue-id",
+      "summary": "Documented GET /v3/venues/{venue_id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get v3 venues venue-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/venues/{venue_id}/"
+        }
+      ],
+      "operation": "eventbrite.get.v3-venues-venue-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get venues venue-id events operation",
+      "summary": "Documented GET /venues/{venue_id}/events/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get venues venue-id events operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/venues/{venue_id}/events/]"
+        }
+      ],
+      "operation": "eventbrite.get.venues-venue-id-events",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get venues venue-id operation",
+      "summary": "Documented GET /venues/{venue_id}/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get venues venue-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/venues/{venue_id}/]"
+        }
+      ],
+      "operation": "eventbrite.get.venues-venue-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhooks operation",
+      "summary": "Documented GET /webhooks/] (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api get webhooks operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/]"
+        }
+      ],
+      "operation": "eventbrite.get.webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post discounts discount-id operation",
+      "summary": "Documented POST /discounts/{discount_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post discounts discount-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/discounts/{discount_id}/]"
+        }
+      ],
+      "operation": "eventbrite.post.discounts-discount-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post event event-id canned-questions question-id operation",
+      "summary": "Documented POST /event/{event_id}/canned_questions/{question_id}] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post event event-id canned-questions question-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/event/{event_id}/canned_questions/{question_id}]"
+        }
+      ],
+      "operation": "eventbrite.post.event-event-id-canned-questions-question-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id cancel operation",
+      "summary": "Documented POST /events/{event_id}/cancel/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id cancel operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/cancel/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id canned-questions operation",
+      "summary": "Documented POST /events/{event_id}/canned_questions/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id canned-questions operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/canned_questions/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-canned-questions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id capacity-tier operation",
+      "summary": "Documented POST /events/{event_id}/capacity_tier/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id capacity-tier operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/capacity_tier/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-capacity-tier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id copy operation",
+      "summary": "Documented POST /events/{event_id}/copy/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id copy operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/copy/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-copy",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id display-settings operation",
+      "summary": "Documented POST /events/{event_id}/display_settings/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id display-settings operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/display_settings/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-display-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id inventory-tiers inventory-tier-id operation",
+      "summary": "Documented POST /events/{event_id}/inventory_tiers/{inventory_tier_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id inventory-tiers inventory-tier-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/inventory_tiers/{inventory_tier_id}/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-inventory-tiers-inventory-tier-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id inventory-tiers operation",
+      "summary": "Documented POST /events/{event_id}/inventory_tiers/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id inventory-tiers operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/inventory_tiers/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-inventory-tiers",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id operation",
+      "summary": "Documented POST /events/{event_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id publish operation",
+      "summary": "Documented POST /events/{event_id}/publish/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id publish operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/publish/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id questions operation",
+      "summary": "Documented POST /events/{event_id}/questions/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id questions operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/questions/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-questions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id schedules operation",
+      "summary": "Documented POST /events/{event_id}/schedules/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id schedules operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/schedules/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-schedules",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id seatmaps operation",
+      "summary": "Documented POST /events/{event_id}/seatmaps/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id seatmaps operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/seatmaps/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-seatmaps",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id teams create operation",
+      "summary": "Documented POST /events/{event_id}/teams/create/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id teams create operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/teams/create/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-teams-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id teams team-id check-password operation",
+      "summary": "Documented POST /events/{event_id}/teams/{team_id}/check_password/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id teams team-id check-password operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/teams/{team_id}/check_password/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-teams-team-id-check-password",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id ticket-buyer-settings operation",
+      "summary": "Documented POST /events/{event_id}/ticket_buyer_settings/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id ticket-buyer-settings operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/ticket_buyer_settings/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-ticket-buyer-settings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id ticket-classes operation",
+      "summary": "Documented POST /events/{event_id}/ticket_classes/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id ticket-classes operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/ticket_classes/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-ticket-classes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id ticket-classes ticket-class-id operation",
+      "summary": "Documented POST /events/{event_id}/ticket_classes/{ticket_class_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id ticket-classes ticket-class-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/ticket_classes/{ticket_class_id}/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-ticket-classes-ticket-class-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events event-id unpublish operation",
+      "summary": "Documented POST /events/{event_id}/unpublish/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events event-id unpublish operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{event_id}/unpublish/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-event-id-unpublish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events id structured-content version operation",
+      "summary": "Documented POST /events/{id}/structured_content/{version}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post events id structured-content version operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/{id}/structured_content/{version}/]"
+        }
+      ],
+      "operation": "eventbrite.post.events-id-structured-content-version",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post media upload operation",
+      "summary": "Documented POST /media/upload/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post media upload operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/media/upload/]"
+        }
+      ],
+      "operation": "eventbrite.post.media-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organization-id discounts operation",
+      "summary": "Documented POST /organizations/{organization_id}/discounts/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post organizations organization-id discounts operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organization_id}/discounts/]"
+        }
+      ],
+      "operation": "eventbrite.post.organizations-organization-id-discounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organization-id events event-id ticket-classes ticket-class-id ticket-groups operation",
+      "summary": "Documented POST /organizations/{organization_id}/events/{event_id}/ticket_classes/{ticket_class_id}/ticket_groups/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post organizations organization-id events event-id ticket-classes ticket-class-id ticket-groups operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organization_id}/events/{event_id}/ticket_classes/{ticket_class_id}/ticket_groups/]"
+        }
+      ],
+      "operation": "eventbrite.post.organizations-organization-id-events-event-id-ticket-classes-ticket-class-id-ticket-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organization-id events operation",
+      "summary": "Documented POST /organizations/{organization_id}/events/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post organizations organization-id events operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organization_id}/events/]"
+        }
+      ],
+      "operation": "eventbrite.post.organizations-organization-id-events",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organization-id text-overrides operation",
+      "summary": "Documented POST /organizations/{organization_id}/text_overrides/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post organizations organization-id text-overrides operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organization_id}/text_overrides/]"
+        }
+      ],
+      "operation": "eventbrite.post.organizations-organization-id-text-overrides",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organization-id ticket-groups operation",
+      "summary": "Documented POST /organizations/{organization_id}/ticket_groups/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post organizations organization-id ticket-groups operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organization_id}/ticket_groups/]"
+        }
+      ],
+      "operation": "eventbrite.post.organizations-organization-id-ticket-groups",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organization-id venues operation",
+      "summary": "Documented POST /organizations/{organization_id}/venues/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post organizations organization-id venues operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organization_id}/venues/]"
+        }
+      ],
+      "operation": "eventbrite.post.organizations-organization-id-venues",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post organizations organization-id webhooks operation",
+      "summary": "Documented POST /organizations/{organization_id}/webhooks/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post organizations organization-id webhooks operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/organizations/{organization_id}/webhooks/]"
+        }
+      ],
+      "operation": "eventbrite.post.organizations-organization-id-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post pricing calculate-price-for-item operation",
+      "summary": "Documented POST /pricing/calculate_price_for_item/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post pricing calculate-price-for-item operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/pricing/calculate_price_for_item/]"
+        }
+      ],
+      "operation": "eventbrite.post.pricing-calculate-price-for-item",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post ticket-groups ticket-group-id operation",
+      "summary": "Documented POST /ticket_groups/{ticket_group_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post ticket-groups ticket-group-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ticket_groups/{ticket_group_id}/]"
+        }
+      ],
+      "operation": "eventbrite.post.ticket-groups-ticket-group-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 organizations organization-id events",
+      "summary": "Documented POST /v3/organizations/{organization_id}/events/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post v3 organizations organization-id events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/organizations/{organization_id}/events/"
+        }
+      ],
+      "operation": "eventbrite.post.v3-organizations-organization-id-events",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post venues venue-id operation",
+      "summary": "Documented POST /venues/{venue_id}/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post venues venue-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/venues/{venue_id}/]"
+        }
+      ],
+      "operation": "eventbrite.post.venues-venue-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post webhooks operation",
+      "summary": "Documented POST /webhooks/] (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite api post webhooks operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhooks/]"
+        }
+      ],
+      "operation": "eventbrite.post.webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "attendees list",
+      "summary": "Run the attendees ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "attendees",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite attendees list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/events/{event_id}/attendees/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "events list",
+      "summary": "Run the events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "events",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/organizations/{organization_id}/events/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "orders list",
+      "summary": "Run the orders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "orders",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite orders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/events/{event_id}/orders/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "organizations list",
+      "summary": "Run the organizations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organizations",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite organizations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/me/organizations/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "ticket classes list",
+      "summary": "Run the ticket classes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ticket_classes",
+      "source_url": "https://jsapi.apiary.io/apis/eventbriteapiv3public.source",
+      "examples": [
+        "pm eventbrite ticket classes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/events/{event_id}/ticket_classes/"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

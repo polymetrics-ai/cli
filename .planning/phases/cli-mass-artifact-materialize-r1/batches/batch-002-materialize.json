@@ -1,0 +1,785 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-002-manifest.json",
+  "candidates": 40,
+  "included": [
+    {
+      "connector": "oncehub",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+        "version": "OnceHub Booking Calendars API v2.0.0 and Booking Pages API v2.0.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3a63c75b82c464bc03dc2aca46a1f48a0028d7c8199c5cf243c0957f99379a94"
+      },
+      "artifact_operations": 42,
+      "declared_operations": 51,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 19,
+        "excluded": 27
+      },
+      "cli_commands": 51,
+      "implemented_commands": 5,
+      "named_dependency_commands": 46,
+      "flagged_discrepancies": 9,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 46
+    },
+    {
+      "connector": "oura",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+        "version": "Oura API v2.0, OpenAPI revision 1.37 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8b8ae3b61eda046c9305d868eadc258301ad60d4857307ff984bfbe115dce9e8"
+      },
+      "artifact_operations": 75,
+      "declared_operations": 77,
+      "operation_split": {
+        "executable": 35,
+        "provider_blocked": 0,
+        "excluded": 42
+      },
+      "cli_commands": 77,
+      "implemented_commands": 35,
+      "named_dependency_commands": 42,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 42
+    },
+    {
+      "connector": "nebius-ai",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "version": "Nebius OpenAI-compatible inference API 20260729-026192a63 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a"
+      },
+      "artifact_operations": 47,
+      "declared_operations": 49,
+      "operation_split": {
+        "executable": 46,
+        "provider_blocked": 0,
+        "excluded": 3
+      },
+      "cli_commands": 49,
+      "implemented_commands": 41,
+      "named_dependency_commands": 8,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 3
+    },
+    {
+      "connector": "coin-api",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/api-bricks/api-bricks-sdk/master/coinapi/market-data-api-rest/spec/openapi.yaml",
+        "version": "CoinAPI Market Data REST API; OpenAPI 3.0.4; info.version v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d1c2daf538452e8866bf9c66c24343b9099bb7f6034be4cac8f93b2fe43513a5"
+      },
+      "artifact_operations": 50,
+      "declared_operations": 51,
+      "operation_split": {
+        "executable": 9,
+        "provider_blocked": 0,
+        "excluded": 42
+      },
+      "cli_commands": 51,
+      "implemented_commands": 9,
+      "named_dependency_commands": 42,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 42
+    },
+    {
+      "connector": "pingdom",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.pingdom.com/api/API_3.1.yaml",
+        "version": "Pingdom Public API 3.1; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d05c91a3c64bbb437329c775712e5e375b2313f56ca16c8c6eeaefe6f708ddca"
+      },
+      "artifact_operations": 50,
+      "declared_operations": 50,
+      "operation_split": {
+        "executable": 21,
+        "provider_blocked": 0,
+        "excluded": 29
+      },
+      "cli_commands": 50,
+      "implemented_commands": 17,
+      "named_dependency_commands": 33,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 29
+    },
+    {
+      "connector": "dbt",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+        "version": "dbt Cloud API v2 2.0.0; OpenAPI 3.0.3; current provider-published master artifact",
+        "retrieved_at": "2026-08-09",
+        "sha256": "75bce6e7de231bf397897502ab6c4280a1ca9fe5f5657d9e9291425e1a13f1ec"
+      },
+      "artifact_operations": 52,
+      "declared_operations": 52,
+      "operation_split": {
+        "executable": 23,
+        "provider_blocked": 0,
+        "excluded": 29
+      },
+      "cli_commands": 52,
+      "implemented_commands": 22,
+      "named_dependency_commands": 30,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 29
+    },
+    {
+      "connector": "recreation",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://ridb.recreation.gov/shared/swagger/ridb.yaml",
+        "version": "RIDB API 1.0.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "9153daf6895597990b4916142d3f3d675ceacdcb73f6d13ed543cdbbfcdde81f"
+      },
+      "artifact_operations": 62,
+      "declared_operations": 68,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 55,
+        "excluded": 8
+      },
+      "cli_commands": 68,
+      "implemented_commands": 5,
+      "named_dependency_commands": 63,
+      "flagged_discrepancies": 6,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 63
+    },
+    {
+      "connector": "leadfeeder",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.leadfeeder.com/openapi.yaml",
+        "version": "2026-08-05 (OpenAPI 3.1.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b9f19d6381269bb31d08dda1149d9ffa6558c6117e268c26772feb0f27732e18"
+      },
+      "artifact_operations": 65,
+      "declared_operations": 71,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 40,
+        "excluded": 27
+      },
+      "cli_commands": 71,
+      "implemented_commands": 4,
+      "named_dependency_commands": 67,
+      "flagged_discrepancies": 6,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 67
+    },
+    {
+      "connector": "shippo",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.goshippo.com/spec/shippoapi/public-api.yaml",
+        "version": "Shippo external API OpenAPI 3.1.0; info.version 2018-02-08",
+        "retrieved_at": "2026-08-09",
+        "sha256": "13280a44853ccad05cc64baf3f67231db519ba94cdff47c6269f93362ef1feb9"
+      },
+      "artifact_operations": 73,
+      "declared_operations": 75,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 37,
+        "excluded": 34
+      },
+      "cli_commands": 75,
+      "implemented_commands": 4,
+      "named_dependency_commands": 71,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 71
+    },
+    {
+      "connector": "salesflare",
+      "artifact": {
+        "kind": "swagger",
+        "url": "https://api.salesflare.com/openapi.json",
+        "version": "Salesflare API 1.0.0; Swagger 2.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3fda4438a5540c4a81336e4c7a10c42d4a5654c79e7c186494a310f6c85a0826"
+      },
+      "artifact_operations": 72,
+      "declared_operations": 72,
+      "operation_split": {
+        "executable": 36,
+        "provider_blocked": 0,
+        "excluded": 36
+      },
+      "cli_commands": 72,
+      "implemented_commands": 36,
+      "named_dependency_commands": 36,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 36
+    },
+    {
+      "connector": "dropbox-sign",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/hellosign/hellosign-openapi/main/openapi-raw.yaml",
+        "version": "Dropbox Sign API v3; OpenAPI 3.0.3; info.version 3.0.0; 28c86b154297e6cbf9bb6bea851669e1f853a8c1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "4a1eeea3a82516c579e89070a9d9b67db379b074182e71ca10cba6eaf52e8089"
+      },
+      "artifact_operations": 75,
+      "declared_operations": 75,
+      "operation_split": {
+        "executable": 17,
+        "provider_blocked": 0,
+        "excluded": 58
+      },
+      "cli_commands": 75,
+      "implemented_commands": 17,
+      "named_dependency_commands": 58,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 58
+    },
+    {
+      "connector": "tavus",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.tavus.io/openapi.yaml",
+        "version": "Tavus Developer API Collection v1.0.0 (OpenAPI 3.0.3)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "93404ad85f5639acfa6176865dbf27c28918899d534f9b8a9e8e5744839e0caa"
+      },
+      "artifact_operations": 83,
+      "declared_operations": 84,
+      "operation_split": {
+        "executable": 25,
+        "provider_blocked": 0,
+        "excluded": 59
+      },
+      "cli_commands": 84,
+      "implemented_commands": 24,
+      "named_dependency_commands": 60,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 59
+    },
+    {
+      "connector": "thinkific",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+        "version": "Thinkific Admin API v1 (OpenAPI 3.0.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f9e6e495e928d059014360e7a05e1f07d49dd042919e2b091bd9435b34879e17"
+      },
+      "artifact_operations": 77,
+      "declared_operations": 154,
+      "operation_split": {
+        "executable": 42,
+        "provider_blocked": 49,
+        "excluded": 63
+      },
+      "cli_commands": 154,
+      "implemented_commands": 40,
+      "named_dependency_commands": 114,
+      "flagged_discrepancies": 77,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 112
+    },
+    {
+      "connector": "thinkific-courses",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.thinkific.com/openapi/thinkific-admin-api-v1.yaml",
+        "version": "Thinkific Admin API v1 (OpenAPI 3.0.1)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "f9e6e495e928d059014360e7a05e1f07d49dd042919e2b091bd9435b34879e17"
+      },
+      "artifact_operations": 77,
+      "declared_operations": 81,
+      "operation_split": {
+        "executable": 76,
+        "provider_blocked": 0,
+        "excluded": 5
+      },
+      "cli_commands": 81,
+      "implemented_commands": 50,
+      "named_dependency_commands": 31,
+      "flagged_discrepancies": 4,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 5
+    },
+    {
+      "connector": "coingecko-coins",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.coingecko.com/openapi-specs/pro-api.json",
+        "version": "CoinGecko Pro API; OpenAPI 3.0.0; info.version 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8dbdc98851fb6b6074ca114f9c5a5ea3d2c37bd7ac685b5236caa05e8197651f"
+      },
+      "artifact_operations": 87,
+      "declared_operations": 88,
+      "operation_split": {
+        "executable": 2,
+        "provider_blocked": 1,
+        "excluded": 85
+      },
+      "cli_commands": 88,
+      "implemented_commands": 2,
+      "named_dependency_commands": 86,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 86
+    },
+    {
+      "connector": "bitly",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://dev.bitly.com/v4/v4.json",
+        "version": "4.0.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "df6828f2b84bce3c5911854b3438036932a4cf982f6a663583516fe68679f10e"
+      },
+      "artifact_operations": 94,
+      "declared_operations": 181,
+      "operation_split": {
+        "executable": 28,
+        "provider_blocked": 70,
+        "excluded": 83
+      },
+      "cli_commands": 181,
+      "implemented_commands": 27,
+      "named_dependency_commands": 154,
+      "flagged_discrepancies": 87,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 153
+    },
+    {
+      "connector": "paddle",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/PaddleHQ/paddle-openapi/main/v1/openapi.yaml",
+        "version": "Paddle API v1.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "e1ac347eb3c5ff208fdbd6af9c4b3f7e9e4e9212be881468ee4f97792058734b"
+      },
+      "artifact_operations": 155,
+      "declared_operations": 155,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 51,
+        "excluded": 100
+      },
+      "cli_commands": 155,
+      "implemented_commands": 4,
+      "named_dependency_commands": 151,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 151
+    },
+    {
+      "connector": "pokeapi",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/master/openapi.yml",
+        "version": "PokéAPI v2.10.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "575d45e6ddc1c0798d127b9867532d868fc2360d1c82b9538f16e149c6420a83"
+      },
+      "artifact_operations": 100,
+      "declared_operations": 197,
+      "operation_split": {
+        "executable": 97,
+        "provider_blocked": 100,
+        "excluded": 0
+      },
+      "cli_commands": 197,
+      "implemented_commands": 97,
+      "named_dependency_commands": 100,
+      "flagged_discrepancies": 97,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 100
+    },
+    {
+      "connector": "shutterstock",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api-explorer.shutterstock.com/openapi.json",
+        "version": "Shutterstock API Explorer 1.2.0; OpenAPI 3.0.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d2e03e7f655de762ce9a9b1ea76d5ba6f5544d3db0da29eb36dd253fcd322efe"
+      },
+      "artifact_operations": 109,
+      "declared_operations": 109,
+      "operation_split": {
+        "executable": 74,
+        "provider_blocked": 0,
+        "excluded": 35
+      },
+      "cli_commands": 109,
+      "implemented_commands": 70,
+      "named_dependency_commands": 39,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 35
+    },
+    {
+      "connector": "elasticemail",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.elasticemail.com/public/v4/swagger",
+        "version": "Elastic Email REST API v4.0.0; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c01002864cae10cefc355fb7316e0c0a8cd1fc65c0bdba1579472d223de6eba7"
+      },
+      "artifact_operations": 114,
+      "declared_operations": 114,
+      "operation_split": {
+        "executable": 41,
+        "provider_blocked": 1,
+        "excluded": 72
+      },
+      "cli_commands": 114,
+      "implemented_commands": 40,
+      "named_dependency_commands": 74,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 73
+    },
+    {
+      "connector": "revenuecat",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://www.revenuecat.com/docs/redocusaurus/openapi-v2.yaml",
+        "version": "RevenueCat Developer API v2.0.0; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "304124ab484a616e82b598505f54973f4c58523fe3c28b3083b8ff8d31eaa53a"
+      },
+      "artifact_operations": 105,
+      "declared_operations": 105,
+      "operation_split": {
+        "executable": 99,
+        "provider_blocked": 2,
+        "excluded": 4
+      },
+      "cli_commands": 105,
+      "implemented_commands": 45,
+      "named_dependency_commands": 60,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 6
+    },
+    {
+      "connector": "coinmarketcap",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://pro.coinmarketcap.com/api/documentation/openapi.json",
+        "version": "CoinMarketCap Cryptocurrency API; OpenAPI 3.1.1; info.version 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "60e056a2c0a8c3ec59d63c5c976b750c5c88dac1dbe95ea6c232a8fc2cb645a7"
+      },
+      "artifact_operations": 107,
+      "declared_operations": 113,
+      "operation_split": {
+        "executable": 9,
+        "provider_blocked": 49,
+        "excluded": 55
+      },
+      "cli_commands": 113,
+      "implemented_commands": 9,
+      "named_dependency_commands": 104,
+      "flagged_discrepancies": 6,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 104
+    },
+    {
+      "connector": "circleci",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://circleci.com/api/v2/openapi.json",
+        "version": "CircleCI API v2; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "530ae97d7f14359d755d4f22dcab55af4e81e62b676b2ed2bc7bb762b0fcf2d2"
+      },
+      "artifact_operations": 111,
+      "declared_operations": 111,
+      "operation_split": {
+        "executable": 16,
+        "provider_blocked": 0,
+        "excluded": 95
+      },
+      "cli_commands": 111,
+      "implemented_commands": 15,
+      "named_dependency_commands": 96,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 95
+    },
+    {
+      "connector": "concord",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.doc.concordnow.com/concord-openapi-bundled.yaml",
+        "version": "Concord API v1.0; OpenAPI 3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c32f017d0044b456f8ef4922c99f594b8d20289c1baca1aaba2075d844572abd"
+      },
+      "artifact_operations": 118,
+      "declared_operations": 119,
+      "operation_split": {
+        "executable": 43,
+        "provider_blocked": 0,
+        "excluded": 76
+      },
+      "cli_commands": 119,
+      "implemented_commands": 42,
+      "named_dependency_commands": 77,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 76
+    },
+    {
+      "connector": "configcat",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://api.configcat.com/docs/v1/swagger.json",
+        "version": "ConfigCat Public Management API v1; OpenAPI 3.0.4; info.version v1",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6b4d53bc1455c7193e09c964ad5077cb951d094740a482c347ccd54096cd0a28"
+      },
+      "artifact_operations": 123,
+      "declared_operations": 123,
+      "operation_split": {
+        "executable": 39,
+        "provider_blocked": 5,
+        "excluded": 79
+      },
+      "cli_commands": 123,
+      "implemented_commands": 39,
+      "named_dependency_commands": 84,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 84
+    },
+    {
+      "connector": "coda",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://coda.io/apis/v1/openapi.yaml",
+        "version": "Superhuman Docs (formerly Coda) API v1; OpenAPI 3.0.0; info.version 1.6.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3661f14cae08d9fae66d25761487d95cfcb26f4f8bee18f7c2642e709b59aac3"
+      },
+      "artifact_operations": 124,
+      "declared_operations": 124,
+      "operation_split": {
+        "executable": 15,
+        "provider_blocked": 51,
+        "excluded": 58
+      },
+      "cli_commands": 124,
+      "implemented_commands": 13,
+      "named_dependency_commands": 111,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 109
+    },
+    {
+      "connector": "pylon",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://static.usepylon.com/openapi.json",
+        "version": "Pylon API 1.0.0; OpenAPI 3.0.3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0ab554396c4e5d86490ec42dd9d0eb0db07c4eb792bf760285d1bf00cc2054c1"
+      },
+      "artifact_operations": 137,
+      "declared_operations": 138,
+      "operation_split": {
+        "executable": 133,
+        "provider_blocked": 1,
+        "excluded": 4
+      },
+      "cli_commands": 138,
+      "implemented_commands": 122,
+      "named_dependency_commands": 16,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 5
+    },
+    {
+      "connector": "gocardless",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.gocardless.com/openapi-schema-public.json",
+        "version": "OpenAPI 3.0.0; GoCardless API 2015-07-06; schema 0.109.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "c24f8b913580ca54a55b3b94d7745a0b4472b4a473a4bcaad9e7d86b3db85b98"
+      },
+      "artifact_operations": 137,
+      "declared_operations": 146,
+      "operation_split": {
+        "executable": 139,
+        "provider_blocked": 3,
+        "excluded": 4
+      },
+      "cli_commands": 146,
+      "implemented_commands": 94,
+      "named_dependency_commands": 52,
+      "flagged_discrepancies": 9,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 7
+    },
+    {
+      "connector": "shortcut",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.shortcut.com/api/rest/v3/shortcut.openapi.json",
+        "version": "Shortcut REST API v3; OpenAPI 3.0.0; info.version 3.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "578733295b71148cda413f9d6842cad0e161f81fb60e56d1aa92703c3ab629e9"
+      },
+      "artifact_operations": 143,
+      "declared_operations": 144,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 85,
+        "excluded": 55
+      },
+      "cli_commands": 144,
+      "implemented_commands": 4,
+      "named_dependency_commands": 140,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 140
+    },
+    {
+      "connector": "tmdb",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developer.themoviedb.org/openapi/tmdb-api.json",
+        "version": "v3 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1c709375fe994e58c5a35aba7c9abfa7f28aa7103ed6c2052ea5ab0b62af081b"
+      },
+      "artifact_operations": 152,
+      "declared_operations": 152,
+      "operation_split": {
+        "executable": 131,
+        "provider_blocked": 0,
+        "excluded": 21
+      },
+      "cli_commands": 152,
+      "implemented_commands": 131,
+      "named_dependency_commands": 21,
+      "flagged_discrepancies": 0,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 21
+    },
+    {
+      "connector": "clockodo",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.clockodo.com/openapi.yaml",
+        "version": "Clockodo REST API; OpenAPI 3.1.0; info.version 2026-07-31",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0f27ed36400c320cb9117fa700299d7f3a1469978af8ea9e440d85005da992d6"
+      },
+      "artifact_operations": 191,
+      "declared_operations": 261,
+      "operation_split": {
+        "executable": 31,
+        "provider_blocked": 71,
+        "excluded": 159
+      },
+      "cli_commands": 261,
+      "implemented_commands": 31,
+      "named_dependency_commands": 230,
+      "flagged_discrepancies": 70,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 230
+    },
+    {
+      "connector": "orb",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://docs.withorb.com/api-reference/orb-openapi.json",
+        "version": "Orb API Reference v1.0 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "02be3e5b19cba7fb9c618b08f68f11895fd982c95134c1b76dec6c13c2d837c1"
+      },
+      "artifact_operations": 145,
+      "declared_operations": 149,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 67,
+        "excluded": 78
+      },
+      "cli_commands": 149,
+      "implemented_commands": 4,
+      "named_dependency_commands": 145,
+      "flagged_discrepancies": 4,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 145
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "judge-me-reviews",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact path \"reviews/{id}\" must be non-empty and connector-relative), and official reference fallback \"https://judge.me/api/docs\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "printify",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 40 operation(s), below the ledger's 44; official reference fallback \"https://developers.printify.com/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "squarespace",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /1.0/webhook_subscriptions contains callbacks that cannot be represented as provider request paths), and official reference fallback \"https://developers.squarespace.com/commerce-apis/contacts\" failed: artifact operation inventory is unknown: official reference \"https://developers.squarespace.com/commerce-apis/latest/schema-processor-version-version-latest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact operation inventory is unknown: operation POST /1.0/webhook_subscriptions contains callbacks that cannot be represented as provider request paths; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "k6-cloud",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 51 operation(s), below the ledger's 57; official reference fallback \"https://grafana.com/docs/grafana-cloud/testing/k6/reference/cloud-rest-api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "luma",
+      "stage": "coverage",
+      "reason": "existing api surface duplicates GET /v1/events/get"
+    },
+    {
+      "connector": "finnhub",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /ai-chat has unsupported field \"examples\"), and official reference fallback \"https://finnhub.io/docs/api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "dixa",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://docs.dixa.io/openapi/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "clickup-api",
+      "stage": "cli_surface",
+      "reason": "write action \"set_custom_field_value\" flags: record field \"value\" is not declared"
+    }
+  ]
+}

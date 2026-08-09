@@ -1,0 +1,711 @@
+{
+  "operations": [
+    {
+      "id": "oncehub.get.booking-calendars",
+      "kind": "rest_read",
+      "summary": "GET /booking-calendars",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/booking-calendars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.booking-calendars-id",
+      "kind": "rest_read",
+      "summary": "GET /booking-calendars/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/booking-calendars/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.booking-calendars-id-one-time-links",
+      "kind": "rest_write",
+      "summary": "POST /booking-calendars/{id}/one-time-links",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/booking-calendars/{id}/one-time-links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.booking-calendars-id-schedule",
+      "kind": "rest_write",
+      "summary": "POST /booking-calendars/{id}/schedule",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/booking-calendars/{id}/schedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.booking-calendars-id-time-slots",
+      "kind": "rest_read",
+      "summary": "GET /booking-calendars/{id}/time-slots",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/booking-calendars/{id}/time-slots",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.bookings",
+      "kind": "rest_read",
+      "summary": "GET /bookings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bookings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.bookings-id",
+      "kind": "rest_read",
+      "summary": "GET /bookings/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bookings/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.bookings-id-cancel",
+      "kind": "rest_write",
+      "summary": "POST /bookings/{id}/cancel",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bookings/{id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.bookings-id-no-show",
+      "kind": "rest_write",
+      "summary": "POST /bookings/{id}/no-show",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bookings/{id}/no-show",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.bookings-id-reassign",
+      "kind": "rest_write",
+      "summary": "POST /bookings/{id}/reassign",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bookings/{id}/reassign",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.bookings-id-request-reschedule",
+      "kind": "rest_write",
+      "summary": "POST /bookings/{id}/request-reschedule",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bookings/{id}/request-reschedule",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.contacts",
+      "kind": "rest_read",
+      "summary": "GET /contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.contacts",
+      "kind": "rest_write",
+      "summary": "POST /contacts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.contacts-id",
+      "kind": "rest_read",
+      "summary": "GET /contacts/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.patch.contacts-id",
+      "kind": "rest_write",
+      "summary": "PATCH /contacts/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.delete.contacts-id",
+      "kind": "rest_write",
+      "summary": "DELETE /contacts/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/contacts/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.notifications-sms",
+      "kind": "rest_read",
+      "summary": "GET /notifications/sms",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/notifications/sms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.teams",
+      "kind": "rest_read",
+      "summary": "GET /teams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.teams-id",
+      "kind": "rest_read",
+      "summary": "GET /teams/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.test",
+      "kind": "rest_read",
+      "summary": "GET /test",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.users",
+      "kind": "rest_read",
+      "summary": "GET /users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.users-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.patch.users-id",
+      "kind": "rest_write",
+      "summary": "PATCH /users/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.delete.users-id",
+      "kind": "rest_write",
+      "summary": "DELETE /users/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.users-id-scheduling-availability",
+      "kind": "rest_read",
+      "summary": "GET /users/{id}/scheduling-availability",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{id}/scheduling-availability",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.patch.users-id-scheduling-availability",
+      "kind": "rest_write",
+      "summary": "PATCH /users/{id}/scheduling-availability",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/users/{id}/scheduling-availability",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.v2-availability",
+      "kind": "rest_read",
+      "summary": "GET /v2/availability",
+      "description": "/v2/availability is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/availability",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.v2-bookings",
+      "kind": "rest_write",
+      "summary": "POST /v2/bookings",
+      "description": "/v2/bookings is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/bookings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.delete.v2-bookings-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/bookings/{id}",
+      "description": "/v2/bookings/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/bookings/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.v2-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhooks",
+      "description": "/v2/webhooks is an additional documented read resource not implemented by legacy; this bundle does not declare its stream schema, pagination contract, or fixtures",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.webhooks",
+      "kind": "rest_read",
+      "summary": "GET /webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.get.webhooks-id",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.delete.webhooks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oncehub.webhook.booking-canceled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK booking.canceled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK booking.canceled#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.booking-canceled-reschedule-requested-post",
+      "kind": "composite",
+      "summary": "WEBHOOK booking.canceled_reschedule_requested#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK booking.canceled_reschedule_requested#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.booking-canceled-then-rescheduled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK booking.canceled_then_rescheduled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK booking.canceled_then_rescheduled#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.booking-completed-post",
+      "kind": "composite",
+      "summary": "WEBHOOK booking.completed#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK booking.completed#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.booking-no-show-post",
+      "kind": "composite",
+      "summary": "WEBHOOK booking.no_show#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK booking.no_show#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.booking-reassigned-post",
+      "kind": "composite",
+      "summary": "WEBHOOK booking.reassigned#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK booking.reassigned#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.booking-rescheduled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK booking.rescheduled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK booking.rescheduled#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.booking-scheduled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK booking.scheduled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK booking.scheduled#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.conversation-abandoned-post",
+      "kind": "composite",
+      "summary": "WEBHOOK conversation.abandoned#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK conversation.abandoned#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.conversation-closed-post",
+      "kind": "composite",
+      "summary": "WEBHOOK conversation.closed#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK conversation.closed#POST"
+        ]
+      }
+    },
+    {
+      "id": "oncehub.webhook.conversation-started-post",
+      "kind": "composite",
+      "summary": "WEBHOOK conversation.started#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://developers.oncehub.com/booking-calendars-api.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK conversation.started#POST"
+        ]
+      }
+    }
+  ]
+}

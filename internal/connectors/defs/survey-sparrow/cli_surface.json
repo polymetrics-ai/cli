@@ -1,0 +1,2722 @@
+{
+  "tagline": "Run SurveySparrow's declared streams and reverse-ETL actions.",
+  "usage": "pm survey-sparrow \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v3 audit-logs",
+        "api get v3 audit-logs events",
+        "api get v3 audit-logs id",
+        "api get v3 channels id",
+        "api get v3 contact-lists id",
+        "api get v3 contacts id",
+        "api get v3 contacts status token",
+        "api get v3 languages",
+        "api get v3 metrics",
+        "api get v3 metrics responses",
+        "api get v3 reminders id",
+        "api get v3 reports",
+        "api get v3 reputation app-platforms id",
+        "api get v3 reputation platforms id",
+        "api get v3 reputation reviews id",
+        "api get v3 response-properties",
+        "api get v3 responses id",
+        "api get v3 responses status token",
+        "api get v3 survey approvers",
+        "api get v3 survey subject evaluators",
+        "api get v3 survey subject report",
+        "api get v3 survey subjects",
+        "api get v3 survey-folders id",
+        "api get v3 surveys id",
+        "api get v3 targets",
+        "api get v3 ticket-fields id",
+        "api get v3 tickets batch status token",
+        "api get v3 tickets id",
+        "api get v3 tickets id comments",
+        "api get v3 translation export",
+        "api get v3 users id",
+        "channels list",
+        "contact lists list",
+        "contact properties list",
+        "contacts list",
+        "email themes list",
+        "expressions list",
+        "questions list",
+        "reminders list",
+        "reputation app platforms list",
+        "reputation platforms list",
+        "reputation reviews list",
+        "responses list",
+        "roles list",
+        "survey folders list",
+        "surveys list",
+        "teams list",
+        "templates list",
+        "ticket fields list",
+        "tickets list",
+        "users list",
+        "variables list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v3 audit-logs events id",
+        "api delete v3 responses id",
+        "api delete v3 sections section-id",
+        "api delete v3 translation",
+        "api post v3 audit-logs events",
+        "api post v3 channels create-unique-links",
+        "api post v3 channels id clone",
+        "api post v3 channels id summary",
+        "api post v3 contacts batch",
+        "api post v3 language",
+        "api post v3 responses",
+        "api post v3 responses batch",
+        "api post v3 responses new",
+        "api post v3 sections",
+        "api post v3 survey invite",
+        "api post v3 surveys id clone",
+        "api post v3 tickets batch",
+        "api post v3 tickets id comments",
+        "api post v3 translation",
+        "api post v3 variables batch",
+        "api put v3 channels id",
+        "api put v3 responses id",
+        "api put v3 responses response-id complete",
+        "api put v3 responses response-id update",
+        "api put v3 sections section-id",
+        "api put v3 survey subject updateinvite",
+        "api put v3 translation",
+        "create channel apply",
+        "create contact apply",
+        "create contact list apply",
+        "create contact property apply",
+        "create question apply",
+        "create reminder apply",
+        "create survey apply",
+        "create survey folder apply",
+        "create team apply",
+        "create ticket apply",
+        "create user apply",
+        "create variable apply",
+        "create webhook apply",
+        "delete channel apply",
+        "delete contact apply",
+        "delete contact list apply",
+        "delete contact property apply",
+        "delete question apply",
+        "delete reminder apply",
+        "delete survey folder apply",
+        "delete ticket apply",
+        "delete user apply",
+        "delete variable apply",
+        "delete webhook apply",
+        "update contact apply",
+        "update contact list apply",
+        "update contact property apply",
+        "update question apply",
+        "update survey apply",
+        "update survey folder apply",
+        "update ticket apply",
+        "update user apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v3 audit-logs events id",
+      "summary": "Documented DELETE /v3/audit_logs/events/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api delete v3 audit-logs events id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/audit_logs/events/:id"
+        }
+      ],
+      "operation": "survey-sparrow.delete.v3-audit-logs-events-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 responses id",
+      "summary": "Documented DELETE /v3/responses/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api delete v3 responses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/responses/:id"
+        }
+      ],
+      "operation": "survey-sparrow.delete.v3-responses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 sections section-id",
+      "summary": "Documented DELETE /v3/sections/:section_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api delete v3 sections section-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/sections/:section_id"
+        }
+      ],
+      "operation": "survey-sparrow.delete.v3-sections-section-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v3 translation",
+      "summary": "Documented DELETE /v3/translation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api delete v3 translation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/translation"
+        }
+      ],
+      "operation": "survey-sparrow.delete.v3-translation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v3 audit-logs",
+      "summary": "Documented GET /v3/audit_logs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 audit-logs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/audit_logs"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-audit-logs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 audit-logs events",
+      "summary": "Documented GET /v3/audit_logs/events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 audit-logs events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/audit_logs/events"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-audit-logs-events",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 audit-logs id",
+      "summary": "Documented GET /v3/audit_logs/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 audit-logs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/audit_logs/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-audit-logs-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 channels id",
+      "summary": "Documented GET /v3/channels/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 channels id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/channels/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-channels-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 contact-lists id",
+      "summary": "Documented GET /v3/contact_lists/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 contact-lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contact_lists/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-contact-lists-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 contacts id",
+      "summary": "Documented GET /v3/contacts/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contacts/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-contacts-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 contacts status token",
+      "summary": "Documented GET /v3/contacts/status/:token (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 contacts status token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contacts/status/:token"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-contacts-status-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 languages",
+      "summary": "Documented GET /v3/languages (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 languages --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/languages"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-languages",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 metrics",
+      "summary": "Documented GET /v3/metrics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 metrics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/metrics"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-metrics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 metrics responses",
+      "summary": "Documented GET /v3/metrics/responses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 metrics responses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/metrics/responses"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-metrics-responses",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 reminders id",
+      "summary": "Documented GET /v3/reminders/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 reminders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reminders/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-reminders-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 reports",
+      "summary": "Documented GET /v3/reports (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 reports --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reports"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-reports",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 reputation app-platforms id",
+      "summary": "Documented GET /v3/reputation/app_platforms/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 reputation app-platforms id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reputation/app_platforms/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-reputation-app-platforms-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 reputation platforms id",
+      "summary": "Documented GET /v3/reputation/platforms/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 reputation platforms id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reputation/platforms/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-reputation-platforms-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 reputation reviews id",
+      "summary": "Documented GET /v3/reputation/reviews/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 reputation reviews id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reputation/reviews/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-reputation-reviews-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 response-properties",
+      "summary": "Documented GET /v3/response_properties (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 response-properties --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/response_properties"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-response-properties",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 responses id",
+      "summary": "Documented GET /v3/responses/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 responses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/responses/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-responses-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 responses status token",
+      "summary": "Documented GET /v3/responses/status/:token (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 responses status token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/responses/status/:token"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-responses-status-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 survey approvers",
+      "summary": "Documented GET /v3/survey/approvers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 survey approvers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey/approvers"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-survey-approvers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 survey subject evaluators",
+      "summary": "Documented GET /v3/survey/subject/evaluators (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 survey subject evaluators --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey/subject/evaluators"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-survey-subject-evaluators",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 survey subject report",
+      "summary": "Documented GET /v3/survey/subject/report (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 survey subject report --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey/subject/report"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-survey-subject-report",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 survey subjects",
+      "summary": "Documented GET /v3/survey/subjects (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 survey subjects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey/subjects"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-survey-subjects",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 survey-folders id",
+      "summary": "Documented GET /v3/survey_folders/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 survey-folders id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey_folders/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-survey-folders-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 surveys id",
+      "summary": "Documented GET /v3/surveys/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 surveys id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-surveys-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 targets",
+      "summary": "Documented GET /v3/targets (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 targets --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/targets"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-targets",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 ticket-fields id",
+      "summary": "Documented GET /v3/ticket_fields/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 ticket-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/ticket_fields/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-ticket-fields-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 tickets batch status token",
+      "summary": "Documented GET /v3/tickets/batch/status/:token (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 tickets batch status token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/tickets/batch/status/:token"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-tickets-batch-status-token",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 tickets id",
+      "summary": "Documented GET /v3/tickets/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 tickets id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/tickets/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-tickets-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 tickets id comments",
+      "summary": "Documented GET /v3/tickets/:id/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 tickets id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/tickets/:id/comments"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-tickets-id-comments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 translation export",
+      "summary": "Documented GET /v3/translation/export (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 translation export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/translation/export"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-translation-export",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v3 users id",
+      "summary": "Documented GET /v3/users/:id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api get v3 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users/:id"
+        }
+      ],
+      "operation": "survey-sparrow.get.v3-users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v3 audit-logs events",
+      "summary": "Documented POST /v3/audit_logs/events (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 audit-logs events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/audit_logs/events"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-audit-logs-events",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 channels create-unique-links",
+      "summary": "Documented POST /v3/channels/create_unique_links (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 channels create-unique-links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/channels/create_unique_links"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-channels-create-unique-links",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 channels id clone",
+      "summary": "Documented POST /v3/channels/:id/clone (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 channels id clone --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/channels/:id/clone"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-channels-id-clone",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 channels id summary",
+      "summary": "Documented POST /v3/channels/:id/summary (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 channels id summary --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/channels/:id/summary"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-channels-id-summary",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 contacts batch",
+      "summary": "Documented POST /v3/contacts/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 contacts batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contacts/batch"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-contacts-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 language",
+      "summary": "Documented POST /v3/language (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/language"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 responses",
+      "summary": "Documented POST /v3/responses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 responses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/responses"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-responses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 responses batch",
+      "summary": "Documented POST /v3/responses/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 responses batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/responses/batch"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-responses-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 responses new",
+      "summary": "Documented POST /v3/responses/new (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 responses new --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/responses/new"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-responses-new",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 sections",
+      "summary": "Documented POST /v3/sections (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 sections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/sections"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-sections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 survey invite",
+      "summary": "Documented POST /v3/survey/invite (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 survey invite --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/survey/invite"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-survey-invite",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 surveys id clone",
+      "summary": "Documented POST /v3/surveys/:id/clone (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 surveys id clone --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/surveys/:id/clone"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-surveys-id-clone",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 tickets batch",
+      "summary": "Documented POST /v3/tickets/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 tickets batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/tickets/batch"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-tickets-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 tickets id comments",
+      "summary": "Documented POST /v3/tickets/:id/comments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 tickets id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/tickets/:id/comments"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-tickets-id-comments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 translation",
+      "summary": "Documented POST /v3/translation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 translation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/translation"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-translation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v3 variables batch",
+      "summary": "Documented POST /v3/variables/batch (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api post v3 variables batch --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/variables/batch"
+        }
+      ],
+      "operation": "survey-sparrow.post.v3-variables-batch",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 channels id",
+      "summary": "Documented PUT /v3/channels/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api put v3 channels id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/channels/:id"
+        }
+      ],
+      "operation": "survey-sparrow.put.v3-channels-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 responses id",
+      "summary": "Documented PUT /v3/responses/:id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api put v3 responses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/responses/:id"
+        }
+      ],
+      "operation": "survey-sparrow.put.v3-responses-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 responses response-id complete",
+      "summary": "Documented PUT /v3/responses/:response_id/complete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api put v3 responses response-id complete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/responses/:response_id/complete"
+        }
+      ],
+      "operation": "survey-sparrow.put.v3-responses-response-id-complete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 responses response-id update",
+      "summary": "Documented PUT /v3/responses/:response_id/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api put v3 responses response-id update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/responses/:response_id/update"
+        }
+      ],
+      "operation": "survey-sparrow.put.v3-responses-response-id-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 sections section-id",
+      "summary": "Documented PUT /v3/sections/:section_id (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api put v3 sections section-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/sections/:section_id"
+        }
+      ],
+      "operation": "survey-sparrow.put.v3-sections-section-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 survey subject updateinvite",
+      "summary": "Documented PUT /v3/survey/subject/updateinvite (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api put v3 survey subject updateinvite --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/survey/subject/updateinvite"
+        }
+      ],
+      "operation": "survey-sparrow.put.v3-survey-subject-updateinvite",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v3 translation",
+      "summary": "Documented PUT /v3/translation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow api put v3 translation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/translation"
+        }
+      ],
+      "operation": "survey-sparrow.put.v3-translation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "channels list",
+      "summary": "Run the channels ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "channels",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow channels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/channels"
+        }
+      ]
+    },
+    {
+      "path": "contact lists list",
+      "summary": "Run the contact lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_lists",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow contact lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contact_lists"
+        }
+      ]
+    },
+    {
+      "path": "contact properties list",
+      "summary": "Run the contact properties ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_properties",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow contact properties list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contact_properties"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/contacts"
+        }
+      ]
+    },
+    {
+      "path": "create channel apply",
+      "summary": "Plan and execute the create channel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_channel",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create channel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/channels"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contacts"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact list apply",
+      "summary": "Plan and execute the create contact list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact_list",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create contact list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contact_lists"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create contact property apply",
+      "summary": "Plan and execute the create contact property reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact_property",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Required label record field.",
+          "maps_to": "record.label",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create contact property apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/contact_properties"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create question apply",
+      "summary": "Plan and execute the create question reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_question",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "survey_id",
+          "type": "integer",
+          "summary": "Required survey id record field.",
+          "maps_to": "record.survey_id",
+          "required": true
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "summary": "Required text record field.",
+          "maps_to": "record.text",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create question apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/questions"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create reminder apply",
+      "summary": "Plan and execute the create reminder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_reminder",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "channel_id",
+          "type": "integer",
+          "summary": "Required channel id record field.",
+          "maps_to": "record.channel_id",
+          "required": true
+        },
+        {
+          "name": "custom_footer",
+          "type": "boolean",
+          "summary": "Required custom footer record field.",
+          "maps_to": "record.custom_footer",
+          "required": true
+        },
+        {
+          "name": "embed_first_question",
+          "type": "boolean",
+          "summary": "Required embed first question record field.",
+          "maps_to": "record.embed_first_question",
+          "required": true
+        },
+        {
+          "name": "frequency",
+          "type": "string",
+          "summary": "Required frequency record field.",
+          "maps_to": "record.frequency",
+          "required": true
+        },
+        {
+          "name": "interval",
+          "type": "integer",
+          "summary": "Required interval record field.",
+          "maps_to": "record.interval",
+          "required": true
+        },
+        {
+          "name": "survey_id",
+          "type": "integer",
+          "summary": "Required survey id record field.",
+          "maps_to": "record.survey_id",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create reminder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/reminders"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create survey apply",
+      "summary": "Plan and execute the create survey reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_survey",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "survey_type",
+          "type": "string",
+          "summary": "Required survey type record field.",
+          "maps_to": "record.survey_type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create survey apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/surveys"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create survey folder apply",
+      "summary": "Plan and execute the create survey folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_survey_folder",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create survey folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/survey_folders"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create team apply",
+      "summary": "Plan and execute the create team reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_team",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create team apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/teams"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create ticket apply",
+      "summary": "Plan and execute the create ticket reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_ticket",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "priority",
+          "type": "integer",
+          "summary": "Required priority record field.",
+          "maps_to": "record.priority",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "integer",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "summary": "Required subject record field.",
+          "maps_to": "record.subject",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create ticket apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/tickets"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create user apply",
+      "summary": "Plan and execute the create user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "role_id",
+          "type": "integer",
+          "summary": "Required role id record field.",
+          "maps_to": "record.role_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/users"
+        }
+      ],
+      "risk": "external mutation creating a live user account with console access; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create variable apply",
+      "summary": "Plan and execute the create variable reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_variable",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "label",
+          "type": "string",
+          "summary": "Required label record field.",
+          "maps_to": "record.label",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "survey_id",
+          "type": "integer",
+          "summary": "Required survey id record field.",
+          "maps_to": "record.survey_id",
+          "required": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Required type record field.",
+          "maps_to": "record.type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create variable apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/variables"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "http_method",
+          "type": "string",
+          "summary": "Required http method record field.",
+          "maps_to": "record.http_method",
+          "required": true
+        },
+        {
+          "name": "survey_id",
+          "type": "integer",
+          "summary": "Required survey id record field.",
+          "maps_to": "record.survey_id",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v3/webhooks"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete channel apply",
+      "summary": "Plan and execute the delete channel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_channel",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete channel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/channels/:id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/contacts/:id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact list apply",
+      "summary": "Plan and execute the delete contact list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact_list",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete contact list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/contact_lists/:id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact property apply",
+      "summary": "Plan and execute the delete contact property reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact_property",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete contact property apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/contact_properties/:id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete question apply",
+      "summary": "Plan and execute the delete question reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_question",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "question_id",
+          "type": "integer",
+          "summary": "Required question id record field.",
+          "maps_to": "record.question_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete question apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/questions/:question_id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete reminder apply",
+      "summary": "Plan and execute the delete reminder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_reminder",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete reminder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/reminders/:id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete survey folder apply",
+      "summary": "Plan and execute the delete survey folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_survey_folder",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete survey folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/survey_folders/:id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete ticket apply",
+      "summary": "Plan and execute the delete ticket reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ticket",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete ticket apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/tickets/:id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/users/:id"
+        }
+      ],
+      "risk": "irreversible external deletion of a user account; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete variable apply",
+      "summary": "Plan and execute the delete variable reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_variable",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "variable_id",
+          "type": "integer",
+          "summary": "Required variable id record field.",
+          "maps_to": "record.variable_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete variable apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/variables/:variable_id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v3/webhooks/:id"
+        }
+      ],
+      "risk": "irreversible external deletion; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "email themes list",
+      "summary": "Run the email themes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "email_themes",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow email themes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/email_themes"
+        }
+      ]
+    },
+    {
+      "path": "expressions list",
+      "summary": "Run the expressions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "expressions",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow expressions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/expressions"
+        }
+      ]
+    },
+    {
+      "path": "questions list",
+      "summary": "Run the questions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "questions",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow questions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/questions"
+        }
+      ]
+    },
+    {
+      "path": "reminders list",
+      "summary": "Run the reminders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reminders",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow reminders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reminders"
+        }
+      ]
+    },
+    {
+      "path": "reputation app platforms list",
+      "summary": "Run the reputation app platforms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reputation_app_platforms",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow reputation app platforms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reputation/app_platforms"
+        }
+      ]
+    },
+    {
+      "path": "reputation platforms list",
+      "summary": "Run the reputation platforms ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reputation_platforms",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow reputation platforms list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reputation/platforms"
+        }
+      ]
+    },
+    {
+      "path": "reputation reviews list",
+      "summary": "Run the reputation reviews ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "reputation_reviews",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow reputation reviews list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/reputation/reviews"
+        }
+      ]
+    },
+    {
+      "path": "responses list",
+      "summary": "Run the responses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "responses",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow responses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/responses"
+        }
+      ]
+    },
+    {
+      "path": "roles list",
+      "summary": "Run the roles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow roles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/roles"
+        }
+      ]
+    },
+    {
+      "path": "survey folders list",
+      "summary": "Run the survey folders ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "survey_folders",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow survey folders list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/survey_folders"
+        }
+      ]
+    },
+    {
+      "path": "surveys list",
+      "summary": "Run the surveys ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "surveys",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow surveys list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/surveys"
+        }
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "Run the teams ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow teams list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/teams"
+        }
+      ]
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/templates"
+        }
+      ]
+    },
+    {
+      "path": "ticket fields list",
+      "summary": "Run the ticket fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ticket_fields",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow ticket fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/ticket_fields"
+        }
+      ]
+    },
+    {
+      "path": "tickets list",
+      "summary": "Run the tickets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tickets",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow tickets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/tickets"
+        }
+      ]
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/contacts/:id"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact list apply",
+      "summary": "Plan and execute the update contact list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact_list",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow update contact list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/contact_lists/:id"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact property apply",
+      "summary": "Plan and execute the update contact property reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact_property",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow update contact property apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/contact_properties/:id"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update question apply",
+      "summary": "Plan and execute the update question reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_question",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "question_id",
+          "type": "integer",
+          "summary": "Required question id record field.",
+          "maps_to": "record.question_id",
+          "required": true
+        },
+        {
+          "name": "survey_id",
+          "type": "integer",
+          "summary": "Required survey id record field.",
+          "maps_to": "record.survey_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow update question apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/questions/:question_id"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update survey apply",
+      "summary": "Plan and execute the update survey reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_survey",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow update survey apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/surveys/:id"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update survey folder apply",
+      "summary": "Plan and execute the update survey folder reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_survey_folder",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow update survey folder apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/survey_folders/:id"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update ticket apply",
+      "summary": "Plan and execute the update ticket reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_ticket",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow update ticket apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/tickets/:id"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v3/users/:id"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm survey-sparrow update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v3/webhooks/:id"
+        }
+      ],
+      "risk": "external mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/users"
+        }
+      ]
+    },
+    {
+      "path": "variables list",
+      "summary": "Run the variables ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "variables",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow variables list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/variables"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://developers.surveysparrow.com/rest-apis/",
+      "examples": [
+        "pm survey-sparrow webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v3/webhooks"
+        }
+      ]
+    }
+  ]
+}

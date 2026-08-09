@@ -1,0 +1,64 @@
+{
+  "operations": [
+    {
+      "id": "cimis.get.api-data",
+      "kind": "rest_read",
+      "summary": "GET /api/data",
+      "description": "records live nested at Data.Providers[].Records[] (an array within an array; the engine's RecordsAt only descends object keys via a dotted path, and cannot flatten across a dynamic number of provider entries), and each record's data-item fields (e.g. DayAirTmpAvg) are a DYNAMIC set of nested {Value,Qc,Unit} objects (driven by the requested dataItems config) each of which legacy flattens into 3 synthetic sibling fields (\u003cItem\u003e_Value/_Qc/_Unit) per key present -- there is no dotted-path wildcard or per-key dynamic-flatten primitive in computed_fields. Genuine ENGINE_GAP, tracked for a follow-up wave; covers both the daily and hourly legacy streams.",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/data",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "cimis.get.api-spatialzipcode-zipcode",
+      "kind": "rest_read",
+      "summary": "GET /api/spatialzipcode/{zipCode}",
+      "description": "single-zip-code filter of the same /api/spatialzipcode resource already covered whole by the spatial_zip_codes stream",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/spatialzipcode/{zipCode}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "cimis.get.api-station-stationnumber",
+      "kind": "rest_read",
+      "summary": "GET /api/station/{stationNumber}",
+      "description": "single-station-by-number filter of the same /api/station resource already covered whole by the stations stream; the engine's declarative read dialect has no per-record path-parameter filter primitive for a list stream, and a full station-list read already returns every station this endpoint would return individually",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/station/{stationNumber}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "cimis.get.api-stationzipcode-zipcode",
+      "kind": "rest_read",
+      "summary": "GET /api/stationzipcode/{zipCode}",
+      "description": "single-zip-code filter of the same /api/stationzipcode resource already covered whole by the station_zip_codes stream",
+      "source_url": "https://et.water.ca.gov/Rest/Index",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/stationzipcode/{zipCode}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

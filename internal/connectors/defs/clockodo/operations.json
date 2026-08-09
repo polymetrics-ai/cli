@@ -1,0 +1,3563 @@
+{
+  "operations": [
+    {
+      "id": "clockodo.post.api-absences",
+      "kind": "rest_write",
+      "summary": "POST /api/absences",
+      "description": "creates an absence (vacation/sick-leave) request; sensitive HR-workflow mutation, no demonstrated write demand alongside the read-only absences stream",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/absences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.api-absences-id",
+      "kind": "rest_read",
+      "summary": "GET /api/absences/{id}",
+      "description": "single-absence detail already reachable via the absences stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/absences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.api-absences-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/absences/{id}",
+      "description": "updates/approves an absence request; sensitive HR-workflow mutation, no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/absences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.api-absences-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/absences/{id}",
+      "description": "deletes an absence request; sensitive HR-workflow mutation, no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/absences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.api-holidayscarry",
+      "kind": "rest_write",
+      "summary": "POST /api/holidayscarry",
+      "description": "creates a holiday-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand alongside the read-only holidays_carry stream",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/holidayscarry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.api-holidayscarry-users-id-year",
+      "kind": "rest_read",
+      "summary": "GET /api/holidayscarry/{users_id}/{year}",
+      "description": "single-carryover-row detail already reachable via the holidays_carry stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/holidayscarry/{users_id}/{year}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.api-holidayscarry-users-id-year",
+      "kind": "rest_write",
+      "summary": "PUT /api/holidayscarry/{users_id}/{year}",
+      "description": "updates a holiday-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/holidayscarry/{users_id}/{year}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.api-holidayscarry-users-id-year",
+      "kind": "rest_write",
+      "summary": "DELETE /api/holidayscarry/{users_id}/{year}",
+      "description": "deletes a holiday-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/holidayscarry/{users_id}/{year}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.api-holidaysquota",
+      "kind": "rest_write",
+      "summary": "POST /api/holidaysquota",
+      "description": "creates a holiday-quota row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand alongside the read-only holidays_quota stream",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/holidaysquota",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.api-holidaysquota-id",
+      "kind": "rest_read",
+      "summary": "GET /api/holidaysquota/{id}",
+      "description": "single-quota-row detail already reachable via the holidays_quota stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/holidaysquota/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.api-holidaysquota-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/holidaysquota/{id}",
+      "description": "updates a holiday-quota row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/holidaysquota/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.api-holidaysquota-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/holidaysquota/{id}",
+      "description": "deletes a holiday-quota row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/holidaysquota/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.api-overtimecarry",
+      "kind": "rest_write",
+      "summary": "POST /api/overtimecarry",
+      "description": "creates an overtime-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand alongside the read-only overtime_carry stream",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/overtimecarry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.api-overtimecarry-users-id-year",
+      "kind": "rest_read",
+      "summary": "GET /api/overtimecarry/{users_id}/{year}",
+      "description": "single-carryover-row detail already reachable via the overtime_carry stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/overtimecarry/{users_id}/{year}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.api-overtimecarry-users-id-year",
+      "kind": "rest_write",
+      "summary": "PUT /api/overtimecarry/{users_id}/{year}",
+      "description": "updates an overtime-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/overtimecarry/{users_id}/{year}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.api-overtimecarry-users-id-year",
+      "kind": "rest_write",
+      "summary": "DELETE /api/overtimecarry/{users_id}/{year}",
+      "description": "deletes an overtime-carryover row; sensitive HR/payroll-adjacent mutation, no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/overtimecarry/{users_id}/{year}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.api-register",
+      "kind": "rest_write",
+      "summary": "POST /api/register",
+      "description": "creates a brand-new Clockodo account (an org-level admin/billing action, not per-record data), and API-key-scoped connections are conventionally already bound to one account",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/register",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.api-targethours",
+      "kind": "rest_write",
+      "summary": "POST /api/targethours",
+      "description": "creates a target-hours (planned-hours) configuration row; HR/payroll-adjacent configuration mutation, no demonstrated write demand alongside the read-only target_hours stream",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/targethours",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.api-targethours-id",
+      "kind": "rest_read",
+      "summary": "GET /api/targethours/{id}",
+      "description": "single-target-hours-row detail already reachable via the target_hours stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/targethours/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.api-targethours-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/targethours/{id}",
+      "description": "updates a target-hours configuration row; no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/targethours/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.api-targethours-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/targethours/{id}",
+      "description": "deletes a target-hours configuration row; no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/targethours/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.api-userreports",
+      "kind": "rest_read",
+      "summary": "GET /api/userreports",
+      "description": "generates an aggregated co-worker report document, not a listing of underlying records",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/userreports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.register",
+      "kind": "rest_write",
+      "summary": "POST /register",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/register",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.targethours",
+      "kind": "rest_read",
+      "summary": "GET /targethours",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/targethours",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.targethours",
+      "kind": "rest_write",
+      "summary": "POST /targethours",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/targethours",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.targethours-id",
+      "kind": "rest_read",
+      "summary": "GET /targethours/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/targethours/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.targethours-id",
+      "kind": "rest_write",
+      "summary": "PUT /targethours/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/targethours/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.targethours-id",
+      "kind": "rest_write",
+      "summary": "DELETE /targethours/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/targethours/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.userreports",
+      "kind": "rest_read",
+      "summary": "GET /userreports",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/userreports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.userreports-id",
+      "kind": "rest_read",
+      "summary": "GET /userreports/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/userreports/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-accessgroups",
+      "kind": "rest_read",
+      "summary": "GET /v2/accessGroups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accessGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-accessgroups",
+      "kind": "rest_write",
+      "summary": "POST /v2/accessGroups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/accessGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-accessgroups-accessgroupsid-customers",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accessGroups/{accessGroupsId}/customers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accessGroups/{accessGroupsId}/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-accessgroups-accessgroupsid-customers-general",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accessGroups/{accessGroupsId}/customers/general",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accessGroups/{accessGroupsId}/customers/general",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-accessgroups-accessgroupsid-customersprojects",
+      "kind": "rest_read",
+      "summary": "GET /v2/accessGroups/{accessGroupsId}/customersProjects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accessGroups/{accessGroupsId}/customersProjects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-accessgroups-accessgroupsid-projects",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accessGroups/{accessGroupsId}/projects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accessGroups/{accessGroupsId}/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-accessgroups-accessgroupsid-services",
+      "kind": "rest_read",
+      "summary": "GET /v2/accessGroups/{accessGroupsId}/services",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accessGroups/{accessGroupsId}/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-accessgroups-accessgroupsid-services",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accessGroups/{accessGroupsId}/services",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accessGroups/{accessGroupsId}/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-accessgroups-accessgroupsid-services-general",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accessGroups/{accessGroupsId}/services/general",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accessGroups/{accessGroupsId}/services/general",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-accessgroups-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/accessGroups/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/accessGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-accessgroups-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/accessGroups/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/accessGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-accessgroups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/accessGroups/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/accessGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-clock",
+      "kind": "rest_read",
+      "summary": "GET /v2/clock",
+      "description": "controls the live stopwatch (start/stop a running timer via GET-as-action, per Clockodo's own docs); an imperative device-control action, not a data listing",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/clock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-clock",
+      "kind": "rest_write",
+      "summary": "POST /v2/clock",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/clock",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-clock-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/clock/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/clock/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-clock-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/clock/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/clock/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-customers-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/customers/{id}",
+      "description": "single-customer detail already reachable via the customers stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-entries",
+      "kind": "rest_write",
+      "summary": "POST /v2/entries",
+      "description": "creates a time entry; the polymorphic entry body (plain time entry / lump-sum value / lump-sum-service variants, discriminated by 'type') has no single dialect-expressible record_schema shape yet, deferred pending a decided per-type write strategy",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-entries-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/entries/{id}",
+      "description": "single-entry detail already reachable via the entries stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-entries-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/entries/{id}",
+      "description": "updates a time entry; deferred alongside the polymorphic create-body decision above",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-entries-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/entries/{id}",
+      "description": "deletes a time entry; deferred alongside the polymorphic create/update decision above so create/update/delete land together in a future increment",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/entries/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-entriestexts",
+      "kind": "rest_read",
+      "summary": "GET /v2/entriesTexts",
+      "description": "queries free-text descriptions used across time/lump-sum entries; a narrow autocomplete-style lookup resource, no demonstrated read demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/entriesTexts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-entrygroups",
+      "kind": "rest_read",
+      "summary": "GET /v2/entrygroups",
+      "description": "requires a mandatory (time_since, time_until, grouping) triple with no natural default; grouped/aggregated entry view layered over the entries stream already covered",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/entrygroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-entrygroups",
+      "kind": "rest_write",
+      "summary": "PUT /v2/entrygroups",
+      "description": "bulk-edits every time entry matching a filter across a date range in one call",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/entrygroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-entrygroups",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/entrygroups",
+      "description": "bulk-deletes every time entry matching a filter across a date range in one irreversible call",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/entrygroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-favorites-id-start",
+      "kind": "rest_write",
+      "summary": "POST /v2/favorites/{id}/start",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/favorites/{id}/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-holidaysquota",
+      "kind": "rest_read",
+      "summary": "GET /v2/holidaysQuota",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/holidaysQuota",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-holidaysquota",
+      "kind": "rest_write",
+      "summary": "POST /v2/holidaysQuota",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/holidaysQuota",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-holidaysquota-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/holidaysQuota/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/holidaysQuota/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-holidaysquota-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/holidaysQuota/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/holidaysQuota/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-holidaysquota-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/holidaysQuota/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/holidaysQuota/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-individualuseraccess-usersid-clear",
+      "kind": "rest_write",
+      "summary": "POST /v2/individualUserAccess/{usersId}/clear",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/individualUserAccess/{usersId}/clear",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-individualuseraccess-usersid-customers",
+      "kind": "rest_write",
+      "summary": "PUT /v2/individualUserAccess/{usersId}/customers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/individualUserAccess/{usersId}/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-individualuseraccess-usersid-customers-general",
+      "kind": "rest_write",
+      "summary": "PUT /v2/individualUserAccess/{usersId}/customers/general",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/individualUserAccess/{usersId}/customers/general",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-individualuseraccess-usersid-customersprojects",
+      "kind": "rest_read",
+      "summary": "GET /v2/individualUserAccess/{usersId}/customersProjects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/individualUserAccess/{usersId}/customersProjects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-individualuseraccess-usersid-projects",
+      "kind": "rest_write",
+      "summary": "PUT /v2/individualUserAccess/{usersId}/projects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/individualUserAccess/{usersId}/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-individualuseraccess-usersid-services",
+      "kind": "rest_read",
+      "summary": "GET /v2/individualUserAccess/{usersId}/services",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/individualUserAccess/{usersId}/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-individualuseraccess-usersid-services",
+      "kind": "rest_write",
+      "summary": "PUT /v2/individualUserAccess/{usersId}/services",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/individualUserAccess/{usersId}/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-individualuseraccess-usersid-services-general",
+      "kind": "rest_write",
+      "summary": "PUT /v2/individualUserAccess/{usersId}/services/general",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/individualUserAccess/{usersId}/services/general",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-lumpsumservices-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/lumpsumservices/{id}",
+      "description": "single-lump-sum-service detail already reachable via the lumpsum_services stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/lumpsumservices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-nonbusinessdays",
+      "kind": "rest_read",
+      "summary": "GET /v2/nonbusinessDays",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/nonbusinessDays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-nonbusinessdays",
+      "kind": "rest_write",
+      "summary": "POST /v2/nonbusinessDays",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/nonbusinessDays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-nonbusinessdays-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/nonbusinessDays/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/nonbusinessDays/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-nonbusinessdays-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/nonbusinessDays/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/nonbusinessDays/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-nonbusinessdays-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/nonbusinessDays/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/nonbusinessDays/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-nonbusinessgroups",
+      "kind": "rest_read",
+      "summary": "GET /v2/nonbusinessGroups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/nonbusinessGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-nonbusinessgroups",
+      "kind": "rest_write",
+      "summary": "POST /v2/nonbusinessGroups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/nonbusinessGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-nonbusinessgroups-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/nonbusinessGroups/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/nonbusinessGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-nonbusinessgroups-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/nonbusinessGroups/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/nonbusinessGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-nonbusinessgroups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/nonbusinessGroups/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/nonbusinessGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-projects-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/projects/{id}",
+      "description": "single-project detail already reachable via the projects stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/projects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-projects-id-createnextinterval",
+      "kind": "rest_write",
+      "summary": "POST /v2/projects/{id}/createNextInterval",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/projects/{id}/createNextInterval",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-services-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/services/{id}",
+      "description": "single-service detail already reachable via the services stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/services/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-subscription",
+      "kind": "rest_read",
+      "summary": "GET /v2/subscription",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/subscription",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-surcharges",
+      "kind": "rest_write",
+      "summary": "POST /v2/surcharges",
+      "description": "creates a new surcharge model; no demonstrated write demand alongside the read-only surcharges stream (narrow payroll-configuration object)",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/surcharges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-surcharges-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/surcharges/{id}",
+      "description": "single-surcharge-model detail already reachable via the surcharges stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/surcharges/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-surcharges-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/surcharges/{id}",
+      "description": "updates a surcharge model; no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/surcharges/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-surcharges-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/surcharges/{id}",
+      "description": "deletes a surcharge model; no demonstrated write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/surcharges/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-teams-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/teams/{id}",
+      "description": "single-team detail already reachable via the teams stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-users",
+      "kind": "rest_write",
+      "summary": "POST /v2/users",
+      "description": "invites/provisions a new co-worker seat, a billing-seat-consuming admin action distinct from ordinary record creation",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-users-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{id}",
+      "description": "single-user detail already reachable via the users stream's listing; no separate stream needed",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-users-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/users/{id}",
+      "description": "updates a co-worker's role/access-control settings (e.g. can_add_customers, boss); an admin-scoped action, no demonstrated write demand for ordinary sync",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-users-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/users/{id}",
+      "description": "irreversibly disables a co-worker's access to the account, a billing-seat/access-revocation admin action",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-users-id-access-customers-projects",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{id}/access/customers-projects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{id}/access/customers-projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-users-id-access-services",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{id}/access/services",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{id}/access/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-users-users-id-access-customers-projects",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{users_id}/access/customers-projects",
+      "description": "per-user customer/project access-rights lookup; narrow authorization-introspection resource, no demonstrated read demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{users_id}/access/customers-projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-users-users-id-access-services",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/{users_id}/access/services",
+      "description": "per-user service access-rights lookup; narrow authorization-introspection resource, no demonstrated read demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/{users_id}/access/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-usersnonbusinessdays",
+      "kind": "rest_read",
+      "summary": "GET /v2/usersNonbusinessDays",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/usersNonbusinessDays",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-usersnonbusinessgroups",
+      "kind": "rest_read",
+      "summary": "GET /v2/usersNonbusinessGroups",
+      "description": "manages per-user holiday-group-period assignment history; narrow HR-configuration join resource, no demonstrated read/write demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/usersNonbusinessGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-worktimes",
+      "kind": "rest_read",
+      "summary": "GET /v2/workTimes",
+      "description": "queries computed work-time totals derived from entries already covered by the entries stream; an aggregated-view resource, no demonstrated additional read demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workTimes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v2-worktimes-changerequests",
+      "kind": "rest_read",
+      "summary": "GET /v2/workTimes/changeRequests",
+      "description": "queries work-time change requests; HR-workflow object, no demonstrated read demand",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/workTimes/changeRequests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-worktimes-changerequests",
+      "kind": "rest_write",
+      "summary": "POST /v2/workTimes/changeRequests",
+      "description": "submits a work-time change request; HR-workflow action, not ordinary record data sync",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workTimes/changeRequests",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v2-worktimes-changerequests-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/workTimes/changeRequests/{id}",
+      "description": "approves/rejects a work-time change request; HR-workflow action",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/workTimes/changeRequests/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v2-worktimes-changerequests-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/workTimes/changeRequests/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/workTimes/changeRequests/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-worktimes-changerequests-id-approve",
+      "kind": "rest_write",
+      "summary": "POST /v2/workTimes/changeRequests/{id}/approve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workTimes/changeRequests/{id}/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v2-worktimes-changerequests-id-decline",
+      "kind": "rest_write",
+      "summary": "POST /v2/workTimes/changeRequests/{id}/decline",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/workTimes/changeRequests/{id}/decline",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-customers",
+      "kind": "rest_read",
+      "summary": "GET /v3/customers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v3-customers",
+      "kind": "rest_write",
+      "summary": "POST /v3/customers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-customers-countprojects",
+      "kind": "rest_read",
+      "summary": "GET /v3/customers/countProjects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/customers/countProjects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-customers-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/customers/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-customers-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/customers/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v3-customers-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/customers/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/customers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-entriestexts",
+      "kind": "rest_read",
+      "summary": "GET /v3/entriesTexts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/entriesTexts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-holidayscarry",
+      "kind": "rest_read",
+      "summary": "GET /v3/holidaysCarry",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/holidaysCarry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v3-holidayscarry",
+      "kind": "rest_write",
+      "summary": "POST /v3/holidaysCarry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/holidaysCarry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-holidayscarry-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/holidaysCarry/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/holidaysCarry/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-holidayscarry-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/holidaysCarry/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/holidaysCarry/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v3-holidayscarry-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/holidaysCarry/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/holidaysCarry/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-overtimecarry",
+      "kind": "rest_read",
+      "summary": "GET /v3/overtimeCarry",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/overtimeCarry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v3-overtimecarry",
+      "kind": "rest_write",
+      "summary": "POST /v3/overtimeCarry",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/overtimeCarry",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-overtimecarry-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/overtimeCarry/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/overtimeCarry/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-overtimecarry-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/overtimeCarry/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/overtimeCarry/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v3-overtimecarry-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/overtimeCarry/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/overtimeCarry/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-overtimereductions",
+      "kind": "rest_read",
+      "summary": "GET /v3/overtimeReductions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/overtimeReductions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v3-overtimereductions",
+      "kind": "rest_write",
+      "summary": "POST /v3/overtimeReductions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/overtimeReductions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-overtimereductions-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/overtimeReductions/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/overtimeReductions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-overtimereductions-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/overtimeReductions/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/overtimeReductions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v3-overtimereductions-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/overtimeReductions/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/overtimeReductions/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-projects-reports",
+      "kind": "rest_read",
+      "summary": "GET /v3/projects/reports",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/projects/reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-projects-id-setbilled",
+      "kind": "rest_write",
+      "summary": "PUT /v3/projects/{id}/setBilled",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/projects/{id}/setBilled",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-subprojects",
+      "kind": "rest_read",
+      "summary": "GET /v3/subprojects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/subprojects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v3-subprojects",
+      "kind": "rest_write",
+      "summary": "POST /v3/subprojects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/subprojects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-subprojects-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/subprojects/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/subprojects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-subprojects-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/subprojects/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/subprojects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v3-subprojects-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/subprojects/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/subprojects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-subprojects-id-complete",
+      "kind": "rest_write",
+      "summary": "PUT /v3/subprojects/{id}/complete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/subprojects/{id}/complete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-teams",
+      "kind": "rest_read",
+      "summary": "GET /v3/teams",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v3-teams",
+      "kind": "rest_write",
+      "summary": "POST /v3/teams",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/teams",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-teams-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/teams/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-teams-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/teams/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v3-teams-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/teams/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/teams/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-users",
+      "kind": "rest_read",
+      "summary": "GET /v3/users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v3-users",
+      "kind": "rest_write",
+      "summary": "POST /v3/users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-users-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/users/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-users-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/users/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v3-users-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/users/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/users/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-usersnonbusinessgroups",
+      "kind": "rest_read",
+      "summary": "GET /v3/usersNonbusinessGroups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/usersNonbusinessGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v3-usersnonbusinessgroups",
+      "kind": "rest_write",
+      "summary": "POST /v3/usersNonbusinessGroups",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/usersNonbusinessGroups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v3-usersnonbusinessgroups-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/usersNonbusinessGroups/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/usersNonbusinessGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v3-usersnonbusinessgroups-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/usersNonbusinessGroups/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/usersNonbusinessGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v3-usersnonbusinessgroups-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/usersNonbusinessGroups/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/usersNonbusinessGroups/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v3-worktimes-changerequests-id-approve",
+      "kind": "rest_write",
+      "summary": "POST /v3/workTimes/changeRequests/{id}/approve",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/workTimes/changeRequests/{id}/approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-absences",
+      "kind": "rest_read",
+      "summary": "GET /v4/absences",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/absences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v4-absences",
+      "kind": "rest_write",
+      "summary": "POST /v4/absences",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/absences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-absences-id",
+      "kind": "rest_read",
+      "summary": "GET /v4/absences/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/absences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v4-absences-id",
+      "kind": "rest_write",
+      "summary": "PUT /v4/absences/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v4/absences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v4-absences-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v4/absences/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v4/absences/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-lumpsumservices",
+      "kind": "rest_read",
+      "summary": "GET /v4/lumpSumServices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/lumpSumServices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v4-lumpsumservices",
+      "kind": "rest_write",
+      "summary": "POST /v4/lumpSumServices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/lumpSumServices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-lumpsumservices-id",
+      "kind": "rest_read",
+      "summary": "GET /v4/lumpSumServices/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/lumpSumServices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v4-lumpsumservices-id",
+      "kind": "rest_write",
+      "summary": "PUT /v4/lumpSumServices/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v4/lumpSumServices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v4-lumpsumservices-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v4/lumpSumServices/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v4/lumpSumServices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-projects",
+      "kind": "rest_read",
+      "summary": "GET /v4/projects",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v4-projects",
+      "kind": "rest_write",
+      "summary": "POST /v4/projects",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/projects",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-projects-reports",
+      "kind": "rest_read",
+      "summary": "GET /v4/projects/reports",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/projects/reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-projects-id",
+      "kind": "rest_read",
+      "summary": "GET /v4/projects/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/projects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v4-projects-id",
+      "kind": "rest_write",
+      "summary": "PUT /v4/projects/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v4/projects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v4-projects-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v4/projects/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v4/projects/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v4-projects-id-complete",
+      "kind": "rest_write",
+      "summary": "PUT /v4/projects/{id}/complete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v4/projects/{id}/complete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-rates",
+      "kind": "rest_read",
+      "summary": "GET /v4/rates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v4-rates",
+      "kind": "rest_write",
+      "summary": "POST /v4/rates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v4-rates-default",
+      "kind": "rest_write",
+      "summary": "PUT /v4/rates/default",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v4/rates/default",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-rates-id",
+      "kind": "rest_read",
+      "summary": "GET /v4/rates/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/rates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v4-rates-id",
+      "kind": "rest_write",
+      "summary": "PUT /v4/rates/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v4/rates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v4-rates-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v4/rates/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v4/rates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v4-rates-id-sort",
+      "kind": "rest_write",
+      "summary": "PUT /v4/rates/{id}/sort",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v4/rates/{id}/sort",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-services",
+      "kind": "rest_read",
+      "summary": "GET /v4/services",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.post.v4-services",
+      "kind": "rest_write",
+      "summary": "POST /v4/services",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v4/services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-services-id",
+      "kind": "rest_read",
+      "summary": "GET /v4/services/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/services/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.put.v4-services-id",
+      "kind": "rest_write",
+      "summary": "PUT /v4/services/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v4/services/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.delete.v4-services-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v4/services/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v4/services/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.v4-users-me",
+      "kind": "rest_read",
+      "summary": "GET /v4/users/me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v4/users/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.get.webhooks",
+      "kind": "rest_read",
+      "summary": "GET /webhooks",
+      "description": "webhook subscription management; push-delivery configuration, not a pollable data resource this connector's pull-sync model reads",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "clockodo.webhook.absence-approved-post",
+      "kind": "composite",
+      "summary": "WEBHOOK absence_approved#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK absence_approved#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.absence-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK absence_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK absence_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.absence-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK absence_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK absence_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.absence-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK absence_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK absence_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.customer-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.customer-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.customer-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK customer_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK customer_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.entry-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK entry_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK entry_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.entry-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK entry_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK entry_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.entry-started-post",
+      "kind": "composite",
+      "summary": "WEBHOOK entry_started#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK entry_started#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.entry-stopped-post",
+      "kind": "composite",
+      "summary": "WEBHOOK entry_stopped#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK entry_stopped#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.entry-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK entry_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK entry_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.holidays-carry-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK holidays_carry_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK holidays_carry_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.holidays-carry-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK holidays_carry_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK holidays_carry_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.holidays-carry-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK holidays_carry_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK holidays_carry_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.holidays-quota-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK holidays_quota_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK holidays_quota_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.holidays-quota-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK holidays_quota_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK holidays_quota_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.holidays-quota-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK holidays_quota_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK holidays_quota_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.lump-sum-service-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK lump_sum_service_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK lump_sum_service_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.lump-sum-service-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK lump_sum_service_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK lump_sum_service_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.lump-sum-service-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK lump_sum_service_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK lump_sum_service_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.nonbusiness-group-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK nonbusiness_group_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK nonbusiness_group_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.nonbusiness-group-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK nonbusiness_group_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK nonbusiness_group_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.nonbusiness-group-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK nonbusiness_group_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK nonbusiness_group_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.overtime-carry-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK overtime_carry_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK overtime_carry_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.overtime-carry-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK overtime_carry_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK overtime_carry_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.overtime-carry-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK overtime_carry_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK overtime_carry_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.project-budget-notification-post",
+      "kind": "composite",
+      "summary": "WEBHOOK project_budget_notification#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK project_budget_notification#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.project-completed-post",
+      "kind": "composite",
+      "summary": "WEBHOOK project_completed#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK project_completed#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.project-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK project_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK project_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.project-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK project_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK project_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.project-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK project_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK project_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.service-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK service_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK service_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.service-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK service_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK service_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.service-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK service_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK service_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.subproject-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subproject_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subproject_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.subproject-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subproject_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subproject_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.subproject-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK subproject_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK subproject_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.team-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK team_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK team_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.team-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK team_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK team_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.team-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK team_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK team_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.user-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK user_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK user_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.user-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK user_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK user_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.user-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK user_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK user_updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.work-time-change-request-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK work_time_change_request_created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK work_time_change_request_created#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.work-time-change-request-deleted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK work_time_change_request_deleted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK work_time_change_request_deleted#POST"
+        ]
+      }
+    },
+    {
+      "id": "clockodo.webhook.work-time-change-request-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK work_time_change_request_updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://docs.clockodo.com/openapi.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK work_time_change_request_updated#POST"
+        ]
+      }
+    }
+  ]
+}

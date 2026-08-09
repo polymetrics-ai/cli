@@ -1,0 +1,3288 @@
+{
+  "tagline": "Run Pabbly Subscriptions Billing's declared streams and reverse-ETL actions.",
+  "usage": "pm pabbly-subscriptions-billing \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get add-card-url customer-id",
+        "api get addon addon-id",
+        "api get addon addonid",
+        "api get addoncategory addon-id",
+        "api get addoncategory category-id",
+        "api get addonlistcategory product-id",
+        "api get addonlistcategory product-id operation",
+        "api get addons product-id",
+        "api get addons product-id operation",
+        "api get affiliate links",
+        "api get api v1 customfields plan-id",
+        "api get checkoutpage product-id",
+        "api get checkoutpage product-id operation",
+        "api get commissions",
+        "api get commissions clicks",
+        "api get coupon product-id",
+        "api get coupon product-id operation",
+        "api get customer",
+        "api get customer customer-id",
+        "api get customer customer-id operation",
+        "api get customer purchase-info customer-id",
+        "api get customfields plan-id",
+        "api get hostedpage",
+        "api get invoice invoice-id",
+        "api get invoice invoice-id operation",
+        "api get invoices",
+        "api get invoices customer-id",
+        "api get invoices transactions invoice-id",
+        "api get multiplans",
+        "api get multiplans multiplan-id",
+        "api get paymentgateways",
+        "api get paymentmethods customer-id",
+        "api get paymentmethods customer-id operation",
+        "api get plan plan-id",
+        "api get plan plan-id operation",
+        "api get plans product-id",
+        "api get plans product-id operation",
+        "api get product product-id",
+        "api get product product-id operation",
+        "api get products product-id licenses",
+        "api get products product-id licenses license-id",
+        "api get products product-id licenses license-id codes",
+        "api get refund customer-id",
+        "api get refund customer-id operation",
+        "api get scheduledchanges subscription-id",
+        "api get scheduledchanges suscription-id",
+        "api get subscription subscription-id",
+        "api get subscription subscription-id operation",
+        "api get subscriptions customer-id",
+        "api get transactions customer-id",
+        "api get transactions customer-id operation",
+        "customers list",
+        "invoices list",
+        "plans list",
+        "products list",
+        "subscriptions list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete addon addon-id",
+        "api delete addoncategory categroy-id",
+        "api delete commissions clicks click-id",
+        "api delete coupons coupon-id",
+        "api delete customers customer-id",
+        "api delete invoices invoice-id",
+        "api delete multiplans id",
+        "api delete plans plan-id",
+        "api delete products product-id",
+        "api delete products product-id licenses license-id",
+        "api delete products product-id licenses license-id codes code",
+        "api delete subscriptions subscription-id",
+        "api delete transaction transaction-id",
+        "api post addon product-id",
+        "api post affiliate commissionrule create",
+        "api post affiliate payout generate",
+        "api post api v2 getdashboardstats",
+        "api post commissions create",
+        "api post coupon product-id",
+        "api post getdashboardstats",
+        "api post invoice failedpayment invoice-id",
+        "api post invoice failedpayment invoice-id operation",
+        "api post invoice recordpayment invoice-id",
+        "api post invoice recordpayment invoice-id operation",
+        "api post invoices create-metered subscription-id",
+        "api post mrrsubscription",
+        "api post multiplans",
+        "api post paymentmethod customer-id",
+        "api post portal-sessions",
+        "api post products product-id licenses",
+        "api post revenuetransaction",
+        "api post subscription",
+        "api post subscription credit subscription-id create",
+        "api post subscription credit subscription-id deduct",
+        "api post subscription customer-id",
+        "api post subscription subscription-id cancel",
+        "api post subscription subscription-id update-charges",
+        "api post transaction refund payment-id",
+        "api post verifyhosted",
+        "api put addon addon-id",
+        "api put addoncategory category-id",
+        "api put affiliate status id",
+        "api put commissions commissionid",
+        "api put coupons coupon-id",
+        "api put customer customer-id",
+        "api put multiplans id",
+        "api put paymentmethod customer-id",
+        "api put plan update plan-id",
+        "api put product update product-id",
+        "api put products product-id licenses license-id",
+        "api put subscription change-billing subscription-id",
+        "api put subscription custom-fields subscription-id",
+        "api put subscription subscription-id pause",
+        "api put subscription subscription-id resume",
+        "api put subscription subscription-id update",
+        "api put subscription subscription-id upgrade-downgrade",
+        "cancel subscription apply",
+        "create addon apply",
+        "create addon category apply",
+        "create coupon apply",
+        "create customer apply",
+        "create license apply",
+        "create payment method apply",
+        "create plan apply",
+        "create product apply",
+        "create subscription apply",
+        "delete addon apply",
+        "delete addon category apply",
+        "update addon apply",
+        "update addon category apply",
+        "update customer apply",
+        "update license apply",
+        "update payment method apply",
+        "update plan apply",
+        "update product apply",
+        "update subscription apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete addon addon-id",
+      "summary": "Documented DELETE /addon/{{addon_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete addon addon-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/addon/{{addon_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.addon-addon-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete addoncategory categroy-id",
+      "summary": "Documented DELETE /addoncategory/{{categroy_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete addoncategory categroy-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/addoncategory/{{categroy_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.addoncategory-categroy-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete commissions clicks click-id",
+      "summary": "Documented DELETE /commissions/clicks/{{click_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete commissions clicks click-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/commissions/clicks/{{click_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.commissions-clicks-click-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete coupons coupon-id",
+      "summary": "Documented DELETE /coupons/{{coupon_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete coupons coupon-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/coupons/{{coupon_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.coupons-coupon-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete customers customer-id",
+      "summary": "Documented DELETE /customers/{{customer_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete customers customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/customers/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.customers-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete invoices invoice-id",
+      "summary": "Documented DELETE /invoices/{{invoice_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete invoices invoice-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/invoices/{{invoice_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.invoices-invoice-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete multiplans id",
+      "summary": "Documented DELETE /multiplans/{{id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete multiplans id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/multiplans/{{id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.multiplans-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete plans plan-id",
+      "summary": "Documented DELETE /plans/{{plan_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete plans plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/plans/{{plan_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.plans-plan-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete products product-id",
+      "summary": "Documented DELETE /products/{{product_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete products product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.products-product-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete products product-id licenses license-id",
+      "summary": "Documented DELETE /products/{{product_id}}/licenses/{{license_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete products product-id licenses license-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{{product_id}}/licenses/{{license_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.products-product-id-licenses-license-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete products product-id licenses license-id codes code",
+      "summary": "Documented DELETE /products/{{product_id}}/licenses/{{license_id}}/codes/{{code}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete products product-id licenses license-id codes code --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/products/{{product_id}}/licenses/{{license_id}}/codes/{{code}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.products-product-id-licenses-license-id-codes-code",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete subscriptions subscription-id",
+      "summary": "Documented DELETE /subscriptions/{{subscription_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete subscriptions subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/subscriptions/{{subscription_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.subscriptions-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete transaction transaction-id",
+      "summary": "Documented DELETE /transaction/{{transaction_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api delete transaction transaction-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/transaction/{{transaction_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.delete.transaction-transaction-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get add-card-url customer-id",
+      "summary": "Documented GET /add_card_url/{{customer_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get add-card-url customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/add_card_url/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.add-card-url-customer-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addon addon-id",
+      "summary": "Documented GET /addon/{addon_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get addon addon-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addon/{addon_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.addon-addon-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addon addonid",
+      "summary": "Documented GET /addon/{{addonId}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get addon addonid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addon/{{addonId}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.addon-addonid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addoncategory addon-id",
+      "summary": "Documented GET /addoncategory/{{addon_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get addoncategory addon-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addoncategory/{{addon_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.addoncategory-addon-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addoncategory category-id",
+      "summary": "Documented GET /addoncategory/{category_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get addoncategory category-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addoncategory/{category_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.addoncategory-category-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addonlistcategory product-id",
+      "summary": "Documented GET /addonlistcategory/{product_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get addonlistcategory product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addonlistcategory/{product_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.addonlistcategory-product-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addonlistcategory product-id operation",
+      "summary": "Documented GET /addonlistcategory/{{product_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get addonlistcategory product-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addonlistcategory/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.addonlistcategory-product-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addons product-id",
+      "summary": "Documented GET /addons/{product_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get addons product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addons/{product_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.addons-product-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get addons product-id operation",
+      "summary": "Documented GET /addons/{{product_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get addons product-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/addons/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.addons-product-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get affiliate links",
+      "summary": "Documented GET /affiliate/links (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get affiliate links --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/affiliate/links"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.affiliate-links",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 customfields plan-id",
+      "summary": "Documented GET /api/v1/customfields/{{plan_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get api v1 customfields plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/customfields/{{plan_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.api-v1-customfields-plan-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get checkoutpage product-id",
+      "summary": "Documented GET /checkoutpage/{product_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get checkoutpage product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checkoutpage/{product_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.checkoutpage-product-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get checkoutpage product-id operation",
+      "summary": "Documented GET /checkoutpage/{{product_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get checkoutpage product-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/checkoutpage/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.checkoutpage-product-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get commissions",
+      "summary": "Documented GET /commissions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get commissions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/commissions"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.commissions",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get commissions clicks",
+      "summary": "Documented GET /commissions/clicks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get commissions clicks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/commissions/clicks"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.commissions-clicks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coupon product-id",
+      "summary": "Documented GET /coupon/{product_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get coupon product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupon/{product_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.coupon-product-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get coupon product-id operation",
+      "summary": "Documented GET /coupon/{{product_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get coupon product-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/coupon/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.coupon-product-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer",
+      "summary": "Documented GET /customer/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get customer --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.customer",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer customer-id",
+      "summary": "Documented GET /customer/{customer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get customer customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/{customer_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.customer-customer-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer customer-id operation",
+      "summary": "Documented GET /customer/{{customer_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get customer customer-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.customer-customer-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customer purchase-info customer-id",
+      "summary": "Documented GET /customer/purchase-info/{{customer_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get customer purchase-info customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customer/purchase-info/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.customer-purchase-info-customer-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get customfields plan-id",
+      "summary": "Documented GET /customfields/plan_id (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get customfields plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customfields/plan_id"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.customfields-plan-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get hostedpage",
+      "summary": "Documented GET /hostedpage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get hostedpage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/hostedpage"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.hostedpage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoice invoice-id",
+      "summary": "Documented GET /invoice/{invoice_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get invoice invoice-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoice/{invoice_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.invoice-invoice-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoice invoice-id operation",
+      "summary": "Documented GET /invoice/{{invoice_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get invoice invoice-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoice/{{invoice_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.invoice-invoice-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices",
+      "summary": "Documented GET /invoices (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get invoices --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.invoices",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices customer-id",
+      "summary": "Documented GET /invoices/{{customer_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get invoices customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.invoices-customer-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get invoices transactions invoice-id",
+      "summary": "Documented GET /invoices/transactions/{{invoice_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get invoices transactions invoice-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/transactions/{{invoice_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.invoices-transactions-invoice-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get multiplans",
+      "summary": "Documented GET /multiplans (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get multiplans --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/multiplans"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.multiplans",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get multiplans multiplan-id",
+      "summary": "Documented GET /multiplans/{{multiplan_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get multiplans multiplan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/multiplans/{{multiplan_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.multiplans-multiplan-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get paymentgateways",
+      "summary": "Documented GET /paymentgateways (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get paymentgateways --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/paymentgateways"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.paymentgateways",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get paymentmethods customer-id",
+      "summary": "Documented GET /paymentmethods/{customer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get paymentmethods customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/paymentmethods/{customer_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.paymentmethods-customer-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get paymentmethods customer-id operation",
+      "summary": "Documented GET /paymentmethods/{{customer_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get paymentmethods customer-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/paymentmethods/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.paymentmethods-customer-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plan plan-id",
+      "summary": "Documented GET /plan/{plan_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get plan plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plan/{plan_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.plan-plan-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plan plan-id operation",
+      "summary": "Documented GET /plan/{{plan_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get plan plan-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plan/{{plan_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.plan-plan-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans product-id",
+      "summary": "Documented GET /plans/{product_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get plans product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/{product_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.plans-product-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get plans product-id operation",
+      "summary": "Documented GET /plans/{{product_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get plans product-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.plans-product-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get product product-id",
+      "summary": "Documented GET /product/{product_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get product product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/product/{product_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.product-product-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get product product-id operation",
+      "summary": "Documented GET /product/{{product_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get product product-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/product/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.product-product-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products product-id licenses",
+      "summary": "Documented GET /products/{{product_id}}/licenses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get products product-id licenses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{{product_id}}/licenses"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.products-product-id-licenses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products product-id licenses license-id",
+      "summary": "Documented GET /products/{{product_id}}/licenses/{{license_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get products product-id licenses license-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{{product_id}}/licenses/{{license_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.products-product-id-licenses-license-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get products product-id licenses license-id codes",
+      "summary": "Documented GET /products/{{product_id}}/licenses/{{license_id}}/codes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get products product-id licenses license-id codes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products/{{product_id}}/licenses/{{license_id}}/codes"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.products-product-id-licenses-license-id-codes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get refund customer-id",
+      "summary": "Documented GET /refund/{customer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get refund customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/refund/{customer_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.refund-customer-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get refund customer-id operation",
+      "summary": "Documented GET /refund/{{customer_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get refund customer-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/refund/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.refund-customer-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scheduledchanges subscription-id",
+      "summary": "Documented GET /scheduledchanges/{subscription_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get scheduledchanges subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scheduledchanges/{subscription_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.scheduledchanges-subscription-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get scheduledchanges suscription-id",
+      "summary": "Documented GET /scheduledchanges/{{suscription_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get scheduledchanges suscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/scheduledchanges/{{suscription_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.scheduledchanges-suscription-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscription subscription-id",
+      "summary": "Documented GET /subscription/{subscription_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get subscription subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscription/{subscription_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.subscription-subscription-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscription subscription-id operation",
+      "summary": "Documented GET /subscription/{{subscription_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get subscription subscription-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscription/{{subscription_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.subscription-subscription-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subscriptions customer-id",
+      "summary": "Documented GET /subscriptions/{{customer_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get subscriptions customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.subscriptions-customer-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transactions customer-id",
+      "summary": "Documented GET /transactions/{customer_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get transactions customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transactions/{customer_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.transactions-customer-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get transactions customer-id operation",
+      "summary": "Documented GET /transactions/{{customer_id}} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api get transactions customer-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/transactions/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.get.transactions-customer-id-2",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post addon product-id",
+      "summary": "Documented POST /addon/{{product_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post addon product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/addon/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.addon-product-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post affiliate commissionrule create",
+      "summary": "Documented POST /affiliate/commissionrule/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post affiliate commissionrule create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/affiliate/commissionrule/create"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.affiliate-commissionrule-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post affiliate payout generate",
+      "summary": "Documented POST /affiliate/payout/generate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post affiliate payout generate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/affiliate/payout/generate"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.affiliate-payout-generate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 getdashboardstats",
+      "summary": "Documented POST /api/v2/getdashboardstats (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post api v2 getdashboardstats --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/getdashboardstats"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.api-v2-getdashboardstats",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post commissions create",
+      "summary": "Documented POST /commissions/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post commissions create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/commissions/create"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.commissions-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post coupon product-id",
+      "summary": "Documented POST /coupon/{{product_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post coupon product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coupon/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.coupon-product-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post getdashboardstats",
+      "summary": "Documented POST /getdashboardstats/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post getdashboardstats --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/getdashboardstats/"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.getdashboardstats",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoice failedpayment invoice-id",
+      "summary": "Documented POST /invoice/failedpayment/{invoice_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post invoice failedpayment invoice-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoice/failedpayment/{invoice_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.invoice-failedpayment-invoice-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoice failedpayment invoice-id operation",
+      "summary": "Documented POST /invoice/failedpayment/{{invoice_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post invoice failedpayment invoice-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoice/failedpayment/{{invoice_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.invoice-failedpayment-invoice-id-2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoice recordpayment invoice-id",
+      "summary": "Documented POST /invoice/recordpayment/{invoice_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post invoice recordpayment invoice-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoice/recordpayment/{invoice_id}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.invoice-recordpayment-invoice-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoice recordpayment invoice-id operation",
+      "summary": "Documented POST /invoice/recordpayment/{{invoice_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post invoice recordpayment invoice-id operation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoice/recordpayment/{{invoice_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.invoice-recordpayment-invoice-id-2",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post invoices create-metered subscription-id",
+      "summary": "Documented POST /invoices/create-metered/{{subscription_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post invoices create-metered subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/invoices/create-metered/{{subscription_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.invoices-create-metered-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post mrrsubscription",
+      "summary": "Documented POST /mrrsubscription/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post mrrsubscription --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/mrrsubscription/"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.mrrsubscription",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post multiplans",
+      "summary": "Documented POST /multiplans (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post multiplans --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/multiplans"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.multiplans",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post paymentmethod customer-id",
+      "summary": "Documented POST /paymentmethod/{{customer_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post paymentmethod customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/paymentmethod/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.paymentmethod-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post portal-sessions",
+      "summary": "Documented POST /portal_sessions/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post portal-sessions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/portal_sessions/"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.portal-sessions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post products product-id licenses",
+      "summary": "Documented POST /products/{{product_id}}/licenses (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post products product-id licenses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{{product_id}}/licenses"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.products-product-id-licenses",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post revenuetransaction",
+      "summary": "Documented POST /revenuetransaction/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post revenuetransaction --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/revenuetransaction/"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.revenuetransaction",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription",
+      "summary": "Documented POST /subscription (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post subscription --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.subscription",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription credit subscription-id create",
+      "summary": "Documented POST /subscription/credit/{{subscription_id}}/create (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post subscription credit subscription-id create --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/credit/{{subscription_id}}/create"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.subscription-credit-subscription-id-create",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription credit subscription-id deduct",
+      "summary": "Documented POST /subscription/credit/{{subscription_id}}/deduct (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post subscription credit subscription-id deduct --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/credit/{{subscription_id}}/deduct"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.subscription-credit-subscription-id-deduct",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription customer-id",
+      "summary": "Documented POST /subscription/{{customer_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post subscription customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.subscription-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription subscription-id cancel",
+      "summary": "Documented POST /subscription/{{subscription_id}}/cancel (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post subscription subscription-id cancel --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/{{subscription_id}}/cancel"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.subscription-subscription-id-cancel",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subscription subscription-id update-charges",
+      "summary": "Documented POST /subscription/{{subscription_id}}/update_charges (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post subscription subscription-id update-charges --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/{{subscription_id}}/update_charges"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.subscription-subscription-id-update-charges",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post transaction refund payment-id",
+      "summary": "Documented POST /transaction/refund/{{payment_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post transaction refund payment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/transaction/refund/{{payment_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.transaction-refund-payment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post verifyhosted",
+      "summary": "Documented POST /verifyhosted (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api post verifyhosted --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/verifyhosted"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.post.verifyhosted",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put addon addon-id",
+      "summary": "Documented PUT /addon/{{addon_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put addon addon-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/addon/{{addon_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.addon-addon-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put addoncategory category-id",
+      "summary": "Documented PUT /addoncategory/{{category_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put addoncategory category-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/addoncategory/{{category_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.addoncategory-category-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put affiliate status id",
+      "summary": "Documented PUT /affiliate/status/{{id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put affiliate status id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/affiliate/status/{{id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.affiliate-status-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put commissions commissionid",
+      "summary": "Documented PUT /commissions/{{commissionId}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put commissions commissionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/commissions/{{commissionId}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.commissions-commissionid",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put coupons coupon-id",
+      "summary": "Documented PUT /coupons/{{coupon_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put coupons coupon-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/coupons/{{coupon_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.coupons-coupon-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put customer customer-id",
+      "summary": "Documented PUT /customer/{{customer_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put customer customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customer/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.customer-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put multiplans id",
+      "summary": "Documented PUT /multiplans/{{id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put multiplans id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/multiplans/{{id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.multiplans-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put paymentmethod customer-id",
+      "summary": "Documented PUT /paymentmethod/{{customer_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put paymentmethod customer-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/paymentmethod/{{customer_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.paymentmethod-customer-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put plan update plan-id",
+      "summary": "Documented PUT /plan/update/{{plan_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put plan update plan-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/plan/update/{{plan_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.plan-update-plan-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put product update product-id",
+      "summary": "Documented PUT /product/update/{{product_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put product update product-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/product/update/{{product_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.product-update-product-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put products product-id licenses license-id",
+      "summary": "Documented PUT /products/{{product_id}}/licenses/{{license_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put products product-id licenses license-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{{product_id}}/licenses/{{license_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.products-product-id-licenses-license-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subscription change-billing subscription-id",
+      "summary": "Documented PUT /subscription/change-billing/{{subscription_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put subscription change-billing subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscription/change-billing/{{subscription_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.subscription-change-billing-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subscription custom-fields subscription-id",
+      "summary": "Documented PUT /subscription/custom-fields/{{subscription_id}} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put subscription custom-fields subscription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscription/custom-fields/{{subscription_id}}"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.subscription-custom-fields-subscription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subscription subscription-id pause",
+      "summary": "Documented PUT /subscription/{{subscription_id}}/pause (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put subscription subscription-id pause --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscription/{{subscription_id}}/pause"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.subscription-subscription-id-pause",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subscription subscription-id resume",
+      "summary": "Documented PUT /subscription/{{subscription_id}}/resume (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put subscription subscription-id resume --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscription/{{subscription_id}}/resume"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.subscription-subscription-id-resume",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subscription subscription-id update",
+      "summary": "Documented PUT /subscription/{{subscription_id}}/update (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put subscription subscription-id update --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscription/{{subscription_id}}/update"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.subscription-subscription-id-update",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subscription subscription-id upgrade-downgrade",
+      "summary": "Documented PUT /subscription/{{subscription_id}}/upgrade-downgrade (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing api put subscription subscription-id upgrade-downgrade --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscription/{{subscription_id}}/upgrade-downgrade"
+        }
+      ],
+      "operation": "pabbly-subscriptions-billing.put.subscription-subscription-id-upgrade-downgrade",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "cancel subscription apply",
+      "summary": "Plan and execute the cancel subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_subscription",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "cancel_at_end",
+          "type": "string",
+          "summary": "Required cancel at end record field.",
+          "maps_to": "record.cancel_at_end",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing cancel subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/{subscription_id}/cancel"
+        }
+      ],
+      "risk": "external mutation; cancels a live billing subscription (immediately or at term end) and stops future customer billing; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create addon apply",
+      "summary": "Plan and execute the create addon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_addon",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "billing_cycle",
+          "type": "string",
+          "summary": "Required billing cycle record field.",
+          "maps_to": "record.billing_cycle",
+          "required": true
+        },
+        {
+          "name": "billing_period",
+          "type": "string",
+          "summary": "Required billing period record field.",
+          "maps_to": "record.billing_period",
+          "required": true
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "summary": "Required code record field.",
+          "maps_to": "record.code",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "summary": "Required price record field.",
+          "maps_to": "record.price",
+          "required": true
+        },
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing create addon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/addon/{product_id}"
+        }
+      ],
+      "risk": "external mutation; creates a sellable add-on that customers can attach to a plan, adding to their bill; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create addon category apply",
+      "summary": "Plan and execute the create addon category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_addon_category",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "category_name",
+          "type": "string",
+          "summary": "Required category name record field.",
+          "maps_to": "record.category_name",
+          "required": true
+        },
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing create addon category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/addoncategory"
+        }
+      ],
+      "risk": "external mutation; creates an add-on category used to organize sellable add-ons in Pabbly Subscriptions; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create coupon apply",
+      "summary": "Plan and execute the create coupon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_coupon",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "coupon_code",
+          "type": "string",
+          "summary": "Required coupon code record field.",
+          "maps_to": "record.coupon_code",
+          "required": true
+        },
+        {
+          "name": "coupon_name",
+          "type": "string",
+          "summary": "Required coupon name record field.",
+          "maps_to": "record.coupon_name",
+          "required": true
+        },
+        {
+          "name": "discount",
+          "type": "number",
+          "summary": "Required discount record field.",
+          "maps_to": "record.discount",
+          "required": true
+        },
+        {
+          "name": "discount_type",
+          "type": "string",
+          "summary": "Required discount type record field.",
+          "maps_to": "record.discount_type",
+          "required": true
+        },
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        },
+        {
+          "name": "redemption_type",
+          "type": "string",
+          "summary": "Required redemption type record field.",
+          "maps_to": "record.redemption_type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing create coupon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/coupon/{product_id}"
+        }
+      ],
+      "risk": "external mutation; creates a discount coupon that lowers future billing amounts for any customer who redeems it; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create customer apply",
+      "summary": "Plan and execute the create customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_customer",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "email_id",
+          "type": "string",
+          "summary": "Required email id record field.",
+          "maps_to": "record.email_id",
+          "required": true
+        },
+        {
+          "name": "first_name",
+          "type": "string",
+          "summary": "Required first name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "summary": "Required last name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing create customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/customer"
+        }
+      ],
+      "risk": "external mutation; creates a billing customer record in Pabbly Subscriptions; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create license apply",
+      "summary": "Plan and execute the create license reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_license",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "license_codes",
+          "type": "string",
+          "summary": "Required license codes record field.",
+          "maps_to": "record.license_codes",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "string",
+          "summary": "Required method record field.",
+          "maps_to": "record.method",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "plan_id",
+          "type": "string",
+          "summary": "Required plan id record field.",
+          "maps_to": "record.plan_id",
+          "required": true
+        },
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing create license apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/products/{product_id}/licenses"
+        }
+      ],
+      "risk": "external mutation; creates a license-key pool for a product's plan in Pabbly Subscriptions; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create payment method apply",
+      "summary": "Plan and execute the create payment method reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_payment_method",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "card_number",
+          "type": "string",
+          "summary": "Required card number record field.",
+          "maps_to": "record.card_number",
+          "required": true
+        },
+        {
+          "name": "customer_id",
+          "type": "string",
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true
+        },
+        {
+          "name": "cvv",
+          "type": "string",
+          "summary": "Required cvv record field.",
+          "maps_to": "record.cvv",
+          "required": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        },
+        {
+          "name": "first_name",
+          "type": "string",
+          "summary": "Required first name record field.",
+          "maps_to": "record.first_name",
+          "required": true
+        },
+        {
+          "name": "gateway_type",
+          "type": "string",
+          "summary": "Required gateway type record field.",
+          "maps_to": "record.gateway_type",
+          "required": true
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "summary": "Required last name record field.",
+          "maps_to": "record.last_name",
+          "required": true
+        },
+        {
+          "name": "month",
+          "type": "string",
+          "summary": "Required month record field.",
+          "maps_to": "record.month",
+          "required": true
+        },
+        {
+          "name": "year",
+          "type": "string",
+          "summary": "Required year record field.",
+          "maps_to": "record.year",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing create payment method apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/paymentmethod/{customer_id}"
+        }
+      ],
+      "risk": "external mutation; stores a new payment card on file for an existing customer via the connected payment gateway; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create plan apply",
+      "summary": "Plan and execute the create plan reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_plan",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "billing_cycle",
+          "type": "string",
+          "summary": "Required billing cycle record field.",
+          "maps_to": "record.billing_cycle",
+          "required": true
+        },
+        {
+          "name": "billing_period",
+          "type": "string",
+          "summary": "Required billing period record field.",
+          "maps_to": "record.billing_period",
+          "required": true
+        },
+        {
+          "name": "billing_period_num",
+          "type": "string",
+          "summary": "Required billing period num record field.",
+          "maps_to": "record.billing_period_num",
+          "required": true
+        },
+        {
+          "name": "plan_active",
+          "type": "string",
+          "summary": "Required plan active record field.",
+          "maps_to": "record.plan_active",
+          "required": true
+        },
+        {
+          "name": "plan_code",
+          "type": "string",
+          "summary": "Required plan code record field.",
+          "maps_to": "record.plan_code",
+          "required": true
+        },
+        {
+          "name": "plan_name",
+          "type": "string",
+          "summary": "Required plan name record field.",
+          "maps_to": "record.plan_name",
+          "required": true
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "summary": "Required price record field.",
+          "maps_to": "record.price",
+          "required": true
+        },
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing create plan apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/plan/create"
+        }
+      ],
+      "risk": "external mutation; creates a billing plan under a product in Pabbly Subscriptions; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create product apply",
+      "summary": "Plan and execute the create product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_product",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "product_name",
+          "type": "string",
+          "summary": "Required product name record field.",
+          "maps_to": "record.product_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing create product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/product/create"
+        }
+      ],
+      "risk": "external mutation; creates a sellable product in Pabbly Subscriptions; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create subscription apply",
+      "summary": "Plan and execute the create subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_subscription",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "customer_id",
+          "type": "string",
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true
+        },
+        {
+          "name": "gateway_id",
+          "type": "string",
+          "summary": "Required gateway id record field.",
+          "maps_to": "record.gateway_id",
+          "required": true
+        },
+        {
+          "name": "gateway_type",
+          "type": "string",
+          "summary": "Required gateway type record field.",
+          "maps_to": "record.gateway_type",
+          "required": true
+        },
+        {
+          "name": "method_id",
+          "type": "string",
+          "summary": "Required method id record field.",
+          "maps_to": "record.method_id",
+          "required": true
+        },
+        {
+          "name": "plan_id",
+          "type": "string",
+          "summary": "Required plan id record field.",
+          "maps_to": "record.plan_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing create subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subscription/{customer_id}"
+        }
+      ],
+      "risk": "external mutation; creates a live billing subscription for an existing customer and starts recurring charges; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "customers list",
+      "summary": "Run the customers ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing customers list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/customers"
+        }
+      ]
+    },
+    {
+      "path": "delete addon apply",
+      "summary": "Plan and execute the delete addon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_addon",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "addon_id",
+          "type": "string",
+          "summary": "Required addon id record field.",
+          "maps_to": "record.addon_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing delete addon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/addon/{addon_id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes a sellable add-on; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete addon category apply",
+      "summary": "Plan and execute the delete addon category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_addon_category",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "category_id",
+          "type": "string",
+          "summary": "Required category id record field.",
+          "maps_to": "record.category_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing delete addon category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/addoncategory/{category_id}"
+        }
+      ],
+      "risk": "external mutation; permanently deletes an add-on category; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "invoices list",
+      "summary": "Run the invoices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invoices",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing invoices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/invoices/{customer_id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "plans list",
+      "summary": "Run the plans ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "plans",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing plans list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/plans"
+        }
+      ]
+    },
+    {
+      "path": "products list",
+      "summary": "Run the products ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "products",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing products list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/products"
+        }
+      ]
+    },
+    {
+      "path": "subscriptions list",
+      "summary": "Run the subscriptions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subscriptions",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "examples": [
+        "pm pabbly-subscriptions-billing subscriptions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscriptions"
+        }
+      ]
+    },
+    {
+      "path": "update addon apply",
+      "summary": "Plan and execute the update addon reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_addon",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "addon_id",
+          "type": "string",
+          "summary": "Required addon id record field.",
+          "maps_to": "record.addon_id",
+          "required": true
+        },
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing update addon apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/addon/{addon_id}"
+        }
+      ],
+      "risk": "external mutation; updates an existing sellable add-on's price/billing terms, changing future charges for customers who have it attached; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update addon category apply",
+      "summary": "Plan and execute the update addon category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_addon_category",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "category_id",
+          "type": "string",
+          "summary": "Required category id record field.",
+          "maps_to": "record.category_id",
+          "required": true
+        },
+        {
+          "name": "category_name",
+          "type": "string",
+          "summary": "Required category name record field.",
+          "maps_to": "record.category_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing update addon category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/addoncategory/{category_id}"
+        }
+      ],
+      "risk": "external mutation; renames an existing add-on category; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update customer apply",
+      "summary": "Plan and execute the update customer reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_customer",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing update customer apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/customer/{customer_id}"
+        }
+      ],
+      "risk": "external mutation; updates a billing customer record in Pabbly Subscriptions; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update license apply",
+      "summary": "Plan and execute the update license reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_license",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "license_id",
+          "type": "string",
+          "summary": "Required license id record field.",
+          "maps_to": "record.license_id",
+          "required": true
+        },
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing update license apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/products/{product_id}/licenses/{license_id}"
+        }
+      ],
+      "risk": "external mutation; updates an existing license-key pool (may add/replace codes) in Pabbly Subscriptions; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update payment method apply",
+      "summary": "Plan and execute the update payment method reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_payment_method",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "card_number",
+          "type": "string",
+          "summary": "Required card number record field.",
+          "maps_to": "record.card_number",
+          "required": true
+        },
+        {
+          "name": "customer_id",
+          "type": "string",
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true
+        },
+        {
+          "name": "cvv",
+          "type": "string",
+          "summary": "Required cvv record field.",
+          "maps_to": "record.cvv",
+          "required": true
+        },
+        {
+          "name": "mid",
+          "type": "string",
+          "summary": "Required mid record field.",
+          "maps_to": "record.mid",
+          "required": true
+        },
+        {
+          "name": "month",
+          "type": "string",
+          "summary": "Required month record field.",
+          "maps_to": "record.month",
+          "required": true
+        },
+        {
+          "name": "year",
+          "type": "string",
+          "summary": "Required year record field.",
+          "maps_to": "record.year",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing update payment method apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/paymentmethod/{customer_id}"
+        }
+      ],
+      "risk": "external mutation; replaces the card an existing customer's future recurring billing charges against; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update plan apply",
+      "summary": "Plan and execute the update plan reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_plan",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "currency_code",
+          "type": "string",
+          "summary": "Required currency code record field.",
+          "maps_to": "record.currency_code",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "product_id",
+          "type": "string",
+          "summary": "Required product id record field.",
+          "maps_to": "record.product_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing update plan apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/plan/update/{plan_id}"
+        }
+      ],
+      "risk": "external mutation; updates a billing plan in Pabbly Subscriptions; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update product apply",
+      "summary": "Plan and execute the update product reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_product",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing update product apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/product/update/{product_id}"
+        }
+      ],
+      "risk": "external mutation; updates a sellable product in Pabbly Subscriptions; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update subscription apply",
+      "summary": "Plan and execute the update subscription reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_subscription",
+      "source_url": "https://apidocs.pabbly.com/pabbly/subscription-billing/llms.txt",
+      "flags": [
+        {
+          "name": "customer_id",
+          "type": "string",
+          "summary": "Required customer id record field.",
+          "maps_to": "record.customer_id",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "plan_id",
+          "type": "string",
+          "summary": "Required plan id record field.",
+          "maps_to": "record.plan_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm pabbly-subscriptions-billing update subscription apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subscription/{subscription_id}/update"
+        }
+      ],
+      "risk": "external mutation; changes an existing subscription's plan/payment terms, altering future customer billing; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

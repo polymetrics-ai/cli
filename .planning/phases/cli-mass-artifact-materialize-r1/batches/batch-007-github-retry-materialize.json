@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-007-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "github",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json",
+        "version": "main",
+        "retrieved_at": "2026-08-09",
+        "sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d"
+      },
+      "artifact_operations": 1220,
+      "declared_operations": 1228,
+      "operation_split": {
+        "executable": 440,
+        "provider_blocked": 492,
+        "excluded": 296
+      },
+      "cli_commands": 1229,
+      "implemented_commands": 440,
+      "named_dependency_commands": 789,
+      "flagged_discrepancies": 8,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 1129
+    }
+  ],
+  "dropped": []
+}

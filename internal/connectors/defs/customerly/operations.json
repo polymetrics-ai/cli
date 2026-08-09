@@ -1,0 +1,283 @@
+{
+  "operations": [
+    {
+      "id": "customerly.get.v1-knowledge-articles",
+      "kind": "rest_read",
+      "summary": "GET /v1/knowledge/articles",
+      "description": "help-center KB article listing; distinct product surface from contact/CRM data, out of scope",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/knowledge/articles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.post.v1-knowledge-articles",
+      "kind": "rest_write",
+      "summary": "POST /v1/knowledge/articles",
+      "description": "help-center KB article authoring; distinct product surface, out of scope",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/knowledge/articles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.get.v1-knowledge-articles-knowledge-base-article-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/knowledge/articles/{knowledge_base_article_id}",
+      "description": "help-center KB single-article fetch; distinct product surface, out of scope",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/knowledge/articles/{knowledge_base_article_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.post.v1-knowledge-articles-knowledge-base-article-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/knowledge/articles/{knowledge_base_article_id}",
+      "description": "help-center KB article edit; distinct product surface, out of scope",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/knowledge/articles/{knowledge_base_article_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.delete.v1-knowledge-articles-knowledge-base-article-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/knowledge/articles/{knowledge_base_article_id}",
+      "description": "help-center KB article delete; distinct product surface, out of scope",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/knowledge/articles/{knowledge_base_article_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.get.v1-knowledge-collections",
+      "kind": "rest_read",
+      "summary": "GET /v1/knowledge/collections",
+      "description": "help-center KB collection listing; distinct product surface from contact/CRM data, out of scope for this connector",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/knowledge/collections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.post.v1-knowledge-collections",
+      "kind": "rest_write",
+      "summary": "POST /v1/knowledge/collections",
+      "description": "help-center content authoring (create a KB collection), a distinct product surface from contact/CRM data; not a syncable object stream or a CRM mutation this connector's capability scope targets",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/knowledge/collections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.get.v1-knowledge-collections-knowledge-base-collection-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/knowledge/collections/{knowledge_base_collection_id}",
+      "description": "help-center KB single-collection fetch; distinct product surface, out of scope",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/knowledge/collections/{knowledge_base_collection_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.post.v1-knowledge-collections-knowledge-base-collection-id",
+      "kind": "rest_write",
+      "summary": "POST /v1/knowledge/collections/{knowledge_base_collection_id}",
+      "description": "help-center KB collection edit; distinct product surface, out of scope",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/knowledge/collections/{knowledge_base_collection_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.delete.v1-knowledge-collections-knowledge-base-collection-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/knowledge/collections/{knowledge_base_collection_id}",
+      "description": "help-center KB collection delete; distinct product surface, out of scope",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/knowledge/collections/{knowledge_base_collection_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.get.v1-knowledge-writers",
+      "kind": "rest_read",
+      "summary": "GET /v1/knowledge/writers",
+      "description": "help-center KB writer/author roster listing; distinct product surface, out of scope",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/knowledge/writers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.post.v1-leads",
+      "kind": "rest_write",
+      "summary": "POST /v1/leads",
+      "description": "ENGINE_GAP: same array-wrap body shape as create_user (\"leads\": [{...}]); no declarative primitive nests a record inside a named array wrapper -- see docs.md Known limits",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/leads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.get.v1-leads-email-email",
+      "kind": "rest_read",
+      "summary": "GET /v1/leads?email={email}",
+      "description": "single-record lookup by email over the same Lead resource the leads/list stream already paginates in full",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/leads?email={email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.get.v1-tags",
+      "kind": "rest_read",
+      "summary": "GET /v1/tags",
+      "description": "ENGINE_GAP: response body is {\"data\": [\"tag1\", \"tag2\", ...]} -- a bare JSON array of scalar strings, not objects; connsdk.RecordsAt only keeps array elements that decode as a JSON object, so a scalar-valued array silently yields zero records, and records.keyed_object explodes an object's VALUES (which must themselves be objects), not a flat array of strings. No declarative primitive fans a bare scalar array into one record per element (same gap class as ip2whois's nameservers deviation, docs/migration/conventions.md ledger item 12); see docs.md Known limits",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.post.v1-users",
+      "kind": "rest_write",
+      "summary": "POST /v1/users",
+      "description": "ENGINE_GAP: the documented request body wraps records in a named singleton/bulk array (\"users\": [{...}]), and the dialect's write body construction (body_type json/form/none, body_fields allow-list) has no primitive to nest a record inside a named array wrapper -- see docs.md Known limits",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.get.v1-users-email-email",
+      "kind": "rest_read",
+      "summary": "GET /v1/users?email={email}",
+      "description": "single-record lookup by email over the same User resource the users/list stream already paginates in full; no bulk/filter parameter makes this a distinct catalog stream, and the dialect has no per-record detail-fetch mechanism outside fan_out (which needs a parent id list, not a caller-supplied email)",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users?email={email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.delete.v1-users-email-email",
+      "kind": "rest_write",
+      "summary": "DELETE /v1/users?email={email}",
+      "description": "irreversibly deletes a user's full conversation/survey/campaign history by email; delete_user (by user_id) already covers the same destructive delete-by-identifier action and writes.json actions are keyed one per action name, so a second email-keyed delete_user variant would collide on the same name",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v1/users?email={email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "customerly.get.v1-users-user-id-user-id",
+      "kind": "rest_read",
+      "summary": "GET /v1/users?user_id={user_id}",
+      "description": "single-record lookup by user_id over the same User resource the users/list stream already paginates in full",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/users?user_id={user_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

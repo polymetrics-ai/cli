@@ -1,0 +1,2214 @@
+{
+  "operations": [
+    {
+      "id": "lemlist.delete.activities-activityid-recording-transcript",
+      "kind": "rest_write",
+      "summary": "DELETE /activities/{activityId}/recording-transcript",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/activities/{activityId}/recording-transcript",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns",
+      "kind": "rest_write",
+      "summary": "POST /campaigns",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaigns-campaignid-duplicate-campaigns-campaignid-pause-campaigns-campaignid-start-campaigns-campaignid-schedules-scheduleid-sequences-sequenceid-steps",
+      "kind": "rest_write",
+      "summary": "POST /campaigns, /campaigns/{campaignId}/duplicate, /campaigns/{campaignId}/pause, /campaigns/{campaignId}/start, /campaigns/{campaignId}/schedules/{scheduleId}, /sequences/{sequenceId}/steps",
+      "description": "Campaign, schedule-association, and sequence-step actions create or change outbound campaign behavior and need a dedicated reverse-ETL approval design.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns, /campaigns/{campaignId}/duplicate, /campaigns/{campaignId}/pause, /campaigns/{campaignId}/start, /campaigns/{campaignId}/schedules/{scheduleId}, /sequences/{sequenceId}/steps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-reports",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/reports",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-reports-crm-filters-inbox-inbox-contactid-inbox-contactid-drafts-inbox-contactid-drafts-draftid",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/reports, /crm/filters, /inbox, /inbox/{contactId}, /inbox/{contactId}/drafts, /inbox/{contactId}/drafts/{draftId}",
+      "description": "These GET endpoints require mandatory query selectors or path IDs such as campaignIds, CRM/user IDs, or contact/draft IDs.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/reports, /crm/filters, /inbox, /inbox/{contactId}, /inbox/{contactId}/drafts, /inbox/{contactId}/drafts/{draftId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.campaigns-campaignid",
+      "kind": "rest_write",
+      "summary": "PATCH /campaigns/{campaignId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/campaigns/{campaignId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.campaigns-campaignid-schedules-scheduleid-sequences-sequenceid-steps-stepid",
+      "kind": "rest_write",
+      "summary": "PATCH /campaigns/{campaignId}, /schedules/{scheduleId}, /sequences/{sequenceId}/steps/{stepId}",
+      "description": "Campaign, schedule, and sequence updates mutate outbound messaging configuration.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/campaigns/{campaignId}, /schedules/{scheduleId}, /sequences/{sequenceId}/steps/{stepId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-schedules-scheduleid-users-userid-leads-leads-email-contacts-idoremail-inbox-labels-labelid-v2-unsubscribes-variables-value-unsubscribes-email-enrich-enrichid",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}, /schedules/{scheduleId}, /users/{userId}, /leads, /leads/{email}, /contacts/{idOrEmail}, /inbox/labels/{labelId}, /v2/unsubscribes/variables/{value}, /unsubscribes/{email}, /enrich/{enrichId}",
+      "description": "Detail endpoints require caller-supplied IDs or email values and do not produce global collections without extra connector config or parent fan-out.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}, /schedules/{scheduleId}, /users/{userId}, /leads, /leads/{email}, /contacts/{idOrEmail}, /inbox/labels/{labelId}, /v2/unsubscribes/variables/{value}, /unsubscribes/{email}, /enrich/{enrichId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaignid-duplicate",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/{campaignId}/duplicate",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/{campaignId}/duplicate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-export-leads",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/export/leads",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/export/leads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-export-leads-contacts-export-unsubs-export-v2-unsubscribes-exports-variables-v2-unsubscribes-exports-contacts",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/export/leads, /contacts/export, /unsubs/export, /v2/unsubscribes/exports/variables, /v2/unsubscribes/exports/contacts",
+      "description": "Export endpoints produce CSV/file-style payloads or export artifacts rather than paginated JSON records.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/export/leads, /contacts/export, /unsubs/export, /v2/unsubscribes/exports/variables, /v2/unsubscribes/exports/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-export-start",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/export/start",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/export/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-export-start-campaigns-campaignid-export-exportid-status",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/export/start, /campaigns/{campaignId}/export/{exportId}/status",
+      "description": "Async export job control/status endpoints do not return stable syncable business-object collections.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/export/start, /campaigns/{campaignId}/export/{exportId}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.put.campaigns-campaignid-export-exportid-email-email",
+      "kind": "rest_write",
+      "summary": "PUT /campaigns/{campaignId}/export/{exportId}/email/{email}",
+      "description": "Export notification configuration mutates delivery settings for an async export.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/campaigns/{campaignId}/export/{exportId}/email/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-export-exportid-status",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/export/{exportId}/status",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/export/{exportId}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-leads",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/leads/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/leads/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaignid-leads",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/{campaignId}/leads/",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/{campaignId}/leads/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaignid-leads-campaigns-campaignid-leads-import-leads-start-leadid-leads-pause-leadid-leads-review-leadid-leads-interested-leadidoremail-leads-notinterested-leadidoremail-campaigns-campaignid-leads-leadidoremail-interested-campaigns-campaignid-leads-leadidoremail-notinterested-leads-leadid-variables-leads-leadid-enrich",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/{campaignId}/leads/, /campaigns/{campaignId}/leads/import, /leads/start/{leadId}, /leads/pause/{leadId}, /leads/review/{leadId}, /leads/interested/{leadIdOrEmail}, /leads/notinterested/{leadIdOrEmail}, /campaigns/{campaignId}/leads/{leadIdOrEmail}/interested, /campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested, /leads/{leadId}/variables, /leads/{leadId}/enrich",
+      "description": "Lead creation, launch/pause/review, interest-state, custom-variable, import, and enrichment actions mutate outreach state or consume enrichment credits.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/{campaignId}/leads/, /campaigns/{campaignId}/leads/import, /leads/start/{leadId}, /leads/pause/{leadId}, /leads/review/{leadId}, /leads/interested/{leadIdOrEmail}, /leads/notinterested/{leadIdOrEmail}, /campaigns/{campaignId}/leads/{leadIdOrEmail}/interested, /campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested, /leads/{leadId}/variables, /leads/{leadId}/enrich",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.campaigns-campaignid-leads-campaigns-campaignid-leads-leadid-campaigns-campaignid-leads-email-leads-leadid-variables",
+      "kind": "rest_write",
+      "summary": "DELETE /campaigns/{campaignId}/leads/, /campaigns/{campaignId}/leads/{leadId}, /campaigns/{campaignId}/leads/{email}, /leads/{leadId}/variables",
+      "description": "Lead delete/unsubscribe and variable erasure endpoints remove or suppress outreach data.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/campaigns/{campaignId}/leads/, /campaigns/{campaignId}/leads/{leadId}, /campaigns/{campaignId}/leads/{email}, /leads/{leadId}/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-leads-campaigns-campaignid-schedules-campaigns-campaignid-sequences-campaigns-campaignid-statutes-v2-campaigns-campaignid-stats-companies-companyid-notes-lemwarm-usermailboxid-settings-v2-unsubscribes-contacts-contactid",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/leads/, /campaigns/{campaignId}/schedules/, /campaigns/{campaignId}/sequences, /campaigns/{campaignId}/statutes, /v2/campaigns/{campaignId}/stats, /companies/{companyId}/notes, /lemwarm/{userMailboxId}/settings, /v2/unsubscribes/contacts/{contactId}",
+      "description": "Subresource reads require campaign, company, mailbox, or contact IDs that this legacy source contract does not collect as independent stream parameters.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/leads/, /campaigns/{campaignId}/schedules/, /campaigns/{campaignId}/sequences, /campaigns/{campaignId}/statutes, /v2/campaigns/{campaignId}/stats, /companies/{companyId}/notes, /lemwarm/{userMailboxId}/settings, /v2/unsubscribes/contacts/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaignid-leads-import",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/{campaignId}/leads/import",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/{campaignId}/leads/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.campaigns-campaignid-leads-email",
+      "kind": "rest_write",
+      "summary": "DELETE /campaigns/{campaignId}/leads/{email}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/campaigns/{campaignId}/leads/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaignid-leads-leadidoremail-interested",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/{campaignId}/leads/{leadIdOrEmail}/interested",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/{campaignId}/leads/{leadIdOrEmail}/interested",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaignid-leads-leadidoremail-notinterested",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/{campaignId}/leads/{leadIdOrEmail}/notinterested",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.campaigns-campaignid-leads-leadid",
+      "kind": "rest_write",
+      "summary": "PATCH /campaigns/{campaignId}/leads/{leadId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/campaigns/{campaignId}/leads/{leadId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.campaigns-campaignid-leads-leadid",
+      "kind": "rest_write",
+      "summary": "DELETE /campaigns/{campaignId}/leads/{leadId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/campaigns/{campaignId}/leads/{leadId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.campaigns-campaignid-leads-leadid-leads-leadid-variables",
+      "kind": "rest_write",
+      "summary": "PATCH /campaigns/{campaignId}/leads/{leadId}, /leads/{leadId}/variables",
+      "description": "Lead update endpoints mutate campaign lead records and custom variables.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/campaigns/{campaignId}/leads/{leadId}, /leads/{leadId}/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaignid-pause",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/{campaignId}/pause",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/{campaignId}/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-schedules",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/schedules/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/schedules/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaignid-schedules-scheduleid",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/{campaignId}/schedules/{scheduleId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/{campaignId}/schedules/{scheduleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-sequences",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/sequences",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/sequences",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.campaigns-campaignid-start",
+      "kind": "rest_write",
+      "summary": "POST /campaigns/{campaignId}/start",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/campaigns/{campaignId}/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.campaigns-campaignid-statutes",
+      "kind": "rest_read",
+      "summary": "GET /campaigns/{campaignId}/statutes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/campaigns/{campaignId}/statutes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.companies",
+      "kind": "rest_write",
+      "summary": "POST /companies",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.companies-companyid",
+      "kind": "rest_write",
+      "summary": "DELETE /companies/{companyId}",
+      "description": "Company deletion removes CRM company data and can detach related contacts.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/companies/{companyId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.companies-companyid-notes",
+      "kind": "rest_read",
+      "summary": "GET /companies/{companyId}/notes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/companies/{companyId}/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.companies-companyid-notes",
+      "kind": "rest_write",
+      "summary": "POST /companies/{companyId}/notes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/companies/{companyId}/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.contacts",
+      "kind": "rest_write",
+      "summary": "POST /contacts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.contacts-contacts-lists-contacts-lists-listid-entities-companies-companies-companyid-notes",
+      "kind": "rest_write",
+      "summary": "POST /contacts, /contacts/lists, /contacts/lists/{listId}/entities, /companies, /companies/{companyId}/notes",
+      "description": "CRM contact, list, company, and note writes mutate customer relationship data.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts, /contacts/lists, /contacts/lists/{listId}/entities, /companies, /companies/{companyId}/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.contacts-export",
+      "kind": "rest_read",
+      "summary": "GET /contacts/export",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.contacts-lists",
+      "kind": "rest_write",
+      "summary": "POST /contacts/lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.contacts-lists-listid-entities",
+      "kind": "rest_write",
+      "summary": "POST /contacts/lists/{listId}/entities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/contacts/lists/{listId}/entities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.contacts-idoremail",
+      "kind": "rest_read",
+      "summary": "GET /contacts/{idOrEmail}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/contacts/{idOrEmail}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.contacts-idoremail",
+      "kind": "rest_write",
+      "summary": "DELETE /contacts/{idOrEmail}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/contacts/{idOrEmail}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.crm-filters",
+      "kind": "rest_read",
+      "summary": "GET /crm/filters",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/crm/filters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.database-companies",
+      "kind": "rest_write",
+      "summary": "POST /database/companies",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/database/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.database-people",
+      "kind": "rest_write",
+      "summary": "POST /database/people",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/database/people",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.database-people-database-companies",
+      "kind": "rest_write",
+      "summary": "POST /database/people, /database/companies",
+      "description": "People/company database search is a read-like POST with request-body filters and body pagination; the declarative read engine does not model POST-body search streams without a StreamHook.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/database/people, /database/companies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.database-personas",
+      "kind": "rest_read",
+      "summary": "GET /database/personas",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/database/personas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.database-personas",
+      "kind": "rest_write",
+      "summary": "POST /database/personas",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/database/personas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.database-personas-personaid",
+      "kind": "rest_write",
+      "summary": "DELETE /database/personas/{personaId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/database/personas/{personaId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.deliverability-alerts",
+      "kind": "rest_read",
+      "summary": "GET /deliverability/alerts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deliverability/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.deliverability-alerts",
+      "kind": "rest_write",
+      "summary": "POST /deliverability/alerts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/deliverability/alerts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.deliverability-alerts-alertid",
+      "kind": "rest_read",
+      "summary": "GET /deliverability/alerts/{alertId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/deliverability/alerts/{alertId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.deliverability-alerts-alertid",
+      "kind": "rest_write",
+      "summary": "PATCH /deliverability/alerts/{alertId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/deliverability/alerts/{alertId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.deliverability-alerts-alertid",
+      "kind": "rest_write",
+      "summary": "DELETE /deliverability/alerts/{alertId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/deliverability/alerts/{alertId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.enrich",
+      "kind": "rest_write",
+      "summary": "POST /enrich",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/enrich",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.enrich-enrichid",
+      "kind": "rest_read",
+      "summary": "GET /enrich/{enrichId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/enrich/{enrichId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.fields",
+      "kind": "rest_read",
+      "summary": "GET /fields",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.hooks",
+      "kind": "rest_write",
+      "summary": "POST /hooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/hooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.hooks-hookid",
+      "kind": "rest_write",
+      "summary": "DELETE /hooks/{hookId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/hooks/{hookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.inbox",
+      "kind": "rest_read",
+      "summary": "GET /inbox",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/inbox",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.inbox-conversations-labels-contactid",
+      "kind": "rest_write",
+      "summary": "POST /inbox/conversations/labels/{contactId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/inbox/conversations/labels/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.inbox-conversations-labels-contactid",
+      "kind": "rest_write",
+      "summary": "DELETE /inbox/conversations/labels/{contactId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/inbox/conversations/labels/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.inbox-conversations-labels-contactid-inbox-contactid-drafts-draftid",
+      "kind": "rest_write",
+      "summary": "DELETE /inbox/conversations/labels/{contactId}, /inbox/{contactId}/drafts/{draftId}",
+      "description": "Inbox delete/remove actions alter conversation metadata or soft-delete drafts.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/inbox/conversations/labels/{contactId}, /inbox/{contactId}/drafts/{draftId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.inbox-email",
+      "kind": "rest_write",
+      "summary": "POST /inbox/email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/inbox/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.inbox-labels",
+      "kind": "rest_write",
+      "summary": "POST /inbox/labels",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/inbox/labels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.inbox-labels-labelid",
+      "kind": "rest_read",
+      "summary": "GET /inbox/labels/{labelId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/inbox/labels/{labelId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.inbox-linkedin",
+      "kind": "rest_write",
+      "summary": "POST /inbox/linkedin",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/inbox/linkedin",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.inbox-whatsapp",
+      "kind": "rest_write",
+      "summary": "POST /inbox/whatsapp",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/inbox/whatsapp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.inbox-contactid",
+      "kind": "rest_read",
+      "summary": "GET /inbox/{contactId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/inbox/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.inbox-contactid-drafts",
+      "kind": "rest_read",
+      "summary": "GET /inbox/{contactId}/drafts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/inbox/{contactId}/drafts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.inbox-contactid-drafts",
+      "kind": "rest_write",
+      "summary": "POST /inbox/{contactId}/drafts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/inbox/{contactId}/drafts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.inbox-contactid-drafts-draftid",
+      "kind": "rest_read",
+      "summary": "GET /inbox/{contactId}/drafts/{draftId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/inbox/{contactId}/drafts/{draftId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.inbox-contactid-drafts-draftid",
+      "kind": "rest_write",
+      "summary": "PATCH /inbox/{contactId}/drafts/{draftId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/inbox/{contactId}/drafts/{draftId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.inbox-contactid-drafts-draftid",
+      "kind": "rest_write",
+      "summary": "DELETE /inbox/{contactId}/drafts/{draftId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/inbox/{contactId}/drafts/{draftId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.leads",
+      "kind": "rest_read",
+      "summary": "GET /leads",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/leads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.leads-audio",
+      "kind": "rest_write",
+      "summary": "POST /leads/audio",
+      "description": "Voice-message upload is a binary/multipart payload, outside the JSON write dialect.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/audio",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.leads-interested-leadidoremail",
+      "kind": "rest_write",
+      "summary": "POST /leads/interested/{leadIdOrEmail}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/interested/{leadIdOrEmail}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.leads-notinterested-leadidoremail",
+      "kind": "rest_write",
+      "summary": "POST /leads/notinterested/{leadIdOrEmail}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/notinterested/{leadIdOrEmail}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.leads-pause-leadid",
+      "kind": "rest_write",
+      "summary": "POST /leads/pause/{leadId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/pause/{leadId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.leads-review-leadid",
+      "kind": "rest_write",
+      "summary": "POST /leads/review/{leadId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/review/{leadId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.leads-start-leadid",
+      "kind": "rest_write",
+      "summary": "POST /leads/start/{leadId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/start/{leadId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.leads-email",
+      "kind": "rest_read",
+      "summary": "GET /leads/{email}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/leads/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.leads-leadid-enrich",
+      "kind": "rest_write",
+      "summary": "POST /leads/{leadId}/enrich",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/{leadId}/enrich",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.leads-leadid-variables",
+      "kind": "rest_write",
+      "summary": "POST /leads/{leadId}/variables",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/leads/{leadId}/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.leads-leadid-variables",
+      "kind": "rest_write",
+      "summary": "PATCH /leads/{leadId}/variables",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/leads/{leadId}/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.leads-leadid-variables",
+      "kind": "rest_write",
+      "summary": "DELETE /leads/{leadId}/variables",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/leads/{leadId}/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.lemwarm-usermailboxid-pause",
+      "kind": "rest_write",
+      "summary": "POST /lemwarm/{userMailboxId}/pause",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/lemwarm/{userMailboxId}/pause",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.lemwarm-usermailboxid-settings",
+      "kind": "rest_read",
+      "summary": "GET /lemwarm/{userMailboxId}/settings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/lemwarm/{userMailboxId}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.lemwarm-usermailboxid-settings",
+      "kind": "rest_write",
+      "summary": "PATCH /lemwarm/{userMailboxId}/settings",
+      "description": "lemwarm settings updates mutate mailbox deliverability configuration.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/lemwarm/{userMailboxId}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.lemwarm-usermailboxid-start",
+      "kind": "rest_write",
+      "summary": "POST /lemwarm/{userMailboxId}/start",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/lemwarm/{userMailboxId}/start",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.schedules",
+      "kind": "rest_write",
+      "summary": "POST /schedules",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/schedules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.schedules-lemwarm-usermailboxid-start-lemwarm-usermailboxid-pause-hooks-enrich-v2-enrichments-bulk-v2-unsubscribes-variables-v2-unsubscribes-variables-value-v2-unsubscribes-contacts-contactid-unsubscribes-email-user-email-accounts-user-email-accounts-emailaccountid-test",
+      "kind": "rest_write",
+      "summary": "POST /schedules, /lemwarm/{userMailboxId}/start, /lemwarm/{userMailboxId}/pause, /hooks, /enrich, /v2/enrichments/bulk, /v2/unsubscribes/variables, /v2/unsubscribes/variables/{value}, /v2/unsubscribes/contacts/{contactId}, /unsubscribes/{email}, /user/email-accounts, /user/email-accounts/{emailAccountId}/test",
+      "description": "Schedule creation, deliverability control, webhook configuration, enrichment, unsubscribe, and email-account actions mutate account state or consume credits.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/schedules, /lemwarm/{userMailboxId}/start, /lemwarm/{userMailboxId}/pause, /hooks, /enrich, /v2/enrichments/bulk, /v2/unsubscribes/variables, /v2/unsubscribes/variables/{value}, /v2/unsubscribes/contacts/{contactId}, /unsubscribes/{email}, /user/email-accounts, /user/email-accounts/{emailAccountId}/test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.schedules-scheduleid",
+      "kind": "rest_read",
+      "summary": "GET /schedules/{scheduleId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/schedules/{scheduleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.schedules-scheduleid",
+      "kind": "rest_write",
+      "summary": "PATCH /schedules/{scheduleId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/schedules/{scheduleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.schedules-scheduleid",
+      "kind": "rest_write",
+      "summary": "DELETE /schedules/{scheduleId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/schedules/{scheduleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.schedules-scheduleid-sequences-sequenceid-steps-stepid-activities-activityid-recording-transcript-v2-unsubscribes-variables-value-v2-unsubscribes-contacts-contactid-unsubscribes-email-hooks-hookid-user-email-accounts-emailaccountid",
+      "kind": "rest_write",
+      "summary": "DELETE /schedules/{scheduleId}, /sequences/{sequenceId}/steps/{stepId}, /activities/{activityId}/recording-transcript, /v2/unsubscribes/variables/{value}, /v2/unsubscribes/contacts/{contactId}, /unsubscribes/{email}, /hooks/{hookId}, /user/email-accounts/{emailAccountId}",
+      "description": "Delete/resubscribe/disconnect endpoints remove configuration, recordings/transcripts, webhook/email-account connections, or unsubscribe state.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/schedules/{scheduleId}, /sequences/{sequenceId}/steps/{stepId}, /activities/{activityId}/recording-transcript, /v2/unsubscribes/variables/{value}, /v2/unsubscribes/contacts/{contactId}, /unsubscribes/{email}, /hooks/{hookId}, /user/email-accounts/{emailAccountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.sequences-sequenceid-steps",
+      "kind": "rest_write",
+      "summary": "POST /sequences/{sequenceId}/steps",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequences/{sequenceId}/steps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.sequences-sequenceid-steps-stepid",
+      "kind": "rest_write",
+      "summary": "PATCH /sequences/{sequenceId}/steps/{stepId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/sequences/{sequenceId}/steps/{stepId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.sequences-sequenceid-steps-stepid",
+      "kind": "rest_write",
+      "summary": "DELETE /sequences/{sequenceId}/steps/{stepId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sequences/{sequenceId}/steps/{stepId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.sequences-sequenceid-steps-stepid-ab-test",
+      "kind": "rest_read",
+      "summary": "GET /sequences/{sequenceId}/steps/{stepId}/ab-test",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.sequences-sequenceid-steps-stepid-ab-test",
+      "kind": "rest_write",
+      "summary": "POST /sequences/{sequenceId}/steps/{stepId}/ab-test",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.sequences-sequenceid-steps-stepid-ab-test",
+      "kind": "rest_write",
+      "summary": "PATCH /sequences/{sequenceId}/steps/{stepId}/ab-test",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.sequences-sequenceid-steps-stepid-ab-test",
+      "kind": "rest_write",
+      "summary": "DELETE /sequences/{sequenceId}/steps/{stepId}/ab-test",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.sequences-sequenceid-steps-stepid-ab-test-winner",
+      "kind": "rest_write",
+      "summary": "POST /sequences/{sequenceId}/steps/{stepId}/ab-test/winner",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sequences/{sequenceId}/steps/{stepId}/ab-test/winner",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.tasks",
+      "kind": "rest_write",
+      "summary": "POST /tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.tasks",
+      "kind": "rest_write",
+      "summary": "PATCH /tasks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/tasks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.tasks-inbox-contactid-drafts-draftid",
+      "kind": "rest_write",
+      "summary": "PATCH /tasks, /inbox/{contactId}/drafts/{draftId}",
+      "description": "Task and draft updates mutate operational outreach workflow state.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/tasks, /inbox/{contactId}/drafts/{draftId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.tasks-tasks-ignore-inbox-email-inbox-linkedin-inbox-whatsapp-inbox-labels-inbox-conversations-labels-contactid-inbox-contactid-drafts",
+      "kind": "rest_write",
+      "summary": "POST /tasks, /tasks/ignore, /inbox/email, /inbox/linkedin, /inbox/whatsapp, /inbox/labels, /inbox/conversations/labels/{contactId}, /inbox/{contactId}/drafts",
+      "description": "Task and inbox endpoints create/send messages, labels, drafts, or task state changes.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks, /tasks/ignore, /inbox/email, /inbox/linkedin, /inbox/whatsapp, /inbox/labels, /inbox/conversations/labels/{contactId}, /inbox/{contactId}/drafts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.tasks-ignore",
+      "kind": "rest_write",
+      "summary": "POST /tasks/ignore",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/tasks/ignore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.unsubs-export",
+      "kind": "rest_read",
+      "summary": "GET /unsubs/export",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/unsubs/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.unsubscribes-email",
+      "kind": "rest_read",
+      "summary": "GET /unsubscribes/{email}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/unsubscribes/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.unsubscribes-email",
+      "kind": "rest_write",
+      "summary": "POST /unsubscribes/{email}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/unsubscribes/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.unsubscribes-email",
+      "kind": "rest_write",
+      "summary": "DELETE /unsubscribes/{email}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/unsubscribes/{email}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.user-email-accounts",
+      "kind": "rest_write",
+      "summary": "POST /user/email-accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/user/email-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.user-email-accounts-emailaccountid",
+      "kind": "rest_write",
+      "summary": "DELETE /user/email-accounts/{emailAccountId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/user/email-accounts/{emailAccountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.user-email-accounts-emailaccountid-test",
+      "kind": "rest_write",
+      "summary": "POST /user/email-accounts/{emailAccountId}/test",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/user/email-accounts/{emailAccountId}/test",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.users-userid",
+      "kind": "rest_read",
+      "summary": "GET /users/{userId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{userId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.v2-campaigns-stats-batch",
+      "kind": "rest_write",
+      "summary": "POST /v2/campaigns/stats/batch",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/campaigns/stats/batch",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.v2-campaigns-campaignid-stats",
+      "kind": "rest_read",
+      "summary": "GET /v2/campaigns/{campaignId}/stats",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/campaigns/{campaignId}/stats",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.v2-enrichments-bulk",
+      "kind": "rest_write",
+      "summary": "POST /v2/enrichments/bulk",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/enrichments/bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.v2-unsubscribes-contacts-contactid",
+      "kind": "rest_read",
+      "summary": "GET /v2/unsubscribes/contacts/{contactId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/unsubscribes/contacts/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.v2-unsubscribes-contacts-contactid",
+      "kind": "rest_write",
+      "summary": "POST /v2/unsubscribes/contacts/{contactId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/unsubscribes/contacts/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.v2-unsubscribes-contacts-contactid",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/unsubscribes/contacts/{contactId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/unsubscribes/contacts/{contactId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.v2-unsubscribes-exports-contacts",
+      "kind": "rest_read",
+      "summary": "GET /v2/unsubscribes/exports/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/unsubscribes/exports/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.v2-unsubscribes-exports-variables",
+      "kind": "rest_read",
+      "summary": "GET /v2/unsubscribes/exports/variables",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/unsubscribes/exports/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.v2-unsubscribes-variables",
+      "kind": "rest_write",
+      "summary": "POST /v2/unsubscribes/variables",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/unsubscribes/variables",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.v2-unsubscribes-variables-value",
+      "kind": "rest_read",
+      "summary": "GET /v2/unsubscribes/variables/{value}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/unsubscribes/variables/{value}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.v2-unsubscribes-variables-value",
+      "kind": "rest_write",
+      "summary": "POST /v2/unsubscribes/variables/{value}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/unsubscribes/variables/{value}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.v2-unsubscribes-variables-value",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/unsubscribes/variables/{value}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/unsubscribes/variables/{value}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.watchlist",
+      "kind": "rest_read",
+      "summary": "GET /watchlist",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/watchlist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.watchlist",
+      "kind": "rest_write",
+      "summary": "POST /watchlist",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/watchlist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.patch.watchlist",
+      "kind": "rest_write",
+      "summary": "PATCH /watchlist",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/watchlist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.delete.watchlist",
+      "kind": "rest_write",
+      "summary": "DELETE /watchlist",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/watchlist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.watchlist-filter-values",
+      "kind": "rest_read",
+      "summary": "GET /watchlist/filter-values",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/watchlist/filter-values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.watchlist-filters",
+      "kind": "rest_read",
+      "summary": "GET /watchlist/filters",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/watchlist/filters",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.watchlist-history",
+      "kind": "rest_read",
+      "summary": "GET /watchlist/history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/watchlist/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.get.watchlist-library",
+      "kind": "rest_read",
+      "summary": "GET /watchlist/library",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/watchlist/library",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lemlist.post.watchlist-watchlistid-external-signals",
+      "kind": "rest_write",
+      "summary": "POST /watchlist/{watchListId}/external-signals",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.lemlist.com/api-reference/getting-started/overview",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/watchlist/{watchListId}/external-signals",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,257 +1,308 @@
 {
-  "api": "Employment Hero REST API (base https://api.employmenthero.com/api; v1 and v2 paths)",
+  "api": "Employment Hero REST API (base https://api.employmenthero.com/api; v1 and v2 paths); provider artifact version: provider-published reference without an explicit version",
   "docs": "https://developer.employmenthero.com/api-references and https://developer.employmenthero.com/postman-collection.json",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion from the official Employment Hero API reference/Postman collection: all practical JSON GET data endpoints are covered as streams and all simple JSON mutations are covered as writes; OAuth, portal/webhook setup, multipart uploads, binary PDF generation, and async polling/status endpoints are explicitly excluded by category.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited postman artifact (128 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "employment-hero-artifact-2026-08-09",
+      "url": "https://developer.employmenthero.com/postman-collection.json",
+      "kind": "postman",
+      "version": "provider-published reference without an explicit version",
+      "retrieved_at": "2026-08-09",
+      "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42"
+    }
+  ],
   "endpoints": [
     {
-      "method": "POST",
-      "path": "https://oauth.employmenthero.com/oauth2/token",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "OAuth token exchange is credential acquisition, not a connector read or reverse-ETL write action."
-      }
-    },
-    {
       "method": "GET",
-      "path": "https://oauth.employmenthero.com/oauth2/authorize",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "OAuth authorization redirect is an interactive auth flow, not a data endpoint."
+      "path": "/oauth2/authorize",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[0].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "https://oauth.employmenthero.com/oauth2/token (refresh)",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "OAuth token refresh is credential maintenance, not a connector data surface."
+      "path": "/oauth2/token",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[0].item[0].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/v1/organisations",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[25].item[0].request.url"
+      },
       "covered_by": {
         "stream": "organisations"
       }
     },
     {
       "method": "GET",
+      "path": "/v1/organisations/{id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[25].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/organisations/{organisation_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "existing-surface[GET /v1/organisations/{organisation_id}]"
+      },
       "covered_by": {
         "stream": "organisation"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees",
-      "covered_by": {
-        "stream": "employees"
+      "path": "/v1/organisations/{organisation_id}/awards_and_classifications",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[1].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}",
-      "covered_by": {
-        "stream": "employee"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/organisations/{organisation_id}/employees/quick_add_employee",
-      "covered_by": {
-        "write": "quick_add_employee"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/organisations/{organisation_id}/employees/quick_add_contractor",
-      "covered_by": {
-        "write": "quick_add_contractor"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/organisations/{organisation_id}/employees/polling_onboard_employee",
-      "covered_by": {
-        "write": "onboard_employee_async"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/onboard/polling_status",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "Polling endpoint reports asynchronous job status for a prior mutation and needs an ephemeral polling key."
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/personal_details",
-      "covered_by": {
-        "write": "update_employee_personal_details"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employment_details",
-      "covered_by": {
-        "write": "update_employee_employment_details"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/contractor_details",
-      "covered_by": {
-        "write": "update_employee_contractor_details"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}",
-      "covered_by": {
-        "write": "delete_employee"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/teams",
-      "covered_by": {
-        "stream": "teams"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/teams/{team_id}/employees",
-      "covered_by": {
-        "stream": "team_employees"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/leave_requests",
-      "covered_by": {
-        "stream": "leave_requests"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/leave_requests/{leave_request_id}",
-      "covered_by": {
-        "stream": "leave_request"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_requests",
-      "covered_by": {
-        "write": "create_leave_request"
+      "path": "/v1/organisations/{organisation_id}/benefits",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[3].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/certifications",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[4].item[0].request.url"
+      },
       "covered_by": {
         "stream": "certifications"
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}",
-      "covered_by": {
-        "stream": "certification"
-      }
-    },
-    {
       "method": "POST",
       "path": "/v1/organisations/{organisation_id}/certifications",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[4].item[2].request.url"
+      },
       "covered_by": {
         "write": "create_certification"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}",
-      "covered_by": {
-        "write": "update_certification"
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/certifications/file_uploads",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[4].item[7].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official file upload endpoint requires multipart/binary upload semantics not expressible by declarative JSON writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/certifications/polling_status",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "Polling endpoint reports async certification import/upload status and needs an ephemeral polling key."
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[4].item[4].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Polling endpoint reports async certification import/upload status and needs an ephemeral polling key.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[4].item[1].request.url"
+      },
+      "covered_by": {
+        "stream": "certification"
       }
     },
     {
       "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}/archive_status",
+      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[4].item[3].request.url"
+      },
       "covered_by": {
-        "write": "archive_certification"
+        "write": "update_certification"
       }
     },
     {
       "method": "DELETE",
       "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[4].item[6].request.url"
+      },
       "covered_by": {
         "write": "delete_certification"
       }
     },
     {
-      "method": "POST",
-      "path": "/v1/organisations/{organisation_id}/certifications/file_uploads",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Official file upload endpoint requires multipart/binary upload semantics not expressible by declarative JSON writes."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications",
-      "covered_by": {
-        "stream": "employee_certification_details"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications/file_uploads",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Official employee certification file upload requires multipart/binary upload semantics not expressible by declarative JSON writes."
-      }
-    },
-    {
       "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications/{id}",
+      "path": "/v1/organisations/{organisation_id}/certifications/{certification_id}/archive_status",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[4].item[5].request.url"
+      },
       "covered_by": {
-        "write": "update_employee_certification"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/bank_accounts",
-      "covered_by": {
-        "stream": "bank_accounts_v1"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/bank_accounts",
-      "covered_by": {
-        "stream": "bank_accounts_v2"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/job_histories",
-      "covered_by": {
-        "stream": "contractor_job_histories"
+        "write": "archive_certification"
       }
     },
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/cost_centres",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[6].item[0].request.url"
+      },
       "covered_by": {
         "stream": "cost_centres"
       }
@@ -259,6 +310,15 @@
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/custom_fields",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[7].item[0].request.url"
+      },
       "covered_by": {
         "stream": "custom_fields"
       }
@@ -266,6 +326,15 @@
     {
       "method": "POST",
       "path": "/v1/organisations/{organisation_id}/departments",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[8].item[0].request.url"
+      },
       "covered_by": {
         "write": "create_department"
       }
@@ -273,13 +342,313 @@
     {
       "method": "PATCH",
       "path": "/v1/organisations/{organisation_id}/departments/{department_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[8].item[1].request.url"
+      },
       "covered_by": {
         "write": "update_department"
       }
     },
     {
       "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employee_benefits",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[12].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "employees"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/onboard/polling_status",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[5].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Polling endpoint reports asynchronous job status for a prior mutation and needs an ephemeral polling key.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/polling_onboard_employee",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[4].request.url"
+      },
+      "covered_by": {
+        "write": "onboard_employee_async"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/quick_add_contractor",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[3].request.url"
+      },
+      "covered_by": {
+        "write": "quick_add_contractor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/quick_add_employee",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[2].request.url"
+      },
+      "covered_by": {
+        "write": "quick_add_employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "existing-surface[GET /v1/organisations/{organisation_id}/employees/{employee_id}]"
+      },
+      "covered_by": {
+        "stream": "employee"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[9].request.url"
+      },
+      "covered_by": {
+        "write": "delete_employee"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/bank_accounts",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[2].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "bank_accounts_v1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[13].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "employee_certification_details"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications/file_uploads",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[13].item[1].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Official employee certification file upload requires multipart/binary upload semantics not expressible by declarative JSON writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/certifications/{id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[13].item[2].request.url"
+      },
+      "covered_by": {
+        "write": "update_employee_certification"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/contractor_details",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[8].request.url"
+      },
+      "covered_by": {
+        "write": "update_employee_contractor_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[14].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "employee_custom_fields"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/bulk",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[14].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields/{custom_field_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[14].item[1].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/documents",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[9].item[0].request.url"
+      },
       "covered_by": {
         "stream": "documents"
       }
@@ -287,224 +656,184 @@
     {
       "method": "POST",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/documents",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Document creation in the official collection has no JSON body and represents document/file upload behavior outside declarative JSON writes."
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[9].item[1].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Document creation in the official collection has no JSON body and represents document/file upload behavior outside declarative JSON writes.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/emergency_contacts",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[10].item[0].request.url"
+      },
       "covered_by": {
         "stream": "emergency_contacts"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/custom_fields",
-      "covered_by": {
-        "stream": "employee_custom_fields"
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[12].item[0].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employing_entities",
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[12].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[12].item[3].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employee_benefits/{employee_benefit_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[12].item[4].request.url"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employment_details",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[7].request.url"
+      },
       "covered_by": {
-        "stream": "employing_entities"
+        "write": "update_employee_employment_details"
       }
     },
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/employment_histories",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[16].item[0].request.url"
+      },
       "covered_by": {
         "stream": "employment_histories"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/forms",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/job_histories",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[5].item[0].request.url"
+      },
       "covered_by": {
-        "stream": "forms"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/forms/{form_id}",
-      "covered_by": {
-        "stream": "form"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/organisations/{organisation_id}/forms/{form_id}",
-      "covered_by": {
-        "write": "delete_form"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses",
-      "covered_by": {
-        "stream": "form_responses"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}",
-      "covered_by": {
-        "stream": "form_response"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/assignments",
-      "covered_by": {
-        "stream": "form_assignments"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/members/{member_id}/form_responses",
-      "covered_by": {
-        "stream": "member_form_responses"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/form_categories",
-      "covered_by": {
-        "stream": "form_categories"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/organisations/{organisation_id}/form_categories",
-      "covered_by": {
-        "write": "create_form_category"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/form_categories/{form_category_id}",
-      "covered_by": {
-        "write": "update_form_category"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/organisations/{organisation_id}/form_categories/{form_category_id}",
-      "covered_by": {
-        "write": "delete_form_category"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/form_templates",
-      "covered_by": {
-        "stream": "form_templates"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}",
-      "covered_by": {
-        "stream": "form_template"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/organisations/{organisation_id}/form_templates",
-      "covered_by": {
-        "write": "create_form_template"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}",
-      "covered_by": {
-        "write": "update_form_template"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}",
-      "covered_by": {
-        "write": "delete_form_template"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/goals",
-      "covered_by": {
-        "stream": "goals"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}",
-      "covered_by": {
-        "stream": "goal"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/comments",
-      "covered_by": {
-        "stream": "goal_comments"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results",
-      "covered_by": {
-        "stream": "goal_key_results"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}",
-      "covered_by": {
-        "stream": "goal_key_result"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/archive_status",
-      "covered_by": {
-        "write": "update_goal_archive_status"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/update_status",
-      "covered_by": {
-        "write": "update_goal_health_status"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/kiosk_members",
-      "covered_by": {
-        "stream": "kiosk_members"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/kiosk_members/bulk_grant_access",
-      "covered_by": {
-        "write": "bulk_grant_kiosk_access"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/organisations/{organisation_id}/kiosk_members/bulk_revoke_access",
-      "covered_by": {
-        "write": "bulk_revoke_kiosk_access"
+        "stream": "contractor_job_histories"
       }
     },
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_balances",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[22].item[0].request.url"
+      },
       "covered_by": {
         "stream": "leave_balances"
       }
@@ -512,34 +841,105 @@
     {
       "method": "PUT",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_balances/{id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[22].item[1].request.url"
+      },
       "covered_by": {
         "write": "update_leave_balance"
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/leave_categories",
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/leave_requests",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[24].item[2].request.url"
+      },
       "covered_by": {
-        "stream": "leave_categories"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/pay_categories",
-      "covered_by": {
-        "stream": "pay_categories"
+        "write": "create_leave_request"
       }
     },
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/pay_details",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[27].item[0].request.url"
+      },
       "covered_by": {
         "stream": "pay_details"
       }
     },
     {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/salary_versions",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[27].item[1].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/pay_details/work_hours",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[27].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[28].item[0].request.url"
+      },
       "covered_by": {
         "stream": "payslips"
       }
@@ -547,6 +947,15 @@
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips/{payslip_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[28].item[1].request.url"
+      },
       "covered_by": {
         "stream": "payslip"
       }
@@ -554,14 +963,1034 @@
     {
       "method": "PUT",
       "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/payslips/{payslip_id}/pdf_gen",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Payslip PDF generation returns or prepares a binary PDF artifact, not a JSON write shape for this engine."
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[28].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Payslip PDF generation returns or prepares a binary PDF artifact, not a JSON write shape for this engine.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/personal_details",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[6].request.url"
+      },
+      "covered_by": {
+        "write": "update_employee_personal_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/superannuation_detail",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[32].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "superannuation_detail_v1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/tax_declaration",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[33].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "tax_declaration_v1"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/timesheet_entries",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[35].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "timesheet_entries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/work_eligibility",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[37].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "work_eligibility"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employees/{id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[11].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/employing_entities",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[15].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "employing_entities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/form_categories",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[18].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "form_categories"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/form_categories",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[18].item[1].request.url"
+      },
+      "covered_by": {
+        "write": "create_form_category"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/form_categories/{form_category_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[18].item[2].request.url"
+      },
+      "covered_by": {
+        "write": "update_form_category"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/form_categories/{form_category_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[18].item[3].request.url"
+      },
+      "covered_by": {
+        "write": "delete_form_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/form_templates",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[19].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "form_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/form_templates",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[19].item[2].request.url"
+      },
+      "covered_by": {
+        "write": "create_form_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[19].item[1].request.url"
+      },
+      "covered_by": {
+        "stream": "form_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[19].item[3].request.url"
+      },
+      "covered_by": {
+        "write": "update_form_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/form_templates/{template_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[19].item[4].request.url"
+      },
+      "covered_by": {
+        "write": "delete_form_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "forms"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/forms",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[1].request.url"
+      },
+      "covered_by": {
+        "stream": "form"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[3].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[4].request.url"
+      },
+      "covered_by": {
+        "write": "delete_form"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/archive",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[8].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/assign",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[6].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/assignments",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[13].request.url"
+      },
+      "covered_by": {
+        "stream": "form_assignments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/close",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[7].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/publish",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[5].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[9].request.url"
+      },
+      "covered_by": {
+        "stream": "form_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[10].request.url"
+      },
+      "covered_by": {
+        "stream": "form_response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/approve",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[11].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/forms/{form_id}/responses/{response_id}/decline",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[12].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "goals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/goals",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/goals/file_uploads",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[15].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[1].request.url"
+      },
+      "covered_by": {
+        "stream": "goal"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[3].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[14].request.url"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/archive_status",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[12].request.url"
+      },
+      "covered_by": {
+        "write": "update_goal_archive_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/comments",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[4].request.url"
+      },
+      "covered_by": {
+        "stream": "goal_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[5].request.url"
+      },
+      "covered_by": {
+        "stream": "goal_key_results"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[7].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[6].request.url"
+      },
+      "covered_by": {
+        "stream": "goal_key_result"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[8].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[9].request.url"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/archive_status",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[10].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/key_results/{key_result_id}/status",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[11].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/status",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[20].item[13].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/goals/{goal_id}/update_status",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "existing-surface[PATCH /v1/organisations/{organisation_id}/goals/{goal_id}/update_status]"
+      },
+      "covered_by": {
+        "write": "update_goal_health_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/kiosk_members",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[21].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "kiosk_members"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/kiosk_members/bulk_grant_access",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[21].item[1].request.url"
+      },
+      "covered_by": {
+        "write": "bulk_grant_kiosk_access"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/organisations/{organisation_id}/kiosk_members/bulk_revoke_access",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[21].item[2].request.url"
+      },
+      "covered_by": {
+        "write": "bulk_revoke_kiosk_access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/leave_categories",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[23].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "leave_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/leave_requests",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[24].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "leave_requests"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/leave_requests/{id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[24].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/leave_requests/{leave_request_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "existing-surface[GET /v1/organisations/{organisation_id}/leave_requests/{leave_request_id}]"
+      },
+      "covered_by": {
+        "stream": "leave_request"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/members/{member_id}/form_responses",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[17].item[14].request.url"
+      },
+      "covered_by": {
+        "stream": "member_form_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/pay_categories",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[26].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "pay_categories"
       }
     },
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/policies",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[29].item[0].request.url"
+      },
       "covered_by": {
         "stream": "policies"
       }
@@ -569,6 +1998,15 @@
     {
       "method": "POST",
       "path": "/v1/organisations/{organisation_id}/positions",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[30].item[0].request.url"
+      },
       "covered_by": {
         "write": "create_position"
       }
@@ -576,92 +2014,191 @@
     {
       "method": "PATCH",
       "path": "/v1/organisations/{organisation_id}/positions/{position_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[30].item[1].request.url"
+      },
       "covered_by": {
         "write": "update_position"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/rostered_shifts",
-      "covered_by": {
-        "stream": "rostered_shifts"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/rostered_shifts/{rostered_shift_id}",
-      "covered_by": {
-        "stream": "rostered_shift"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/rostered_shifts/cost",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "Cost endpoint is an aggregate/calculation endpoint rather than a list or object data stream."
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v1/organisations/{organisation_id}/roles",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[31].item[3].request.url"
+      },
       "covered_by": {
         "stream": "roles"
       }
     },
     {
+      "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/rostered_shifts",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[31].item[0].request.url"
+      },
+      "covered_by": {
+        "stream": "rostered_shifts"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v1/organisations/{organisation_id}/rostered_shifts/bulk_create",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[31].item[4].request.url"
+      },
       "covered_by": {
         "write": "bulk_create_rostered_shifts"
       }
     },
     {
       "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/rostered_shifts/cost",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[31].item[2].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Cost endpoint is an aggregate/calculation endpoint rather than a list or object data stream.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/organisations/{organisation_id}/rostered_shifts/job_status/{job_id}",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "Async bulk-create job status endpoint needs a prior mutation job id and is not an independent data stream."
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[31].item[5].request.url"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Async bulk-create job status endpoint needs a prior mutation job id and is not an independent data stream.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/superannuation_detail",
-      "covered_by": {
-        "stream": "superannuation_detail_v1"
+      "path": "/v1/organisations/{organisation_id}/rostered_shifts/{id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[31].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/superannuation_detail",
+      "path": "/v1/organisations/{organisation_id}/rostered_shifts/{rostered_shift_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "existing-surface[GET /v1/organisations/{organisation_id}/rostered_shifts/{rostered_shift_id}]"
+      },
       "covered_by": {
-        "stream": "superannuation_detail_v2"
+        "stream": "rostered_shift"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/tax_declaration",
+      "path": "/v1/organisations/{organisation_id}/teams",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[34].item[0].request.url"
+      },
       "covered_by": {
-        "stream": "tax_declaration_v1"
+        "stream": "teams"
       }
     },
     {
       "method": "GET",
-      "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/tax_declaration",
+      "path": "/v1/organisations/{organisation_id}/teams/{team_id}/employees",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[34].item[1].request.url"
+      },
       "covered_by": {
-        "stream": "tax_declaration_v2"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/timesheet_entries",
-      "covered_by": {
-        "stream": "timesheet_entries"
+        "stream": "team_employees"
       }
     },
     {
       "method": "POST",
       "path": "/v1/organisations/{organisation_id}/timesheet_entries",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[35].item[1].request.url"
+      },
       "covered_by": {
         "write": "create_timesheet_entries"
       }
@@ -669,27 +2206,69 @@
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/unavailabilities",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[36].item[0].request.url"
+      },
       "covered_by": {
         "stream": "unavailabilities"
       }
     },
     {
       "method": "GET",
+      "path": "/v1/organisations/{organisation_id}/unavailabilities/{id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[36].item[1].request.url"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/organisations/{organisation_id}/unavailabilities/{unavailability_id}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "existing-surface[GET /v1/organisations/{organisation_id}/unavailabilities/{unavailability_id}]"
+      },
       "covered_by": {
         "stream": "unavailability"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/organisations/{organisation_id}/employees/{employee_id}/work_eligibility",
-      "covered_by": {
-        "stream": "work_eligibility"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v1/organisations/{organisation_id}/work_locations",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[38].item[0].request.url"
+      },
       "covered_by": {
         "stream": "work_locations"
       }
@@ -697,6 +2276,15 @@
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/work_sites",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[39].item[0].request.url"
+      },
       "covered_by": {
         "stream": "work_sites"
       }
@@ -704,6 +2292,15 @@
     {
       "method": "POST",
       "path": "/v1/organisations/{organisation_id}/work_sites",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[39].item[1].request.url"
+      },
       "covered_by": {
         "write": "create_work_site"
       }
@@ -711,6 +2308,15 @@
     {
       "method": "PUT",
       "path": "/v1/organisations/{organisation_id}/work_sites/{work_site_id}",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[39].item[2].request.url"
+      },
       "covered_by": {
         "write": "update_work_site"
       }
@@ -718,8 +2324,131 @@
     {
       "method": "GET",
       "path": "/v1/organisations/{organisation_id}/work_types",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[40].item[0].request.url"
+      },
       "covered_by": {
         "stream": "work_types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/bank_accounts",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[2].item[1].request.url"
+      },
+      "covered_by": {
+        "stream": "bank_accounts_v2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/superannuation_detail",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[32].item[1].request.url"
+      },
+      "covered_by": {
+        "stream": "superannuation_detail_v2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/organisations/{organisation_id}/employees/{employee_id}/tax_declaration",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "collection.item[33].item[1].request.url"
+      },
+      "covered_by": {
+        "stream": "tax_declaration_v2"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "https://oauth.employmenthero.com/oauth2/authorize",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "existing-surface[GET https://oauth.employmenthero.com/oauth2/authorize]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "OAuth authorization redirect is an interactive auth flow, not a data endpoint.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://oauth.employmenthero.com/oauth2/token",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "existing-surface[POST https://oauth.employmenthero.com/oauth2/token]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth token exchange is credential acquisition, not a connector read or reverse-ETL write action.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "https://oauth.employmenthero.com/oauth2/token (refresh)",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "employment-hero-artifact-2026-08-09",
+        "source_url": "https://developer.employmenthero.com/postman-collection.json",
+        "source_kind": "postman",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3d7a65de95d9622af3a32228ee60a36636f62a04413102bd7700c2dc12a3b42",
+        "coordinate": "existing-surface[POST https://oauth.employmenthero.com/oauth2/token (refresh)]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "OAuth token refresh is credential maintenance, not a connector data surface.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

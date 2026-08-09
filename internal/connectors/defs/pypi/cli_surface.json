@@ -1,0 +1,95 @@
+{
+  "tagline": "Run PyPI's declared streams and reverse-ETL actions.",
+  "usage": "pm pypi \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get pypi project version json",
+        "api get simple project",
+        "api get stats",
+        "project list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get pypi project version json",
+      "summary": "Documented GET /pypi/{project}/{version}/json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pypi.org/api/json/",
+      "examples": [
+        "pm pypi api get pypi project version json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pypi/{project}/{version}/json"
+        }
+      ],
+      "operation": "pypi.get.pypi-project-version-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get simple project",
+      "summary": "Documented GET /simple/{project}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pypi.org/api/json/",
+      "examples": [
+        "pm pypi api get simple project --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/simple/{project}/"
+        }
+      ],
+      "operation": "pypi.get.simple-project",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get stats",
+      "summary": "Documented GET /stats (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.pypi.org/api/json/",
+      "examples": [
+        "pm pypi api get stats --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/stats"
+        }
+      ],
+      "operation": "pypi.get.stats",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "project list",
+      "summary": "Run the project ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project",
+      "source_url": "https://docs.pypi.org/api/json/",
+      "examples": [
+        "pm pypi project list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pypi/{project}/json"
+        }
+      ]
+    }
+  ]
+}

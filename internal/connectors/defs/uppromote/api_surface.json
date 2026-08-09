@@ -1,42 +1,512 @@
 {
-  "api": "UpPromote Public API v2 (https://aff-api.uppromote.com/api/v2)",
+  "api": "UpPromote Public API v2 (https://aff-api.uppromote.com/api/v2); provider artifact version: current UpPromote Public API v2 reference",
   "docs": "https://aff-api.uppromote.com/docs/v2/api-overview-1615961m0",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion: every documented UpPromote API v2 endpoint (per the real OpenAPI reference published at aff-api.uppromote.com/docs/v2, distinct from the fictional api.uppromote.com/api/affiliates shape the legacy connector was originally built against and which the affiliates stream still targets verbatim for parity) is now covered by a stream or write action, except webhook-subscription-list (no distinct read value beyond what create/update/delete already confirm) and the endpoints listed below as excluded.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 28 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official openapi_fragments artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion: every documented UpPromote API v2 endpoint (per the real OpenAPI reference published at aff-api.uppromote.com/docs/v2, distinct from the fictional api.uppromote.com/api/affiliates shape the legacy connector was originally built against and which the affiliates stream still targets verbatim for parity) is now covered by a stream or write action, except webhook-subscription-list (no distinct read value beyond what create/update/delete already confirm) and the endpoints listed below as excluded.",
+  "artifacts": [
+    {
+      "id": "uppromote-artifact-2026-08-09",
+      "url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "kind": "openapi_fragments",
+      "version": "current UpPromote Public API v2 reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/api/affiliates", "covered_by": { "stream": "affiliates" } },
-    { "method": "POST", "path": "/api/affiliates", "excluded": { "category": "duplicate_of", "reason": "legacy's fictional write-shaped affiliates endpoint has no real-API counterpart at this path; the real create-affiliate mutation is covered by create_affiliate at the real /api/v2/affiliates path instead" } },
-
-    { "method": "GET", "path": "/api/v2/programs", "covered_by": { "stream": "programs" } },
-    { "method": "GET", "path": "/api/v2/programs/{id}", "excluded": { "category": "duplicate_of", "reason": "single-program detail; identical record shape to the programs list stream's per-item object, already covered by that stream" } },
-    { "method": "GET", "path": "/api/v2/programs/{id}/excluded", "excluded": { "category": "out_of_scope", "reason": "program-scoped excluded-products/collections sub-object read; a configuration detail of one program, not an independently syncable object list" } },
-
-    { "method": "GET", "path": "/api/v2/affiliates", "excluded": { "category": "duplicate_of", "reason": "the real v2 affiliate-list endpoint returns the same affiliate record type the legacy-shaped affiliates stream already covers (under legacy's own path/envelope, preserved for accepted-input parity); adding a second, differently-shaped affiliate list stream here would duplicate that record type" } },
-    { "method": "POST", "path": "/api/v2/affiliates", "covered_by": { "write": "create_affiliate" } },
-    { "method": "GET", "path": "/api/v2/affiliates/{id}", "excluded": { "category": "duplicate_of", "reason": "single-affiliate detail on the real v2 API; the legacy-shaped affiliates stream already covers per-affiliate records (under legacy's own path/envelope), and adding a second, differently-shaped affiliate detail stream here would duplicate that record type" } },
-    { "method": "POST", "path": "/api/v2/affiliate/active", "covered_by": { "write": "approve_deny_affiliate" } },
-    { "method": "POST", "path": "/api/v2/affiliate/set-upline", "covered_by": { "write": "set_upline_affiliate" } },
-    { "method": "POST", "path": "/api/v2/affiliate/move-affiliate-to-program", "covered_by": { "write": "move_affiliate_to_program" } },
-    { "method": "POST", "path": "/api/v2/affiliate/create-connect-customer", "covered_by": { "write": "connect_customer_to_affiliate" } },
-
-    { "method": "GET", "path": "/api/v2/coupons", "covered_by": { "stream": "coupons" } },
-    { "method": "POST", "path": "/api/v2/coupons/assign", "covered_by": { "write": "assign_coupon_to_affiliate" } },
-
-    { "method": "GET", "path": "/api/v2/payments/unpaid", "covered_by": { "stream": "unpaid_payments" } },
-    { "method": "GET", "path": "/api/v2/payments/paid", "covered_by": { "stream": "paid_payments" } },
-    { "method": "GET", "path": "/api/v2/payments/total-paid", "excluded": { "category": "out_of_scope", "reason": "single-scalar aggregate count (total paid payments), not a syncable object list; a one-row summary derivable by counting the paid_payments stream instead" } },
-    { "method": "GET", "path": "/api/v2/payments/{id}", "excluded": { "category": "duplicate_of", "reason": "single-payment detail; identical record shape to the paid/unpaid payments list streams' per-item objects, already covered by those streams" } },
-    { "method": "POST", "path": "/api/v2/payments/mark-as-paid", "covered_by": { "write": "mark_as_paid_manual_payment" } },
-
-    { "method": "GET", "path": "/api/v2/referrals", "covered_by": { "stream": "referrals" } },
-    { "method": "POST", "path": "/api/v2/referrals", "covered_by": { "write": "create_referral" } },
-    { "method": "GET", "path": "/api/v2/referrals/{id}", "excluded": { "category": "duplicate_of", "reason": "single-referral detail; identical record shape to the referrals list stream's per-item object, already covered by that stream" } },
-    { "method": "POST", "path": "/api/v2/referral/{id}/status", "covered_by": { "write": "approve_deny_referral" } },
-    { "method": "POST", "path": "/api/v2/referral/{id}/adjustment", "covered_by": { "write": "add_referral_adjustment" } },
-
-    { "method": "GET", "path": "/api/v2/webhook-subscriptions", "excluded": { "category": "out_of_scope", "reason": "webhook-subscription listing is configuration introspection over a small operator-managed set already fully round-tripped by subscribe/update/delete_webhook writes; low read value, breadth-vs-cost triage for this pass" } },
-    { "method": "POST", "path": "/api/v2/webhook-subscriptions", "covered_by": { "write": "subscribe_webhook_event" } },
-    { "method": "PUT", "path": "/api/v2/webhook-subscriptions", "covered_by": { "write": "update_webhook_subscription" } },
-    { "method": "DELETE", "path": "/api/v2/webhook-subscriptions", "covered_by": { "write": "delete_webhook_subscription" } }
+    {
+      "method": "GET",
+      "path": "/api/affiliates",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/affiliates]"
+      },
+      "covered_by": {
+        "stream": "affiliates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/affiliates",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/affiliates]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy's fictional write-shaped affiliates endpoint has no real-API counterpart at this path; the real create-affiliate mutation is covered by create_affiliate at the real /api/v2/affiliates path instead",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/affiliate/active",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/affiliate/active]"
+      },
+      "covered_by": {
+        "write": "approve_deny_affiliate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/affiliate/create-connect-customer",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/affiliate/create-connect-customer]"
+      },
+      "covered_by": {
+        "write": "connect_customer_to_affiliate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/affiliate/move-affiliate-to-program",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/affiliate/move-affiliate-to-program]"
+      },
+      "covered_by": {
+        "write": "move_affiliate_to_program"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/affiliate/set-upline",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/affiliate/set-upline]"
+      },
+      "covered_by": {
+        "write": "set_upline_affiliate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/affiliates",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/affiliates]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "the real v2 affiliate-list endpoint returns the same affiliate record type the legacy-shaped affiliates stream already covers (under legacy's own path/envelope, preserved for accepted-input parity); adding a second, differently-shaped affiliate list stream here would duplicate that record type",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/affiliates",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/affiliates]"
+      },
+      "covered_by": {
+        "write": "create_affiliate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/affiliates/{id}",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/affiliates/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-affiliate detail on the real v2 API; the legacy-shaped affiliates stream already covers per-affiliate records (under legacy's own path/envelope), and adding a second, differently-shaped affiliate detail stream here would duplicate that record type",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/coupons",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/coupons]"
+      },
+      "covered_by": {
+        "stream": "coupons"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/coupons/assign",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/coupons/assign]"
+      },
+      "covered_by": {
+        "write": "assign_coupon_to_affiliate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/payments/mark-as-paid",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/payments/mark-as-paid]"
+      },
+      "covered_by": {
+        "write": "mark_as_paid_manual_payment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/payments/paid",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/payments/paid]"
+      },
+      "covered_by": {
+        "stream": "paid_payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/payments/total-paid",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/payments/total-paid]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-scalar aggregate count (total paid payments), not a syncable object list; a one-row summary derivable by counting the paid_payments stream instead",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/payments/unpaid",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/payments/unpaid]"
+      },
+      "covered_by": {
+        "stream": "unpaid_payments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/payments/{id}",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/payments/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-payment detail; identical record shape to the paid/unpaid payments list streams' per-item objects, already covered by those streams",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/programs",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/programs]"
+      },
+      "covered_by": {
+        "stream": "programs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/programs/{id}",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/programs/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-program detail; identical record shape to the programs list stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/programs/{id}/excluded",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/programs/{id}/excluded]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "program-scoped excluded-products/collections sub-object read; a configuration detail of one program, not an independently syncable object list",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/referral/{id}/adjustment",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/referral/{id}/adjustment]"
+      },
+      "covered_by": {
+        "write": "add_referral_adjustment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/referral/{id}/status",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/referral/{id}/status]"
+      },
+      "covered_by": {
+        "write": "approve_deny_referral"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/referrals",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/referrals]"
+      },
+      "covered_by": {
+        "stream": "referrals"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/referrals",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/referrals]"
+      },
+      "covered_by": {
+        "write": "create_referral"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/referrals/{id}",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/referrals/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-referral detail; identical record shape to the referrals list stream's per-item object, already covered by that stream",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/webhook-subscriptions",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[GET /api/v2/webhook-subscriptions]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "webhook-subscription listing is configuration introspection over a small operator-managed set already fully round-tripped by subscribe/update/delete_webhook writes; low read value, breadth-vs-cost triage for this pass",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/webhook-subscriptions",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[POST /api/v2/webhook-subscriptions]"
+      },
+      "covered_by": {
+        "write": "subscribe_webhook_event"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v2/webhook-subscriptions",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[PUT /api/v2/webhook-subscriptions]"
+      },
+      "covered_by": {
+        "write": "update_webhook_subscription"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/webhook-subscriptions",
+      "provenance": {
+        "artifact": "uppromote-artifact-2026-08-09",
+        "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+        "source_kind": "openapi_fragments",
+        "version": "current UpPromote Public API v2 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1ef865f38f141db0a469828264d0e231b2798b69a9b5fa31d4fa047653b92684",
+        "coordinate": "existing-complete-surface[DELETE /api/v2/webhook-subscriptions]"
+      },
+      "covered_by": {
+        "write": "delete_webhook_subscription"
+      }
+    }
   ]
 }

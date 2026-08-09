@@ -1,0 +1,1148 @@
+{
+  "tagline": "Run Nebius AI's declared streams and reverse-ETL actions.",
+  "usage": "pm nebius-ai \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "batches list",
+        "datasets dataset id content list",
+        "datasets dataset id export list",
+        "datasets dataset id list",
+        "datasets dataset id query templates list",
+        "datasets list",
+        "datasets uploads upload id list",
+        "datasets uploads upload id parts list",
+        "dedicated endpoints list",
+        "dedicated endpoints templates list",
+        "files file id content list",
+        "files file id link list",
+        "files file id list",
+        "files list",
+        "fine tuning jobs job id checkpoints checkpoint id list",
+        "fine tuning jobs job id checkpoints list",
+        "fine tuning jobs job id events list",
+        "fine tuning jobs job id list",
+        "fine tuning jobs list",
+        "fine tuning models spec draft 2 list",
+        "fine tuning models spec draft list",
+        "models list",
+        "operations list",
+        "operations operation id errors list",
+        "operations operation id list",
+        "operations operation id results list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post v0 models upload",
+        "api post v1 datasets uploads upload-id parts",
+        "api post v1 files",
+        "create chat completions apply",
+        "create completions apply",
+        "create datasets apply",
+        "create datasets uploads apply",
+        "create datasets uploads upload id complete apply",
+        "create dedicated endpoints apply",
+        "create embeddings apply",
+        "create fine tuning jobs apply",
+        "create images generations apply",
+        "create operations apply",
+        "create rerank apply",
+        "create responses apply",
+        "delete datasets dataset id apply",
+        "delete dedicated endpoints endpoint id apply",
+        "delete files file id apply",
+        "execute datasets uploads upload id cancel apply",
+        "execute fine tuning jobs job id cancel apply",
+        "execute operations operation id cancel apply",
+        "update datasets dataset id apply",
+        "update dedicated endpoints endpoint id apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api post v0 models upload",
+      "summary": "Documented POST /v0/models/upload (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai api post v0 models upload --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/models/upload"
+        }
+      ],
+      "operation": "nebius-ai.post.v0-models-upload",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 datasets uploads upload-id parts",
+      "summary": "Documented POST /v1/datasets/uploads/{upload_id}/parts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai api post v1 datasets uploads upload-id parts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/datasets/uploads/{upload_id}/parts"
+        }
+      ],
+      "operation": "nebius-ai.post.v1-datasets-uploads-upload-id-parts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 files",
+      "summary": "Documented POST /v1/files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai api post v1 files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/files"
+        }
+      ],
+      "operation": "nebius-ai.post.v1-files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "batches list",
+      "summary": "Run the batches ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "batches",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai batches list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/batches"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "create chat completions apply",
+      "summary": "Plan and execute the create chat completions reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_chat_completions",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai create chat completions apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/chat/completions"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create completions apply",
+      "summary": "Plan and execute the create completions reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_completions",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "model",
+          "type": "string",
+          "summary": "Required model record field.",
+          "maps_to": "record.model",
+          "required": true
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "summary": "Required prompt record field.",
+          "maps_to": "record.prompt",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai create completions apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/completions"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create datasets apply",
+      "summary": "Plan and execute the create datasets reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_datasets",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai create datasets apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/datasets"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create datasets uploads apply",
+      "summary": "Plan and execute the create datasets uploads reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_datasets_uploads",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai create datasets uploads apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/datasets/uploads"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create datasets uploads upload id complete apply",
+      "summary": "Plan and execute the create datasets uploads upload id complete reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_datasets_uploads_upload_id_complete",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "part_ids",
+          "type": "string_array",
+          "summary": "Required part ids record field.",
+          "maps_to": "record.part_ids",
+          "required": true
+        },
+        {
+          "name": "upload_id",
+          "type": "string",
+          "summary": "Required upload id record field.",
+          "maps_to": "record.upload_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai create datasets uploads upload id complete apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/datasets/uploads/{upload_id}/complete"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create dedicated endpoints apply",
+      "summary": "Plan and execute the create dedicated endpoints reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_dedicated_endpoints",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai create dedicated endpoints apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v0/dedicated_endpoints"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create embeddings apply",
+      "summary": "Plan and execute the create embeddings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_embeddings",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "input",
+          "type": "string",
+          "summary": "Required input record field.",
+          "maps_to": "record.input",
+          "required": true
+        },
+        {
+          "name": "model",
+          "type": "string",
+          "summary": "Required model record field.",
+          "maps_to": "record.model",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai create embeddings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/embeddings"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create fine tuning jobs apply",
+      "summary": "Plan and execute the create fine tuning jobs reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_fine_tuning_jobs",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "model",
+          "type": "string",
+          "summary": "Required model record field.",
+          "maps_to": "record.model",
+          "required": true
+        },
+        {
+          "name": "training_file",
+          "type": "string",
+          "summary": "Required training file record field.",
+          "maps_to": "record.training_file",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai create fine tuning jobs apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/fine_tuning/jobs"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create images generations apply",
+      "summary": "Plan and execute the create images generations reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_images_generations",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "model",
+          "type": "string",
+          "summary": "Required model record field.",
+          "maps_to": "record.model",
+          "required": true
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "summary": "Required prompt record field.",
+          "maps_to": "record.prompt",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai create images generations apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/images/generations"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create operations apply",
+      "summary": "Plan and execute the create operations reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_operations",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai create operations apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/operations"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create rerank apply",
+      "summary": "Plan and execute the create rerank reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_rerank",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "documents",
+          "type": "string_array",
+          "summary": "Required documents record field.",
+          "maps_to": "record.documents",
+          "required": true
+        },
+        {
+          "name": "model",
+          "type": "string",
+          "summary": "Required model record field.",
+          "maps_to": "record.model",
+          "required": true
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "summary": "Required query record field.",
+          "maps_to": "record.query",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai create rerank apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/rerank"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create responses apply",
+      "summary": "Plan and execute the create responses reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_responses",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "input",
+          "type": "string",
+          "summary": "Required input record field.",
+          "maps_to": "record.input",
+          "required": true
+        },
+        {
+          "name": "model",
+          "type": "string",
+          "summary": "Required model record field.",
+          "maps_to": "record.model",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai create responses apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/responses"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "datasets dataset id content list",
+      "summary": "Run the datasets dataset id content ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets_dataset_id_content",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai datasets dataset id content list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/datasets/{dataset_id}/content"
+        }
+      ]
+    },
+    {
+      "path": "datasets dataset id export list",
+      "summary": "Run the datasets dataset id export ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets_dataset_id_export",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai datasets dataset id export list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/datasets/{dataset_id}/export"
+        }
+      ]
+    },
+    {
+      "path": "datasets dataset id list",
+      "summary": "Run the datasets dataset id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets_dataset_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai datasets dataset id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/datasets/{dataset_id}"
+        }
+      ]
+    },
+    {
+      "path": "datasets dataset id query templates list",
+      "summary": "Run the datasets dataset id query templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets_dataset_id_query_templates",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai datasets dataset id query templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/datasets/{dataset_id}/query_templates"
+        }
+      ]
+    },
+    {
+      "path": "datasets list",
+      "summary": "Run the datasets ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai datasets list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/datasets"
+        }
+      ]
+    },
+    {
+      "path": "datasets uploads upload id list",
+      "summary": "Run the datasets uploads upload id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets_uploads_upload_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai datasets uploads upload id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/datasets/uploads/{upload_id}"
+        }
+      ]
+    },
+    {
+      "path": "datasets uploads upload id parts list",
+      "summary": "Run the datasets uploads upload id parts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "datasets_uploads_upload_id_parts",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai datasets uploads upload id parts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/datasets/uploads/{upload_id}/parts"
+        }
+      ]
+    },
+    {
+      "path": "dedicated endpoints list",
+      "summary": "Run the dedicated endpoints ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dedicated_endpoints",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai dedicated endpoints list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/dedicated_endpoints"
+        }
+      ]
+    },
+    {
+      "path": "dedicated endpoints templates list",
+      "summary": "Run the dedicated endpoints templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "dedicated_endpoints_templates",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai dedicated endpoints templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v0/dedicated_endpoints/templates"
+        }
+      ]
+    },
+    {
+      "path": "delete datasets dataset id apply",
+      "summary": "Plan and execute the delete datasets dataset id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_datasets_dataset_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "dataset_id",
+          "type": "string",
+          "summary": "Required dataset id record field.",
+          "maps_to": "record.dataset_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai delete datasets dataset id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/datasets/{dataset_id}"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete dedicated endpoints endpoint id apply",
+      "summary": "Plan and execute the delete dedicated endpoints endpoint id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_dedicated_endpoints_endpoint_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "endpoint_id",
+          "type": "string",
+          "summary": "Required endpoint id record field.",
+          "maps_to": "record.endpoint_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai delete dedicated endpoints endpoint id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v0/dedicated_endpoints/{endpoint_id}"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete files file id apply",
+      "summary": "Plan and execute the delete files file id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_files_file_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "file_id",
+          "type": "string",
+          "summary": "Required file id record field.",
+          "maps_to": "record.file_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai delete files file id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/files/{file_id}"
+        }
+      ],
+      "risk": "medium: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "execute datasets uploads upload id cancel apply",
+      "summary": "Plan and execute the execute datasets uploads upload id cancel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "execute_datasets_uploads_upload_id_cancel",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "upload_id",
+          "type": "string",
+          "summary": "Required upload id record field.",
+          "maps_to": "record.upload_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai execute datasets uploads upload id cancel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/datasets/uploads/{upload_id}/cancel"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "execute fine tuning jobs job id cancel apply",
+      "summary": "Plan and execute the execute fine tuning jobs job id cancel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "execute_fine_tuning_jobs_job_id_cancel",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "job_id",
+          "type": "string",
+          "summary": "Required job id record field.",
+          "maps_to": "record.job_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai execute fine tuning jobs job id cancel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/fine_tuning/jobs/{job_id}/cancel"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "execute operations operation id cancel apply",
+      "summary": "Plan and execute the execute operations operation id cancel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "execute_operations_operation_id_cancel",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "operation_id",
+          "type": "string",
+          "summary": "Required operation id record field.",
+          "maps_to": "record.operation_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai execute operations operation id cancel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/operations/{operation_id}/cancel"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "files file id content list",
+      "summary": "Run the files file id content ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "files_file_id_content",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai files file id content list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/files/{file_id}/content"
+        }
+      ]
+    },
+    {
+      "path": "files file id link list",
+      "summary": "Run the files file id link ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "files_file_id_link",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai files file id link list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/files/{file_id}/link"
+        }
+      ]
+    },
+    {
+      "path": "files file id list",
+      "summary": "Run the files file id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "files_file_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai files file id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/files/{file_id}"
+        }
+      ]
+    },
+    {
+      "path": "files list",
+      "summary": "Run the files ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "files",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai files list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/files"
+        }
+      ]
+    },
+    {
+      "path": "fine tuning jobs job id checkpoints checkpoint id list",
+      "summary": "Run the fine tuning jobs job id checkpoints checkpoint id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fine_tuning_jobs_job_id_checkpoints_checkpoint_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai fine tuning jobs job id checkpoints checkpoint id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/fine_tuning/jobs/{job_id}/checkpoints/{checkpoint_id}"
+        }
+      ]
+    },
+    {
+      "path": "fine tuning jobs job id checkpoints list",
+      "summary": "Run the fine tuning jobs job id checkpoints ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fine_tuning_jobs_job_id_checkpoints",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai fine tuning jobs job id checkpoints list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/fine_tuning/jobs/{job_id}/checkpoints"
+        }
+      ]
+    },
+    {
+      "path": "fine tuning jobs job id events list",
+      "summary": "Run the fine tuning jobs job id events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fine_tuning_jobs_job_id_events",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai fine tuning jobs job id events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/fine_tuning/jobs/{job_id}/events"
+        }
+      ]
+    },
+    {
+      "path": "fine tuning jobs job id list",
+      "summary": "Run the fine tuning jobs job id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fine_tuning_jobs_job_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai fine tuning jobs job id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/fine_tuning/jobs/{job_id}"
+        }
+      ]
+    },
+    {
+      "path": "fine tuning jobs list",
+      "summary": "Run the fine tuning jobs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fine_tuning_jobs",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai fine tuning jobs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/fine_tuning/jobs"
+        }
+      ]
+    },
+    {
+      "path": "fine tuning models spec draft 2 list",
+      "summary": "Run the fine tuning models spec draft 2 ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fine_tuning_models_spec_draft_2",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai fine tuning models spec draft 2 list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fine_tuning/models/spec-draft"
+        }
+      ]
+    },
+    {
+      "path": "fine tuning models spec draft list",
+      "summary": "Run the fine tuning models spec draft ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fine_tuning_models_spec_draft",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai fine tuning models spec draft list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/fine_tuning/models/spec-draft"
+        }
+      ]
+    },
+    {
+      "path": "models list",
+      "summary": "Run the models ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "models",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai models list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/models"
+        }
+      ]
+    },
+    {
+      "path": "operations list",
+      "summary": "Run the operations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "operations",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai operations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/operations"
+        }
+      ]
+    },
+    {
+      "path": "operations operation id errors list",
+      "summary": "Run the operations operation id errors ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "operations_operation_id_errors",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai operations operation id errors list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/operations/{operation_id}/errors"
+        }
+      ]
+    },
+    {
+      "path": "operations operation id list",
+      "summary": "Run the operations operation id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "operations_operation_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai operations operation id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/operations/{operation_id}"
+        }
+      ]
+    },
+    {
+      "path": "operations operation id results list",
+      "summary": "Run the operations operation id results ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "operations_operation_id_results",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "examples": [
+        "pm nebius-ai operations operation id results list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/operations/{operation_id}/results"
+        }
+      ]
+    },
+    {
+      "path": "update datasets dataset id apply",
+      "summary": "Plan and execute the update datasets dataset id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_datasets_dataset_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "dataset_id",
+          "type": "string",
+          "summary": "Required dataset id record field.",
+          "maps_to": "record.dataset_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai update datasets dataset id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/datasets/{dataset_id}"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update dedicated endpoints endpoint id apply",
+      "summary": "Plan and execute the update dedicated endpoints endpoint id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_dedicated_endpoints_endpoint_id",
+      "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "flags": [
+        {
+          "name": "endpoint_id",
+          "type": "string",
+          "summary": "Required endpoint id record field.",
+          "maps_to": "record.endpoint_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm nebius-ai update dedicated endpoints endpoint id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v0/dedicated_endpoints/{endpoint_id}"
+        }
+      ],
+      "risk": "high: external Nebius API side effect or mutation; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    }
+  ]
+}

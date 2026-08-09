@@ -1,0 +1,650 @@
+{
+  "tagline": "Run Avni's declared streams and reverse-ETL actions.",
+  "usage": "pm avni \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api encounter id",
+        "api get api location id",
+        "api get api programencounter id",
+        "api get api programenrolment id",
+        "api get api subject id",
+        "api get api subjectmigration bulk status jobid",
+        "approval statuses list",
+        "encounters list",
+        "group subjects list",
+        "locations list",
+        "program encounters list",
+        "program enrolments list",
+        "subjects list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api encounter id",
+        "api delete api programencounter id",
+        "api delete api programenrolment id",
+        "api delete api subject id",
+        "api delete api subjecttree",
+        "api patch api encounter id",
+        "api patch api subject id",
+        "api post api encounter",
+        "api post api programencounter",
+        "api post api programenrolment",
+        "api post api subject",
+        "api post api subjectmigration bulk",
+        "api post api task",
+        "api post api user enable",
+        "api put api encounter id",
+        "api put api programencounter id",
+        "api put api programenrolment id",
+        "api put api subject id"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete api encounter id",
+      "summary": "Documented DELETE /api/encounter/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api delete api encounter id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/encounter/{ID}"
+        }
+      ],
+      "operation": "avni.delete.api-encounter-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api programencounter id",
+      "summary": "Documented DELETE /api/programEncounter/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api delete api programencounter id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/programEncounter/{ID}"
+        }
+      ],
+      "operation": "avni.delete.api-programencounter-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api programenrolment id",
+      "summary": "Documented DELETE /api/programEnrolment/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api delete api programenrolment id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/programEnrolment/{ID}"
+        }
+      ],
+      "operation": "avni.delete.api-programenrolment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api subject id",
+      "summary": "Documented DELETE /api/subject/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api delete api subject id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/subject/{ID}"
+        }
+      ],
+      "operation": "avni.delete.api-subject-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api subjecttree",
+      "summary": "Documented DELETE /api/subjectTree (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api delete api subjecttree --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/subjectTree"
+        }
+      ],
+      "operation": "avni.delete.api-subjecttree",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api encounter id",
+      "summary": "Documented GET /api/encounter/{ID} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api get api encounter id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/encounter/{ID}"
+        }
+      ],
+      "operation": "avni.get.api-encounter-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api location id",
+      "summary": "Documented GET /api/location/{ID} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api get api location id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/location/{ID}"
+        }
+      ],
+      "operation": "avni.get.api-location-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api programencounter id",
+      "summary": "Documented GET /api/programEncounter/{ID} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api get api programencounter id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/programEncounter/{ID}"
+        }
+      ],
+      "operation": "avni.get.api-programencounter-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api programenrolment id",
+      "summary": "Documented GET /api/programEnrolment/{ID} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api get api programenrolment id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/programEnrolment/{ID}"
+        }
+      ],
+      "operation": "avni.get.api-programenrolment-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subject id",
+      "summary": "Documented GET /api/subject/{ID} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api get api subject id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subject/{ID}"
+        }
+      ],
+      "operation": "avni.get.api-subject-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api subjectmigration bulk status jobid",
+      "summary": "Documented GET /api/subjectMigration/bulk/status/{jobId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api get api subjectmigration bulk status jobid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subjectMigration/bulk/status/{jobId}"
+        }
+      ],
+      "operation": "avni.get.api-subjectmigration-bulk-status-jobid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch api encounter id",
+      "summary": "Documented PATCH /api/encounter/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api patch api encounter id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/encounter/{ID}"
+        }
+      ],
+      "operation": "avni.patch.api-encounter-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch api subject id",
+      "summary": "Documented PATCH /api/subject/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api patch api subject id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/subject/{ID}"
+        }
+      ],
+      "operation": "avni.patch.api-subject-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api encounter",
+      "summary": "Documented POST /api/encounter (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api post api encounter --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/encounter"
+        }
+      ],
+      "operation": "avni.post.api-encounter",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api programencounter",
+      "summary": "Documented POST /api/programEncounter (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api post api programencounter --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/programEncounter"
+        }
+      ],
+      "operation": "avni.post.api-programencounter",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api programenrolment",
+      "summary": "Documented POST /api/programEnrolment (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api post api programenrolment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/programEnrolment"
+        }
+      ],
+      "operation": "avni.post.api-programenrolment",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api subject",
+      "summary": "Documented POST /api/subject (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api post api subject --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/subject"
+        }
+      ],
+      "operation": "avni.post.api-subject",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api subjectmigration bulk",
+      "summary": "Documented POST /api/subjectMigration/bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api post api subjectmigration bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/subjectMigration/bulk"
+        }
+      ],
+      "operation": "avni.post.api-subjectmigration-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api task",
+      "summary": "Documented POST /api/task (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api post api task --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/task"
+        }
+      ],
+      "operation": "avni.post.api-task",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api user enable",
+      "summary": "Documented POST /api/user/enable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api post api user enable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/user/enable"
+        }
+      ],
+      "operation": "avni.post.api-user-enable",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api encounter id",
+      "summary": "Documented PUT /api/encounter/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api put api encounter id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/encounter/{ID}"
+        }
+      ],
+      "operation": "avni.put.api-encounter-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api programencounter id",
+      "summary": "Documented PUT /api/programEncounter/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api put api programencounter id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/programEncounter/{ID}"
+        }
+      ],
+      "operation": "avni.put.api-programencounter-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api programenrolment id",
+      "summary": "Documented PUT /api/programEnrolment/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api put api programenrolment id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/programEnrolment/{ID}"
+        }
+      ],
+      "operation": "avni.put.api-programenrolment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api subject id",
+      "summary": "Documented PUT /api/subject/{ID} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni api put api subject id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/subject/{ID}"
+        }
+      ],
+      "operation": "avni.put.api-subject-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "approval statuses list",
+      "summary": "Run the approval statuses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "approval_statuses",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni approval statuses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/approvalStatuses"
+        }
+      ]
+    },
+    {
+      "path": "encounters list",
+      "summary": "Run the encounters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "encounters",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni encounters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/encounters"
+        }
+      ]
+    },
+    {
+      "path": "group subjects list",
+      "summary": "Run the group subjects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "group_subjects",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni group subjects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/groupSubjects"
+        }
+      ]
+    },
+    {
+      "path": "locations list",
+      "summary": "Run the locations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "locations",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni locations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/locations"
+        }
+      ]
+    },
+    {
+      "path": "program encounters list",
+      "summary": "Run the program encounters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "program_encounters",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni program encounters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/programEncounters"
+        }
+      ]
+    },
+    {
+      "path": "program enrolments list",
+      "summary": "Run the program enrolments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "program_enrolments",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni program enrolments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/programEnrolments"
+        }
+      ]
+    },
+    {
+      "path": "subjects list",
+      "summary": "Run the subjects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "subjects",
+      "source_url": "https://raw.githubusercontent.com/avniproject/avni-server/master/avni-server-api/src/main/resources/api/external-api.yaml",
+      "examples": [
+        "pm avni subjects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/subjects"
+        }
+      ]
+    }
+  ]
+}

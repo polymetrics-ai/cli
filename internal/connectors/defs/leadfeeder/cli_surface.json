@@ -1,0 +1,1503 @@
+{
+  "tagline": "Run Leadfeeder's declared streams and reverse-ETL actions.",
+  "usage": "pm leadfeeder \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "accounts list",
+        "api * accounts account-id users-feed-rule-and-webhook integration-management-endpoints",
+        "api get v1 accounts",
+        "api get v1 buyer-personas",
+        "api get v1 buyer-personas id",
+        "api get v1 campaigns",
+        "api get v1 campaigns id",
+        "api get v1 campaigns id stats",
+        "api get v1 companies",
+        "api get v1 companies enrichment-jobs job-id",
+        "api get v1 companies id",
+        "api get v1 companies id financials",
+        "api get v1 companies ips",
+        "api get v1 contacts",
+        "api get v1 contacts find-contact-data-jobs job-id",
+        "api get v1 contacts id",
+        "api get v1 custom-fields",
+        "api get v1 custom-fields id",
+        "api get v1 icps",
+        "api get v1 icps id",
+        "api get v1 ip enrich",
+        "api get v1 lists",
+        "api get v1 lists batch-add-to-list-jobs job-id",
+        "api get v1 lists batch-remove-from-list-jobs job-id",
+        "api get v1 lists id",
+        "api get v1 lists id items",
+        "api get v1 tags",
+        "api get v1 tags id",
+        "api get v1 usage",
+        "api get v1 users me",
+        "api get v1 web-visits companies",
+        "api get v1 web-visits custom-feeds",
+        "api get v1 web-visits custom-feeds custom-feed-id",
+        "api get v1 web-visits custom-feeds-folders",
+        "api get v1 web-visits tracker",
+        "api post/patch/delete all-leadfeeder-mutation-endpoints",
+        "custom feeds list",
+        "leads list",
+        "visits list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 companies id lists",
+        "api delete v1 companies id tags",
+        "api delete v1 contacts id lists",
+        "api delete v1 custom-fields id",
+        "api delete v1 lists id",
+        "api delete v1 tags id",
+        "api delete v1 web-visits custom-feeds custom-feed-id",
+        "api patch v1 campaigns id",
+        "api patch v1 companies id",
+        "api patch v1 contacts id",
+        "api patch v1 custom-fields id",
+        "api patch v1 lists id",
+        "api patch v1 tags id",
+        "api patch v1 web-visits custom-feeds custom-feed-id",
+        "api post v1 companies enrichment-jobs",
+        "api post v1 companies enrichment-jobs estimate",
+        "api post v1 companies id lists",
+        "api post v1 companies id tags",
+        "api post v1 companies match",
+        "api post v1 companies search",
+        "api post v1 companies signals",
+        "api post v1 contacts find-contact-data-jobs",
+        "api post v1 contacts find-contact-data-jobs estimate",
+        "api post v1 contacts id lists",
+        "api post v1 contacts search",
+        "api post v1 custom-fields",
+        "api post v1 lists",
+        "api post v1 lists batch-add-to-list-jobs",
+        "api post v1 lists batch-remove-from-list-jobs",
+        "api post v1 tags",
+        "api post v1 web-visits",
+        "api post v1 web-visits custom-feeds"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "api * accounts account-id users-feed-rule-and-webhook integration-management-endpoints",
+      "summary": "Documented * /accounts/{account_id}/users, feed-rule and webhook/integration management endpoints (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api * accounts account-id users-feed-rule-and-webhook integration-management-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "*",
+          "path": "/accounts/{account_id}/users, feed-rule and webhook/integration management endpoints"
+        }
+      ],
+      "operation": "leadfeeder.operation.accounts-account-id-users-feed-rule-and-webhook-integration-management-endpoints",
+      "risk": "medium",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "notes": "named_dependency=review.webhook_url_mutation: the provider webhook-URL mutation has no dedicated security-reviewed execution contract"
+    },
+    {
+      "path": "api delete v1 companies id lists",
+      "summary": "Documented DELETE /v1/companies/{id}/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api delete v1 companies id lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/companies/{id}/lists"
+        }
+      ],
+      "operation": "leadfeeder.delete.v1-companies-id-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 companies id tags",
+      "summary": "Documented DELETE /v1/companies/{id}/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api delete v1 companies id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/companies/{id}/tags"
+        }
+      ],
+      "operation": "leadfeeder.delete.v1-companies-id-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 contacts id lists",
+      "summary": "Documented DELETE /v1/contacts/{id}/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api delete v1 contacts id lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/contacts/{id}/lists"
+        }
+      ],
+      "operation": "leadfeeder.delete.v1-contacts-id-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 custom-fields id",
+      "summary": "Documented DELETE /v1/custom-fields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api delete v1 custom-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/custom-fields/{id}"
+        }
+      ],
+      "operation": "leadfeeder.delete.v1-custom-fields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 lists id",
+      "summary": "Documented DELETE /v1/lists/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api delete v1 lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/lists/{id}"
+        }
+      ],
+      "operation": "leadfeeder.delete.v1-lists-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 tags id",
+      "summary": "Documented DELETE /v1/tags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api delete v1 tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/tags/{id}"
+        }
+      ],
+      "operation": "leadfeeder.delete.v1-tags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 web-visits custom-feeds custom-feed-id",
+      "summary": "Documented DELETE /v1/web-visits/custom-feeds/{custom_feed_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api delete v1 web-visits custom-feeds custom-feed-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/web-visits/custom-feeds/{custom_feed_id}"
+        }
+      ],
+      "operation": "leadfeeder.delete.v1-web-visits-custom-feeds-custom-feed-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 accounts",
+      "summary": "Documented GET /v1/accounts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/accounts"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-accounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 buyer-personas",
+      "summary": "Documented GET /v1/buyer-personas (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 buyer-personas --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/buyer-personas"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-buyer-personas",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 buyer-personas id",
+      "summary": "Documented GET /v1/buyer-personas/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 buyer-personas id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/buyer-personas/{id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-buyer-personas-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns",
+      "summary": "Documented GET /v1/campaigns (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 campaigns --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-campaigns",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns id",
+      "summary": "Documented GET /v1/campaigns/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 campaigns id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-campaigns-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 campaigns id stats",
+      "summary": "Documented GET /v1/campaigns/{id}/stats (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 campaigns id stats --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/campaigns/{id}/stats"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-campaigns-id-stats",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 companies",
+      "summary": "Documented GET /v1/companies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 companies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/companies"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-companies",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 companies enrichment-jobs job-id",
+      "summary": "Documented GET /v1/companies/enrichment-jobs/{job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 companies enrichment-jobs job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/companies/enrichment-jobs/{job_id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-companies-enrichment-jobs-job-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 companies id",
+      "summary": "Documented GET /v1/companies/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 companies id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/companies/{id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-companies-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 companies id financials",
+      "summary": "Documented GET /v1/companies/{id}/financials (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 companies id financials --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/companies/{id}/financials"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-companies-id-financials",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 companies ips",
+      "summary": "Documented GET /v1/companies/ips (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 companies ips --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/companies/ips"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-companies-ips",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 contacts",
+      "summary": "Documented GET /v1/contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-contacts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 contacts find-contact-data-jobs job-id",
+      "summary": "Documented GET /v1/contacts/find-contact-data-jobs/{job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 contacts find-contact-data-jobs job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts/find-contact-data-jobs/{job_id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-contacts-find-contact-data-jobs-job-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 contacts id",
+      "summary": "Documented GET /v1/contacts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/contacts/{id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-contacts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 custom-fields",
+      "summary": "Documented GET /v1/custom-fields (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 custom-fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/custom-fields"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-custom-fields",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 custom-fields id",
+      "summary": "Documented GET /v1/custom-fields/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 custom-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/custom-fields/{id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-custom-fields-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 icps",
+      "summary": "Documented GET /v1/icps (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 icps --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/icps"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-icps",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 icps id",
+      "summary": "Documented GET /v1/icps/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 icps id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/icps/{id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-icps-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 ip enrich",
+      "summary": "Documented GET /v1/ip/enrich (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 ip enrich --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/ip/enrich"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-ip-enrich",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 lists",
+      "summary": "Documented GET /v1/lists (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/lists"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-lists",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 lists batch-add-to-list-jobs job-id",
+      "summary": "Documented GET /v1/lists/batch-add-to-list-jobs/{job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 lists batch-add-to-list-jobs job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/lists/batch-add-to-list-jobs/{job_id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-lists-batch-add-to-list-jobs-job-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 lists batch-remove-from-list-jobs job-id",
+      "summary": "Documented GET /v1/lists/batch-remove-from-list-jobs/{job_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 lists batch-remove-from-list-jobs job-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/lists/batch-remove-from-list-jobs/{job_id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-lists-batch-remove-from-list-jobs-job-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 lists id",
+      "summary": "Documented GET /v1/lists/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/lists/{id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-lists-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 lists id items",
+      "summary": "Documented GET /v1/lists/{id}/items (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 lists id items --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/lists/{id}/items"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-lists-id-items",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 tags",
+      "summary": "Documented GET /v1/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tags"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-tags",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 tags id",
+      "summary": "Documented GET /v1/tags/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tags/{id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-tags-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 usage",
+      "summary": "Documented GET /v1/usage (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 usage --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/usage"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-usage",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users me",
+      "summary": "Documented GET /v1/users/me (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 users me --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/me"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-users-me",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 web-visits companies",
+      "summary": "Documented GET /v1/web-visits/companies (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 web-visits companies --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/web-visits/companies"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-web-visits-companies",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 web-visits custom-feeds",
+      "summary": "Documented GET /v1/web-visits/custom-feeds (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 web-visits custom-feeds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/web-visits/custom-feeds"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-web-visits-custom-feeds",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 web-visits custom-feeds custom-feed-id",
+      "summary": "Documented GET /v1/web-visits/custom-feeds/{custom_feed_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 web-visits custom-feeds custom-feed-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/web-visits/custom-feeds/{custom_feed_id}"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-web-visits-custom-feeds-custom-feed-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 web-visits custom-feeds-folders",
+      "summary": "Documented GET /v1/web-visits/custom-feeds-folders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 web-visits custom-feeds-folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/web-visits/custom-feeds-folders"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-web-visits-custom-feeds-folders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 web-visits tracker",
+      "summary": "Documented GET /v1/web-visits/tracker (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api get v1 web-visits tracker --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/web-visits/tracker"
+        }
+      ],
+      "operation": "leadfeeder.get.v1-web-visits-tracker",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v1 campaigns id",
+      "summary": "Documented PATCH /v1/campaigns/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api patch v1 campaigns id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/campaigns/{id}"
+        }
+      ],
+      "operation": "leadfeeder.patch.v1-campaigns-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 companies id",
+      "summary": "Documented PATCH /v1/companies/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api patch v1 companies id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/companies/{id}"
+        }
+      ],
+      "operation": "leadfeeder.patch.v1-companies-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 contacts id",
+      "summary": "Documented PATCH /v1/contacts/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api patch v1 contacts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/contacts/{id}"
+        }
+      ],
+      "operation": "leadfeeder.patch.v1-contacts-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 custom-fields id",
+      "summary": "Documented PATCH /v1/custom-fields/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api patch v1 custom-fields id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/custom-fields/{id}"
+        }
+      ],
+      "operation": "leadfeeder.patch.v1-custom-fields-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 lists id",
+      "summary": "Documented PATCH /v1/lists/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api patch v1 lists id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/lists/{id}"
+        }
+      ],
+      "operation": "leadfeeder.patch.v1-lists-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 tags id",
+      "summary": "Documented PATCH /v1/tags/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api patch v1 tags id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/tags/{id}"
+        }
+      ],
+      "operation": "leadfeeder.patch.v1-tags-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v1 web-visits custom-feeds custom-feed-id",
+      "summary": "Documented PATCH /v1/web-visits/custom-feeds/{custom_feed_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api patch v1 web-visits custom-feeds custom-feed-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/web-visits/custom-feeds/{custom_feed_id}"
+        }
+      ],
+      "operation": "leadfeeder.patch.v1-web-visits-custom-feeds-custom-feed-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 companies enrichment-jobs",
+      "summary": "Documented POST /v1/companies/enrichment-jobs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 companies enrichment-jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/companies/enrichment-jobs"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-companies-enrichment-jobs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 companies enrichment-jobs estimate",
+      "summary": "Documented POST /v1/companies/enrichment-jobs/estimate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 companies enrichment-jobs estimate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/companies/enrichment-jobs/estimate"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-companies-enrichment-jobs-estimate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 companies id lists",
+      "summary": "Documented POST /v1/companies/{id}/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 companies id lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/companies/{id}/lists"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-companies-id-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 companies id tags",
+      "summary": "Documented POST /v1/companies/{id}/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 companies id tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/companies/{id}/tags"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-companies-id-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 companies match",
+      "summary": "Documented POST /v1/companies/match (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 companies match --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/companies/match"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-companies-match",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 companies search",
+      "summary": "Documented POST /v1/companies/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 companies search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/companies/search"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-companies-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 companies signals",
+      "summary": "Documented POST /v1/companies/signals (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 companies signals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/companies/signals"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-companies-signals",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts find-contact-data-jobs",
+      "summary": "Documented POST /v1/contacts/find-contact-data-jobs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 contacts find-contact-data-jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/find-contact-data-jobs"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-contacts-find-contact-data-jobs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts find-contact-data-jobs estimate",
+      "summary": "Documented POST /v1/contacts/find-contact-data-jobs/estimate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 contacts find-contact-data-jobs estimate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/find-contact-data-jobs/estimate"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-contacts-find-contact-data-jobs-estimate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts id lists",
+      "summary": "Documented POST /v1/contacts/{id}/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 contacts id lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/{id}/lists"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-contacts-id-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 contacts search",
+      "summary": "Documented POST /v1/contacts/search (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 contacts search --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/contacts/search"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-contacts-search",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 custom-fields",
+      "summary": "Documented POST /v1/custom-fields (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 custom-fields --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/custom-fields"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-custom-fields",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 lists",
+      "summary": "Documented POST /v1/lists (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 lists --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/lists"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-lists",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 lists batch-add-to-list-jobs",
+      "summary": "Documented POST /v1/lists/batch-add-to-list-jobs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 lists batch-add-to-list-jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/lists/batch-add-to-list-jobs"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-lists-batch-add-to-list-jobs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 lists batch-remove-from-list-jobs",
+      "summary": "Documented POST /v1/lists/batch-remove-from-list-jobs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 lists batch-remove-from-list-jobs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/lists/batch-remove-from-list-jobs"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-lists-batch-remove-from-list-jobs",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 tags",
+      "summary": "Documented POST /v1/tags (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/tags"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-tags",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 web-visits",
+      "summary": "Documented POST /v1/web-visits (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 web-visits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/web-visits"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-web-visits",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 web-visits custom-feeds",
+      "summary": "Documented POST /v1/web-visits/custom-feeds (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post v1 web-visits custom-feeds --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/web-visits/custom-feeds"
+        }
+      ],
+      "operation": "leadfeeder.post.v1-web-visits-custom-feeds",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post/patch/delete all-leadfeeder-mutation-endpoints",
+      "summary": "Documented POST/PATCH/DELETE all Leadfeeder mutation endpoints (not implemented)",
+      "intent": "docs_only",
+      "availability": "not_implemented",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder api post/patch/delete all-leadfeeder-mutation-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST/PATCH/DELETE",
+          "path": "all Leadfeeder mutation endpoints"
+        }
+      ],
+      "operation": "leadfeeder.post-patch-delete.all-leadfeeder-mutation-endpoints",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "custom feeds list",
+      "summary": "Run the custom feeds ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_feeds",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder custom feeds list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{account_id}/custom-feeds"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "leads list",
+      "summary": "Run the leads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leads",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder leads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{account_id}/leads"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "visits list",
+      "summary": "Run the visits ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "visits",
+      "source_url": "https://api.leadfeeder.com/openapi.yaml",
+      "examples": [
+        "pm leadfeeder visits list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/accounts/{account_id}/visits"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

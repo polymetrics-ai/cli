@@ -1,0 +1,639 @@
+{
+  "operations": [
+    {
+      "id": "oura.get.oauth-authorize",
+      "kind": "rest_read",
+      "summary": "GET /oauth/authorize",
+      "description": "OAuth authorization endpoint; used to obtain access, not to read or write connector records.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/oauth/authorize",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.post.oauth-token",
+      "kind": "rest_write",
+      "summary": "POST /oauth/token",
+      "description": "OAuth token exchange endpoint; credential lifecycle endpoint rather than ETL/reverse-ETL data surface.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-activity",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_activity",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_activity",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-activity-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_activity/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_activity/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-cardiovascular-age",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_cardiovascular_age",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_cardiovascular_age",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-cardiovascular-age-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_cardiovascular_age/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_cardiovascular_age/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-readiness",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_readiness",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_readiness",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-readiness-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_readiness/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_readiness/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-resilience",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_resilience",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_resilience",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-resilience-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_resilience/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_resilience/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-sleep",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_sleep",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_sleep",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-sleep-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_sleep/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_sleep/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-spo2",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_spo2",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_spo2",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-spo2-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_spo2/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_spo2/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-stress",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_stress",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_stress",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-daily-stress-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/daily_stress/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/daily_stress/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-enhanced-tag",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/enhanced_tag",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/enhanced_tag",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-enhanced-tag-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/enhanced_tag/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/enhanced_tag/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-heartrate",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/heartrate",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/heartrate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-rest-mode-period",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/rest_mode_period",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/rest_mode_period",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-rest-mode-period-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/rest_mode_period/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/rest_mode_period/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-ring-battery-level",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/ring_battery_level",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/ring_battery_level",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-ring-configuration",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/ring_configuration",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/ring_configuration",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-ring-configuration-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/ring_configuration/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/ring_configuration/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-session",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/session",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/session",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-session-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/session/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/session/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-sleep",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/sleep",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/sleep",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-sleep-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/sleep/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/sleep/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-sleep-time",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/sleep_time",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/sleep_time",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-sleep-time-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/sleep_time/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/sleep_time/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-tag",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/tag",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/tag",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-tag-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/tag/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/tag/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-vo2-max",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/vO2_max",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/vO2_max",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-vo2-max-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/vO2_max/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/vO2_max/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-workout",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/workout",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/workout",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-sandbox-usercollection-workout-document-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/sandbox/usercollection/workout/{document_id}",
+      "description": "Sandbox usercollection endpoint duplicates the production Oura usercollection API for synthetic data; use base_url override with the same streams when sandbox reads are needed.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/sandbox/usercollection/workout/{document_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-webhook-subscription",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhook/subscription",
+      "description": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhook/subscription",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.post.v2-webhook-subscription",
+      "kind": "rest_write",
+      "summary": "POST /v2/webhook/subscription",
+      "description": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/webhook/subscription",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.put.v2-webhook-subscription-renew-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/webhook/subscription/renew/{id}",
+      "description": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/webhook/subscription/renew/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.get.v2-webhook-subscription-id",
+      "kind": "rest_read",
+      "summary": "GET /v2/webhook/subscription/{id}",
+      "description": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/webhook/subscription/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.put.v2-webhook-subscription-id",
+      "kind": "rest_write",
+      "summary": "PUT /v2/webhook/subscription/{id}",
+      "description": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/webhook/subscription/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "oura.delete.v2-webhook-subscription-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/webhook/subscription/{id}",
+      "description": "Webhook subscription endpoints use app-level x-client-id and x-client-secret credentials, not the bearer user-data token used by this usercollection connector.",
+      "source_url": "https://cloud.ouraring.com/v2/static/json/openapi-1.37.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/webhook/subscription/{id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

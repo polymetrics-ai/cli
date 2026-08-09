@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strconv"
 	"strings"
 	"testing"
@@ -140,6 +141,21 @@ func TestReadBatchManifestCanonicalizesProviderReferenceURL(t *testing.T) {
 	}
 	if got := manifest.Connectors[0].ProviderReferenceURL; got != "https://example.test/reference" {
 		t.Fatalf("provider reference URL = %q, want canonical URL", got)
+	}
+}
+
+func TestReadBatchManifestAllowsDocumentedPartnerAccess(t *testing.T) {
+	path := writeBatchManifestFixture(t, "cli-surface")
+	manifest, err := readBatchManifest(path)
+	if err != nil {
+		t.Fatalf("read public manifest: %v", err)
+	}
+	manifest.Connectors[0].AccessModel = "partner_gated"
+	if err := writeBatchManifest(path, manifest); err != nil {
+		t.Fatalf("write documented partner manifest: %v", err)
+	}
+	if _, err := readBatchManifest(path); err != nil {
+		t.Fatalf("read documented partner manifest: %v", err)
 	}
 }
 
@@ -578,6 +594,21 @@ func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) 
 	if len(cli.Commands) != 3 {
 		t.Fatalf("generated CLI commands = %+v, want stream, write, and blocked artifact operation", cli.Commands)
 	}
+	retainedTargets := map[string]string{}
+	for _, command := range cli.Commands {
+		switch command.Path {
+		case "widget list":
+			retainedTargets[command.Path] = command.Stream
+		case "widget create":
+			retainedTargets[command.Path] = command.Write
+		}
+	}
+	if !reflect.DeepEqual(retainedTargets, map[string]string{
+		"widget list":   "widgets",
+		"widget create": "create_widget",
+	}) {
+		t.Fatalf("generated CLI commands = %+v, want existing ETL and reverse-ETL command paths retained", cli.Commands)
+	}
 	if len(cli.Commands[0].APISurface) != 1 || len(cli.Commands[1].APISurface) != 1 || len(cli.Commands[2].APISurface) != 1 {
 		t.Fatalf("generated CLI command endpoint bindings = %+v, want one per command", cli.Commands)
 	}
@@ -593,6 +624,117 @@ func TestBatchMaterializeGeneratesV2ProvenanceAndReachableSurface(t *testing.T) 
 
 	if reportRaw, err := os.ReadFile(reportPath); err != nil || !strings.Contains(string(reportRaw), `"cli-surface"`) || !strings.Contains(string(reportRaw), `"included"`) {
 		t.Fatalf("materialize report = %q, want included candidate report (err=%v)", reportRaw, err)
+	}
+}
+
+func TestBatchMaterializeUsesExactExistingSurfaceEvidence(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"scope": "The preserved provider inventory was exhaustively counted from the official reference.",
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "DELETE", "path": "/widgets/{id}", "operation": { "model": "destructive_action", "status": "blocked", "risk": "high", "blocked_by_default": true, "reason": "The official provider operation requires explicit approval." } }
+		]
+	}`)}
+	writeBatchBundle(t, sourceDefsRoot, fsys)
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	setBatchManifestOperationCounts(t, manifestPath, 3, 1, 2)
+	artifactDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.txt"), []byte("official provider reference index"), 0o644); err != nil {
+		t.Fatalf("write official artifact: %v", err)
+	}
+	defsRoot := t.TempDir()
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-09", "--report", reportPath, "--existing-surface-evidence"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("batch materialize exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	var report BatchMaterializeReport
+	decodeJSONFile(t, reportPath, &report)
+	if len(report.Included) != 1 || report.Included[0].EvidenceMode != "existing_surface_evidence" || report.Included[0].ArtifactOperations != 3 {
+		t.Fatalf("materialize report = %+v, want exact existing-surface evidence inclusion", report)
+	}
+	var surface engine.APISurface
+	decodeJSONFile(t, filepath.Join(defsRoot, "cli-surface", "api_surface.json"), &surface)
+	if surface.OperationLedgerVersion != 2 || len(surface.Endpoints) != 3 || !strings.Contains(surface.Scope, "Exact existing-surface evidence fallback") {
+		t.Fatalf("materialized surface = %+v, want v2 exact existing-surface evidence", surface)
+	}
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Provenance == nil || endpoint.Provenance.SourceURL != "https://example.test/cli-surface.json" || !strings.HasPrefix(endpoint.Provenance.Coordinate, "existing-complete-surface[") {
+			t.Fatalf("endpoint provenance = %+v, want cited exact existing-surface evidence", endpoint.Provenance)
+		}
+	}
+	validation, err := validatePath(filepath.Join(defsRoot, "cli-surface"))
+	if err != nil || len(validation.Findings) != 0 {
+		t.Fatalf("validate exact existing-surface materialization = %+v, %v", validation.Findings, err)
+	}
+
+	setBatchManifestOperationCounts(t, manifestPath, 4, 2, 2)
+	mismatchReportPath := filepath.Join(t.TempDir(), "mismatch.json")
+	stdout.Reset()
+	stderr.Reset()
+	code = run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", t.TempDir(), "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-09", "--report", mismatchReportPath, "--existing-surface-evidence"}, &stdout, &stderr)
+	if code != 1 {
+		t.Fatalf("mismatched existing-surface materialize exit = %d, want 1; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	decodeJSONFile(t, mismatchReportPath, &report)
+	if len(report.Included) != 0 || len(report.Dropped) != 1 || report.Dropped[0].Stage != "existing_surface_evidence" || !strings.Contains(report.Dropped[0].Reason, "3 operation(s), not the immutable ledger count 4") {
+		t.Fatalf("mismatch materialize report = %+v, want exact-count refusal", report)
+	}
+}
+
+func TestExistingSurfaceEvidenceInventoryMergesSharedEndpointBindings(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "example",
+		Surface: &engine.APISurface{
+			API: "Example API",
+			Endpoints: []engine.SurfaceEndpoint{
+				{Method: http.MethodGet, Path: "/widgets", CoveredBy: &engine.SurfaceCoverage{Stream: "widgets"}},
+				{Method: http.MethodGet, Path: "/widgets", CoveredBy: &engine.SurfaceCoverage{Stream: "archived_widgets"}},
+				{Method: http.MethodGet, Path: "/config"},
+				{Method: http.MethodGet, Path: "/healthz"},
+			},
+		},
+		Streams: []engine.StreamSpec{{Name: "widgets"}, {Name: "archived_widgets"}},
+	}
+	candidate := BatchManifestConnector{
+		Connector:       "example",
+		OperationsTotal: 4,
+		Artifact:        BatchArtifact{URL: "https://example.test/reference", Kind: "html_reference", Version: "v1"},
+	}
+	inventory, err := existingSurfaceEvidenceInventory(bundle, candidate, "2026-08-09", strings.Repeat("a", 64), []byte("official reference index"))
+	if err != nil {
+		t.Fatalf("existing surface evidence inventory: %v", err)
+	}
+	if len(inventory.Endpoints) != 3 {
+		t.Fatalf("direct evidence endpoint inventory = %+v, want three unique provider method/path rows", inventory.Endpoints)
+	}
+	surface, err := materializeAPISurface(bundle, candidate, "2026-08-09", strings.Repeat("a", 64), inventory.Endpoints, inventory.Sources)
+	if err != nil {
+		t.Fatalf("materialize shared direct-evidence bindings: %v", err)
+	}
+	var widgets *engine.SurfaceEndpoint
+	for index := range surface.Endpoints {
+		endpoint := &surface.Endpoints[index]
+		if endpoint.Method == http.MethodGet && endpoint.Path == "/widgets" {
+			widgets = endpoint
+			break
+		}
+	}
+	if widgets == nil || widgets.CoveredBy == nil {
+		t.Fatalf("surface = %+v, want one merged widgets coverage entry", surface.Endpoints)
+	}
+	got := map[string]bool{}
+	for _, stream := range widgets.CoveredBy.StreamTargets() {
+		got[stream] = true
+	}
+	if !got["widgets"] || !got["archived_widgets"] {
+		t.Fatalf("merged direct-evidence streams = %+v, want both preserved stream targets", got)
 	}
 }
 
@@ -727,6 +869,51 @@ func TestBatchMaterializeRetainsMissingExecutableCoverageAsDiscrepancy(t *testin
 	}
 	if _, err := os.Stat(filepath.Join(defsRoot, "cli-surface", "operations.json")); err != nil {
 		t.Fatalf("materializer did not write generated operations catalog: %v", err)
+	}
+}
+
+func TestBatchMaterializePreservesImplementedDirectReadCoverage(t *testing.T) {
+	sourceDefsRoot := t.TempDir()
+	writeBatchBundle(t, sourceDefsRoot, directReadCLISurfaceBundleFS(validDirectReadCLISurfaceJSON()))
+	defsRoot := t.TempDir()
+	manifestPath := writeBatchManifestFixture(t, "cli-surface")
+	setBatchManifestOperationCounts(t, manifestPath, 4, 2, 2)
+	artifactDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(artifactDir, "cli-surface.json"), []byte(`{
+		"openapi": "3.0.0",
+		"paths": {
+			"/widgets": { "get": {"summary": "List widgets"}, "post": {"summary": "Create widget"} },
+			"/widgets/{path}": { "get": {"summary": "Read widget metadata"} },
+			"/widgets/{id}": { "delete": {"summary": "Delete widget"} }
+		}
+	}`), 0o644); err != nil {
+		t.Fatalf("write artifact: %v", err)
+	}
+	reportPath := filepath.Join(t.TempDir(), "materialize.json")
+	var stdout, stderr bytes.Buffer
+
+	if code := run([]string{"batch", "materialize", "--manifest", manifestPath, "--source-defs-root", sourceDefsRoot, "--defs-root", defsRoot, "--artifact-dir", artifactDir, "--retrieved-at", "2026-08-06", "--report", reportPath}, &stdout, &stderr); code != 0 {
+		t.Fatalf("batch materialize exit = %d, want 0; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	var cli engine.CLISurface
+	bundleDir := filepath.Join(defsRoot, "cli-surface")
+	decodeJSONFile(t, filepath.Join(bundleDir, "cli_surface.json"), &cli)
+	var preserved bool
+	for _, command := range cli.Commands {
+		if command.Path == "widget read" && command.Intent == "direct_read" && command.Availability == "implemented" {
+			preserved = true
+		}
+	}
+	if !preserved {
+		t.Fatalf("materialized commands = %+v, want implemented direct-read command retained for its covered endpoint", cli.Commands)
+	}
+	validation, err := validatePath(bundleDir)
+	if err != nil {
+		t.Fatalf("validate materialized direct-read bundle: %v", err)
+	}
+	if len(validation.Findings) != 0 {
+		t.Fatalf("materialized direct-read findings = %+v, want zero", validation.Findings)
 	}
 }
 
@@ -1144,6 +1331,26 @@ paths:
 	}
 }
 
+func TestParseBatchSwaggerArtifactPrefixesBasePath(t *testing.T) {
+	artifact := []byte(`{
+		"swagger": "2.0",
+		"basePath": "/api",
+		"paths": {
+			"/widgets": {
+				"get": {"summary": "List widgets", "responses": {"200": {"description": "OK"}}}
+			}
+		}
+	}`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse Swagger basePath artifact: %v", err)
+	}
+	if len(endpoints) != 1 || endpoints[0].Method != http.MethodGet || endpoints[0].Path != "/api/widgets" {
+		t.Fatalf("parsed endpoints = %+v, want GET /api/widgets", endpoints)
+	}
+}
+
 func TestParseBatchOpenAPIArtifactRequiresOpenAPI3OrSwagger2(t *testing.T) {
 	for _, test := range []struct {
 		name string
@@ -1168,6 +1375,104 @@ paths:
 				t.Fatalf("parse error = %v, want strict version rejection", err)
 			}
 		})
+	}
+}
+
+func TestParseBatchGoogleDiscoveryArtifactEnumeratesNestedMethods(t *testing.T) {
+	artifact := []byte(`{
+		"kind": "discovery#restDescription",
+		"name": "example",
+		"version": "v1",
+		"methods": {
+			"health": {"id": "example.health", "path": "v1/health", "httpMethod": "GET", "description": "Check health"}
+		},
+		"resources": {
+			"widgets": {
+				"methods": {
+					"get": {"id": "example.widgets.get", "path": "v1/{+name}", "httpMethod": "GET", "description": "Get widget"}
+				},
+				"resources": {
+					"items": {
+						"methods": {
+							"create": {"id": "example.widgets.items.create", "path": "v1/{+parent}/items", "httpMethod": "POST", "description": "Create item"}
+						}
+					}
+				}
+			}
+		}
+	}`)
+	source := batchArtifactSource{URL: "https://example.test/$discovery/rest?version=v1", Kind: "openapi", Version: "v1", Retrieved: "2026-08-09"}
+	inventory, err := parseBatchGoogleDiscoveryArtifact(artifact, source)
+	if err != nil {
+		t.Fatalf("parse Google Discovery artifact: %v", err)
+	}
+	if len(inventory.Endpoints) != 3 {
+		t.Fatalf("endpoint count = %d, want 3", len(inventory.Endpoints))
+	}
+	got := make(map[string]batchArtifactEndpoint, len(inventory.Endpoints))
+	for _, endpoint := range inventory.Endpoints {
+		got[endpoint.Method+" "+endpoint.Path] = endpoint
+	}
+	for _, key := range []string{"GET /v1/health", "GET /v1/{name}", "POST /v1/{parent}/items"} {
+		endpoint, ok := got[key]
+		if !ok {
+			t.Fatalf("endpoints = %+v, missing %s", inventory.Endpoints, key)
+		}
+		if endpoint.SourceURL != source.URL || endpoint.SourceKind != source.Kind || endpoint.SourceVersion != source.Version || endpoint.SourceRetrieved != source.Retrieved || endpoint.SourceCoordinate == "" {
+			t.Fatalf("endpoint provenance = %+v, want exact discovery source", endpoint)
+		}
+	}
+}
+
+func TestMaterializeAPISurfaceRetainsDuplicateCoveredStreamBindings(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "example",
+		Surface: &engine.APISurface{
+			API: "Example API",
+			Endpoints: []engine.SurfaceEndpoint{
+				{Method: http.MethodGet, Path: "/widgets", CoveredBy: &engine.SurfaceCoverage{Stream: "widgets"}},
+				{Method: http.MethodGet, Path: "/widgets", CoveredBy: &engine.SurfaceCoverage{Stream: "archived_widgets"}},
+			},
+		},
+		Streams: []engine.StreamSpec{{Name: "widgets"}, {Name: "archived_widgets"}},
+	}
+	candidate := BatchManifestConnector{Connector: "example", Artifact: BatchArtifact{URL: "https://example.test/discovery", Kind: "openapi", Version: "v1"}}
+	surface, err := materializeAPISurface(bundle, candidate, "2026-08-09", strings.Repeat("a", 64), []batchArtifactEndpoint{{
+		Method:           http.MethodGet,
+		Path:             "/v1/widgets",
+		Summary:          "List widgets",
+		SourceURL:        candidate.Artifact.URL,
+		SourceKind:       candidate.Artifact.Kind,
+		SourceVersion:    candidate.Artifact.Version,
+		SourceRetrieved:  "2026-08-09",
+		SourceSHA256:     strings.Repeat("a", 64),
+		SourceCoordinate: "methods[\"list\"]",
+	}})
+	if err != nil {
+		t.Fatalf("materialize duplicate stream bindings: %v", err)
+	}
+	if len(surface.Endpoints) != 1 || surface.Endpoints[0].CoveredBy == nil {
+		t.Fatalf("surface endpoints = %+v, want one merged binding", surface.Endpoints)
+	}
+	if surface.Endpoints[0].Path != "/widgets" {
+		t.Fatalf("materialized endpoint path = %q, want connector-relative /widgets", surface.Endpoints[0].Path)
+	}
+	got := map[string]bool{}
+	for _, stream := range surface.Endpoints[0].CoveredBy.StreamTargets() {
+		got[stream] = true
+	}
+	if !got["widgets"] || !got["archived_widgets"] {
+		t.Fatalf("surface stream bindings = %+v, want both source streams", got)
+	}
+}
+
+func TestMaterializeOperationCatalogKeepsEmptyOperationsArray(t *testing.T) {
+	operations, err := materializeOperationCatalog(engine.Bundle{Name: "example"}, engine.APISurface{}, BatchManifestConnector{Connector: "example"})
+	if err != nil {
+		t.Fatalf("materialize empty operation catalog: %v", err)
+	}
+	if operations == nil {
+		t.Fatal("materialized empty operation catalog is nil, want JSON []")
 	}
 }
 
@@ -1222,6 +1527,119 @@ func TestParseBatchOpenAPIArtifactMapsTopLevelWebhooks(t *testing.T) {
 	}
 	if webhookCount != 2 {
 		t.Fatalf("parsed endpoints = %+v, want two visible webhook operations", endpoints)
+	}
+}
+
+func TestParseBatchOpenAPIArtifactAcceptsOperationReferenceWithLocalMetadata(t *testing.T) {
+	artifact := []byte(`{
+		"openapi": "3.1.0",
+		"paths": {
+			"/widgets": {
+				"delete": {
+					"operationId": "customDelete",
+					"$ref": "#/components/operations/customRequest"
+				}
+			}
+		},
+		"components": {
+			"operations": {
+				"customRequest": {
+					"summary": "Send a custom request",
+					"responses": {"200": {"description": "ok"}}
+				}
+			}
+		}
+	}`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse operation reference artifact: %v", err)
+	}
+	if len(endpoints) != 1 {
+		t.Fatalf("endpoint count = %d, want 1", len(endpoints))
+	}
+	endpoint := endpoints[0]
+	if endpoint.Method != http.MethodDelete || endpoint.Path != "/widgets" || endpoint.Summary != "customDelete" {
+		t.Fatalf("endpoint = %+v, want DELETE /widgets with local operation metadata", endpoint)
+	}
+}
+
+func TestParseBatchOpenAPIArtifactIgnoresNonRequestOperationMetadata(t *testing.T) {
+	artifact := []byte(`{
+		"openapi": "3.1.0",
+		"paths": {
+			"/widgets": {
+				"post": {
+					"summary": "Create widget",
+					"examples": {"request": {"value": {"name": "example"}}},
+					"callbacks": {"delivery": {"{$request.body#/callback}": {"post": {"responses": {"200": {"description": "OK"}}}}}},
+					"responses": {"201": {"description": "Created"}}
+				}
+			}
+		}
+	}`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse OpenAPI operation metadata: %v", err)
+	}
+	if len(endpoints) != 1 || endpoints[0].Method != http.MethodPost || endpoints[0].Path != "/widgets" || endpoints[0].Summary != "Create widget" {
+		t.Fatalf("parsed endpoints = %+v, want the provider request without callback deliveries", endpoints)
+	}
+}
+
+func TestParseBatchOpenAPIArtifactAcceptsJSONUnicodeEscapes(t *testing.T) {
+	artifact := []byte(`{
+		"openapi": "3.1.0",
+		"paths": {
+			"/messages": {
+				"post": {
+					"summary": "Send a message \ud83d\udc4d",
+					"responses": {"201": {"description": "Created"}}
+				}
+			}
+		}
+	}`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse JSON Unicode escape artifact: %v", err)
+	}
+	if len(endpoints) != 1 || endpoints[0].Method != http.MethodPost || endpoints[0].Path != "/messages" {
+		t.Fatalf("parsed endpoints = %+v, want POST /messages", endpoints)
+	}
+}
+
+func TestParseBatchOpenAPIArtifactIgnoresProviderNeutralFreeTier(t *testing.T) {
+	artifact := []byte(`{
+		"swagger": "2.0",
+		"paths": {
+			"/quotes": {
+				"get": {
+					"summary": "Get quotes",
+					"freeTier": null,
+					"responses": {"200": {"description": "OK"}}
+				}
+			}
+		}
+	}`)
+
+	endpoints, err := parseBatchOpenAPIArtifact(artifact)
+	if err != nil {
+		t.Fatalf("parse provider neutral field artifact: %v", err)
+	}
+	if len(endpoints) != 1 || endpoints[0].Method != http.MethodGet || endpoints[0].Path != "/quotes" {
+		t.Fatalf("parsed endpoints = %+v, want GET /quotes", endpoints)
+	}
+}
+
+func TestMaterializedOperationIDSanitizesNonHTTPMethodLabels(t *testing.T) {
+	used := map[string]bool{}
+	if got, want := materializedOperationID("leadfeeder", "*", "/accounts/{account_id}/users", used), "leadfeeder.operation.accounts-account-id-users"; got != want {
+		t.Fatalf("wildcard method ID = %q, want %q", got, want)
+	}
+	if got, want := materializedOperationID("leadfeeder", "POST/PATCH/DELETE", "/all", used), "leadfeeder.post-patch-delete.all"; got != want {
+		t.Fatalf("aggregate method ID = %q, want %q", got, want)
 	}
 }
 
@@ -1345,6 +1763,53 @@ func TestParseBatchHTMLReferenceTraversesOfficialMachineSource(t *testing.T) {
 	}
 }
 
+func TestCompleteBatchHTMLReferenceRootAvoidsTraversalWhenCountIsMet(t *testing.T) {
+	artifact := []byte(`<html><body>
+		GET /projects
+		POST /projects
+		<a href="/unrelated-reference">unrelated reference</a>
+	</body></html>`)
+	source := batchArtifactSource{URL: "https://provider.example/reference", Kind: "html_reference", Version: "v1", Retrieved: "2026-08-09"}
+	candidate := BatchManifestConnector{Connector: "example", OperationsTotal: 2}
+
+	inventory, complete, err := completeBatchHTMLReferenceRoot(candidate, artifact, source)
+	if err != nil {
+		t.Fatalf("parse complete root reference: %v", err)
+	}
+	if !complete {
+		t.Fatal("complete root reference = false, want true without traversing unrelated links")
+	}
+	if len(inventory.Endpoints) != 2 {
+		t.Fatalf("root inventory endpoints = %+v, want two documented requests", inventory.Endpoints)
+	}
+}
+
+func TestParseBatchHTMLReferenceSkipsStaticAssetCandidates(t *testing.T) {
+	rootURL := "https://provider.example/reference"
+	machineURL := "https://provider.example/openapi.json"
+	root := []byte(`<html><head><link href="/build/css/api-doc.css" rel="stylesheet"></head><body><a href="/openapi.json">OpenAPI export</a></body></html>`)
+	machine := []byte(`{"openapi":"3.1.0","paths":{"/widgets":{"get":{"summary":"List widgets"}}}}`)
+
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: rootURL, Kind: "html_reference", Retrieved: "2026-08-09"}, func(rawURL string) ([]byte, error) {
+		if rawURL != machineURL {
+			t.Fatalf("traversed URL = %q, want only official machine source", rawURL)
+		}
+		return machine, nil
+	})
+	if err != nil {
+		t.Fatalf("parse HTML reference: %v", err)
+	}
+	if len(inventory.Endpoints) != 1 || inventory.Endpoints[0].Path != "/widgets" {
+		t.Fatalf("HTML/source endpoints = %+v, want linked machine operation only", inventory.Endpoints)
+	}
+}
+
+func TestNormalizeBatchHTMLOperationPathConvertsAnglePlaceholders(t *testing.T) {
+	if got, want := normalizeBatchHTMLOperationPath("/pypi/&lt;project&gt;/&lt;version&gt;/json"), "/pypi/{project}/{version}/json"; got != want {
+		t.Fatalf("normalized HTML path = %q, want %q", got, want)
+	}
+}
+
 func TestParseBatchHTMLReferenceDoesNotScanMachineDocumentProse(t *testing.T) {
 	rootURL := "https://provider.example/reference"
 	machineURL := "https://provider.example/openapi.json"
@@ -1463,6 +1928,26 @@ func TestParseBatchHTMLReferenceFailsClosedForSelectedOffHostLink(t *testing.T) 
 	}
 }
 
+func TestParseBatchHTMLReferenceSkipsOffHostNonMachineNavigation(t *testing.T) {
+	rootURL := "https://docs.provider.example/reference"
+	machineURL := "https://docs.provider.example/openapi.json"
+	root := []byte(`<html><body><a href="https://support.provider.example/api/reference">Support navigation</a><a href="/openapi.json">OpenAPI export</a></body></html>`)
+	machine := []byte(`{"openapi":"3.1.0","paths":{"/widgets":{"get":{"summary":"List widgets"}}}}`)
+
+	inventory, err := parseBatchHTMLReference(root, batchArtifactSource{URL: rootURL, Kind: "html_reference", Retrieved: "2026-08-09"}, func(rawURL string) ([]byte, error) {
+		if rawURL != machineURL {
+			t.Fatalf("traversed URL = %q, want only same-host machine source", rawURL)
+		}
+		return machine, nil
+	})
+	if err != nil {
+		t.Fatalf("parse HTML reference: %v", err)
+	}
+	if len(inventory.Endpoints) != 1 || inventory.Endpoints[0].Path != "/widgets" {
+		t.Fatalf("HTML/source endpoints = %+v, want linked machine operation only", inventory.Endpoints)
+	}
+}
+
 func TestParseBatchHTMLReferenceFailsClosedForSelectedLinkFailures(t *testing.T) {
 	rootURL := "https://provider.example/reference"
 	machineURL := "https://provider.example/openapi.json"
@@ -1561,6 +2046,9 @@ func TestBatchArtifactURLAndDestinationGuards(t *testing.T) {
 		if err := validateBatchArtifactURL(raw); err == nil {
 			t.Fatalf("validateBatchArtifactURL(%q) succeeded, want rejection", raw)
 		}
+	}
+	if err := validateBatchArtifactURL("https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta"); err != nil {
+		t.Fatalf("validateBatchArtifactURL accepted official versioned discovery URL: %v", err)
 	}
 	privateLookup := func(context.Context, string) ([]net.IPAddr, error) {
 		return []net.IPAddr{{IP: net.ParseIP("169.254.169.254")}}, nil

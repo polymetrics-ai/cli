@@ -1,0 +1,697 @@
+{
+  "tagline": "Run Customerly's declared streams and reverse-ETL actions.",
+  "usage": "pm customerly \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "accounts list",
+        "api get v1 knowledge articles",
+        "api get v1 knowledge articles knowledge-base-article-id",
+        "api get v1 knowledge collections",
+        "api get v1 knowledge collections knowledge-base-collection-id",
+        "api get v1 knowledge writers",
+        "api get v1 leads-email email",
+        "api get v1 tags",
+        "api get v1 users-email email",
+        "api get v1 users-user-id user-id",
+        "leads list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add company attributes apply",
+        "add tag apply",
+        "add user attributes apply",
+        "add user to company apply",
+        "api delete v1 knowledge articles knowledge-base-article-id",
+        "api delete v1 knowledge collections knowledge-base-collection-id",
+        "api delete v1 users-email email",
+        "api post v1 knowledge articles",
+        "api post v1 knowledge articles knowledge-base-article-id",
+        "api post v1 knowledge collections",
+        "api post v1 knowledge collections knowledge-base-collection-id",
+        "api post v1 leads",
+        "api post v1 users",
+        "delete lead apply",
+        "delete tag apply",
+        "delete user apply",
+        "send message apply",
+        "unsubscribe user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "accounts list",
+      "summary": "Run the accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "accounts",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/accounts/"
+        }
+      ]
+    },
+    {
+      "path": "add company attributes apply",
+      "summary": "Plan and execute the add company attributes reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_company_attributes",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "flags": [
+        {
+          "name": "company_id",
+          "type": "string",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customerly add company attributes apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/company/add-attributes/{company_id}"
+        }
+      ],
+      "risk": "external mutation; adds/overwrites custom attribute values (and optionally renames) a live company",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "add tag apply",
+      "summary": "Plan and execute the add tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_tag",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "flags": [
+        {
+          "name": "tag",
+          "type": "string",
+          "summary": "Required tag record field.",
+          "maps_to": "record.tag",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customerly add tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/tags"
+        }
+      ],
+      "risk": "external mutation; adds or removes a tag on one or more live users/leads",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "add user attributes apply",
+      "summary": "Plan and execute the add user attributes reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "add_user_attributes",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly add user attributes apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users/add-attributes/{user_id}"
+        }
+      ],
+      "risk": "external mutation; adds/overwrites custom attribute values on a live user",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "add user to company apply",
+      "summary": "Plan and execute the add user to company reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_user_to_company",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "flags": [
+        {
+          "name": "company_id",
+          "type": "string",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customerly add user to company apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users/add-to-company"
+        }
+      ],
+      "risk": "external mutation; links a live user to a company, creating the company if it does not already exist",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api delete v1 knowledge articles knowledge-base-article-id",
+      "summary": "Documented DELETE /v1/knowledge/articles/{knowledge_base_article_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api delete v1 knowledge articles knowledge-base-article-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/knowledge/articles/{knowledge_base_article_id}"
+        }
+      ],
+      "operation": "customerly.delete.v1-knowledge-articles-knowledge-base-article-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 knowledge collections knowledge-base-collection-id",
+      "summary": "Documented DELETE /v1/knowledge/collections/{knowledge_base_collection_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api delete v1 knowledge collections knowledge-base-collection-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/knowledge/collections/{knowledge_base_collection_id}"
+        }
+      ],
+      "operation": "customerly.delete.v1-knowledge-collections-knowledge-base-collection-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 users-email email",
+      "summary": "Documented DELETE /v1/users?email={email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api delete v1 users-email email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/users?email={email}"
+        }
+      ],
+      "operation": "customerly.delete.v1-users-email-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 knowledge articles",
+      "summary": "Documented GET /v1/knowledge/articles (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api get v1 knowledge articles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/knowledge/articles"
+        }
+      ],
+      "operation": "customerly.get.v1-knowledge-articles",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 knowledge articles knowledge-base-article-id",
+      "summary": "Documented GET /v1/knowledge/articles/{knowledge_base_article_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api get v1 knowledge articles knowledge-base-article-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/knowledge/articles/{knowledge_base_article_id}"
+        }
+      ],
+      "operation": "customerly.get.v1-knowledge-articles-knowledge-base-article-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 knowledge collections",
+      "summary": "Documented GET /v1/knowledge/collections (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api get v1 knowledge collections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/knowledge/collections"
+        }
+      ],
+      "operation": "customerly.get.v1-knowledge-collections",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 knowledge collections knowledge-base-collection-id",
+      "summary": "Documented GET /v1/knowledge/collections/{knowledge_base_collection_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api get v1 knowledge collections knowledge-base-collection-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/knowledge/collections/{knowledge_base_collection_id}"
+        }
+      ],
+      "operation": "customerly.get.v1-knowledge-collections-knowledge-base-collection-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 knowledge writers",
+      "summary": "Documented GET /v1/knowledge/writers (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api get v1 knowledge writers --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/knowledge/writers"
+        }
+      ],
+      "operation": "customerly.get.v1-knowledge-writers",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 leads-email email",
+      "summary": "Documented GET /v1/leads?email={email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api get v1 leads-email email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/leads?email={email}"
+        }
+      ],
+      "operation": "customerly.get.v1-leads-email-email",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 tags",
+      "summary": "Documented GET /v1/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api get v1 tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/tags"
+        }
+      ],
+      "operation": "customerly.get.v1-tags",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users-email email",
+      "summary": "Documented GET /v1/users?email={email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api get v1 users-email email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users?email={email}"
+        }
+      ],
+      "operation": "customerly.get.v1-users-email-email",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 users-user-id user-id",
+      "summary": "Documented GET /v1/users?user_id={user_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api get v1 users-user-id user-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users?user_id={user_id}"
+        }
+      ],
+      "operation": "customerly.get.v1-users-user-id-user-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post v1 knowledge articles",
+      "summary": "Documented POST /v1/knowledge/articles (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api post v1 knowledge articles --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/knowledge/articles"
+        }
+      ],
+      "operation": "customerly.post.v1-knowledge-articles",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 knowledge articles knowledge-base-article-id",
+      "summary": "Documented POST /v1/knowledge/articles/{knowledge_base_article_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api post v1 knowledge articles knowledge-base-article-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/knowledge/articles/{knowledge_base_article_id}"
+        }
+      ],
+      "operation": "customerly.post.v1-knowledge-articles-knowledge-base-article-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 knowledge collections",
+      "summary": "Documented POST /v1/knowledge/collections (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api post v1 knowledge collections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/knowledge/collections"
+        }
+      ],
+      "operation": "customerly.post.v1-knowledge-collections",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 knowledge collections knowledge-base-collection-id",
+      "summary": "Documented POST /v1/knowledge/collections/{knowledge_base_collection_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api post v1 knowledge collections knowledge-base-collection-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/knowledge/collections/{knowledge_base_collection_id}"
+        }
+      ],
+      "operation": "customerly.post.v1-knowledge-collections-knowledge-base-collection-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 leads",
+      "summary": "Documented POST /v1/leads (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api post v1 leads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/leads"
+        }
+      ],
+      "operation": "customerly.post.v1-leads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "api post v1 users",
+      "summary": "Documented POST /v1/users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly api post v1 users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users"
+        }
+      ],
+      "operation": "customerly.post.v1-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks the provider-specific top-level body envelope required by this operation",
+      "notes": "named_dependency=engine.rest_write_body_envelope: the REST write executor lacks the provider-specific top-level body envelope required by this operation"
+    },
+    {
+      "path": "delete lead apply",
+      "summary": "Plan and execute the delete lead reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_lead",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "flags": [
+        {
+          "name": "email",
+          "type": "string",
+          "summary": "Required email record field.",
+          "maps_to": "record.email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customerly delete lead apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/leads?email={email}"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Customerly lead and every associated record; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete tag apply",
+      "summary": "Plan and execute the delete tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tag",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "flags": [
+        {
+          "name": "tag",
+          "type": "string",
+          "summary": "Required tag record field.",
+          "maps_to": "record.tag",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customerly delete tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/tags"
+        }
+      ],
+      "risk": "external mutation; permanently removes a tag definition from the app; it is un-applied from every contact that carried it; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "flags": [
+        {
+          "name": "user_id",
+          "type": "string",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customerly delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/users?user_id={user_id}"
+        }
+      ],
+      "risk": "external mutation; irreversibly deletes a live Customerly user and every conversation/survey/campaign record tied to them; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "leads list",
+      "summary": "Run the leads ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "leads",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly leads list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/leads/list"
+        }
+      ]
+    },
+    {
+      "path": "send message apply",
+      "summary": "Plan and execute the send message reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "send_message",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly send message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/messages"
+        }
+      ],
+      "risk": "sends a user-visible message from Customerly on the sender's behalf; may notify the recipient",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unsubscribe user apply",
+      "summary": "Plan and execute the unsubscribe user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "unsubscribe_user",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "flags": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm customerly unsubscribe user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/users/unsubscribe/{user_id}"
+        }
+      ],
+      "risk": "external mutation; unsubscribes a live user from Customerly messaging; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://customerlypublic.docs.apiary.io/api-description-document",
+      "examples": [
+        "pm customerly users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/users/list"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2607 @@
+{
+  "tagline": "Run Elastic Email's declared streams and reverse-ETL actions.",
+  "usage": "pm elasticemail \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get campaigns name",
+        "api get contacts email",
+        "api get contacts export id status",
+        "api get domains domain",
+        "api get domains domain restricted",
+        "api get emails msgid view",
+        "api get emails transactionid status",
+        "api get events",
+        "api get events channels export id status",
+        "api get events channels name",
+        "api get events export id status",
+        "api get events transactionid",
+        "api get files name",
+        "api get files name info",
+        "api get inboundroute id",
+        "api get lists listname contacts",
+        "api get lists name",
+        "api get security apikeys",
+        "api get security apikeys name",
+        "api get security smtp",
+        "api get security smtp name",
+        "api get segments name",
+        "api get statistics",
+        "api get statistics campaigns name",
+        "api get statistics channels name",
+        "api get subaccounts email",
+        "api get subaccounts email apikey",
+        "api get suppressions email",
+        "api get templates name",
+        "api get verifications",
+        "api get verifications email",
+        "api get verifications files id result",
+        "api get verifications files id result download",
+        "api get verifications files result",
+        "api get webhook publicid",
+        "campaigns list",
+        "contacts list",
+        "domains list",
+        "files list",
+        "inbound routes list",
+        "lists list",
+        "segments list",
+        "statistics campaigns list",
+        "statistics channels list",
+        "sub accounts list",
+        "suppressions bounces list",
+        "suppressions complaints list",
+        "suppressions list",
+        "suppressions unsubscribes list",
+        "templates list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "add list contacts apply",
+        "api delete files name",
+        "api delete security apikeys name",
+        "api delete security smtp name",
+        "api delete subaccounts email",
+        "api delete suppressions email",
+        "api delete verifications email",
+        "api delete verifications files id",
+        "api patch domains email default",
+        "api patch subaccounts email credits",
+        "api post campaigns automation name trigger",
+        "api post contacts delete",
+        "api post contacts export",
+        "api post contacts import",
+        "api post emails",
+        "api post emails mergefile",
+        "api post emails transactional",
+        "api post events channels name export",
+        "api post events export",
+        "api post files",
+        "api post lists name contacts remove",
+        "api post security apikeys",
+        "api post security smtp",
+        "api post subaccounts",
+        "api post suppressions bounces",
+        "api post suppressions bounces import",
+        "api post suppressions complaints",
+        "api post suppressions complaints import",
+        "api post suppressions unsubscribes",
+        "api post suppressions unsubscribes import",
+        "api post verifications email",
+        "api post verifications files",
+        "api post verifications files id verification",
+        "api put domains domain",
+        "api put domains domain verification",
+        "api put inboundroute order",
+        "api put security apikeys name",
+        "api put security smtp name",
+        "api put subaccounts email settings email",
+        "create campaign apply",
+        "create contact apply",
+        "create domain apply",
+        "create inbound route apply",
+        "create list apply",
+        "create segment apply",
+        "create template apply",
+        "create webhook apply",
+        "delete campaign apply",
+        "delete contact apply",
+        "delete domain apply",
+        "delete inbound route apply",
+        "delete list apply",
+        "delete segment apply",
+        "delete template apply",
+        "delete webhook apply",
+        "pause campaign apply",
+        "update campaign apply",
+        "update contact apply",
+        "update inbound route apply",
+        "update list apply",
+        "update segment apply",
+        "update template apply",
+        "update webhook apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "add list contacts apply",
+      "summary": "Plan and execute the add list contacts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_list_contacts",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Emails",
+          "type": "string_array",
+          "summary": "Required Emails record field.",
+          "maps_to": "record.Emails",
+          "required": true
+        },
+        {
+          "name": "ListName",
+          "type": "string",
+          "summary": "Required ListName record field.",
+          "maps_to": "record.ListName",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail add list contacts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lists/{name}/contacts"
+        }
+      ],
+      "risk": "adds existing contacts to a list, making them eligible recipients for any campaign targeting that list",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "api delete files name",
+      "summary": "Documented DELETE /files/{name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api delete files name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/files/{name}"
+        }
+      ],
+      "operation": "elasticemail.delete.files-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete security apikeys name",
+      "summary": "Documented DELETE /security/apikeys/{name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api delete security apikeys name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/security/apikeys/{name}"
+        }
+      ],
+      "operation": "elasticemail.delete.security-apikeys-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete security smtp name",
+      "summary": "Documented DELETE /security/smtp/{name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api delete security smtp name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/security/smtp/{name}"
+        }
+      ],
+      "operation": "elasticemail.delete.security-smtp-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete subaccounts email",
+      "summary": "Documented DELETE /subaccounts/{email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api delete subaccounts email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/subaccounts/{email}"
+        }
+      ],
+      "operation": "elasticemail.delete.subaccounts-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete suppressions email",
+      "summary": "Documented DELETE /suppressions/{email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api delete suppressions email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/suppressions/{email}"
+        }
+      ],
+      "operation": "elasticemail.delete.suppressions-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete verifications email",
+      "summary": "Documented DELETE /verifications/{email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api delete verifications email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/verifications/{email}"
+        }
+      ],
+      "operation": "elasticemail.delete.verifications-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete verifications files id",
+      "summary": "Documented DELETE /verifications/files/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api delete verifications files id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/verifications/files/{id}"
+        }
+      ],
+      "operation": "elasticemail.delete.verifications-files-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get campaigns name",
+      "summary": "Documented GET /campaigns/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get campaigns name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.campaigns-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts email",
+      "summary": "Documented GET /contacts/{email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get contacts email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{email}"
+        }
+      ],
+      "operation": "elasticemail.get.contacts-email",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get contacts export id status",
+      "summary": "Documented GET /contacts/export/{id}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get contacts export id status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/export/{id}/status"
+        }
+      ],
+      "operation": "elasticemail.get.contacts-export-id-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains domain",
+      "summary": "Documented GET /domains/{domain} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get domains domain --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/{domain}"
+        }
+      ],
+      "operation": "elasticemail.get.domains-domain",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get domains domain restricted",
+      "summary": "Documented GET /domains/{domain}/restricted (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get domains domain restricted --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains/{domain}/restricted"
+        }
+      ],
+      "operation": "elasticemail.get.domains-domain-restricted",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get emails msgid view",
+      "summary": "Documented GET /emails/{msgid}/view (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get emails msgid view --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/emails/{msgid}/view"
+        }
+      ],
+      "operation": "elasticemail.get.emails-msgid-view",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get emails transactionid status",
+      "summary": "Documented GET /emails/{transactionid}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get emails transactionid status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/emails/{transactionid}/status"
+        }
+      ],
+      "operation": "elasticemail.get.emails-transactionid-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events",
+      "summary": "Documented GET /events (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get events --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "operation": "elasticemail.get.events",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events channels export id status",
+      "summary": "Documented GET /events/channels/export/{id}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get events channels export id status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/channels/export/{id}/status"
+        }
+      ],
+      "operation": "elasticemail.get.events-channels-export-id-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events channels name",
+      "summary": "Documented GET /events/channels/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get events channels name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/channels/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.events-channels-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events export id status",
+      "summary": "Documented GET /events/export/{id}/status (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get events export id status --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/export/{id}/status"
+        }
+      ],
+      "operation": "elasticemail.get.events-export-id-status",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get events transactionid",
+      "summary": "Documented GET /events/{transactionid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get events transactionid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events/{transactionid}"
+        }
+      ],
+      "operation": "elasticemail.get.events-transactionid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get files name",
+      "summary": "Documented GET /files/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get files name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/files/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.files-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get files name info",
+      "summary": "Documented GET /files/{name}/info (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get files name info --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/files/{name}/info"
+        }
+      ],
+      "operation": "elasticemail.get.files-name-info",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get inboundroute id",
+      "summary": "Documented GET /inboundroute/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get inboundroute id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inboundroute/{id}"
+        }
+      ],
+      "operation": "elasticemail.get.inboundroute-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lists listname contacts",
+      "summary": "Documented GET /lists/{listname}/contacts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get lists listname contacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{listname}/contacts"
+        }
+      ],
+      "operation": "elasticemail.get.lists-listname-contacts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get lists name",
+      "summary": "Documented GET /lists/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get lists name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.lists-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get security apikeys",
+      "summary": "Documented GET /security/apikeys (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get security apikeys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/security/apikeys"
+        }
+      ],
+      "operation": "elasticemail.get.security-apikeys",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get security apikeys name",
+      "summary": "Documented GET /security/apikeys/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get security apikeys name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/security/apikeys/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.security-apikeys-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get security smtp",
+      "summary": "Documented GET /security/smtp (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get security smtp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/security/smtp"
+        }
+      ],
+      "operation": "elasticemail.get.security-smtp",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get security smtp name",
+      "summary": "Documented GET /security/smtp/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get security smtp name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/security/smtp/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.security-smtp-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segments name",
+      "summary": "Documented GET /segments/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get segments name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.segments-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get statistics",
+      "summary": "Documented GET /statistics (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get statistics --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statistics"
+        }
+      ],
+      "operation": "elasticemail.get.statistics",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get statistics campaigns name",
+      "summary": "Documented GET /statistics/campaigns/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get statistics campaigns name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statistics/campaigns/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.statistics-campaigns-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get statistics channels name",
+      "summary": "Documented GET /statistics/channels/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get statistics channels name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statistics/channels/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.statistics-channels-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subaccounts email",
+      "summary": "Documented GET /subaccounts/{email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get subaccounts email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subaccounts/{email}"
+        }
+      ],
+      "operation": "elasticemail.get.subaccounts-email",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get subaccounts email apikey",
+      "summary": "Documented GET /subaccounts/{email}/apikey (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get subaccounts email apikey --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subaccounts/{email}/apikey"
+        }
+      ],
+      "operation": "elasticemail.get.subaccounts-email-apikey",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get suppressions email",
+      "summary": "Documented GET /suppressions/{email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get suppressions email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppressions/{email}"
+        }
+      ],
+      "operation": "elasticemail.get.suppressions-email",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get templates name",
+      "summary": "Documented GET /templates/{name} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get templates name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates/{name}"
+        }
+      ],
+      "operation": "elasticemail.get.templates-name",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get verifications",
+      "summary": "Documented GET /verifications (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get verifications --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/verifications"
+        }
+      ],
+      "operation": "elasticemail.get.verifications",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get verifications email",
+      "summary": "Documented GET /verifications/{email} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get verifications email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/verifications/{email}"
+        }
+      ],
+      "operation": "elasticemail.get.verifications-email",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get verifications files id result",
+      "summary": "Documented GET /verifications/files/{id}/result (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get verifications files id result --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/verifications/files/{id}/result"
+        }
+      ],
+      "operation": "elasticemail.get.verifications-files-id-result",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get verifications files id result download",
+      "summary": "Documented GET /verifications/files/{id}/result/download (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get verifications files id result download --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/verifications/files/{id}/result/download"
+        }
+      ],
+      "operation": "elasticemail.get.verifications-files-id-result-download",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get verifications files result",
+      "summary": "Documented GET /verifications/files/result (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get verifications files result --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/verifications/files/result"
+        }
+      ],
+      "operation": "elasticemail.get.verifications-files-result",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get webhook publicid",
+      "summary": "Documented GET /webhook/{publicid} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api get webhook publicid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhook/{publicid}"
+        }
+      ],
+      "operation": "elasticemail.get.webhook-publicid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch domains email default",
+      "summary": "Documented PATCH /domains/{email}/default (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api patch domains email default --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/domains/{email}/default"
+        }
+      ],
+      "operation": "elasticemail.patch.domains-email-default",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch subaccounts email credits",
+      "summary": "Documented PATCH /subaccounts/{email}/credits (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api patch subaccounts email credits --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/subaccounts/{email}/credits"
+        }
+      ],
+      "operation": "elasticemail.patch.subaccounts-email-credits",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post campaigns automation name trigger",
+      "summary": "Documented POST /campaigns/automation/{name}/trigger (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post campaigns automation name trigger --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns/automation/{name}/trigger"
+        }
+      ],
+      "operation": "elasticemail.post.campaigns-automation-name-trigger",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts delete",
+      "summary": "Documented POST /contacts/delete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post contacts delete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/delete"
+        }
+      ],
+      "operation": "elasticemail.post.contacts-delete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts export",
+      "summary": "Documented POST /contacts/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post contacts export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/export"
+        }
+      ],
+      "operation": "elasticemail.post.contacts-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts import",
+      "summary": "Documented POST /contacts/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post contacts import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/import"
+        }
+      ],
+      "operation": "elasticemail.post.contacts-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post emails",
+      "summary": "Documented POST /emails (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post emails --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/emails"
+        }
+      ],
+      "operation": "elasticemail.post.emails",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post emails mergefile",
+      "summary": "Documented POST /emails/mergefile (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post emails mergefile --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/emails/mergefile"
+        }
+      ],
+      "operation": "elasticemail.post.emails-mergefile",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post emails transactional",
+      "summary": "Documented POST /emails/transactional (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post emails transactional --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/emails/transactional"
+        }
+      ],
+      "operation": "elasticemail.post.emails-transactional",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events channels name export",
+      "summary": "Documented POST /events/channels/{name}/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post events channels name export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/channels/{name}/export"
+        }
+      ],
+      "operation": "elasticemail.post.events-channels-name-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post events export",
+      "summary": "Documented POST /events/export (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post events export --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/export"
+        }
+      ],
+      "operation": "elasticemail.post.events-export",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post files",
+      "summary": "Documented POST /files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/files"
+        }
+      ],
+      "operation": "elasticemail.post.files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post lists name contacts remove",
+      "summary": "Documented POST /lists/{name}/contacts/remove (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post lists name contacts remove --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lists/{name}/contacts/remove"
+        }
+      ],
+      "operation": "elasticemail.post.lists-name-contacts-remove",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post security apikeys",
+      "summary": "Documented POST /security/apikeys (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post security apikeys --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/security/apikeys"
+        }
+      ],
+      "operation": "elasticemail.post.security-apikeys",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post security smtp",
+      "summary": "Documented POST /security/smtp (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post security smtp --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/security/smtp"
+        }
+      ],
+      "operation": "elasticemail.post.security-smtp",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post subaccounts",
+      "summary": "Documented POST /subaccounts (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post subaccounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/subaccounts"
+        }
+      ],
+      "operation": "elasticemail.post.subaccounts",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions bounces",
+      "summary": "Documented POST /suppressions/bounces (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post suppressions bounces --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/bounces"
+        }
+      ],
+      "operation": "elasticemail.post.suppressions-bounces",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions bounces import",
+      "summary": "Documented POST /suppressions/bounces/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post suppressions bounces import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/bounces/import"
+        }
+      ],
+      "operation": "elasticemail.post.suppressions-bounces-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions complaints",
+      "summary": "Documented POST /suppressions/complaints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post suppressions complaints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/complaints"
+        }
+      ],
+      "operation": "elasticemail.post.suppressions-complaints",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions complaints import",
+      "summary": "Documented POST /suppressions/complaints/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post suppressions complaints import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/complaints/import"
+        }
+      ],
+      "operation": "elasticemail.post.suppressions-complaints-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions unsubscribes",
+      "summary": "Documented POST /suppressions/unsubscribes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post suppressions unsubscribes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/unsubscribes"
+        }
+      ],
+      "operation": "elasticemail.post.suppressions-unsubscribes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post suppressions unsubscribes import",
+      "summary": "Documented POST /suppressions/unsubscribes/import (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post suppressions unsubscribes import --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/suppressions/unsubscribes/import"
+        }
+      ],
+      "operation": "elasticemail.post.suppressions-unsubscribes-import",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post verifications email",
+      "summary": "Documented POST /verifications/{email} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post verifications email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/verifications/{email}"
+        }
+      ],
+      "operation": "elasticemail.post.verifications-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post verifications files",
+      "summary": "Documented POST /verifications/files (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post verifications files --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/verifications/files"
+        }
+      ],
+      "operation": "elasticemail.post.verifications-files",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post verifications files id verification",
+      "summary": "Documented POST /verifications/files/{id}/verification (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api post verifications files id verification --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/verifications/files/{id}/verification"
+        }
+      ],
+      "operation": "elasticemail.post.verifications-files-id-verification",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put domains domain",
+      "summary": "Documented PUT /domains/{domain} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api put domains domain --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/domains/{domain}"
+        }
+      ],
+      "operation": "elasticemail.put.domains-domain",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put domains domain verification",
+      "summary": "Documented PUT /domains/{domain}/verification (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api put domains domain verification --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/domains/{domain}/verification"
+        }
+      ],
+      "operation": "elasticemail.put.domains-domain-verification",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put inboundroute order",
+      "summary": "Documented PUT /inboundroute/order (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api put inboundroute order --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/inboundroute/order"
+        }
+      ],
+      "operation": "elasticemail.put.inboundroute-order",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put security apikeys name",
+      "summary": "Documented PUT /security/apikeys/{name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api put security apikeys name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/security/apikeys/{name}"
+        }
+      ],
+      "operation": "elasticemail.put.security-apikeys-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put security smtp name",
+      "summary": "Documented PUT /security/smtp/{name} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api put security smtp name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/security/smtp/{name}"
+        }
+      ],
+      "operation": "elasticemail.put.security-smtp-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put subaccounts email settings email",
+      "summary": "Documented PUT /subaccounts/{email}/settings/email (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail api put subaccounts email settings email --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/subaccounts/{email}/settings/email"
+        }
+      ],
+      "operation": "elasticemail.put.subaccounts-email-settings-email",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "campaigns list",
+      "summary": "Run the campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "campaigns",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/campaigns"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "create campaign apply",
+      "summary": "Plan and execute the create campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_campaign",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail create campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/campaigns"
+        }
+      ],
+      "risk": "creates a new campaign targeting the given lists/segments; depending on Options this may schedule a live send to real recipients, not a preview-only action",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_contact",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Email",
+          "type": "string",
+          "summary": "Required Email record field.",
+          "maps_to": "record.Email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "risk": "adds a new contact to the account's overall recipient list; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create domain apply",
+      "summary": "Plan and execute the create domain reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_domain",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Domain",
+          "type": "string",
+          "summary": "Required Domain record field.",
+          "maps_to": "record.Domain",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail create domain apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/domains"
+        }
+      ],
+      "risk": "registers a new sending domain pending DNS verification; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create inbound route apply",
+      "summary": "Plan and execute the create inbound route reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_inbound_route",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "ActionType",
+          "type": "string",
+          "summary": "Required ActionType record field.",
+          "maps_to": "record.ActionType",
+          "required": true
+        },
+        {
+          "name": "Filter",
+          "type": "string",
+          "summary": "Required Filter record field.",
+          "maps_to": "record.Filter",
+          "required": true
+        },
+        {
+          "name": "FilterType",
+          "type": "string",
+          "summary": "Required FilterType record field.",
+          "maps_to": "record.FilterType",
+          "required": true
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail create inbound route apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/inboundroute"
+        }
+      ],
+      "risk": "creates a new inbound-mail routing rule that forwards matching inbound email to an external address or webhook URL of the caller's choosing",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create list apply",
+      "summary": "Plan and execute the create list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_list",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "ListName",
+          "type": "string",
+          "summary": "Required ListName record field.",
+          "maps_to": "record.ListName",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail create list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lists"
+        }
+      ],
+      "risk": "creates a new contact list, optionally seeding it from existing contact emails; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create segment apply",
+      "summary": "Plan and execute the create segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_segment",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        },
+        {
+          "name": "Rule",
+          "type": "string",
+          "summary": "Required Rule record field.",
+          "maps_to": "record.Rule",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail create segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/segments"
+        }
+      ],
+      "risk": "creates a new dynamic contact segment from a SQL-like rule; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create template apply",
+      "summary": "Plan and execute the create template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_template",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail create template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/templates"
+        }
+      ],
+      "risk": "creates a new email template; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        },
+        {
+          "name": "URL",
+          "type": "string",
+          "summary": "Required URL record field.",
+          "maps_to": "record.URL",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/webhook"
+        }
+      ],
+      "risk": "registers a new outbound webhook that will POST live event data (sent/opened/clicked/bounced) to an external URL of the caller's choosing; verify the target endpoint before enabling",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete campaign apply",
+      "summary": "Plan and execute the delete campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_campaign",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail delete campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/campaigns/{name}"
+        }
+      ],
+      "risk": "permanently removes a campaign; if it has not finished sending, any remaining scheduled deliveries are cancelled",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_contact",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Email",
+          "type": "string",
+          "summary": "Required Email record field.",
+          "maps_to": "record.Email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{email}"
+        }
+      ],
+      "risk": "permanently removes a contact and its activity/consent history from the account",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete domain apply",
+      "summary": "Plan and execute the delete domain reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_domain",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Domain",
+          "type": "string",
+          "summary": "Required Domain record field.",
+          "maps_to": "record.Domain",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail delete domain apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/domains/{domain}"
+        }
+      ],
+      "risk": "permanently removes a verified sending domain; any campaign configured to send from this domain will fail until reconfigured",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete inbound route apply",
+      "summary": "Plan and execute the delete inbound route reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_inbound_route",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "PublicId",
+          "type": "string",
+          "summary": "Required PublicId record field.",
+          "maps_to": "record.PublicId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail delete inbound route apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/inboundroute/{id}"
+        }
+      ],
+      "risk": "permanently removes an inbound-mail routing rule; matching inbound mail is no longer forwarded once removed",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete list apply",
+      "summary": "Plan and execute the delete list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_list",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "ListName",
+          "type": "string",
+          "summary": "Required ListName record field.",
+          "maps_to": "record.ListName",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail delete list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/lists/{name}"
+        }
+      ],
+      "risk": "permanently removes a contact list; any campaign still targeting this list by name will fail to resolve its recipients",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete segment apply",
+      "summary": "Plan and execute the delete segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_segment",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail delete segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/segments/{name}"
+        }
+      ],
+      "risk": "permanently removes a segment; any campaign still targeting this segment by name will fail to resolve its recipients",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete template apply",
+      "summary": "Plan and execute the delete template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_template",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail delete template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/templates/{name}"
+        }
+      ],
+      "risk": "permanently removes a template; any campaign still referencing this template by name will fail to build its content",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_webhook",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "WebhookID",
+          "type": "string",
+          "summary": "Required WebhookID record field.",
+          "maps_to": "record.WebhookID",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhook/{publicid}"
+        }
+      ],
+      "risk": "permanently removes a webhook subscription; event delivery to its target URL stops immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "domains list",
+      "summary": "Run the domains ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "domains",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail domains list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/domains"
+        }
+      ]
+    },
+    {
+      "path": "files list",
+      "summary": "Run the files ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "files",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail files list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/files"
+        }
+      ]
+    },
+    {
+      "path": "inbound routes list",
+      "summary": "Run the inbound routes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "inbound_routes",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail inbound routes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/inboundroute"
+        }
+      ]
+    },
+    {
+      "path": "lists list",
+      "summary": "Run the lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lists",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lists"
+        }
+      ]
+    },
+    {
+      "path": "pause campaign apply",
+      "summary": "Plan and execute the pause campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "pause_campaign",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail pause campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/campaigns/{name}/pause"
+        }
+      ],
+      "risk": "pauses an in-progress campaign send; recipients not yet reached will not receive the email until the campaign is resumed",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "segments list",
+      "summary": "Run the segments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "segments",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail segments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments"
+        }
+      ]
+    },
+    {
+      "path": "statistics campaigns list",
+      "summary": "Run the statistics campaigns ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "statistics_campaigns",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail statistics campaigns list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statistics/campaigns"
+        }
+      ]
+    },
+    {
+      "path": "statistics channels list",
+      "summary": "Run the statistics channels ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "statistics_channels",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail statistics channels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statistics/channels"
+        }
+      ]
+    },
+    {
+      "path": "sub accounts list",
+      "summary": "Run the sub accounts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sub_accounts",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail sub accounts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subaccounts"
+        }
+      ]
+    },
+    {
+      "path": "suppressions bounces list",
+      "summary": "Run the suppressions bounces ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "suppressions_bounces",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail suppressions bounces list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppressions/bounces"
+        }
+      ]
+    },
+    {
+      "path": "suppressions complaints list",
+      "summary": "Run the suppressions complaints ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "suppressions_complaints",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail suppressions complaints list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppressions/complaints"
+        }
+      ]
+    },
+    {
+      "path": "suppressions list",
+      "summary": "Run the suppressions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "suppressions",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail suppressions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppressions"
+        }
+      ]
+    },
+    {
+      "path": "suppressions unsubscribes list",
+      "summary": "Run the suppressions unsubscribes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "suppressions_unsubscribes",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail suppressions unsubscribes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/suppressions/unsubscribes"
+        }
+      ]
+    },
+    {
+      "path": "templates list",
+      "summary": "Run the templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/templates"
+        }
+      ]
+    },
+    {
+      "path": "update campaign apply",
+      "summary": "Plan and execute the update campaign reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_campaign",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail update campaign apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/campaigns/{name}"
+        }
+      ],
+      "risk": "mutates an existing campaign's content, recipients, or send options; a campaign already in progress may not accept every field change",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_contact",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Email",
+          "type": "string",
+          "summary": "Required Email record field.",
+          "maps_to": "record.Email",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{email}"
+        }
+      ],
+      "risk": "mutates an existing contact's status/name/custom-field data; a Status change (e.g. to Unsubscribed) changes future campaign eligibility for this recipient",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update inbound route apply",
+      "summary": "Plan and execute the update inbound route reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_inbound_route",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "PublicId",
+          "type": "string",
+          "summary": "Required PublicId record field.",
+          "maps_to": "record.PublicId",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail update inbound route apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/inboundroute/{id}"
+        }
+      ],
+      "risk": "mutates an existing inbound route's match filter or forwarding destination; redirects future matching inbound mail to a different address/URL",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update list apply",
+      "summary": "Plan and execute the update list reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_list",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "ListName",
+          "type": "string",
+          "summary": "Required ListName record field.",
+          "maps_to": "record.ListName",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail update list apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/lists/{name}"
+        }
+      ],
+      "risk": "renames an existing list or changes its unsubscribe-allowed setting; a rename changes the identifier campaigns/segments reference this list by",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update segment apply",
+      "summary": "Plan and execute the update segment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_segment",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        },
+        {
+          "name": "Rule",
+          "type": "string",
+          "summary": "Required Rule record field.",
+          "maps_to": "record.Rule",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail update segment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/segments/{name}"
+        }
+      ],
+      "risk": "changes the membership rule of an existing segment; immediately changes which contacts any campaign targeting this segment will reach",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update template apply",
+      "summary": "Plan and execute the update template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_template",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "Name",
+          "type": "string",
+          "summary": "Required Name record field.",
+          "maps_to": "record.Name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail update template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/templates/{name}"
+        }
+      ],
+      "risk": "overwrites the subject/body of an existing template; any campaign referencing this template by name sends the new content on its next send",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update webhook apply",
+      "summary": "Plan and execute the update webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_webhook",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "flags": [
+        {
+          "name": "WebhookID",
+          "type": "string",
+          "summary": "Required WebhookID record field.",
+          "maps_to": "record.WebhookID",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm elasticemail update webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webhook/{publicid}"
+        }
+      ],
+      "risk": "mutates an existing webhook's target URL or event subscriptions; a changed URL redirects future event deliveries to a different endpoint",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://api.elasticemail.com/public/v4/swagger",
+      "examples": [
+        "pm elasticemail webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhook"
+        }
+      ]
+    }
+  ]
+}

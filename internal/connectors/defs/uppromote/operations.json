@@ -1,0 +1,140 @@
+{
+  "operations": [
+    {
+      "id": "uppromote.post.api-affiliates",
+      "kind": "rest_write",
+      "summary": "POST /api/affiliates",
+      "description": "legacy's fictional write-shaped affiliates endpoint has no real-API counterpart at this path; the real create-affiliate mutation is covered by create_affiliate at the real /api/v2/affiliates path instead",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/affiliates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "uppromote.get.api-v2-affiliates",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/affiliates",
+      "description": "the real v2 affiliate-list endpoint returns the same affiliate record type the legacy-shaped affiliates stream already covers (under legacy's own path/envelope, preserved for accepted-input parity); adding a second, differently-shaped affiliate list stream here would duplicate that record type",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/affiliates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "uppromote.get.api-v2-affiliates-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/affiliates/{id}",
+      "description": "single-affiliate detail on the real v2 API; the legacy-shaped affiliates stream already covers per-affiliate records (under legacy's own path/envelope), and adding a second, differently-shaped affiliate detail stream here would duplicate that record type",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/affiliates/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "uppromote.get.api-v2-payments-total-paid",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/payments/total-paid",
+      "description": "single-scalar aggregate count (total paid payments), not a syncable object list; a one-row summary derivable by counting the paid_payments stream instead",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/payments/total-paid",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "uppromote.get.api-v2-payments-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/payments/{id}",
+      "description": "single-payment detail; identical record shape to the paid/unpaid payments list streams' per-item objects, already covered by those streams",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/payments/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "uppromote.get.api-v2-programs-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/programs/{id}",
+      "description": "single-program detail; identical record shape to the programs list stream's per-item object, already covered by that stream",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/programs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "uppromote.get.api-v2-programs-id-excluded",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/programs/{id}/excluded",
+      "description": "program-scoped excluded-products/collections sub-object read; a configuration detail of one program, not an independently syncable object list",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/programs/{id}/excluded",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "uppromote.get.api-v2-referrals-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/referrals/{id}",
+      "description": "single-referral detail; identical record shape to the referrals list stream's per-item object, already covered by that stream",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/referrals/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "uppromote.get.api-v2-webhook-subscriptions",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/webhook-subscriptions",
+      "description": "webhook-subscription listing is configuration introspection over a small operator-managed set already fully round-tripped by subscribe/update/delete_webhook writes; low read value, breadth-vs-cost triage for this pass",
+      "source_url": "https://aff-api.uppromote.com/docs/v2/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/webhook-subscriptions",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

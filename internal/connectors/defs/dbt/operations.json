@@ -1,0 +1,452 @@
+{
+  "operations": [
+    {
+      "id": "dbt.get.api-v2-accounts",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/",
+      "description": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead' in the published OpenAPI spec; this bundle's account scoping uses the required account_id config value directly, never an account-listing call",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/",
+      "description": "account-level billing/plan metadata retrieval, not a syncable data stream; account_id is supplied directly via config, not discovered",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.post.api-v2-accounts-account-id",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/accounts/{account_id}/",
+      "description": "mutates account-level billing/plan settings; account-admin scope, not connector-appropriate data mutation",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.patch.api-v2-accounts-account-id",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v2/accounts/{account_id}/",
+      "description": "partial account-level settings update; same account-admin scope as the full account update",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v2/accounts/{account_id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-encryptions-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/encryptions/{id}/",
+      "description": "single-SSH-tunnel detail is a strict subset of the ssh_tunnels stream's list response fields; the list stream already reads every tunnel",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/encryptions/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.post.api-v2-accounts-account-id-environments",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/accounts/{account_id}/environments/",
+      "description": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'; environment mutation belongs to the v3 Administrative API this connector does not target",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/environments/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-environments-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/environments/{id}/",
+      "description": "single-environment detail is a strict subset of the environments stream's list response fields",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.post.api-v2-accounts-account-id-environments-id",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/accounts/{account_id}/environments/{id}/",
+      "description": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.delete.api-v2-accounts-account-id-environments-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/accounts/{account_id}/environments/{id}/",
+      "description": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/environments/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-invites-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/invites/{id}/",
+      "description": "single-invite detail is a strict subset of the invites stream's list response fields",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/invites/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-jobs-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/jobs/{id}/",
+      "description": "single-job detail is a strict subset of the jobs stream's list response fields",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-jobs-job-id-artifacts-remainder",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+      "description": "downloads a specific completed run's manifest.json/run_results.json/catalog.json artifact file verbatim, not a structured JSON list/detail record",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-notifications-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/notifications/{id}/",
+      "description": "single-notification detail is a strict subset of the notifications stream's list response fields",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/notifications/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.post.api-v2-accounts-account-id-permissions-id",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/accounts/{account_id}/permissions/{id}/",
+      "description": "mutates a user's license/role permission grant; account-admin identity-management action, not connector data",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/permissions/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.post.api-v2-accounts-account-id-projects",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/accounts/{account_id}/projects/",
+      "description": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/projects/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-projects-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/projects/{id}/",
+      "description": "single-project detail is a strict subset of the projects stream's list response fields",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.post.api-v2-accounts-account-id-projects-id",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/accounts/{account_id}/projects/{id}/",
+      "description": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.delete.api-v2-accounts-account-id-projects-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/accounts/{account_id}/projects/{id}/",
+      "description": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/projects/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.post.api-v2-accounts-account-id-repositories",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/accounts/{account_id}/repositories/",
+      "description": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/accounts/{account_id}/repositories/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-repositories-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/repositories/{id}/",
+      "description": "single-repository detail is a strict subset of the repositories stream's list response fields",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.delete.api-v2-accounts-account-id-repositories-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v2/accounts/{account_id}/repositories/{id}/",
+      "description": "dbt-labs-marked 'Deprecated. Consider using the v3 API instead'",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v2/accounts/{account_id}/repositories/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-runs-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/runs/{id}/",
+      "description": "single-run detail is a strict subset of the runs stream's list response fields",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-runs-run-id-artifacts",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+      "description": "lists artifact FILENAMES only as a precursor to downloading each raw artifact body; the artifacts themselves are binary_payload (see the per-file GET below), and the filename list carries no independently syncable record data",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-runs-run-id-artifacts-remainder",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+      "description": "downloads a specific run's manifest.json/run_results.json/catalog.json artifact file verbatim, not a structured JSON list/detail record",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-runs-run-id-retry",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+      "description": "retrieves retry-eligibility/failure-point details already present on the runs stream's own record (status/status_message); no independent record shape",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-accounts-account-id-steps-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/accounts/{account_id}/steps/{id}/",
+      "description": "a single run step's full stdout/debug log text is a large unbounded blob keyed by an id only discoverable by first reading a run's own step list (not itself a list endpoint dbt Cloud publishes); no practical stream shape without a parent-id fan_out this connector does not declare",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/accounts/{account_id}/steps/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.post.api-v2-notifications-unsubscribe",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/notifications/unsubscribe/",
+      "description": "clears every email notification configuration for the CALLING user's own identity; a caller-identity action, not a mutation targeting a specific record the connector reads",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/notifications/unsubscribe/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.get.api-v2-users-id",
+      "kind": "rest_read",
+      "summary": "GET /api/v2/users/{id}/",
+      "description": "single-user detail is a strict subset of the users stream's list response fields",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v2/users/{id}/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "dbt.post.api-v2-users-id",
+      "kind": "rest_write",
+      "summary": "POST /api/v2/users/{id}/",
+      "description": "mutates a user's own account profile fields; user-identity self-service action, not connector-appropriate data mutation",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v2/users/{id}/",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

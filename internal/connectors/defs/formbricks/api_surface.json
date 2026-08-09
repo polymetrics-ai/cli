@@ -1,42 +1,1309 @@
 {
-  "api": "Formbricks API v1 REST API (https://formbricks.com/docs/api-reference/rest-api)",
+  "api": "Formbricks API v1 REST API (https://formbricks.com/docs/api-reference/rest-api); provider artifact version: Formbricks REST API v1 (current provider reference)",
   "docs": "https://formbricks.com/docs/api-reference/rest-api",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion of the API v1 Formbricks Management API documented under the connector docs URL. Current v1 management reads and JSON mutations are covered; client SDK endpoints, health checks, generated link helpers, and deprecated API-key helper pages are explicitly excluded.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (32 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "formbricks-artifact-2026-08-09",
+      "url": "https://formbricks.com/docs/api-reference/rest-api",
+      "kind": "html_reference",
+      "version": "Formbricks REST API v1 (current provider reference)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f"
+    }
+  ],
   "endpoints": [
-    { "method": "POST", "path": "client/{workspaceId}/displays", "excluded": { "category": "out_of_scope", "reason": "Public Client API SDK event endpoint, not the authenticated Management API surface for this connector." } },
-    { "method": "GET", "path": "client/{workspaceId}/environment", "excluded": { "category": "out_of_scope", "reason": "Public Client API SDK workspace-state endpoint; it requires a client workspace id rather than the management API-key connector model." } },
-    { "method": "POST", "path": "client/{workspaceId}/responses", "excluded": { "category": "out_of_scope", "reason": "Public Client API response submission endpoint, separate from the authenticated Management API response mutation covered by create_response." } },
-    { "method": "PUT", "path": "client/{workspaceId}/responses/{responseId}", "excluded": { "category": "out_of_scope", "reason": "Public Client API response update endpoint, separate from the authenticated Management API response mutation covered by update_response." } },
-    { "method": "POST", "path": "client/{workspaceId}/user", "excluded": { "category": "out_of_scope", "reason": "Public Client API identify endpoint, not part of the management API-key connector surface." } },
-    { "method": "GET", "path": "health", "excluded": { "category": "non_data_endpoint", "reason": "Operational health check; no connector records or reverse ETL action." } },
-    { "method": "GET", "path": "me", "excluded": { "category": "duplicate_of", "reason": "Legacy API-key test helper page; the current Management API account metadata endpoint is covered by the me stream at management/me." } },
-    { "method": "GET", "path": "management/me", "covered_by": { "stream": "me" } },
-    { "method": "GET", "path": "management/action-classes", "covered_by": { "stream": "action_classes" } },
-    { "method": "POST", "path": "management/action-classes", "covered_by": { "write": "create_action_class" } },
-    { "method": "GET", "path": "management/action-classes/{actionClassId}", "covered_by": { "stream": "action_class_details" } },
-    { "method": "DELETE", "path": "management/action-classes/{actionClassId}", "covered_by": { "write": "delete_action_class" } },
-    { "method": "GET", "path": "management/attribute-classes", "covered_by": { "stream": "attribute_classes" } },
-    { "method": "GET", "path": "management/contact-attribute-keys", "covered_by": { "stream": "contact_attribute_keys" } },
-    { "method": "GET", "path": "management/contact-attribute-keys/{contactAttributeKeyId}", "covered_by": { "stream": "contact_attribute_key_details" } },
-    { "method": "GET", "path": "management/contact-attributes", "covered_by": { "stream": "contact_attributes" } },
-    { "method": "GET", "path": "management/contacts", "covered_by": { "stream": "contacts" } },
-    { "method": "GET", "path": "management/contacts/{contactId}", "covered_by": { "stream": "contact_details" } },
-    { "method": "GET", "path": "management/responses", "covered_by": { "stream": "responses" } },
-    { "method": "POST", "path": "management/responses", "covered_by": { "write": "create_response" } },
-    { "method": "GET", "path": "management/responses/{responseId}", "covered_by": { "stream": "response_details" } },
-    { "method": "PUT", "path": "management/responses/{responseId}", "covered_by": { "write": "update_response" } },
-    { "method": "DELETE", "path": "management/responses/{responseId}", "covered_by": { "write": "delete_response" } },
-    { "method": "POST", "path": "management/storage", "covered_by": { "write": "create_public_file_upload" } },
-    { "method": "GET", "path": "management/surveys", "covered_by": { "stream": "surveys" } },
-    { "method": "POST", "path": "management/surveys", "covered_by": { "write": "create_survey" } },
-    { "method": "GET", "path": "management/surveys/{surveyId}", "covered_by": { "stream": "survey_details" } },
-    { "method": "PUT", "path": "management/surveys/{surveyId}", "covered_by": { "write": "update_survey" } },
-    { "method": "DELETE", "path": "management/surveys/{surveyId}", "covered_by": { "write": "delete_survey" } },
-    { "method": "GET", "path": "management/surveys/{surveyId}/singleUseIds", "excluded": { "category": "non_data_endpoint", "reason": "GET endpoint generates new single-use survey links; it is a side-effecting helper, not a persisted collection read." } },
-    { "method": "GET", "path": "webhooks", "covered_by": { "stream": "webhooks" } },
-    { "method": "POST", "path": "webhooks", "covered_by": { "write": "create_webhook" } },
-    { "method": "GET", "path": "webhooks/{webhookId}", "covered_by": { "stream": "webhook_details" } },
-    { "method": "DELETE", "path": "webhooks/{webhookId}", "covered_by": { "write": "delete_webhook" } }
+    {
+      "method": "POST",
+      "path": "/api/v1/client/{workspaceId}/displays",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#POST /api/v1/client/{workspaceId}/displays"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/client/{workspaceId}/environment",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/client/{workspaceId}/environment"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/client/{workspaceId}/responses",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#POST /api/v1/client/{workspaceId}/responses"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/client/{workspaceId}/responses/{responseId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#PUT /api/v1/client/{workspaceId}/responses/{responseId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/client/{workspaceId}/user",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#POST /api/v1/client/{workspaceId}/user"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/action-classes",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/action-classes"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/management/action-classes",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#POST /api/v1/management/action-classes"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/action-classes/{actionClassId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/action-classes/{actionClassId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/management/action-classes/{actionClassId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#DELETE /api/v1/management/action-classes/{actionClassId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/contact-attribute-keys",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/contact-attribute-keys"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/contact-attribute-keys/{contactAttributeKeyId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/contact-attribute-keys/{contactAttributeKeyId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/contact-attributes",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/contact-attributes"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/contacts",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/contacts"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/contacts/{contactId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/contacts/{contactId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/me",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/me"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/responses",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/responses"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/management/responses",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#POST /api/v1/management/responses"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/responses/{responseId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/responses/{responseId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/management/responses/{responseId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#PUT /api/v1/management/responses/{responseId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/management/responses/{responseId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#DELETE /api/v1/management/responses/{responseId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/management/storage",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#POST /api/v1/management/storage"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/surveys",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/surveys"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/management/surveys",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#POST /api/v1/management/surveys"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/surveys/{surveyId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/surveys/{surveyId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/management/surveys/{surveyId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#PUT /api/v1/management/surveys/{surveyId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/management/surveys/{surveyId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#DELETE /api/v1/management/surveys/{surveyId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/management/surveys/{surveyId}/singleUseIds",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/management/surveys/{surveyId}/singleUseIds"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/webhooks",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/webhooks"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/webhooks",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#POST /api/v1/webhooks"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/webhooks/{webhookId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /api/v1/webhooks/{webhookId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v1/webhooks/{webhookId}",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#DELETE /api/v1/webhooks/{webhookId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "https://formbricks.com/docs/api-reference/rest-api#GET /health"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "client/{workspaceId}/displays",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[POST client/{workspaceId}/displays]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public Client API SDK event endpoint, not the authenticated Management API surface for this connector.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "client/{workspaceId}/environment",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET client/{workspaceId}/environment]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Public Client API SDK workspace-state endpoint; it requires a client workspace id rather than the management API-key connector model.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "client/{workspaceId}/responses",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[POST client/{workspaceId}/responses]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public Client API response submission endpoint, separate from the authenticated Management API response mutation covered by create_response.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "client/{workspaceId}/responses/{responseId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[PUT client/{workspaceId}/responses/{responseId}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public Client API response update endpoint, separate from the authenticated Management API response mutation covered by update_response.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "client/{workspaceId}/user",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[POST client/{workspaceId}/user]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Public Client API identify endpoint, not part of the management API-key connector surface.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "health",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET health]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Operational health check; no connector records or reverse ETL action.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/action-classes",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/action-classes]"
+      },
+      "covered_by": {
+        "stream": "action_classes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "management/action-classes",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[POST management/action-classes]"
+      },
+      "covered_by": {
+        "write": "create_action_class"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/action-classes/{actionClassId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/action-classes/{actionClassId}]"
+      },
+      "covered_by": {
+        "stream": "action_class_details"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "management/action-classes/{actionClassId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[DELETE management/action-classes/{actionClassId}]"
+      },
+      "covered_by": {
+        "write": "delete_action_class"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/attribute-classes",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/attribute-classes]"
+      },
+      "covered_by": {
+        "stream": "attribute_classes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/contact-attribute-keys",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/contact-attribute-keys]"
+      },
+      "covered_by": {
+        "stream": "contact_attribute_keys"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/contact-attribute-keys/{contactAttributeKeyId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/contact-attribute-keys/{contactAttributeKeyId}]"
+      },
+      "covered_by": {
+        "stream": "contact_attribute_key_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/contact-attributes",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/contact-attributes]"
+      },
+      "covered_by": {
+        "stream": "contact_attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/contacts",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/contacts]"
+      },
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/contacts/{contactId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/contacts/{contactId}]"
+      },
+      "covered_by": {
+        "stream": "contact_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/me",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/me]"
+      },
+      "covered_by": {
+        "stream": "me"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/responses",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/responses]"
+      },
+      "covered_by": {
+        "stream": "responses"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "management/responses",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[POST management/responses]"
+      },
+      "covered_by": {
+        "write": "create_response"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/responses/{responseId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/responses/{responseId}]"
+      },
+      "covered_by": {
+        "stream": "response_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "management/responses/{responseId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[PUT management/responses/{responseId}]"
+      },
+      "covered_by": {
+        "write": "update_response"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "management/responses/{responseId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[DELETE management/responses/{responseId}]"
+      },
+      "covered_by": {
+        "write": "delete_response"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "management/storage",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[POST management/storage]"
+      },
+      "covered_by": {
+        "write": "create_public_file_upload"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/surveys",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/surveys]"
+      },
+      "covered_by": {
+        "stream": "surveys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "management/surveys",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[POST management/surveys]"
+      },
+      "covered_by": {
+        "write": "create_survey"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/surveys/{surveyId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/surveys/{surveyId}]"
+      },
+      "covered_by": {
+        "stream": "survey_details"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "management/surveys/{surveyId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[PUT management/surveys/{surveyId}]"
+      },
+      "covered_by": {
+        "write": "update_survey"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "management/surveys/{surveyId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[DELETE management/surveys/{surveyId}]"
+      },
+      "covered_by": {
+        "write": "delete_survey"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "management/surveys/{surveyId}/singleUseIds",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET management/surveys/{surveyId}/singleUseIds]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "GET endpoint generates new single-use survey links; it is a side-effecting helper, not a persisted collection read.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "me",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET me]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Legacy API-key test helper page; the current Management API account metadata endpoint is covered by the me stream at management/me.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "webhooks",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET webhooks]"
+      },
+      "covered_by": {
+        "stream": "webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "webhooks",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[POST webhooks]"
+      },
+      "covered_by": {
+        "write": "create_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "webhooks/{webhookId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[GET webhooks/{webhookId}]"
+      },
+      "covered_by": {
+        "stream": "webhook_details"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "webhooks/{webhookId}",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "formbricks-artifact-2026-08-09",
+        "source_url": "https://formbricks.com/docs/api-reference/rest-api",
+        "source_kind": "html_reference",
+        "version": "Formbricks REST API v1 (current provider reference)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "56629062f0d11a20edf8a27a5e0c3988aa9841394af713533fd5eebb9e4a927f",
+        "coordinate": "existing-surface[DELETE webhooks/{webhookId}]"
+      },
+      "covered_by": {
+        "write": "delete_webhook"
+      }
+    }
   ]
 }

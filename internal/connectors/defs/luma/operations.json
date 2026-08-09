@@ -1,0 +1,203 @@
+{
+  "operations": [
+    {
+      "id": "luma.post.v1-calendars-contacts-block",
+      "kind": "rest_write",
+      "summary": "POST /v1/calendars/contacts/block",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/calendars/contacts/block",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "luma.post.v1-calendars-contacts-remove",
+      "kind": "rest_write",
+      "summary": "POST /v1/calendars/contacts/remove",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/calendars/contacts/remove",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "luma.post.v1-calendars-contacts-restore",
+      "kind": "rest_write",
+      "summary": "POST /v1/calendars/contacts/restore",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/calendars/contacts/restore",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "luma.post.v1-events-guests-update-tickets",
+      "kind": "rest_write",
+      "summary": "POST /v1/events/guests/update-tickets",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v1/events/guests/update-tickets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "luma.webhook.calendar-event-added-post",
+      "kind": "composite",
+      "summary": "WEBHOOK calendar.event.added#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK calendar.event.added#POST"
+        ]
+      }
+    },
+    {
+      "id": "luma.webhook.calendar-event-submitted-post",
+      "kind": "composite",
+      "summary": "WEBHOOK calendar.event.submitted#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK calendar.event.submitted#POST"
+        ]
+      }
+    },
+    {
+      "id": "luma.webhook.calendar-person-subscribed-post",
+      "kind": "composite",
+      "summary": "WEBHOOK calendar.person.subscribed#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK calendar.person.subscribed#POST"
+        ]
+      }
+    },
+    {
+      "id": "luma.webhook.event-canceled-post",
+      "kind": "composite",
+      "summary": "WEBHOOK event.canceled#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK event.canceled#POST"
+        ]
+      }
+    },
+    {
+      "id": "luma.webhook.event-created-post",
+      "kind": "composite",
+      "summary": "WEBHOOK event.created#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK event.created#POST"
+        ]
+      }
+    },
+    {
+      "id": "luma.webhook.event-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK event.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK event.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "luma.webhook.guest-registered-post",
+      "kind": "composite",
+      "summary": "WEBHOOK guest.registered#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK guest.registered#POST"
+        ]
+      }
+    },
+    {
+      "id": "luma.webhook.guest-updated-post",
+      "kind": "composite",
+      "summary": "WEBHOOK guest.updated#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK guest.updated#POST"
+        ]
+      }
+    },
+    {
+      "id": "luma.webhook.ticket-registered-post",
+      "kind": "composite",
+      "summary": "WEBHOOK ticket.registered#POST",
+      "description": "Documented OpenAPI top-level webhook is an inbound provider callback, not an outbound provider request path. It remains visible but is not executable until the runtime has a webhook receiver executor.",
+      "source_url": "https://public-api.luma.com/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the runtime has no inbound webhook receiver executor for top-level webhook operations",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "WEBHOOK ticket.registered#POST"
+        ]
+      }
+    }
+  ]
+}

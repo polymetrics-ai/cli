@@ -1,0 +1,3146 @@
+{
+  "operations": [
+    {
+      "id": "chift.post.connections",
+      "kind": "rest_write",
+      "summary": "POST /connections",
+      "description": "adding a connection is an interactive OAuth/credential-linking flow (returns a redirect URL for the end user to complete authorization in Chift's UI), not a plain declarative JSON create this dialect's write model fits",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/connections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.connections-id",
+      "kind": "rest_write",
+      "summary": "PATCH /connections/{id}",
+      "description": "connection metadata updates are a narrow admin action with no legacy precedent; Pass B prioritizes the consumer object as the representative write target",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/connections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.delete.connections-id",
+      "kind": "rest_write",
+      "summary": "DELETE /connections/{id}",
+      "description": "deleting a connection severs a consumer's link to their external financial system and can interrupt in-flight syncs; an irreversible account-structure action",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/connections/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.connections-id-transaction",
+      "kind": "rest_read",
+      "summary": "GET /connections/{id}/transaction",
+      "description": "narrow per-connection diagnostic/transaction-log detail, not part of the core connection object this bundle's connections stream already covers",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/connections/{id}/transaction",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.delete.consumers-consumer-id",
+      "kind": "rest_write",
+      "summary": "DELETE /consumers/{consumer_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/consumers/{consumer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/*/**",
+      "description": "every unified sub-API's create endpoints (accounting entries/journals/clients, invoicing invoices/contacts, ecommerce orders, pos customers, etc.) are deferred alongside their own sub-API's GET surface above — no sub-API is partially covered",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/*/**",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/**",
+      "description": "ENGINE_GAP-adjacent scope decision (not a hard engine blocker — see api_surface.json's top-level scope note): Chift's Accounting unified API alone publishes ~50 endpoints (entries/journals/analytic-accounts/bank-accounts/invoices/clients/suppliers/vat-codes/bookyears/folders/etc.), every GET list requiring a fan_out over every consumer id connected via an 'Accounting' api connection AND practically also filterable by folder_id (multi-entity accounts). Reviewed and deliberately deferred in full rather than covering 1-2 endpoints against a single hardcoded consumer id, which would misrepresent 'accounting coverage' while leaving ~48 sibling endpoints unimplemented; a follow-up pass should size ONE sub-API (accounting is the largest and most legacy-relevant) as its own dedicated Pass-B-2 scope.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/**",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-accounts",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-analytic-accounts",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/analytic-accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/analytic-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-analytic-accounts",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/analytic-accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/analytic-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-analytic-accounts-multi-analytic-plans",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/analytic-accounts/multi-analytic-plans",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/analytic-accounts/multi-analytic-plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-analytic-accounts-multi-analytic-plans-analytic-plan",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/analytic-accounts/multi-analytic-plans/{analytic_plan}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/analytic-accounts/multi-analytic-plans/{analytic_plan}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-analytic-accounts-analytic-account-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/analytic-accounts/{analytic_account_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/analytic-accounts/{analytic_account_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-accounting-analytic-accounts-analytic-account-id",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/accounting/analytic-accounts/{analytic_account_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/accounting/analytic-accounts/{analytic_account_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-analytic-accounts-analytic-account-id-multi-analytic-plans-analytic-plan",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/analytic-accounts/{analytic_account_id}/multi-analytic-plans/{analytic_plan}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/analytic-accounts/{analytic_account_id}/multi-analytic-plans/{analytic_plan}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-accounting-analytic-accounts-analytic-account-id-multi-analytic-plans-analytic-plan",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/accounting/analytic-accounts/{analytic_account_id}/multi-analytic-plans/{analytic_plan}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/accounting/analytic-accounts/{analytic_account_id}/multi-analytic-plans/{analytic_plan}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-analytic-plans",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/analytic-plans",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/analytic-plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-attachments",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-bank-accounts",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/bank-accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/bank-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-bank-accounts",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/bank-accounts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/bank-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-bank-transactions",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/bank-transactions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/bank-transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-bookyears",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/bookyears",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/bookyears",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-chart-of-accounts",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/chart-of-accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/chart-of-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-chart-of-accounts-balance",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/chart-of-accounts/balance",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/chart-of-accounts/balance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-clients",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/clients",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/clients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-clients",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/clients",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/clients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-clients-client-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/clients/{client_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/clients/{client_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-accounting-clients-client-id",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/accounting/clients/{client_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/accounting/clients/{client_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-contacts",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-employees",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/employees",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/employees",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-expenses",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/expenses",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/expenses",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-export-fec",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/export-fec",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/export-fec",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-financial-entries",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/financial-entries",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/financial-entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-folders",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/folders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-folders-folder-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/folders/{folder_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/folders/{folder_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-invoices",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/invoices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-invoices-id-invoice-id-payments",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/invoices/id/{invoice_id}/payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/invoices/id/{invoice_id}/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-invoices-multi-analytic-plans",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/invoices/multi-analytic-plans",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/invoices/multi-analytic-plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-invoices-multi-analytic-plans-type-invoice-type",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/invoices/multi-analytic-plans/type/{invoice_type}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/invoices/multi-analytic-plans/type/{invoice_type}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-invoices-multi-analytic-plans-invoice-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/invoices/multi-analytic-plans/{invoice_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/invoices/multi-analytic-plans/{invoice_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-invoices-payments",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/invoices/payments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/invoices/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-invoices-pdf-invoice-id",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/invoices/pdf/{invoice_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/invoices/pdf/{invoice_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-invoices-type-invoice-type",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/invoices/type/{invoice_type}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/invoices/type/{invoice_type}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-invoices-invoice-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/invoices/{invoice_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/invoices/{invoice_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-journal",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/journal",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/journal",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-journal-entries",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/journal-entries",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/journal-entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-journal-entries",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/journal/entries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/journal/entries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-journal-entries-multi-analytic-plans",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/journal/entries/multi-analytic-plans",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/journal/entries/multi-analytic-plans",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-journal-entries-journal-entry-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/journal/entries/{journal_entry_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/journal/entries/{journal_entry_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-journals",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/journals",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/journals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-matching",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/matching",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/matching",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-matching-multiple",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/matching-multiple",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/matching-multiple",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-miscellaneous-operation",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/miscellaneous-operation",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/miscellaneous-operation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-miscellaneous-operation",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/miscellaneous-operation",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/miscellaneous-operation",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-miscellaneous-operation-operation-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/miscellaneous-operation/{operation_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/miscellaneous-operation/{operation_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-outstandings",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/outstandings",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/outstandings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/payment-methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/payment-methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-payment-terms",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/payment-terms",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/payment-terms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-schemes",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/schemes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/schemes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-suppliers",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/suppliers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/suppliers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-accounting-suppliers",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/accounting/suppliers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/accounting/suppliers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-suppliers-supplier-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/suppliers/{supplier_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/suppliers/{supplier_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-accounting-suppliers-supplier-id",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/accounting/suppliers/{supplier_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/accounting/suppliers/{supplier_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-accounting-vat-codes",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/accounting/vat-codes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/accounting/vat-codes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-banking",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/banking/**",
+      "description": "unified Banking API (accounts/institutions/transactions/counterparts) — same per-consumer fan_out scoping decision as accounting; deferred as a distinct, smaller follow-up sub-API pass",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/banking/**",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-banking-accounts",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/banking/accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/banking/accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-banking-attachments",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/banking/attachments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/banking/attachments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-banking-counterparts",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/banking/counterparts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/banking/counterparts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-banking-financial-institutions",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/banking/financial-institutions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/banking/financial-institutions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-banking-opening-balance",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/banking/opening-balance",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/banking/opening-balance",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-banking-transactions",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/banking/transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/banking/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-countries",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/countries",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/countries",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-customers",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/customers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-customers-customer-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/customers/{customer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-locations",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/locations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/locations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-orders",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/orders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-commerce-orders",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/commerce/orders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/commerce/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-orders-order-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/orders/{order_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/orders/{order_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/payment-methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/payment-methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-product-categories",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/product-categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/product-categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-products",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-products-product-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/products/{product_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/products/{product_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-taxes",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/taxes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/taxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-commerce-variants-set-quantity-variant-id",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/commerce/variants/set_quantity/{variant_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/commerce/variants/set_quantity/{variant_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-commerce-variants-variant-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/commerce/variants/{variant_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/commerce/variants/{variant_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-connections",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/connections",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/connections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-connections",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/connections",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/connections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-connections-connection-id-disable-datalayer",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/connections/{connection_id}/disable_datalayer",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/connections/{connection_id}/disable_datalayer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-connections-connection-id-enable-datalayer",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/connections/{connection_id}/enable_datalayer",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/connections/{connection_id}/enable_datalayer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-connections-connection-id-refresh-datalayer",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/connections/{connection_id}/refresh_datalayer",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/connections/{connection_id}/refresh_datalayer",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-connections-connection-id-transactions",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/connections/{connection_id}/transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/connections/{connection_id}/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-connections-connectionid",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/connections/{connectionid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/connections/{connectionid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.delete.consumers-consumer-id-connections-connectionid",
+      "kind": "rest_write",
+      "summary": "DELETE /consumers/{consumer_id}/connections/{connectionid}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/consumers/{consumer_id}/connections/{connectionid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-datastore-datastoreid-data",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/datastore/{datastoreid}/data",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/datastore/{datastoreid}/data",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-datastore-datastoreid-data",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/datastore/{datastoreid}/data",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/datastore/{datastoreid}/data",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-datastore-datastoreid-data-datastoredataid",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/datastore/{datastoreid}/data/{datastoredataid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/datastore/{datastoreid}/data/{datastoredataid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.delete.consumers-consumer-id-datastore-datastoreid-data-datastoredataid",
+      "kind": "rest_write",
+      "summary": "DELETE /consumers/{consumer_id}/datastore/{datastoreid}/data/{datastoredataid}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/consumers/{consumer_id}/datastore/{datastoreid}/data/{datastoredataid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-ecommerce",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/ecommerce/**",
+      "description": "unified eCommerce API (products/orders/customers/tax-rates) — same per-consumer fan_out scoping decision as accounting",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/ecommerce/**",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/**",
+      "description": "unified Invoicing API (invoices/contacts/products/payments/taxes/opportunities) — same per-consumer fan_out scoping decision as accounting",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/**",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-bank-accounts",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/bank-accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/bank-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-bank-transactions",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/bank-transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/bank-transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-contacts",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-invoicing-contacts",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/invoicing/contacts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/invoicing/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-contacts-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/contacts/{contact_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-invoices",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/invoices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-invoicing-invoices",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/invoicing/invoices",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/invoicing/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-invoices-invoice-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/invoices/{invoice_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/invoices/{invoice_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-opportunities",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/opportunities",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/opportunities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-opportunities-opportunity-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/opportunities/{opportunity_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/opportunities/{opportunity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/payment-methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/payment-methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-payments",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-invoicing-payments",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/invoicing/payments",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/invoicing/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-invoicing-payments-payment-id",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/invoicing/payments/{payment_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/invoicing/payments/{payment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-products",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-invoicing-products",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/invoicing/products",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/invoicing/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-products-product-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/products/{product_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/products/{product_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-taxes",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/taxes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/taxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-invoicing-taxes-tax-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/invoicing/taxes/{tax_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/invoicing/taxes/{tax_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-invoicing-upload-document",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/invoicing/upload-document",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/invoicing/upload-document",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-issues",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/issues",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/issues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-payment",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/payment/**",
+      "description": "unified Payment API (payments/refunds/balances/transactions) — same per-consumer fan_out scoping decision as accounting",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/payment/**",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-payment-balances",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/payment/balances",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/payment/balances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-payment-locations",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/payment/locations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/payment/locations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-payment-payments",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/payment/payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/payment/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-payment-payments-payment-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/payment/payments/{payment_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/payment/payments/{payment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-payment-payouts",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/payment/payouts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/payment/payouts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-payment-refunds",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/payment/refunds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/payment/refunds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-payment-transactions",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/payment/transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/payment/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/**",
+      "description": "unified Property Management System API (customers/orders/invoices/payments) — same per-consumer fan_out scoping decision as accounting",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/**",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-accounting-categories",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/accounting-categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/accounting-categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-accounting-transactions",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/accounting-transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/accounting-transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-closures-date",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/closures/{date}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/closures/{date}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-customers",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/customers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-customers-customer-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/customers/{customer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-invoices",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/invoices",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-locations",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/locations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/locations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-orders",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/orders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/payment-methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/payment-methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-payments",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pms-taxes",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pms/taxes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pms/taxes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/**",
+      "description": "unified Point of Sale API (orders/customers/products/payments/sales/objectives/reports) — same per-consumer fan_out scoping decision as accounting",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/**",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-accounting-categories",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/accounting-categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/accounting-categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-closures-date",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/closures/{date}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/closures/{date}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-customers",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/customers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-pos-customers",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/pos/customers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/pos/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-customers-customer-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/customers/{customer_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/customers/{customer_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-locations",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/locations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/locations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-modifiers",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/modifiers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/modifiers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-objectives",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/objectives",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/objectives",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-orders",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/orders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/orders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-orders-order-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/orders/{order_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/orders/{order_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-pos-orders-order-id",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/pos/orders/{order_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/pos/orders/{order_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-payment-methods",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/payment-methods",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/payment-methods",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-payments",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/payments",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/payments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-product-categories",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/product-categories",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/product-categories",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-products",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/products",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-report",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/report",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/report",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-sales",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/sales",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/sales",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-pos-tax-rates",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/pos/tax-rates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/pos/tax-rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-syncs",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/syncs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/syncs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-syncs-syncid",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/syncs/{syncid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/syncs/{syncid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-syncs-syncid",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/syncs/{syncid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/syncs/{syncid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.consumers-consumer-id-syncs-syncid-flows-flowid",
+      "kind": "rest_write",
+      "summary": "PATCH /consumers/{consumer_id}/syncs/{syncid}/flows/{flowid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/consumers/{consumer_id}/syncs/{syncid}/flows/{flowid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-syncs-syncid-flows-flowid-disable",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/syncs/{syncid}/flows/{flowid}/disable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/syncs/{syncid}/flows/{flowid}/disable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.consumers-consumer-id-syncs-syncid-flows-flowid-enable",
+      "kind": "rest_write",
+      "summary": "POST /consumers/{consumer_id}/syncs/{syncid}/flows/{flowid}/enable",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/consumers/{consumer_id}/syncs/{syncid}/flows/{flowid}/enable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-consumer-id-syncs-syncid-flows-flowid-executions",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{consumer_id}/syncs/{syncid}/flows/{flowid}/executions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{consumer_id}/syncs/{syncid}/flows/{flowid}/executions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-id",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{id}",
+      "description": "single-consumer read is redundant with the consumers list stream, which already emits every field the detail endpoint returns",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-id-executions",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{id}/executions",
+      "description": "sync-execution run history is operational/observability log data (past job runs and their outcomes), not a durable business object comparable to the consumers/connections/syncs configuration streams this bundle covers",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{id}/executions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-id-executions-datastore",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{id}/executions/{datastore}",
+      "description": "per-execution datastore payload dump is transient job-run data tied to one specific historical execution, not a stable syncable collection",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{id}/executions/{datastore}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-id-sync",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{id}/sync",
+      "description": "per-consumer sync-status summary is a narrower view of the same data already emitted in full by the syncs stream (filterable client-side by consumerid)",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{id}/sync",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.consumers-id-sync-url",
+      "kind": "rest_read",
+      "summary": "GET /consumers/{id}/sync/url",
+      "description": "generates a short-lived hosted onboarding URL/token for the consumer to complete activation, not a durable business-data record",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/consumers/{id}/sync/url",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.datalab-cube-schemas",
+      "kind": "rest_read",
+      "summary": "GET /datalab/cube-schemas",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/datalab/cube-schemas",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.datalab-query-db",
+      "kind": "rest_write",
+      "summary": "POST /datalab/query-db",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/datalab/query-db",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.integrations-id-logo",
+      "kind": "rest_read",
+      "summary": "GET /integrations/{id}/logo",
+      "description": "returns a logo/icon image asset, not a structured JSON business record",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integrations/{id}/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.integrations-integrationid-image-type-json",
+      "kind": "rest_read",
+      "summary": "GET /integrations/{integrationid}/{image_type}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integrations/{integrationid}/{image_type}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.issues",
+      "kind": "rest_read",
+      "summary": "GET /issues",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/issues",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.issues-issue-id",
+      "kind": "rest_read",
+      "summary": "GET /issues/{issue_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/issues/{issue_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.local-agents-releases",
+      "kind": "rest_read",
+      "summary": "GET /local-agents/releases",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/local-agents/releases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.mcp-token",
+      "kind": "rest_write",
+      "summary": "POST /mcp-token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/mcp-token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.syncs",
+      "kind": "rest_write",
+      "summary": "POST /syncs",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/syncs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.syncs-id",
+      "kind": "rest_read",
+      "summary": "GET /syncs/{id}",
+      "description": "single-sync read is redundant with the syncs list stream",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/syncs/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.syncs-id-executions",
+      "kind": "rest_read",
+      "summary": "GET /syncs/{id}/executions",
+      "description": "sync-execution run history is operational/observability log data, not a durable business object",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/syncs/{id}/executions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.syncs-id-executions-id-timestamp",
+      "kind": "rest_read",
+      "summary": "GET /syncs/{id}/executions/{id}/timestamp",
+      "description": "per-execution timestamp detail is transient job-run diagnostic data",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/syncs/{id}/executions/{id}/timestamp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.syncs-id-flows-flowid-enable",
+      "kind": "rest_write",
+      "summary": "POST /syncs/{id}/flows/{flowId}/enable",
+      "description": "enabling a specific sync flow for a consumer is a narrow per-flow configuration action, not a create/update of the sync object itself",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/syncs/{id}/flows/{flowId}/enable",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.syncs-id-flows-flowid-event",
+      "kind": "rest_write",
+      "summary": "POST /syncs/{id}/flows/{flowId}/event",
+      "description": "sending a custom flow event is an operational trigger action (event-sourcing shape), not an object CRUD mutation",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/syncs/{id}/flows/{flowId}/event",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.syncs-id-flows-flowid-mappings",
+      "kind": "rest_write",
+      "summary": "PATCH /syncs/{id}/flows/{flowId}/mappings",
+      "description": "field-mapping configuration for a sync flow is narrow integration-setup metadata, not the sync object's own durable fields",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/syncs/{id}/flows/{flowId}/mappings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.syncs-id-flows-flowid-settings",
+      "kind": "rest_write",
+      "summary": "PATCH /syncs/{id}/flows/{flowId}/settings",
+      "description": "per-flow settings configuration is narrow integration-setup metadata",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/syncs/{id}/flows/{flowId}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.syncs-syncid",
+      "kind": "rest_read",
+      "summary": "GET /syncs/{syncid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/syncs/{syncid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.syncs-syncid-executions",
+      "kind": "rest_read",
+      "summary": "GET /syncs/{syncid}/executions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/syncs/{syncid}/executions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.syncs-syncid-flows-flowid-event",
+      "kind": "rest_write",
+      "summary": "POST /syncs/{syncid}/flows/{flowid}/event",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/syncs/{syncid}/flows/{flowid}/event",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.syncs-syncid-flows-flowid-executions-executionid",
+      "kind": "rest_read",
+      "summary": "GET /syncs/{syncid}/flows/{flowid}/executions/{executionid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/syncs/{syncid}/flows/{flowid}/executions/{executionid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.token",
+      "kind": "rest_write",
+      "summary": "POST /token",
+      "description": "session-token exchange, not a syncable object stream; implemented via the chift AuthHook",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "registering a new webhook instance (callback URL subscription) is account-configuration setup, not customer-facing business data",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.webhooks-instances",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/instances",
+      "description": "configured webhook-instance inventory is account-setup/subscription metadata (which events THIS account has subscribed a callback URL to), distinct from the catalog of possible webhook events already covered by the webhook_definitions stream; no legacy precedent",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/instances",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.webhooks-list",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/list",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/list",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.webhooks-id",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{id}",
+      "description": "single webhook-instance read is redundant with the webhooks/instances listing this pass does not otherwise cover",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.webhooks-id",
+      "kind": "rest_write",
+      "summary": "PATCH /webhooks/{id}",
+      "description": "same account-configuration scoping as webhook instance creation",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.delete.webhooks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{id}",
+      "description": "same account-configuration scoping as webhook instance creation",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.webhooks-id-logs",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{id}/logs",
+      "description": "webhook delivery-log listing is operational/observability data (retry status of past deliveries), not a durable business object",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{id}/logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.webhooks-webhookid",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{webhookid}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{webhookid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.patch.webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "PATCH /webhooks/{webhookid}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/webhooks/{webhookid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.delete.webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{webhookid}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{webhookid}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "chift.get.webhooks-webhookid-logs",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{webhookid}/logs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://docs.chift.eu/api-reference/openapi.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{webhookid}/logs",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "batch": "batch-004",
+  "manifest": "batches/batch-004-manifest.json",
+  "outcomes": [
+    {
+      "connector": "ip2whois",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-004-materialize.json"
+    },
+    {
+      "connector": "nytimes",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-004-materialize.json"
+    },
+    {
+      "connector": "google-webfonts",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/fonts/docs/developer_api\" failed: artifact operation inventory is unknown: official reference \"https://developers.google.com/_pwa/developers/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "qualaroo",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "gnews",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "gutendex",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "pypi",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://warehouse.pypa.io/api-reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "news-api",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://newsapi.org/docs\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "mailjet-sms",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a malformed selected link), and official reference fallback \"https://dev.mailjet.com/sms/reference/overview/\" failed: artifact operation inventory is unknown: official reference \"https://dev.mailjet.com/page-data/sms/reference/overview/page-data.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "plausible",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "searxng",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "buzzsprout",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://www.buzzsprout.com/api\" failed: fetch artifact: provider returned HTTP 403"
+    },
+    {
+      "connector": "openweather",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "the-guardian-api",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "weatherstack",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://weatherstack.com/documentation\" failed: fetch artifact: Get \"https://docs.apilayer.com/weatherstack/docs/api-documentation?utm_source=WeatherstackHomePage&utm_medium=Referral\": artifact reference query must use only non-sensitive parameters"
+    },
+    {
+      "connector": "exchange-rates",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "cimis",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://et.water.ca.gov/Home/Index\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "open-exchange-rates",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "marketstack",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://marketstack.com/documentation\" failed: fetch artifact: Get \"https://docs.apilayer.com/marketstack/docs/api-endpoints-v1/?utm_source=MarketstackHomePage&utm_medium=Referral\": artifact reference query must use only non-sensitive parameters"
+    },
+    {
+      "connector": "pexels-api",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no pexels-api.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "rentcast",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.rentcast.io/reference/introduction\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "campayn",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://github.com/nebojsac/Campayn-API/commits/master/\" could not be fetched: fetch artifact: provider returned HTTP 429), and official reference fallback \"https://github.com/nebojsac/Campayn-API/blob/1635142d9799e0a50ba6fdc84118e027114ae734/README.md\" failed: artifact operation inventory is unknown: official reference link \"https://github.com/nebojsac/Campayn-API/commits/1635142d9799e0a50ba6fdc84118e027114ae734/README.md\" could not be fetched: fetch artifact: provider returned HTTP 429"
+    },
+    {
+      "connector": "ebay-finance",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no ebay-finance.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "hugging-face-datasets",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "countercyclical",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://docs.countercyclical.io/developers/endpoints/rss.xml\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://docs.countercyclical.io/llms.txt\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "mailtrap",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://docs.mailtrap.io/developers/openapi-specs\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "ticketmaster",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "google-tasks",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://developers.google.com/workspace/tasks/reference/rest\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "simfin",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://simfin.readme.io/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "ebay-fulfillment",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no ebay-fulfillment.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "stockdata",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "freshcaller",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 17 operation(s), below the ledger's 18"
+    },
+    {
+      "connector": "kissmetrics",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://support.kissmetrics.io/reference/authorization\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "eventzilla",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "linkrunner",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "poplar",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 1 operation(s), below the ledger's 20; official reference fallback \"https://docs.heypoplar.com/api\" failed: artifact operation inventory is unknown: official reference link \"https://docs.heypoplar.com/api/rss.xml\" could not be fetched: fetch artifact: provider returned HTTP 404"
+    },
+    {
+      "connector": "paypal-transaction",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.paypal.com/api/rest/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "datascope",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://app.mydatascope.com/api/external/docs/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "savvycal",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.savvycal.com/authentication\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "smaily",
+      "state": "genuinely_blocked",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-004-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://smaily.com/category/api/a-b-tests/feed/\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    }
+  ]
+}

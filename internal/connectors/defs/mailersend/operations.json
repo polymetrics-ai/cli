@@ -1,0 +1,1419 @@
+{
+  "operations": [
+    {
+      "id": "mailersend.get.activities-activity-id",
+      "kind": "rest_read",
+      "summary": "GET /activities/{activity_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/activities/{activity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.api-quota",
+      "kind": "rest_read",
+      "summary": "GET /api-quota",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api-quota",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.bulk-email",
+      "kind": "rest_write",
+      "summary": "POST /bulk-email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/bulk-email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.bulk-email-bulk-email-id",
+      "kind": "rest_read",
+      "summary": "GET /bulk-email/{bulk_email_id}",
+      "description": "Bulk-email status is an async job-status lookup for a send request, not a syncable business-object collection.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bulk-email/{bulk_email_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.domains",
+      "kind": "rest_write",
+      "summary": "POST /domains",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.domains-domain-id",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domain_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domain_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.domains-domain-id",
+      "kind": "rest_write",
+      "summary": "DELETE /domains/{domain_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/domains/{domain_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.domains-domain-id-dns-records",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domain_id}/dns-records",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domain_id}/dns-records",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.domains-domain-id-dns-records-domains-domain-id-recipients-domains-domain-id-settings-domains-domain-id-verification-status-and-similar-domain-subresources",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domain_id}/dns-records, /domains/{domain_id}/recipients, /domains/{domain_id}/settings, /domains/{domain_id}/verification-status and similar domain subresources",
+      "description": "Domain subresources require per-domain fan-out and separate nested schemas outside the legacy domain/message/recipient record contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domain_id}/dns-records, /domains/{domain_id}/recipients, /domains/{domain_id}/settings, /domains/{domain_id}/verification-status and similar domain subresources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.domains-domain-id-recipients",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domain_id}/recipients",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domain_id}/recipients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.domains-domain-id-settings",
+      "kind": "rest_write",
+      "summary": "PUT /domains/{domain_id}/settings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/domains/{domain_id}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.domains-domain-id-smtp-users",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domain_id}/smtp-users",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domain_id}/smtp-users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.domains-domain-id-smtp-users-smtp-user-id",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domain_id}/smtp-users/{smtp_user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domain_id}/smtp-users/{smtp_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.domains-domain-id-smtp-users-smtp-user-id",
+      "kind": "rest_write",
+      "summary": "PUT /domains/{domain_id}/smtp-users/{smtp_user_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/domains/{domain_id}/smtp-users/{smtp_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.domains-domain-id-smtp-users-smtp-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /domains/{domain_id}/smtp-users/{smtp_user_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/domains/{domain_id}/smtp-users/{smtp_user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.domains-domain-id-verify",
+      "kind": "rest_read",
+      "summary": "GET /domains/{domain_id}/verify",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/domains/{domain_id}/verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.email",
+      "kind": "rest_write",
+      "summary": "POST /email",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/email",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.email-bulk-email-sms-and-related-send-endpoints",
+      "kind": "rest_write",
+      "summary": "POST /email, /bulk-email, /sms and related send endpoints",
+      "description": "Transactional email/SMS send endpoints deliver messages to recipients and require explicit send approval semantics, not a generic reverse-ETL write.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/email, /bulk-email, /sms and related send endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.email-verification",
+      "kind": "rest_read",
+      "summary": "GET /email-verification",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/email-verification",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.email-verification",
+      "kind": "rest_write",
+      "summary": "POST /email-verification",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/email-verification",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.email-verification-lists-results-and-all-sms-list-detail-endpoints",
+      "kind": "rest_read",
+      "summary": "GET /email-verification lists/results and all /sms/* list/detail endpoints",
+      "description": "Email verification and SMS resources use separate product surfaces/scopes and are outside the legacy MailerSend email source connector contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/email-verification lists/results and all /sms/* list/detail endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.email-verification-verify",
+      "kind": "rest_write",
+      "summary": "POST /email-verification/verify",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/email-verification/verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.email-verification-email-verification-id",
+      "kind": "rest_read",
+      "summary": "GET /email-verification/{email_verification_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/email-verification/{email_verification_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.email-verification-email-verification-id-results",
+      "kind": "rest_read",
+      "summary": "GET /email-verification/{email_verification_id}/results",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/email-verification/{email_verification_id}/results",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.email-verification-email-verification-id-verify",
+      "kind": "rest_read",
+      "summary": "GET /email-verification/{email_verification_id}/verify",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/email-verification/{email_verification_id}/verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.identities",
+      "kind": "rest_write",
+      "summary": "POST /identities",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/identities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.identities-email-client-email-com",
+      "kind": "rest_read",
+      "summary": "GET /identities/email/{client@email.com}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/identities/email/{client@email.com}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.identities-email-client-email-com",
+      "kind": "rest_write",
+      "summary": "PUT /identities/email/{client@email.com}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/identities/email/{client@email.com}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.identities-email-client-email-com",
+      "kind": "rest_write",
+      "summary": "DELETE /identities/email/{client@email.com}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/identities/email/{client@email.com}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.identities-identity-id",
+      "kind": "rest_read",
+      "summary": "GET /identities/{identity_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/identities/{identity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.identities-identity-id",
+      "kind": "rest_write",
+      "summary": "PUT /identities/{identity_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/identities/{identity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.identities-identity-id",
+      "kind": "rest_write",
+      "summary": "DELETE /identities/{identity_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/identities/{identity_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.inbound",
+      "kind": "rest_write",
+      "summary": "POST /inbound",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/inbound",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.inbound-inbound-id",
+      "kind": "rest_read",
+      "summary": "GET /inbound/{inbound_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/inbound/{inbound_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.inbound-inbound-id",
+      "kind": "rest_write",
+      "summary": "PUT /inbound/{inbound_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/inbound/{inbound_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.inbound-inbound-id",
+      "kind": "rest_write",
+      "summary": "DELETE /inbound/{inbound_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/inbound/{inbound_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.message-schedules-message-id",
+      "kind": "rest_read",
+      "summary": "GET /message-schedules/{message_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/message-schedules/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.message-schedules-message-id",
+      "kind": "rest_write",
+      "summary": "DELETE /message-schedules/{message_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/message-schedules/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.messages-message-id",
+      "kind": "rest_read",
+      "summary": "GET /messages/{message_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/messages/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.recipients-recipient-id",
+      "kind": "rest_read",
+      "summary": "GET /recipients/{recipient_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recipients/{recipient_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.recipients-recipient-id",
+      "kind": "rest_write",
+      "summary": "DELETE /recipients/{recipient_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/recipients/{recipient_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.sms",
+      "kind": "rest_write",
+      "summary": "POST /sms",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-activity",
+      "kind": "rest_read",
+      "summary": "GET /sms-activity",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-activity",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-activity-sms-message-id",
+      "kind": "rest_read",
+      "summary": "GET /sms-activity/{sms_message_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-activity/{sms_message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-inbounds",
+      "kind": "rest_read",
+      "summary": "GET /sms-inbounds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-inbounds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.sms-inbounds",
+      "kind": "rest_write",
+      "summary": "POST /sms-inbounds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sms-inbounds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-inbounds-sms-inbound-id",
+      "kind": "rest_read",
+      "summary": "GET /sms-inbounds/{sms_inbound_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-inbounds/{sms_inbound_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.sms-inbounds-sms-inbound-id",
+      "kind": "rest_write",
+      "summary": "PUT /sms-inbounds/{sms_inbound_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sms-inbounds/{sms_inbound_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.sms-inbounds-sms-inbound-id",
+      "kind": "rest_write",
+      "summary": "DELETE /sms-inbounds/{sms_inbound_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sms-inbounds/{sms_inbound_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-messages",
+      "kind": "rest_read",
+      "summary": "GET /sms-messages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-messages-sms-message-id",
+      "kind": "rest_read",
+      "summary": "GET /sms-messages/{sms_message_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-messages/{sms_message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-numbers",
+      "kind": "rest_read",
+      "summary": "GET /sms-numbers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-numbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-numbers-sms-number-id",
+      "kind": "rest_read",
+      "summary": "GET /sms-numbers/{sms_number_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-numbers/{sms_number_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.sms-numbers-sms-number-id",
+      "kind": "rest_write",
+      "summary": "PUT /sms-numbers/{sms_number_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sms-numbers/{sms_number_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.sms-numbers-sms-number-id",
+      "kind": "rest_write",
+      "summary": "DELETE /sms-numbers/{sms_number_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sms-numbers/{sms_number_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-recipients",
+      "kind": "rest_read",
+      "summary": "GET /sms-recipients",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-recipients",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-recipients-sms-recipient-id",
+      "kind": "rest_read",
+      "summary": "GET /sms-recipients/{sms_recipient_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-recipients/{sms_recipient_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.sms-recipients-sms-recipient-id",
+      "kind": "rest_write",
+      "summary": "PUT /sms-recipients/{sms_recipient_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sms-recipients/{sms_recipient_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /sms-webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.sms-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /sms-webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/sms-webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.sms-webhooks-sms-webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /sms-webhooks/{sms_webhook_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/sms-webhooks/{sms_webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.sms-webhooks-sms-webhook-id",
+      "kind": "rest_write",
+      "summary": "PUT /sms-webhooks/{sms_webhook_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/sms-webhooks/{sms_webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.sms-webhooks-sms-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /sms-webhooks/{sms_webhook_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/sms-webhooks/{sms_webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.smtp-users-blocklist-monitoring-dmarc-monitoring-and-account-monitoring-admin-list-resources",
+      "kind": "rest_read",
+      "summary": "GET /smtp-users, /blocklist-monitoring, /dmarc-monitoring and account monitoring/admin list resources",
+      "description": "Account administration and monitoring endpoints require elevated account scopes beyond the default Email API source-read contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/smtp-users, /blocklist-monitoring, /dmarc-monitoring and account monitoring/admin list resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.suppressions-blocklist",
+      "kind": "rest_read",
+      "summary": "GET /suppressions/blocklist",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/suppressions/blocklist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.suppressions-blocklist",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/blocklist",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/blocklist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.suppressions-blocklist",
+      "kind": "rest_write",
+      "summary": "DELETE /suppressions/blocklist",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/suppressions/blocklist",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.suppressions-hard-bounces",
+      "kind": "rest_read",
+      "summary": "GET /suppressions/hard-bounces",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/suppressions/hard-bounces",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.suppressions-hard-bounces",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/hard-bounces",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/hard-bounces",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.suppressions-hard-bounces",
+      "kind": "rest_write",
+      "summary": "DELETE /suppressions/hard-bounces",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/suppressions/hard-bounces",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.suppressions-spam-complaints",
+      "kind": "rest_read",
+      "summary": "GET /suppressions/spam-complaints",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/suppressions/spam-complaints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.suppressions-spam-complaints",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/spam-complaints",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/spam-complaints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.suppressions-spam-complaints",
+      "kind": "rest_write",
+      "summary": "DELETE /suppressions/spam-complaints",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/suppressions/spam-complaints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.suppressions-unsubscribes",
+      "kind": "rest_read",
+      "summary": "GET /suppressions/unsubscribes",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/suppressions/unsubscribes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.suppressions-unsubscribes",
+      "kind": "rest_write",
+      "summary": "POST /suppressions/unsubscribes",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/suppressions/unsubscribes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.suppressions-unsubscribes",
+      "kind": "rest_write",
+      "summary": "DELETE /suppressions/unsubscribes",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/suppressions/unsubscribes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.templates-identities-identities-identity-id-resend-inbound-users-invites-invite-id-resend-token-webhooks-and-verification-list-creation-verification-endpoints",
+      "kind": "rest_write",
+      "summary": "POST /templates, /identities, /identities/{identity_id}/resend, /inbound, /users, /invites/{invite_id}/resend, /token, /webhooks and verification-list creation/verification endpoints",
+      "description": "Template, identity, inbound-route, user/invite, token, webhook, and verification actions mutate account configuration or initiate verification workflows.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/templates, /identities, /identities/{identity_id}/resend, /inbound, /users, /invites/{invite_id}/resend, /token, /webhooks and verification-list creation/verification endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.templates-template-id-identities-identity-id-identities-email-email-inbound-inbound-id-users-user-id-token-token-id-webhooks-webhook-id-domain-settings-and-sms-configuration-update-endpoints",
+      "kind": "rest_write",
+      "summary": "PUT /templates/{template_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /token/{token_id}, /webhooks/{webhook_id}, domain settings and SMS configuration update endpoints",
+      "description": "Update endpoints mutate sending templates, identities, routes, users, tokens, webhooks, domain settings, or SMS configuration.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/templates/{template_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /token/{token_id}, /webhooks/{webhook_id}, domain settings and SMS configuration update endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.templates-template-id-message-schedules-message-id-identities-identity-id-identities-email-email-inbound-inbound-id-users-user-id-invites-invite-id-token-token-id-webhooks-webhook-id-messages-message-id-domains-domain-id-recipients-recipient-id",
+      "kind": "rest_read",
+      "summary": "GET /templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, /messages/{message_id}, /domains/{domain_id}, /recipients/{recipient_id}",
+      "description": "Detail lookups return the same object families as covered list streams and require caller-supplied IDs or emails instead of producing independent collections.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, /messages/{message_id}, /domains/{domain_id}, /recipients/{recipient_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.templates-template-id-message-schedules-message-id-identities-identity-id-identities-email-email-inbound-inbound-id-users-user-id-invites-invite-id-token-token-id-webhooks-webhook-id-domain-sms-verification-delete-endpoints",
+      "kind": "rest_write",
+      "summary": "DELETE /templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, domain/SMS/verification delete endpoints",
+      "description": "Delete/cancel endpoints remove account configuration, users/invites/tokens, sender identities, routes, webhooks, scheduled sends, or product data.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/templates/{template_id}, /message-schedules/{message_id}, /identities/{identity_id}, /identities/email/{email}, /inbound/{inbound_id}, /users/{user_id}, /invites/{invite_id}, /token/{token_id}, /webhooks/{webhook_id}, domain/SMS/verification delete endpoints",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.token",
+      "kind": "rest_write",
+      "summary": "POST /token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.token-token-id",
+      "kind": "rest_write",
+      "summary": "DELETE /token/{token_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/token/{token_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.token-token-id-settings",
+      "kind": "rest_write",
+      "summary": "PUT /token/{token_id}/settings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/token/{token_id}/settings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.users-user-id",
+      "kind": "rest_read",
+      "summary": "GET /users/{user_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.users-user-id",
+      "kind": "rest_write",
+      "summary": "PUT /users/{user_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.users-user-id",
+      "kind": "rest_write",
+      "summary": "DELETE /users/{user_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/users/{user_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.get.webhooks-webhook-id",
+      "kind": "rest_read",
+      "summary": "GET /webhooks/{webhook_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.put.webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "PUT /webhooks/{webhook_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "mailersend.delete.webhooks-webhook-id",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{webhook_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.swaggerhub.com/apis/MailerSend/mailersend-api/1.0.0-oas3.1?resolved=true",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{webhook_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

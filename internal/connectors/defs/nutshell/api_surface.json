@@ -1,12 +1,32 @@
 {
-  "api": "Nutshell REST API (https://developers.nutshell.com/docs/getting-started)",
+  "api": "Nutshell REST API (https://developers.nutshell.com/docs/getting-started); provider artifact version: current REST API (reference undated)",
   "docs": "https://developers.nutshell.com/docs/getting-started",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion over the current official Nutshell REST reference: documented JSON GET list/detail endpoints are streams, dialect-expressible object/no-body mutations are write actions, and root-array/binary endpoints are excluded with concrete reasons.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 109 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B expansion over the current official Nutshell REST reference: documented JSON GET list/detail endpoints are streams, dialect-expressible object/no-body mutations are write actions, and root-array/binary endpoints are excluded with concrete reasons.",
+  "artifacts": [
+    {
+      "id": "nutshell-artifact-2026-08-09",
+      "url": "https://developers.nutshell.com/reference/",
+      "kind": "html_reference",
+      "version": "current REST API (reference undated)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
       "path": "/accounts",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /accounts]"
+      },
       "covered_by": {
         "stream": "accounts"
       }
@@ -14,49 +34,31 @@
     {
       "method": "POST",
       "path": "/accounts",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /accounts]"
+      },
       "covered_by": {
         "write": "create_account"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/accounts/{id}",
-      "covered_by": {
-        "write": "delete_account"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/accounts/{id}",
-      "covered_by": {
-        "stream": "account"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/accounts/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires a root JSON Patch array body (application/json-patch+json); writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/accounts/{id}/customfields",
-      "covered_by": {
-        "stream": "account_custom_fields"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/accounts/{id}/undelete",
-      "covered_by": {
-        "write": "undelete_account"
-      }
-    },
-    {
       "method": "POST",
       "path": "/accounts/customfield",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /accounts/customfield]"
+      },
       "covered_by": {
         "write": "create_account_custom_field"
       }
@@ -64,6 +66,15 @@
     {
       "method": "GET",
       "path": "/accounts/customfields/attributes",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /accounts/customfields/attributes]"
+      },
       "covered_by": {
         "stream": "account_custom_field_attributes"
       }
@@ -71,6 +82,15 @@
     {
       "method": "GET",
       "path": "/accounts/list",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /accounts/list]"
+      },
       "covered_by": {
         "stream": "account_list_items"
       }
@@ -78,13 +98,116 @@
     {
       "method": "GET",
       "path": "/accounts/list/fields",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /accounts/list/fields]"
+      },
       "covered_by": {
         "stream": "account_list_fields"
       }
     },
     {
       "method": "GET",
+      "path": "/accounts/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /accounts/{id}]"
+      },
+      "covered_by": {
+        "stream": "account"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[PATCH /accounts/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires a root JSON Patch array body (application/json-patch+json); writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /accounts/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/{id}/customfields",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /accounts/{id}/customfields]"
+      },
+      "covered_by": {
+        "stream": "account_custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{id}/undelete",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /accounts/{id}/undelete]"
+      },
+      "covered_by": {
+        "write": "undelete_account"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/accounttypes",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /accounttypes]"
+      },
       "covered_by": {
         "stream": "account_types"
       }
@@ -92,6 +215,15 @@
     {
       "method": "GET",
       "path": "/activities",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /activities]"
+      },
       "covered_by": {
         "stream": "activities"
       }
@@ -99,6 +231,15 @@
     {
       "method": "POST",
       "path": "/activities",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /activities]"
+      },
       "covered_by": {
         "write": "create_activity"
       }
@@ -106,6 +247,15 @@
     {
       "method": "GET",
       "path": "/activities/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /activities/{id}]"
+      },
       "covered_by": {
         "stream": "activity"
       }
@@ -113,6 +263,15 @@
     {
       "method": "PUT",
       "path": "/activities/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[PUT /activities/{id}]"
+      },
       "covered_by": {
         "write": "update_activity"
       }
@@ -120,6 +279,15 @@
     {
       "method": "GET",
       "path": "/activitytypes",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /activitytypes]"
+      },
       "covered_by": {
         "stream": "activity_types"
       }
@@ -127,6 +295,15 @@
     {
       "method": "GET",
       "path": "/audiences",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /audiences]"
+      },
       "covered_by": {
         "stream": "audiences"
       }
@@ -134,6 +311,15 @@
     {
       "method": "POST",
       "path": "/audiences",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /audiences]"
+      },
       "covered_by": {
         "write": "create_audience"
       }
@@ -141,20 +327,31 @@
     {
       "method": "GET",
       "path": "/competitormaps",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /competitormaps]"
+      },
       "covered_by": {
         "stream": "competitor_maps"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/competitormaps/{id}",
-      "covered_by": {
-        "write": "delete_competitor_map"
-      }
-    },
-    {
       "method": "GET",
       "path": "/competitormaps/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /competitormaps/{id}]"
+      },
       "covered_by": {
         "stream": "competitor_map"
       }
@@ -162,14 +359,52 @@
     {
       "method": "PATCH",
       "path": "/competitormaps/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires a root JSON Patch array body; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json."
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[PATCH /competitormaps/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires a root JSON Patch array body; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/competitormaps/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /competitormaps/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_competitor_map"
       }
     },
     {
       "method": "GET",
       "path": "/competitors",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /competitors]"
+      },
       "covered_by": {
         "stream": "competitors"
       }
@@ -177,6 +412,15 @@
     {
       "method": "GET",
       "path": "/competitors/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /competitors/{id}]"
+      },
       "covered_by": {
         "stream": "competitor"
       }
@@ -184,6 +428,15 @@
     {
       "method": "GET",
       "path": "/contacts",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /contacts]"
+      },
       "covered_by": {
         "stream": "contacts"
       }
@@ -191,49 +444,31 @@
     {
       "method": "POST",
       "path": "/contacts",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /contacts]"
+      },
       "covered_by": {
         "write": "create_contact"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/contacts/{id}",
-      "covered_by": {
-        "write": "delete_contact"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/contacts/{id}",
-      "covered_by": {
-        "stream": "contact"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/contacts/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires a root JSON Patch array body (application/json-patch+json); writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/contacts/{id}/customfields",
-      "covered_by": {
-        "stream": "contact_custom_fields"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/contacts/{id}/undelete",
-      "covered_by": {
-        "write": "undelete_contact"
-      }
-    },
-    {
       "method": "POST",
       "path": "/contacts/customfield",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /contacts/customfield]"
+      },
       "covered_by": {
         "write": "create_contact_custom_field"
       }
@@ -241,6 +476,15 @@
     {
       "method": "GET",
       "path": "/contacts/customfields/attributes",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /contacts/customfields/attributes]"
+      },
       "covered_by": {
         "stream": "contact_custom_field_attributes"
       }
@@ -248,6 +492,15 @@
     {
       "method": "GET",
       "path": "/contacts/list",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /contacts/list]"
+      },
       "covered_by": {
         "stream": "contact_list_items"
       }
@@ -255,13 +508,116 @@
     {
       "method": "GET",
       "path": "/contacts/list/fields",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /contacts/list/fields]"
+      },
       "covered_by": {
         "stream": "contact_list_fields"
       }
     },
     {
       "method": "GET",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /contacts/{id}]"
+      },
+      "covered_by": {
+        "stream": "contact"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[PATCH /contacts/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires a root JSON Patch array body (application/json-patch+json); writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /contacts/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/customfields",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /contacts/{id}/customfields]"
+      },
+      "covered_by": {
+        "stream": "contact_custom_fields"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{id}/undelete",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /contacts/{id}/undelete]"
+      },
+      "covered_by": {
+        "write": "undelete_contact"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/editions",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /editions]"
+      },
       "covered_by": {
         "stream": "editions"
       }
@@ -269,6 +625,15 @@
     {
       "method": "GET",
       "path": "/editions/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /editions/{id}]"
+      },
       "covered_by": {
         "stream": "edition"
       }
@@ -276,6 +641,15 @@
     {
       "method": "GET",
       "path": "/emails/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /emails/{id}]"
+      },
       "covered_by": {
         "stream": "email"
       }
@@ -283,6 +657,15 @@
     {
       "method": "GET",
       "path": "/events",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /events]"
+      },
       "covered_by": {
         "stream": "events"
       }
@@ -290,6 +673,15 @@
     {
       "method": "GET",
       "path": "/events/deleted",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /events/deleted]"
+      },
       "covered_by": {
         "stream": "deleted_events"
       }
@@ -297,6 +689,15 @@
     {
       "method": "GET",
       "path": "/filters",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /filters]"
+      },
       "covered_by": {
         "stream": "saved_filters"
       }
@@ -304,6 +705,15 @@
     {
       "method": "GET",
       "path": "/forms",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /forms]"
+      },
       "covered_by": {
         "stream": "forms"
       }
@@ -311,6 +721,15 @@
     {
       "method": "GET",
       "path": "/forms/{fieldId}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /forms/{fieldId}]"
+      },
       "covered_by": {
         "stream": "form_field"
       }
@@ -318,6 +737,15 @@
     {
       "method": "GET",
       "path": "/forms/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /forms/{id}]"
+      },
       "covered_by": {
         "stream": "form"
       }
@@ -325,6 +753,15 @@
     {
       "method": "GET",
       "path": "/industries",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /industries]"
+      },
       "covered_by": {
         "stream": "industries"
       }
@@ -332,6 +769,15 @@
     {
       "method": "GET",
       "path": "/industries/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /industries/{id}]"
+      },
       "covered_by": {
         "stream": "industry"
       }
@@ -339,6 +785,15 @@
     {
       "method": "GET",
       "path": "/invoices",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /invoices]"
+      },
       "covered_by": {
         "stream": "invoices"
       }
@@ -346,6 +801,15 @@
     {
       "method": "GET",
       "path": "/invoices/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /invoices/{id}]"
+      },
       "covered_by": {
         "stream": "invoice"
       }
@@ -353,6 +817,15 @@
     {
       "method": "GET",
       "path": "/leads",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /leads]"
+      },
       "covered_by": {
         "stream": "leads"
       }
@@ -360,99 +833,31 @@
     {
       "method": "POST",
       "path": "/leads",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /leads]"
+      },
       "covered_by": {
         "write": "create_lead"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/leads/{id}",
-      "covered_by": {
-        "write": "delete_lead"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/leads/{id}",
-      "covered_by": {
-        "stream": "lead"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/leads/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires a root JSON Patch array body (application/json-patch+json); writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/leads/{id}/customfields",
-      "covered_by": {
-        "stream": "lead_custom_fields"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/leads/{id}/installments",
-      "covered_by": {
-        "stream": "lead_installments"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/leads/{id}/installments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires a root JSON array of installment objects; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/leads/{id}/reopen",
-      "covered_by": {
-        "write": "reopen_lead"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/leads/{id}/stages",
-      "covered_by": {
-        "stream": "lead_stages"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/leads/{id}/stageset",
-      "covered_by": {
-        "write": "set_lead_pipeline"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/leads/{id}/status",
-      "covered_by": {
-        "write": "update_lead_status"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/leads/{id}/undelete",
-      "covered_by": {
-        "write": "undelete_lead"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/leads/{id}/watch",
-      "covered_by": {
-        "write": "watch_lead"
-      }
-    },
-    {
       "method": "POST",
       "path": "/leads/customfield",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /leads/customfield]"
+      },
       "covered_by": {
         "write": "create_lead_custom_field"
       }
@@ -460,6 +865,15 @@
     {
       "method": "GET",
       "path": "/leads/customfields/attributes",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /leads/customfields/attributes]"
+      },
       "covered_by": {
         "stream": "lead_custom_field_attributes"
       }
@@ -467,6 +881,15 @@
     {
       "method": "GET",
       "path": "/leads/list",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /leads/list]"
+      },
       "covered_by": {
         "stream": "lead_list_items"
       }
@@ -474,6 +897,15 @@
     {
       "method": "GET",
       "path": "/leads/list/fields",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /leads/list/fields]"
+      },
       "covered_by": {
         "stream": "lead_list_fields"
       }
@@ -481,13 +913,233 @@
     {
       "method": "GET",
       "path": "/leads/report",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /leads/report]"
+      },
       "covered_by": {
         "stream": "lead_reports"
       }
     },
     {
       "method": "GET",
+      "path": "/leads/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /leads/{id}]"
+      },
+      "covered_by": {
+        "stream": "lead"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/leads/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[PATCH /leads/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires a root JSON Patch array body (application/json-patch+json); writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/leads/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /leads/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_lead"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/leads/{id}/customfields",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /leads/{id}/customfields]"
+      },
+      "covered_by": {
+        "stream": "lead_custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/leads/{id}/installments",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /leads/{id}/installments]"
+      },
+      "covered_by": {
+        "stream": "lead_installments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads/{id}/installments",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /leads/{id}/installments]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires a root JSON array of installment objects; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads/{id}/reopen",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /leads/{id}/reopen]"
+      },
+      "covered_by": {
+        "write": "reopen_lead"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/leads/{id}/stages",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /leads/{id}/stages]"
+      },
+      "covered_by": {
+        "stream": "lead_stages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads/{id}/stageset",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /leads/{id}/stageset]"
+      },
+      "covered_by": {
+        "write": "set_lead_pipeline"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads/{id}/status",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /leads/{id}/status]"
+      },
+      "covered_by": {
+        "write": "update_lead_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads/{id}/undelete",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /leads/{id}/undelete]"
+      },
+      "covered_by": {
+        "write": "undelete_lead"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/leads/{id}/watch",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /leads/{id}/watch]"
+      },
+      "covered_by": {
+        "write": "watch_lead"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/markets",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /markets]"
+      },
       "covered_by": {
         "stream": "markets"
       }
@@ -495,6 +1147,15 @@
     {
       "method": "GET",
       "path": "/markets/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /markets/{id}]"
+      },
       "covered_by": {
         "stream": "market"
       }
@@ -502,6 +1163,15 @@
     {
       "method": "GET",
       "path": "/notes",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /notes]"
+      },
       "covered_by": {
         "stream": "notes"
       }
@@ -509,27 +1179,63 @@
     {
       "method": "POST",
       "path": "/notes",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /notes]"
+      },
       "covered_by": {
         "write": "create_note"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/notes/{id}",
-      "covered_by": {
-        "write": "delete_note"
-      }
-    },
-    {
       "method": "GET",
       "path": "/notes/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /notes/{id}]"
+      },
       "covered_by": {
         "stream": "note"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/notes/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /notes/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_note"
+      }
+    },
+    {
       "method": "POST",
       "path": "/notes/{id}/undelete",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /notes/{id}/undelete]"
+      },
       "covered_by": {
         "write": "undelete_note"
       }
@@ -537,6 +1243,15 @@
     {
       "method": "GET",
       "path": "/outcomes",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /outcomes]"
+      },
       "covered_by": {
         "stream": "lead_outcomes"
       }
@@ -544,13 +1259,47 @@
     {
       "method": "GET",
       "path": "/outcomes/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /outcomes/{id}]"
+      },
       "covered_by": {
         "stream": "lead_outcome"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/productMaps/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /productMaps/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product_map"
+      }
+    },
+    {
       "method": "GET",
       "path": "/productcategories",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /productcategories]"
+      },
       "covered_by": {
         "stream": "product_categories"
       }
@@ -558,6 +1307,15 @@
     {
       "method": "POST",
       "path": "/productcategories",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /productcategories]"
+      },
       "covered_by": {
         "write": "create_product_category"
       }
@@ -565,6 +1323,15 @@
     {
       "method": "GET",
       "path": "/productcategories/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /productcategories/{id}]"
+      },
       "covered_by": {
         "stream": "product_category"
       }
@@ -572,6 +1339,15 @@
     {
       "method": "GET",
       "path": "/productmaps",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /productmaps]"
+      },
       "covered_by": {
         "stream": "product_maps"
       }
@@ -579,6 +1355,15 @@
     {
       "method": "GET",
       "path": "/productmaps/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /productmaps/{id}]"
+      },
       "covered_by": {
         "stream": "product_map"
       }
@@ -586,42 +1371,84 @@
     {
       "method": "PATCH",
       "path": "/productmaps/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires a root JSON Patch array body; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json."
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/productMaps/{id}",
-      "covered_by": {
-        "write": "delete_product_map"
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[PATCH /productmaps/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires a root JSON Patch array body; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/products",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /products]"
+      },
       "covered_by": {
         "stream": "products"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/products/{id}",
-      "covered_by": {
-        "write": "delete_product"
-      }
-    },
-    {
       "method": "GET",
       "path": "/products/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /products/{id}]"
+      },
       "covered_by": {
         "stream": "product"
       }
     },
     {
+      "method": "DELETE",
+      "path": "/products/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /products/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_product"
+      }
+    },
+    {
       "method": "POST",
       "path": "/products/{id}/undelete",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /products/{id}/undelete]"
+      },
       "covered_by": {
         "write": "undelete_product"
       }
@@ -629,6 +1456,15 @@
     {
       "method": "GET",
       "path": "/quotes",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /quotes]"
+      },
       "covered_by": {
         "stream": "quotes"
       }
@@ -636,6 +1472,15 @@
     {
       "method": "GET",
       "path": "/quotes/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /quotes/{id}]"
+      },
       "covered_by": {
         "stream": "quote"
       }
@@ -643,6 +1488,15 @@
     {
       "method": "GET",
       "path": "/sources",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /sources]"
+      },
       "covered_by": {
         "stream": "sources"
       }
@@ -650,6 +1504,15 @@
     {
       "method": "POST",
       "path": "/sources",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /sources]"
+      },
       "covered_by": {
         "write": "create_source"
       }
@@ -657,6 +1520,15 @@
     {
       "method": "DELETE",
       "path": "/sources/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /sources/{id}]"
+      },
       "covered_by": {
         "write": "delete_source"
       }
@@ -664,6 +1536,15 @@
     {
       "method": "POST",
       "path": "/sources/{id}/undelete",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /sources/{id}/undelete]"
+      },
       "covered_by": {
         "write": "undelete_source"
       }
@@ -671,6 +1552,15 @@
     {
       "method": "GET",
       "path": "/stages",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /stages]"
+      },
       "covered_by": {
         "stream": "stages"
       }
@@ -678,6 +1568,15 @@
     {
       "method": "GET",
       "path": "/stagesets",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /stagesets]"
+      },
       "covered_by": {
         "stream": "pipelines"
       }
@@ -685,14 +1584,36 @@
     {
       "method": "GET",
       "path": "/stagesets/{id}/export",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Returns a CSV export rather than JSON records, so it is not a declarative JSON stream."
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /stagesets/{id}/export]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Returns a CSV export rather than JSON records, so it is not a declarative JSON stream.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/tags",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /tags]"
+      },
       "covered_by": {
         "stream": "tags"
       }
@@ -700,6 +1621,15 @@
     {
       "method": "POST",
       "path": "/tags",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /tags]"
+      },
       "covered_by": {
         "write": "create_tag"
       }
@@ -707,6 +1637,15 @@
     {
       "method": "DELETE",
       "path": "/tags/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /tags/{id}]"
+      },
       "covered_by": {
         "write": "delete_tag"
       }
@@ -714,6 +1653,15 @@
     {
       "method": "POST",
       "path": "/tags/{id}/undelete",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /tags/{id}/undelete]"
+      },
       "covered_by": {
         "write": "undelete_tag"
       }
@@ -721,6 +1669,15 @@
     {
       "method": "GET",
       "path": "/tasks",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /tasks]"
+      },
       "covered_by": {
         "stream": "tasks"
       }
@@ -728,20 +1685,31 @@
     {
       "method": "POST",
       "path": "/tasks",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[POST /tasks]"
+      },
       "covered_by": {
         "write": "create_task"
       }
     },
     {
-      "method": "DELETE",
-      "path": "/tasks/{id}",
-      "covered_by": {
-        "write": "delete_task"
-      }
-    },
-    {
       "method": "GET",
       "path": "/tasks/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /tasks/{id}]"
+      },
       "covered_by": {
         "stream": "task"
       }
@@ -749,14 +1717,52 @@
     {
       "method": "PATCH",
       "path": "/tasks/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Requires a root JSON Patch array body; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json."
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[PATCH /tasks/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Requires a root JSON Patch array body; writes.json can construct only object/none bodies from records. See the nutshell ENGINE_GAP entry in docs/migration/quarantine.json.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[DELETE /tasks/{id}]"
+      },
+      "covered_by": {
+        "write": "delete_task"
       }
     },
     {
       "method": "GET",
       "path": "/territories",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /territories]"
+      },
       "covered_by": {
         "stream": "territories"
       }
@@ -764,6 +1770,15 @@
     {
       "method": "GET",
       "path": "/users",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /users]"
+      },
       "covered_by": {
         "stream": "users"
       }
@@ -771,6 +1786,15 @@
     {
       "method": "GET",
       "path": "/users/{id}",
+      "provenance": {
+        "artifact": "nutshell-artifact-2026-08-09",
+        "source_url": "https://developers.nutshell.com/reference/",
+        "source_kind": "html_reference",
+        "version": "current REST API (reference undated)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a887c79eb6b4423a6db46b8f5e421bcb48bb52f419e7320a8b608933e7e8abd6",
+        "coordinate": "existing-complete-surface[GET /users/{id}]"
+      },
       "covered_by": {
         "stream": "user"
       }

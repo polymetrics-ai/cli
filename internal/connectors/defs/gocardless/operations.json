@@ -1,0 +1,113 @@
+{
+  "operations": [
+    {
+      "id": "gocardless.get.bank-account-details-customer-bank-account-id",
+      "kind": "rest_read",
+      "summary": "GET /bank_account_details/{customer_bank_account_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/bank_account_details/{customer_bank_account_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gocardless.post.oauth-access-token",
+      "kind": "rest_write",
+      "summary": "POST /oauth/access_token",
+      "description": "OAuth token exchange uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation.",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth/access_token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gocardless.post.oauth-introspect",
+      "kind": "rest_write",
+      "summary": "POST /oauth/introspect",
+      "description": "OAuth token introspection uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation.",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth/introspect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gocardless.post.oauth-revoke",
+      "kind": "rest_write",
+      "summary": "POST /oauth/revoke",
+      "description": "OAuth token revocation uses the Connect OAuth form flow on connect.gocardless.com, not a bearer-authenticated GoCardless API record mutation.",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth/revoke",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gocardless.get.payment-accounts-payment-account-transaction-id-transactions",
+      "kind": "rest_read",
+      "summary": "GET /payment_accounts/{payment_account_transaction_id}/transactions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/payment_accounts/{payment_account_transaction_id}/transactions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gocardless.post.scenario-simulators-scenario-simulator-id-actions-run",
+      "kind": "rest_write",
+      "summary": "POST /scenario_simulators/{scenario_simulator_id}/actions/run",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/scenario_simulators/{scenario_simulator_id}/actions/run",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "gocardless.get.transferred-mandates-mandate-id",
+      "kind": "rest_read",
+      "summary": "GET /transferred_mandates/{mandate_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.gocardless.com/openapi-schema-public.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/transferred_mandates/{mandate_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,3304 @@
+{
+  "tagline": "Run OnePageCRM's declared streams and reverse-ETL actions.",
+  "usage": "pm onepagecrm \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "action list",
+        "action stream list",
+        "actions list",
+        "api get attachments s3-form",
+        "bootstrap list",
+        "call list",
+        "call results list",
+        "calls list",
+        "companies list",
+        "company actions list",
+        "company calls list",
+        "company deals list",
+        "company field list",
+        "company fields list",
+        "company linked contacts list",
+        "company list",
+        "company meetings list",
+        "company notes list",
+        "company pinned attachments list",
+        "contact actions list",
+        "contact calls list",
+        "contact deals list",
+        "contact list",
+        "contact meetings list",
+        "contact notes list",
+        "contact pinned attachments list",
+        "contact relationship list",
+        "contact relationships list",
+        "contacts cascade after list",
+        "contacts cascade list",
+        "contacts list",
+        "countries list",
+        "custom field list",
+        "custom fields list",
+        "deal field list",
+        "deal fields list",
+        "deal list",
+        "deals list",
+        "filter list",
+        "filtered contacts list",
+        "filters list",
+        "lead source list",
+        "lead sources list",
+        "meeting list",
+        "meetings list",
+        "note list",
+        "notes list",
+        "notification list",
+        "notifications list",
+        "pipeline list",
+        "pipelines list",
+        "predefined action group list",
+        "predefined action groups list",
+        "predefined action list",
+        "predefined actions list",
+        "predefined item group list",
+        "predefined item groups list",
+        "predefined item list",
+        "predefined items list",
+        "relationship type list",
+        "relationship types list",
+        "status list",
+        "statuses list",
+        "team stream list",
+        "user list",
+        "users list",
+        "webhook list",
+        "webhooks list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete contacts delete",
+        "api patch companies company-id logo",
+        "api post change-auth-key",
+        "api post companies company-id logo",
+        "api post contacts contact-id contact-photo",
+        "api put contacts contact-id contact-photo",
+        "assign contact tag apply",
+        "change contact owner apply",
+        "change contact status apply",
+        "close sales cycle contact apply",
+        "create action apply",
+        "create attachment apply",
+        "create call apply",
+        "create call attachment apply",
+        "create company field apply",
+        "create company linked contact apply",
+        "create contact action apply",
+        "create contact apply",
+        "create contact call apply",
+        "create contact deal apply",
+        "create contact meeting apply",
+        "create contact note apply",
+        "create contact relationship apply",
+        "create custom field apply",
+        "create deal apply",
+        "create deal attachment apply",
+        "create deal field apply",
+        "create lead source apply",
+        "create meeting apply",
+        "create meeting attachment apply",
+        "create note apply",
+        "create note attachment apply",
+        "create predefined action apply",
+        "create predefined action group apply",
+        "create predefined item apply",
+        "create predefined item group apply",
+        "create relationship type apply",
+        "create status apply",
+        "delete action apply",
+        "delete attachment apply",
+        "delete call apply",
+        "delete company field apply",
+        "delete company linked contact apply",
+        "delete company logo apply",
+        "delete company synced status apply",
+        "delete contact apply",
+        "delete contact contact photo apply",
+        "delete contact relationship apply",
+        "delete custom field apply",
+        "delete deal apply",
+        "delete deal field apply",
+        "delete lead source apply",
+        "delete meeting apply",
+        "delete note apply",
+        "delete predefined action apply",
+        "delete predefined action group apply",
+        "delete predefined item apply",
+        "delete predefined item group apply",
+        "delete relationship type apply",
+        "delete status apply",
+        "delete webhook apply",
+        "enable company synced status apply",
+        "force close sales cycle contact apply",
+        "mark all notifications as read apply",
+        "mark as done action apply",
+        "mark as read notification apply",
+        "pin attachment apply",
+        "promote action apply",
+        "reopen sales cycle contact apply",
+        "revert promotion action apply",
+        "save contact to google contacts apply",
+        "split contact apply",
+        "star contact apply",
+        "swap action apply",
+        "unassign action apply",
+        "unassign contact tag apply",
+        "undo completion action apply",
+        "unpin attachment apply",
+        "unstar contact apply",
+        "update action apply",
+        "update attachment apply",
+        "update call apply",
+        "update company apply",
+        "update company field apply",
+        "update contact apply",
+        "update custom field apply",
+        "update deal apply",
+        "update deal field apply",
+        "update lead source apply",
+        "update meeting apply",
+        "update note apply",
+        "update predefined action apply",
+        "update predefined action group apply",
+        "update predefined item apply",
+        "update relationship apply",
+        "update relationship type apply",
+        "update status apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "action list",
+      "summary": "Run the action ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm action list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/actions/{action_id}"
+        }
+      ]
+    },
+    {
+      "path": "action stream list",
+      "summary": "Run the action stream ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "action_stream",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm action stream list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/action_stream"
+        }
+      ]
+    },
+    {
+      "path": "actions list",
+      "summary": "Run the actions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "actions",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm actions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/actions"
+        }
+      ]
+    },
+    {
+      "path": "api delete contacts delete",
+      "summary": "Documented DELETE /contacts/delete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm api delete contacts delete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/delete"
+        }
+      ],
+      "operation": "onepagecrm.delete.contacts-delete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get attachments s3-form",
+      "summary": "Documented GET /attachments/s3_form (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm api get attachments s3-form --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/attachments/s3_form"
+        }
+      ],
+      "operation": "onepagecrm.get.attachments-s3-form",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch companies company-id logo",
+      "summary": "Documented PATCH /companies/{company_id}/logo (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm api patch companies company-id logo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/companies/{company_id}/logo"
+        }
+      ],
+      "operation": "onepagecrm.patch.companies-company-id-logo",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post change-auth-key",
+      "summary": "Documented POST /change_auth_key (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm api post change-auth-key --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/change_auth_key"
+        }
+      ],
+      "operation": "onepagecrm.post.change-auth-key",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post companies company-id logo",
+      "summary": "Documented POST /companies/{company_id}/logo (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm api post companies company-id logo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{company_id}/logo"
+        }
+      ],
+      "operation": "onepagecrm.post.companies-company-id-logo",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post contacts contact-id contact-photo",
+      "summary": "Documented POST /contacts/{contact_id}/contact_photo (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm api post contacts contact-id contact-photo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/contact_photo"
+        }
+      ],
+      "operation": "onepagecrm.post.contacts-contact-id-contact-photo",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put contacts contact-id contact-photo",
+      "summary": "Documented PUT /contacts/{contact_id}/contact_photo (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm api put contacts contact-id contact-photo --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/contact_photo"
+        }
+      ],
+      "operation": "onepagecrm.put.contacts-contact-id-contact-photo",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "assign contact tag apply",
+      "summary": "Plan and execute the assign contact tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "assign_contact_tag",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm assign contact tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/assign_tag/{tag_name}"
+        }
+      ],
+      "risk": "Assign a tag to a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "bootstrap list",
+      "summary": "Run the bootstrap ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "bootstrap",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm bootstrap list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/bootstrap"
+        }
+      ]
+    },
+    {
+      "path": "call list",
+      "summary": "Run the call ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "call",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm call list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calls/{call_id}"
+        }
+      ]
+    },
+    {
+      "path": "call results list",
+      "summary": "Run the call results ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "call_results",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm call results list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/call_results"
+        }
+      ]
+    },
+    {
+      "path": "calls list",
+      "summary": "Run the calls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "calls",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm calls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calls"
+        }
+      ]
+    },
+    {
+      "path": "change contact owner apply",
+      "summary": "Plan and execute the change contact owner reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "change_contact_owner",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm change contact owner apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/change_owner/{owner_id}"
+        }
+      ],
+      "risk": "Change the owner of a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "change contact status apply",
+      "summary": "Plan and execute the change contact status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "change_contact_status",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm change contact status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/change_status/{status_id}"
+        }
+      ],
+      "risk": "Change the status of a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "close sales cycle contact apply",
+      "summary": "Plan and execute the close sales cycle contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "close_sales_cycle_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm close sales cycle contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/close_sales_cycle"
+        }
+      ],
+      "risk": "Close the sales cycle for a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "companies list",
+      "summary": "Run the companies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm companies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ]
+    },
+    {
+      "path": "company actions list",
+      "summary": "Run the company actions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_actions",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company actions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/actions"
+        }
+      ]
+    },
+    {
+      "path": "company calls list",
+      "summary": "Run the company calls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_calls",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company calls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/calls"
+        }
+      ]
+    },
+    {
+      "path": "company deals list",
+      "summary": "Run the company deals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_deals",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company deals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/deals"
+        }
+      ]
+    },
+    {
+      "path": "company field list",
+      "summary": "Run the company field ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company field list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/company_fields/{company_field_id}"
+        }
+      ]
+    },
+    {
+      "path": "company fields list",
+      "summary": "Run the company fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_fields",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/company_fields"
+        }
+      ]
+    },
+    {
+      "path": "company linked contacts list",
+      "summary": "Run the company linked contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_linked_contacts",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company linked contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/linked_contacts"
+        }
+      ]
+    },
+    {
+      "path": "company list",
+      "summary": "Run the company ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}"
+        }
+      ]
+    },
+    {
+      "path": "company meetings list",
+      "summary": "Run the company meetings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_meetings",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company meetings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/meetings"
+        }
+      ]
+    },
+    {
+      "path": "company notes list",
+      "summary": "Run the company notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_notes",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/notes"
+        }
+      ]
+    },
+    {
+      "path": "company pinned attachments list",
+      "summary": "Run the company pinned attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "company_pinned_attachments",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm company pinned attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/pinned_attachments"
+        }
+      ]
+    },
+    {
+      "path": "contact actions list",
+      "summary": "Run the contact actions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_actions",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contact actions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/actions"
+        }
+      ]
+    },
+    {
+      "path": "contact calls list",
+      "summary": "Run the contact calls ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_calls",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contact calls list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/calls"
+        }
+      ]
+    },
+    {
+      "path": "contact deals list",
+      "summary": "Run the contact deals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_deals",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contact deals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/deals"
+        }
+      ]
+    },
+    {
+      "path": "contact list",
+      "summary": "Run the contact ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}"
+        }
+      ]
+    },
+    {
+      "path": "contact meetings list",
+      "summary": "Run the contact meetings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_meetings",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contact meetings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/meetings"
+        }
+      ]
+    },
+    {
+      "path": "contact notes list",
+      "summary": "Run the contact notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_notes",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contact notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/notes"
+        }
+      ]
+    },
+    {
+      "path": "contact pinned attachments list",
+      "summary": "Run the contact pinned attachments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_pinned_attachments",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contact pinned attachments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/pinned_attachments"
+        }
+      ]
+    },
+    {
+      "path": "contact relationship list",
+      "summary": "Run the contact relationship ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_relationship",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contact relationship list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/relationships/{relationship_id}"
+        }
+      ]
+    },
+    {
+      "path": "contact relationships list",
+      "summary": "Run the contact relationships ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contact_relationships",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contact relationships list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/relationships"
+        }
+      ]
+    },
+    {
+      "path": "contacts cascade after list",
+      "summary": "Run the contacts cascade after ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts_cascade_after",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contacts cascade after list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/cascade/{last_id}"
+        }
+      ]
+    },
+    {
+      "path": "contacts cascade list",
+      "summary": "Run the contacts cascade ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts_cascade",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contacts cascade list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/cascade"
+        }
+      ]
+    },
+    {
+      "path": "contacts list",
+      "summary": "Run the contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ]
+    },
+    {
+      "path": "countries list",
+      "summary": "Run the countries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "countries",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm countries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/countries"
+        }
+      ]
+    },
+    {
+      "path": "create action apply",
+      "summary": "Plan and execute the create action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/actions"
+        }
+      ],
+      "risk": "Create a new action; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create attachment apply",
+      "summary": "Plan and execute the create attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_attachment",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/attachments"
+        }
+      ],
+      "risk": "Create a new attachment; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create call apply",
+      "summary": "Plan and execute the create call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_call",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calls"
+        }
+      ],
+      "risk": "Create a call; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create call attachment apply",
+      "summary": "Plan and execute the create call attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_call_attachment",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create call attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calls/{call_id}/attachments"
+        }
+      ],
+      "risk": "Create attachment and assign it to an existing call; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create company field apply",
+      "summary": "Plan and execute the create company field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_company_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create company field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/company_fields"
+        }
+      ],
+      "risk": "Create a new company field; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create company linked contact apply",
+      "summary": "Plan and execute the create company linked contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_company_linked_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create company linked contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{company_id}/linked_contacts"
+        }
+      ],
+      "risk": "Link a contact to a specific company; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact action apply",
+      "summary": "Plan and execute the create contact action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create contact action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/actions"
+        }
+      ],
+      "risk": "Create an action for a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact apply",
+      "summary": "Plan and execute the create contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "risk": "Create a contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact call apply",
+      "summary": "Plan and execute the create contact call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact_call",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create contact call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/calls"
+        }
+      ],
+      "risk": "Create a call for a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact deal apply",
+      "summary": "Plan and execute the create contact deal reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact_deal",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create contact deal apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/deals"
+        }
+      ],
+      "risk": "Create a deal for a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact meeting apply",
+      "summary": "Plan and execute the create contact meeting reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact_meeting",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create contact meeting apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/meetings"
+        }
+      ],
+      "risk": "Create a meeting for a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact note apply",
+      "summary": "Plan and execute the create contact note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact_note",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create contact note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/notes"
+        }
+      ],
+      "risk": "Create a note for a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create contact relationship apply",
+      "summary": "Plan and execute the create contact relationship reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_contact_relationship",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create contact relationship apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/relationships"
+        }
+      ],
+      "risk": "Create a relationships for a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create custom field apply",
+      "summary": "Plan and execute the create custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_custom_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom_fields"
+        }
+      ],
+      "risk": "Create a new custom field; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create deal apply",
+      "summary": "Plan and execute the create deal reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_deal",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create deal apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/deals"
+        }
+      ],
+      "risk": "Create a new deal; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create deal attachment apply",
+      "summary": "Plan and execute the create deal attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_deal_attachment",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create deal attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/deals/{deal_id}/attachments"
+        }
+      ],
+      "risk": "Create attachment and assign it to an existing deal; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create deal field apply",
+      "summary": "Plan and execute the create deal field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_deal_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create deal field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/deal_fields"
+        }
+      ],
+      "risk": "Create a new deal field; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create lead source apply",
+      "summary": "Plan and execute the create lead source reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_lead_source",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create lead source apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/lead_sources"
+        }
+      ],
+      "risk": "Create a new lead source; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create meeting apply",
+      "summary": "Plan and execute the create meeting reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_meeting",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create meeting apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/meetings"
+        }
+      ],
+      "risk": "Create a meeting; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create meeting attachment apply",
+      "summary": "Plan and execute the create meeting attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_meeting_attachment",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create meeting attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/meetings/{meeting_id}/attachments"
+        }
+      ],
+      "risk": "Create attachment and assign it to an existing meeting; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create note apply",
+      "summary": "Plan and execute the create note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_note",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notes"
+        }
+      ],
+      "risk": "Create a new note; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create note attachment apply",
+      "summary": "Plan and execute the create note attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_note_attachment",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create note attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notes/{note_id}/attachments"
+        }
+      ],
+      "risk": "Create attachment and assign it to an existing note; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create predefined action apply",
+      "summary": "Plan and execute the create predefined action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_predefined_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create predefined action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/predefined_actions"
+        }
+      ],
+      "risk": "Create a new predefined action; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create predefined action group apply",
+      "summary": "Plan and execute the create predefined action group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_predefined_action_group",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create predefined action group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/predefined_action_groups"
+        }
+      ],
+      "risk": "Create a new predefined action group; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create predefined item apply",
+      "summary": "Plan and execute the create predefined item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_predefined_item",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create predefined item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/predefined_items"
+        }
+      ],
+      "risk": "Create a new predefined item; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create predefined item group apply",
+      "summary": "Plan and execute the create predefined item group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_predefined_item_group",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create predefined item group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/predefined_item_groups"
+        }
+      ],
+      "risk": "Create a new predefined item group; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create relationship type apply",
+      "summary": "Plan and execute the create relationship type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_relationship_type",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create relationship type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/relationship_types"
+        }
+      ],
+      "risk": "Create a new relationship type; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create status apply",
+      "summary": "Plan and execute the create status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_status",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm create status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/statuses"
+        }
+      ],
+      "risk": "Create a new status; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "custom field list",
+      "summary": "Run the custom field ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm custom field list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_fields/{custom_field_id}"
+        }
+      ]
+    },
+    {
+      "path": "custom fields list",
+      "summary": "Run the custom fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_fields",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm custom fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_fields"
+        }
+      ]
+    },
+    {
+      "path": "deal field list",
+      "summary": "Run the deal field ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deal_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm deal field list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deal_fields/{deal_field_id}"
+        }
+      ]
+    },
+    {
+      "path": "deal fields list",
+      "summary": "Run the deal fields ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deal_fields",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm deal fields list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deal_fields"
+        }
+      ]
+    },
+    {
+      "path": "deal list",
+      "summary": "Run the deal ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deal",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm deal list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals/{deal_id}"
+        }
+      ]
+    },
+    {
+      "path": "deals list",
+      "summary": "Run the deals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "deals",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm deals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/deals"
+        }
+      ]
+    },
+    {
+      "path": "delete action apply",
+      "summary": "Plan and execute the delete action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/actions/{action_id}"
+        }
+      ],
+      "risk": "Delete a specific action; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete attachment apply",
+      "summary": "Plan and execute the delete attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_attachment",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/attachments/{attachment_id}"
+        }
+      ],
+      "risk": "Delete a specific attachment; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete call apply",
+      "summary": "Plan and execute the delete call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_call",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/calls/{call_id}"
+        }
+      ],
+      "risk": "Delete a specific call; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete company field apply",
+      "summary": "Plan and execute the delete company field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_company_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete company field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/company_fields/{company_field_id}"
+        }
+      ],
+      "risk": "Delete a specific company field; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete company linked contact apply",
+      "summary": "Plan and execute the delete company linked contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_company_linked_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete company linked contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/companies/{company_id}/linked_contacts/{contact_id}"
+        }
+      ],
+      "risk": "Unlink a contact from a company; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete company logo apply",
+      "summary": "Plan and execute the delete company logo reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_company_logo",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete company logo apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/companies/{company_id}/logo"
+        }
+      ],
+      "risk": "Delete logo in then given company; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete company synced status apply",
+      "summary": "Plan and execute the delete company synced status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_company_synced_status",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete company synced status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/companies/{company_id}/synced_status"
+        }
+      ],
+      "risk": "Disable company status sync; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete contact apply",
+      "summary": "Plan and execute the delete contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "risk": "Delete a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete contact contact photo apply",
+      "summary": "Plan and execute the delete contact contact photo reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_contact_contact_photo",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete contact contact photo apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{contact_id}/contact_photo"
+        }
+      ],
+      "risk": "Remove a contact's photo; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete contact relationship apply",
+      "summary": "Plan and execute the delete contact relationship reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_contact_relationship",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete contact relationship apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{contact_id}/relationships/{relationship_id}"
+        }
+      ],
+      "risk": "Delete a relationship; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete custom field apply",
+      "summary": "Plan and execute the delete custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_custom_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/custom_fields/{custom_field_id}"
+        }
+      ],
+      "risk": "Delete a specific custom field; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete deal apply",
+      "summary": "Plan and execute the delete deal reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_deal",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete deal apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/deals/{deal_id}"
+        }
+      ],
+      "risk": "Delete a specific deal; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete deal field apply",
+      "summary": "Plan and execute the delete deal field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_deal_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete deal field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/deal_fields/{deal_field_id}"
+        }
+      ],
+      "risk": "Delete a specific deal field; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete lead source apply",
+      "summary": "Plan and execute the delete lead source reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_lead_source",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete lead source apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/lead_sources/{lead_source_id}"
+        }
+      ],
+      "risk": "Delete a specific lead source; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete meeting apply",
+      "summary": "Plan and execute the delete meeting reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_meeting",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete meeting apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/meetings/{meeting_id}"
+        }
+      ],
+      "risk": "Delete a specific meeting; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete note apply",
+      "summary": "Plan and execute the delete note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_note",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/notes/{note_id}"
+        }
+      ],
+      "risk": "Delete a specific note; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete predefined action apply",
+      "summary": "Plan and execute the delete predefined action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_predefined_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete predefined action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/predefined_actions/{predefined_action_id}"
+        }
+      ],
+      "risk": "Delete a specific predefined action; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete predefined action group apply",
+      "summary": "Plan and execute the delete predefined action group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_predefined_action_group",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete predefined action group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/predefined_action_groups/{predefined_action_group_id}"
+        }
+      ],
+      "risk": "Delete a specific predefined action group; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete predefined item apply",
+      "summary": "Plan and execute the delete predefined item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_predefined_item",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete predefined item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/predefined_items/{predefined_item_id}"
+        }
+      ],
+      "risk": "Delete a specific predefined item; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete predefined item group apply",
+      "summary": "Plan and execute the delete predefined item group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_predefined_item_group",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete predefined item group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/predefined_item_groups/{predefined_item_group_id}"
+        }
+      ],
+      "risk": "Delete a specific predefined item group; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete relationship type apply",
+      "summary": "Plan and execute the delete relationship type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_relationship_type",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete relationship type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/relationship_types/{relationship_type_id}"
+        }
+      ],
+      "risk": "Delete a relationship type; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete status apply",
+      "summary": "Plan and execute the delete status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_status",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/statuses/{status_id}"
+        }
+      ],
+      "risk": "Delete a specific status; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "delete webhook apply",
+      "summary": "Plan and execute the delete webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "delete_webhook",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm delete webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "Delete a specific webhook; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "enable company synced status apply",
+      "summary": "Plan and execute the enable company synced status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "enable_company_synced_status",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm enable company synced status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{company_id}/synced_status"
+        }
+      ],
+      "risk": "Enable company status sync; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "filter list",
+      "summary": "Run the filter ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "filter",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm filter list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filters/{filter_id}"
+        }
+      ]
+    },
+    {
+      "path": "filtered contacts list",
+      "summary": "Run the filtered contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "filtered_contacts",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm filtered contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/filters/{filter_id}"
+        }
+      ]
+    },
+    {
+      "path": "filters list",
+      "summary": "Run the filters ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "filters",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm filters list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/filters"
+        }
+      ]
+    },
+    {
+      "path": "force close sales cycle contact apply",
+      "summary": "Plan and execute the force close sales cycle contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "force_close_sales_cycle_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm force close sales cycle contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/force_close_sales_cycle"
+        }
+      ],
+      "risk": "Force close the sales cycle for a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "lead source list",
+      "summary": "Run the lead source ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_source",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm lead source list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lead_sources/{lead_source_id}"
+        }
+      ]
+    },
+    {
+      "path": "lead sources list",
+      "summary": "Run the lead sources ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "lead_sources",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm lead sources list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/lead_sources"
+        }
+      ]
+    },
+    {
+      "path": "mark all notifications as read apply",
+      "summary": "Plan and execute the mark all notifications as read reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "mark_all_notifications_as_read",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm mark all notifications as read apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notifications/mark_all_as_read"
+        }
+      ],
+      "risk": "Marks all users' notifications as read; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "mark as done action apply",
+      "summary": "Plan and execute the mark as done action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "mark_as_done_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm mark as done action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/actions/{action_id}/mark_as_done"
+        }
+      ],
+      "risk": "Mark a specific action as complete; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "mark as read notification apply",
+      "summary": "Plan and execute the mark as read notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "mark_as_read_notification",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm mark as read notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/notifications/{notification_id}/mark_as_read"
+        }
+      ],
+      "risk": "Marks given notification as read; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "meeting list",
+      "summary": "Run the meeting ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "meeting",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm meeting list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/meetings/{meeting_id}"
+        }
+      ]
+    },
+    {
+      "path": "meetings list",
+      "summary": "Run the meetings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "meetings",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm meetings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/meetings"
+        }
+      ]
+    },
+    {
+      "path": "note list",
+      "summary": "Run the note ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "note",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm note list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes/{note_id}"
+        }
+      ]
+    },
+    {
+      "path": "notes list",
+      "summary": "Run the notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notes",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes"
+        }
+      ]
+    },
+    {
+      "path": "notification list",
+      "summary": "Run the notification ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notification",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm notification list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notifications/{notification_id}"
+        }
+      ]
+    },
+    {
+      "path": "notifications list",
+      "summary": "Run the notifications ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notifications",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm notifications list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notifications"
+        }
+      ]
+    },
+    {
+      "path": "pin attachment apply",
+      "summary": "Plan and execute the pin attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "pin_attachment",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm pin attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/attachments/{attachment_id}/pin"
+        }
+      ],
+      "risk": "Pin attachment to its owner contact through its note/call/deal; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "pipeline list",
+      "summary": "Run the pipeline ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pipeline",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm pipeline list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines/{pipeline_id}"
+        }
+      ]
+    },
+    {
+      "path": "pipelines list",
+      "summary": "Run the pipelines ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pipelines",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm pipelines list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/pipelines"
+        }
+      ]
+    },
+    {
+      "path": "predefined action group list",
+      "summary": "Run the predefined action group ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "predefined_action_group",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm predefined action group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/predefined_action_groups/{predefined_action_group_id}"
+        }
+      ]
+    },
+    {
+      "path": "predefined action groups list",
+      "summary": "Run the predefined action groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "predefined_action_groups",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm predefined action groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/predefined_action_groups"
+        }
+      ]
+    },
+    {
+      "path": "predefined action list",
+      "summary": "Run the predefined action ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "predefined_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm predefined action list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/predefined_actions/{predefined_action_id}"
+        }
+      ]
+    },
+    {
+      "path": "predefined actions list",
+      "summary": "Run the predefined actions ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "predefined_actions",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm predefined actions list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/predefined_actions"
+        }
+      ]
+    },
+    {
+      "path": "predefined item group list",
+      "summary": "Run the predefined item group ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "predefined_item_group",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm predefined item group list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/predefined_item_groups/{predefined_item_group_id}"
+        }
+      ]
+    },
+    {
+      "path": "predefined item groups list",
+      "summary": "Run the predefined item groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "predefined_item_groups",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm predefined item groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/predefined_item_groups"
+        }
+      ]
+    },
+    {
+      "path": "predefined item list",
+      "summary": "Run the predefined item ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "predefined_item",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm predefined item list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/predefined_items/{predefined_item_id}"
+        }
+      ]
+    },
+    {
+      "path": "predefined items list",
+      "summary": "Run the predefined items ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "predefined_items",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm predefined items list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/predefined_items"
+        }
+      ]
+    },
+    {
+      "path": "promote action apply",
+      "summary": "Plan and execute the promote action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "promote_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm promote action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/actions/{action_id}/promote"
+        }
+      ],
+      "risk": "Specify action to be promoted as the logged API users next action; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "relationship type list",
+      "summary": "Run the relationship type ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "relationship_type",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm relationship type list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/relationship_types/{relationship_type_id}"
+        }
+      ]
+    },
+    {
+      "path": "relationship types list",
+      "summary": "Run the relationship types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "relationship_types",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm relationship types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/relationship_types"
+        }
+      ]
+    },
+    {
+      "path": "reopen sales cycle contact apply",
+      "summary": "Plan and execute the reopen sales cycle contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "reopen_sales_cycle_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm reopen sales cycle contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/reopen_sales_cycle"
+        }
+      ],
+      "risk": "Reopen the sales cycle for a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "revert promotion action apply",
+      "summary": "Plan and execute the revert promotion action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "revert_promotion_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm revert promotion action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/actions/{action_id}/revert_promotion"
+        }
+      ],
+      "risk": "Undo action promotion; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "save contact to google contacts apply",
+      "summary": "Plan and execute the save contact to google contacts reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "save_contact_to_google_contacts",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm save contact to google contacts apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/google_contacts"
+        }
+      ],
+      "risk": "Save a specific OnePageCRM contact to Google Contacts; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "split contact apply",
+      "summary": "Plan and execute the split contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "split_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm split contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/split"
+        }
+      ],
+      "risk": "Split a contact from their current company (and potentially to a new company); external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "star contact apply",
+      "summary": "Plan and execute the star contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "star_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm star contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/star"
+        }
+      ],
+      "risk": "Apply a star to a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "status list",
+      "summary": "Run the status ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "status",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm status list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statuses/{status_id}"
+        }
+      ]
+    },
+    {
+      "path": "statuses list",
+      "summary": "Run the statuses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "statuses",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm statuses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/statuses"
+        }
+      ]
+    },
+    {
+      "path": "swap action apply",
+      "summary": "Plan and execute the swap action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "swap_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm swap action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/actions/{action_id}/swap"
+        }
+      ],
+      "risk": "Specify action to be swapped in as the logged API users next action; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "team stream list",
+      "summary": "Run the team stream ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team_stream",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm team stream list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/team_stream"
+        }
+      ]
+    },
+    {
+      "path": "unassign action apply",
+      "summary": "Plan and execute the unassign action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unassign_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm unassign action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/actions/{action_id}/unassign"
+        }
+      ],
+      "risk": "Unassign a specific action (from the currently assigned user); external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unassign contact tag apply",
+      "summary": "Plan and execute the unassign contact tag reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unassign_contact_tag",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm unassign contact tag apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/unassign_tag/{tag_name}"
+        }
+      ],
+      "risk": "Remove a tag from a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "undo completion action apply",
+      "summary": "Plan and execute the undo completion action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "undo_completion_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm undo completion action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/actions/{action_id}/undo_completion"
+        }
+      ],
+      "risk": "Undo action completion; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unpin attachment apply",
+      "summary": "Plan and execute the unpin attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unpin_attachment",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm unpin attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/attachments/{attachment_id}/unpin"
+        }
+      ],
+      "risk": "Unpin attachment from its owner contact through its note/call/deal; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "unstar contact apply",
+      "summary": "Plan and execute the unstar contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "unstar_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm unstar contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/unstar"
+        }
+      ],
+      "risk": "Remove star from a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update action apply",
+      "summary": "Plan and execute the update action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/actions/{action_id}"
+        }
+      ],
+      "risk": "Update a specific action; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update attachment apply",
+      "summary": "Plan and execute the update attachment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_attachment",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update attachment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/attachments/{attachment_id}"
+        }
+      ],
+      "risk": "Sets/updates attachment custom file name; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update call apply",
+      "summary": "Plan and execute the update call reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_call",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update call apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/calls/{call_id}"
+        }
+      ],
+      "risk": "Update a specific call; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update company apply",
+      "summary": "Plan and execute the update company reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_company",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update company apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/companies/{company_id}"
+        }
+      ],
+      "risk": "Update a specific company; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update company field apply",
+      "summary": "Plan and execute the update company field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_company_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update company field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/company_fields/{company_field_id}"
+        }
+      ],
+      "risk": "Update a specific company field; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update contact apply",
+      "summary": "Plan and execute the update contact reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_contact",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update contact apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "risk": "Update a specific contact; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update custom field apply",
+      "summary": "Plan and execute the update custom field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_custom_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update custom field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/custom_fields/{custom_field_id}"
+        }
+      ],
+      "risk": "Update a specific custom field; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update deal apply",
+      "summary": "Plan and execute the update deal reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_deal",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update deal apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/deals/{deal_id}"
+        }
+      ],
+      "risk": "Update a specific deal; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update deal field apply",
+      "summary": "Plan and execute the update deal field reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_deal_field",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update deal field apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/deal_fields/{deal_field_id}"
+        }
+      ],
+      "risk": "Update a specific deal field; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update lead source apply",
+      "summary": "Plan and execute the update lead source reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_lead_source",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update lead source apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/lead_sources/{lead_source_id}"
+        }
+      ],
+      "risk": "Update a specific lead source; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update meeting apply",
+      "summary": "Plan and execute the update meeting reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_meeting",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update meeting apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/meetings/{meeting_id}"
+        }
+      ],
+      "risk": "Update a specific meeting; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update note apply",
+      "summary": "Plan and execute the update note reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_note",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update note apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/notes/{note_id}"
+        }
+      ],
+      "risk": "Update a specific note; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update predefined action apply",
+      "summary": "Plan and execute the update predefined action reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_predefined_action",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update predefined action apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/predefined_actions/{predefined_action_id}"
+        }
+      ],
+      "risk": "Update a specific predefined action; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update predefined action group apply",
+      "summary": "Plan and execute the update predefined action group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_predefined_action_group",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update predefined action group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/predefined_action_groups/{predefined_action_group_id}"
+        }
+      ],
+      "risk": "Update a specific predefined action group; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update predefined item apply",
+      "summary": "Plan and execute the update predefined item reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_predefined_item",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update predefined item apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/predefined_items/{predefined_item_id}"
+        }
+      ],
+      "risk": "Update a specific predefined item; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update relationship apply",
+      "summary": "Plan and execute the update relationship reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_relationship",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update relationship apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}/relationships/{relationship_id}"
+        }
+      ],
+      "risk": "Update a specific relationship; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update relationship type apply",
+      "summary": "Plan and execute the update relationship type reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_relationship_type",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update relationship type apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/relationship_types/{relationship_type_id}"
+        }
+      ],
+      "risk": "Update a specific relationship type; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update status apply",
+      "summary": "Plan and execute the update status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_status",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/statuses/{status_id}"
+        }
+      ],
+      "risk": "Update a specific status; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "update_user",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{user_id}"
+        }
+      ],
+      "risk": "Update a specific user; external OnePageCRM mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "user list",
+      "summary": "Run the user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{user_id}"
+        }
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users"
+        }
+      ]
+    },
+    {
+      "path": "webhook list",
+      "summary": "Run the webhook ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhook",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm webhook list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks/{webhook_id}"
+        }
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "Run the webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "source_url": "https://raw.githubusercontent.com/OnePageCRM/swagger/master/swagger.yaml",
+      "examples": [
+        "pm onepagecrm webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/webhooks"
+        }
+      ]
+    }
+  ]
+}

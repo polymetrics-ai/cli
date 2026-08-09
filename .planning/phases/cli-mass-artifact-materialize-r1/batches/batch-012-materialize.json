@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-012-manifest.json",
+  "candidates": 18,
+  "included": [],
+  "dropped": [
+    {
+      "connector": "adjust",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "alpha-vantage",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "amazon-sqs",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "ashby",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "assemblyai",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://www.assemblyai.com/api-reference/overview\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://www.assemblyai.com/docs\" failed: artifact operation inventory is unknown: official reference link \"https://www.assemblyai.com/api-reference/overview\" could not be fetched: fetch artifact: provider returned HTTP 404"
+    },
+    {
+      "connector": "awin-advertiser",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 1 operation(s), below the ledger's 11; official reference fallback \"https://help.awin.com/advertisers/docs/en/awins-apis-overview\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "aws-cloudtrail",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "bamboo-hr",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "braze",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://www.braze.com/docs/api/api_campaigns/transactional_api_campaign/index.md\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://www.braze.com/docs/api/home/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "bunny-inc",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://docs.bunny.com/developer\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "churnkey",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://docs.churnkey.co/data-integrations/data-api\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "dynamodb",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "fillout",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "freshchat",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "mixpanel",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "notion",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference link \"https://developers.notion.com/reference/query-a-data-source\" could not be fetched: fetch artifact: response exceeds 16777216-byte artifact limit"
+    },
+    {
+      "connector": "retailexpress-by-maropost",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://developer.retailexpress.com.au/getting-started\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "segment",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://docs.segmentapis.com/\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document"
+    }
+  ]
+}

@@ -1,74 +1,2363 @@
 {
-  "api": "Float v3 REST API (https://developer.float.com/)",
+  "api": "Float v3 REST API (https://developer.float.com/); provider artifact version: Float Developer API 3.0.0 (Swagger 2.0)",
   "docs": "https://dev.float.com/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (people, projects, clients, tasks, departments); Float is read-only in legacy, no writes are modeled.",
+  "reviewed_at": "2026-08-08",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited swagger artifact (102 documented operations across 24 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "float-artifact-2026-08-08",
+      "url": "https://developer.float.com/swagger-api-v3.yaml",
+      "kind": "swagger",
+      "version": "2.0",
+      "retrieved_at": "2026-08-08",
+      "sha256": "d204eae066136386aea4ea955fb9d0d08ef9ca85eafabc2bb2dcd30b8751211c"
+    },
+    {
+      "id": "float-artifact-ref-2e691f4a39dee0bb-0c03909be18d1886",
+      "url": "https://developer.float.com/paths/accounts.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "2e691f4a39dee0bb5b4521f06ff92e0edea7e63fca1291d6541299fc81423b7d"
+    },
+    {
+      "id": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
+      "url": "https://developer.float.com/paths/clients.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96"
+    },
+    {
+      "id": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
+      "url": "https://developer.float.com/paths/currencies.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57"
+    },
+    {
+      "id": "float-artifact-ref-7d110518b2b3c1c6-812f95a6f49ec720",
+      "url": "https://developer.float.com/paths/deleted.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "7d110518b2b3c1c6ef20ce7cb37343c89661ee251641ca47c8023f140213f89f"
+    },
+    {
+      "id": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
+      "url": "https://developer.float.com/paths/departments.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe"
+    },
+    {
+      "id": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
+      "url": "https://developer.float.com/paths/holidays.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5"
+    },
+    {
+      "id": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
+      "url": "https://developer.float.com/paths/loggedtime.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd"
+    },
+    {
+      "id": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
+      "url": "https://developer.float.com/paths/milestones.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6"
+    },
+    {
+      "id": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
+      "url": "https://developer.float.com/paths/people.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c"
+    },
+    {
+      "id": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
+      "url": "https://developer.float.com/paths/phases.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061"
+    },
+    {
+      "id": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
+      "url": "https://developer.float.com/paths/project-expenses.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed"
+    },
+    {
+      "id": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
+      "url": "https://developer.float.com/paths/project-stages.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1"
+    },
+    {
+      "id": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
+      "url": "https://developer.float.com/paths/project-tasks.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f"
+    },
+    {
+      "id": "float-artifact-ref-759441a5cf64e2b0-5ed7ec8392fa0535",
+      "url": "https://developer.float.com/paths/project-templates.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "759441a5cf64e2b0bfbd3eaeef3a965fcdcd294a2ee278958e68ef6887b179ee"
+    },
+    {
+      "id": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
+      "url": "https://developer.float.com/paths/projects.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e"
+    },
+    {
+      "id": "float-artifact-ref-55e014ac4325d1e9-0cc13ec5103551bf",
+      "url": "https://developer.float.com/paths/publicholidays.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "55e014ac4325d1e9f33c0f5b5e0514d89270d8487344b0201166e5f9829d5cb2"
+    },
+    {
+      "id": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
+      "url": "https://developer.float.com/paths/rate-cards.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286"
+    },
+    {
+      "id": "float-artifact-ref-dd53ef84c8c11e53-8f6bf3a972c2908b",
+      "url": "https://developer.float.com/paths/reports.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "dd53ef84c8c11e53edbd99f892eb94153ecca772d329c1145a1947b21468423d"
+    },
+    {
+      "id": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
+      "url": "https://developer.float.com/paths/roles.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf"
+    },
+    {
+      "id": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
+      "url": "https://developer.float.com/paths/statuses.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d"
+    },
+    {
+      "id": "float-artifact-ref-b5e148795294c788-411814baad557103",
+      "url": "https://developer.float.com/paths/tasks.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5"
+    },
+    {
+      "id": "float-artifact-ref-34cc76b9c72b3e44-0bf1dde1864d101b",
+      "url": "https://developer.float.com/paths/timeofftypes.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "34cc76b9c72b3e4427a7c2ceb438beeb55c9377bb432f87dffa8efca34e24f90"
+    },
+    {
+      "id": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
+      "url": "https://developer.float.com/paths/timeoffs.yaml",
+      "kind": "referenced-document",
+      "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+      "retrieved_at": "2026-08-08",
+      "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/people",
-      "covered_by": {
-        "stream": "people"
+      "path": "/accounts",
+      "provenance": {
+        "artifact": "float-artifact-ref-2e691f4a39dee0bb-0c03909be18d1886",
+        "source_url": "https://developer.float.com/paths/accounts.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "2e691f4a39dee0bb5b4521f06ff92e0edea7e63fca1291d6541299fc81423b7d",
+        "coordinate": "#/accounts/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
-      "path": "/projects",
-      "covered_by": {
-        "stream": "projects"
+      "path": "/accounts/{account_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-2e691f4a39dee0bb-0c03909be18d1886",
+        "source_url": "https://developer.float.com/paths/accounts.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "2e691f4a39dee0bb5b4521f06ff92e0edea7e63fca1291d6541299fc81423b7d",
+        "coordinate": "#/account-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/allocations",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "float-artifact-2026-08-08",
+        "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+        "source_kind": "swagger",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "d204eae066136386aea4ea955fb9d0d08ef9ca85eafabc2bb2dcd30b8751211c",
+        "coordinate": "existing-surface[GET /allocations]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "scheduling/allocation data not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/clients",
+      "provenance": {
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
+        "source_url": "https://developer.float.com/paths/clients.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
+        "coordinate": "#/clients/get"
+      },
       "covered_by": {
         "stream": "clients"
       }
     },
     {
+      "method": "POST",
+      "path": "/clients",
+      "provenance": {
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
+        "source_url": "https://developer.float.com/paths/clients.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
+        "coordinate": "#/clients/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
-      "path": "/tasks",
-      "covered_by": {
-        "stream": "tasks"
+      "path": "/clients/{client_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
+        "source_url": "https://developer.float.com/paths/clients.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
+        "coordinate": "#/clients-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/clients/{client_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
+        "source_url": "https://developer.float.com/paths/clients.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
+        "coordinate": "#/clients-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/clients/{client_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-4c2b23c1c0a7044f-98f200a00c84573f",
+        "source_url": "https://developer.float.com/paths/clients.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4c2b23c1c0a7044fd44748b90db13f63b41af5c0d019cb6e4690a03511c13b96",
+        "coordinate": "#/clients-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/currencies",
+      "provenance": {
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
+        "source_url": "https://developer.float.com/paths/currencies.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
+        "coordinate": "#/currencies/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/currencies",
+      "provenance": {
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
+        "source_url": "https://developer.float.com/paths/currencies.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
+        "coordinate": "#/currencies/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/currencies/{currency_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
+        "source_url": "https://developer.float.com/paths/currencies.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
+        "coordinate": "#/currencies-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/currencies/{currency_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
+        "source_url": "https://developer.float.com/paths/currencies.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
+        "coordinate": "#/currencies-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/currencies/{currency_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-4efb46b5a96bc526-4ac23d7cbec6e5f1",
+        "source_url": "https://developer.float.com/paths/currencies.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "4efb46b5a96bc526ab255c493e2f4e6c7a21f12890c5577ac44830ed51a8bb57",
+        "coordinate": "#/currencies-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/deleted/logged-time",
+      "provenance": {
+        "artifact": "float-artifact-ref-7d110518b2b3c1c6-812f95a6f49ec720",
+        "source_url": "https://developer.float.com/paths/deleted.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7d110518b2b3c1c6ef20ce7cb37343c89661ee251641ca47c8023f140213f89f",
+        "coordinate": "#/deleted-logged-time/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/deleted/tasks",
+      "provenance": {
+        "artifact": "float-artifact-ref-7d110518b2b3c1c6-812f95a6f49ec720",
+        "source_url": "https://developer.float.com/paths/deleted.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7d110518b2b3c1c6ef20ce7cb37343c89661ee251641ca47c8023f140213f89f",
+        "coordinate": "#/deleted-tasks/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/deleted/timeoffs",
+      "provenance": {
+        "artifact": "float-artifact-ref-7d110518b2b3c1c6-812f95a6f49ec720",
+        "source_url": "https://developer.float.com/paths/deleted.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "7d110518b2b3c1c6ef20ce7cb37343c89661ee251641ca47c8023f140213f89f",
+        "coordinate": "#/deleted-timeoffs/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/departments",
+      "provenance": {
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
+        "source_url": "https://developer.float.com/paths/departments.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
+        "coordinate": "#/departments/get"
+      },
       "covered_by": {
         "stream": "departments"
       }
     },
     {
       "method": "POST",
-      "path": "/people",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented people writes; not implemented in this bundle"
+      "path": "/departments",
+      "provenance": {
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
+        "source_url": "https://developer.float.com/paths/departments.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
+        "coordinate": "#/departments/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/allocations",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "scheduling/allocation data not modeled by legacy; not implemented in this bundle"
+      "path": "/departments/{department_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
+        "source_url": "https://developer.float.com/paths/departments.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
+        "coordinate": "#/departments-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/departments/{department_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
+        "source_url": "https://developer.float.com/paths/departments.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
+        "coordinate": "#/departments-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/departments/{department_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-0cb807ec3add5fd5-5758df3277c5102b",
+        "source_url": "https://developer.float.com/paths/departments.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0cb807ec3add5fd5f8e17944b2d7b7ad85548403c5538dfa095420503fc6efbe",
+        "coordinate": "#/departments-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/holidays",
+      "provenance": {
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
+        "source_url": "https://developer.float.com/paths/holidays.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
+        "coordinate": "#/holidays/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/holidays",
+      "provenance": {
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
+        "source_url": "https://developer.float.com/paths/holidays.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
+        "coordinate": "#/holidays/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/holidays/{holiday_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
+        "source_url": "https://developer.float.com/paths/holidays.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
+        "coordinate": "#/holidays-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/holidays/{holiday_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
+        "source_url": "https://developer.float.com/paths/holidays.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
+        "coordinate": "#/holidays-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/holidays/{holiday_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-23f5285165116540-2128da558cd2a95a",
+        "source_url": "https://developer.float.com/paths/holidays.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "23f52851651165402f692524357d0584e9fc2ad327a9c552f34a2345712ea7e5",
+        "coordinate": "#/holidays-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/logged-time",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "timesheet data not modeled by legacy; not implemented in this bundle"
+      "provenance": {
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
+        "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
+        "coordinate": "#/logged-time/get"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "timesheet data not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/logged-time",
+      "provenance": {
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
+        "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
+        "coordinate": "#/logged-time/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/logged-time/{logged_time_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
+        "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
+        "coordinate": "#/logged-time-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/logged-time/{logged_time_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
+        "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
+        "coordinate": "#/logged-time-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/logged-time/{logged_time_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-58b20f69f076082f-64975f61a91c5c79",
+        "source_url": "https://developer.float.com/paths/loggedtime.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "58b20f69f076082fce22fdbe4ccb7b81d47bffe40f908078840e2980cab523bd",
+        "coordinate": "#/logged-time-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/milestones",
+      "provenance": {
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
+        "source_url": "https://developer.float.com/paths/milestones.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
+        "coordinate": "#/milestones/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/milestones",
+      "provenance": {
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
+        "source_url": "https://developer.float.com/paths/milestones.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
+        "coordinate": "#/milestones/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/milestones/{milestone_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
+        "source_url": "https://developer.float.com/paths/milestones.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
+        "coordinate": "#/milestones-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/milestones/{milestone_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
+        "source_url": "https://developer.float.com/paths/milestones.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
+        "coordinate": "#/milestones-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/milestones/{milestone_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-b542db62ff7ed61b-ecadcfdc95d0eed2",
+        "source_url": "https://developer.float.com/paths/milestones.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b542db62ff7ed61bfa862b98c476d16a75d5047bce20dda1de19ae33c188dbd6",
+        "coordinate": "#/milestones-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people",
+      "provenance": {
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
+        "source_url": "https://developer.float.com/paths/people.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
+        "coordinate": "#/people/get"
+      },
+      "covered_by": {
+        "stream": "people"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/people",
+      "provenance": {
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
+        "source_url": "https://developer.float.com/paths/people.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
+        "coordinate": "#/people/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "legacy connector never implemented people writes; not implemented in this bundle",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{people_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
+        "source_url": "https://developer.float.com/paths/people.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
+        "coordinate": "#/people-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/people/{people_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
+        "source_url": "https://developer.float.com/paths/people.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
+        "coordinate": "#/people-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/people/{people_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-3ad7c05d2ae1ef93-2cc348f6d8def049",
+        "source_url": "https://developer.float.com/paths/people.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3ad7c05d2ae1ef938af53273d4202fec8ec33984f2b5e0d7b76dd481c870c73c",
+        "coordinate": "#/people-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phases",
+      "provenance": {
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
+        "source_url": "https://developer.float.com/paths/phases.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
+        "coordinate": "#/phases/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/phases",
+      "provenance": {
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
+        "source_url": "https://developer.float.com/paths/phases.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
+        "coordinate": "#/phases/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/phases/{phase_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
+        "source_url": "https://developer.float.com/paths/phases.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
+        "coordinate": "#/phases-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/phases/{phase_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
+        "source_url": "https://developer.float.com/paths/phases.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
+        "coordinate": "#/phases-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/phases/{phase_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-3189cd8cd5e67511-4c385c160e01b0d8",
+        "source_url": "https://developer.float.com/paths/phases.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "3189cd8cd5e67511fdd4d51a0f92d003fac79c835ae393d47bffceda73c39061",
+        "coordinate": "#/phases-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project-expenses",
+      "provenance": {
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
+        "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
+        "coordinate": "#/project-expenses/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/project-expenses",
+      "provenance": {
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
+        "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
+        "coordinate": "#/project-expenses/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project-expenses/{project_expense_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
+        "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
+        "coordinate": "#/project-expenses-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/project-expenses/{project_expense_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
+        "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
+        "coordinate": "#/project-expenses-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/project-expenses/{project_expense_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-778d4dad8a1dfccc-3923c81f3b3b16f9",
+        "source_url": "https://developer.float.com/paths/project-expenses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "778d4dad8a1dfccc6c47bcbe94e28c45c349f0f26f736569ec73499d584c69ed",
+        "coordinate": "#/project-expenses-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project-stages",
+      "provenance": {
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
+        "source_url": "https://developer.float.com/paths/project-stages.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
+        "coordinate": "#/project-stages/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/project-stages",
+      "provenance": {
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
+        "source_url": "https://developer.float.com/paths/project-stages.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
+        "coordinate": "#/project-stages/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project-stages/{id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
+        "source_url": "https://developer.float.com/paths/project-stages.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
+        "coordinate": "#/project-stages-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/project-stages/{id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
+        "source_url": "https://developer.float.com/paths/project-stages.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
+        "coordinate": "#/project-stages-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/project-stages/{id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-a708054049a896e6-aa9aab171845fb73",
+        "source_url": "https://developer.float.com/paths/project-stages.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "a708054049a896e65b5e2938d9ed1c101aa500c05156d91f0f80bf8212e1cfa1",
+        "coordinate": "#/project-stages-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project-tasks",
+      "provenance": {
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
+        "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
+        "coordinate": "#/project-tasks/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/project-tasks",
+      "provenance": {
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
+        "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
+        "coordinate": "#/project-tasks/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/project-tasks/merge",
+      "provenance": {
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
+        "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
+        "coordinate": "#/project-tasks-merge/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project-tasks/{project_task_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
+        "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
+        "coordinate": "#/project-task-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/project-tasks/{project_task_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
+        "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
+        "coordinate": "#/project-task-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/project-tasks/{project_task_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-881440dfabb211a7-ec7c65491be1956b",
+        "source_url": "https://developer.float.com/paths/project-tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "881440dfabb211a746ccf7e04f8d2032b6cb530a03ed2d0a3a1472f67224695f",
+        "coordinate": "#/project-task-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project-templates",
+      "provenance": {
+        "artifact": "float-artifact-ref-759441a5cf64e2b0-5ed7ec8392fa0535",
+        "source_url": "https://developer.float.com/paths/project-templates.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "759441a5cf64e2b0bfbd3eaeef3a965fcdcd294a2ee278958e68ef6887b179ee",
+        "coordinate": "#/project-templates/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/project-templates/{project_template_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-759441a5cf64e2b0-5ed7ec8392fa0535",
+        "source_url": "https://developer.float.com/paths/project-templates.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "759441a5cf64e2b0bfbd3eaeef3a965fcdcd294a2ee278958e68ef6887b179ee",
+        "coordinate": "#/project-templates-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects",
+      "provenance": {
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
+        "source_url": "https://developer.float.com/paths/projects.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
+        "coordinate": "#/projects/get"
+      },
+      "covered_by": {
+        "stream": "projects"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects",
+      "provenance": {
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
+        "source_url": "https://developer.float.com/paths/projects.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
+        "coordinate": "#/projects/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/projects/from-template/{project_template_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-759441a5cf64e2b0-5ed7ec8392fa0535",
+        "source_url": "https://developer.float.com/paths/project-templates.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "759441a5cf64e2b0bfbd3eaeef3a965fcdcd294a2ee278958e68ef6887b179ee",
+        "coordinate": "#/projects-from-template/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{project_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
+        "source_url": "https://developer.float.com/paths/projects.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
+        "coordinate": "#/projects-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/projects/{project_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
+        "source_url": "https://developer.float.com/paths/projects.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
+        "coordinate": "#/projects-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/projects/{project_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-1733cd3c5729a0bf-92caa45f782fc2a0",
+        "source_url": "https://developer.float.com/paths/projects.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "1733cd3c5729a0bf43bfd0caa02c302deeca66f47c7b04d4dbcf05b0afe01b2e",
+        "coordinate": "#/projects-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public-holidays",
+      "provenance": {
+        "artifact": "float-artifact-ref-55e014ac4325d1e9-0cc13ec5103551bf",
+        "source_url": "https://developer.float.com/paths/publicholidays.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "55e014ac4325d1e9f33c0f5b5e0514d89270d8487344b0201166e5f9829d5cb2",
+        "coordinate": "#/public-holidays/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/public-holidays/{public_holiday_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-55e014ac4325d1e9-0cc13ec5103551bf",
+        "source_url": "https://developer.float.com/paths/publicholidays.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "55e014ac4325d1e9f33c0f5b5e0514d89270d8487344b0201166e5f9829d5cb2",
+        "coordinate": "#/public-holidays-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rate-cards",
+      "provenance": {
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
+        "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
+        "coordinate": "#/rate-cards/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rate-cards",
+      "provenance": {
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
+        "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
+        "coordinate": "#/rate-cards/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rate-cards/{rate_card_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
+        "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
+        "coordinate": "#/rate-cards-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/rate-cards/{rate_card_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
+        "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
+        "coordinate": "#/rate-cards-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rate-cards/{rate_card_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-ce5a3a3ea2048a04-c6ce79287bbe19e9",
+        "source_url": "https://developer.float.com/paths/rate-cards.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "ce5a3a3ea2048a04aa95e5cbe727b7fcb29f14f90a04aea4cafd2942ec7e7286",
+        "coordinate": "#/rate-cards-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/people",
+      "provenance": {
+        "artifact": "float-artifact-ref-dd53ef84c8c11e53-8f6bf3a972c2908b",
+        "source_url": "https://developer.float.com/paths/reports.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "dd53ef84c8c11e53edbd99f892eb94153ecca772d329c1145a1947b21468423d",
+        "coordinate": "#/reports-people/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/reports/projects",
+      "provenance": {
+        "artifact": "float-artifact-ref-dd53ef84c8c11e53-8f6bf3a972c2908b",
+        "source_url": "https://developer.float.com/paths/reports.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "dd53ef84c8c11e53edbd99f892eb94153ecca772d329c1145a1947b21468423d",
+        "coordinate": "#/reports-projects/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles",
+      "provenance": {
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
+        "source_url": "https://developer.float.com/paths/roles.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
+        "coordinate": "#/roles/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/roles",
+      "provenance": {
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
+        "source_url": "https://developer.float.com/paths/roles.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
+        "coordinate": "#/roles/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/roles/{role_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
+        "source_url": "https://developer.float.com/paths/roles.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
+        "coordinate": "#/role-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/roles/{role_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
+        "source_url": "https://developer.float.com/paths/roles.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
+        "coordinate": "#/role-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/roles/{role_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-9be8a7d2f1e8a54c-c27f827b05d1c1e1",
+        "source_url": "https://developer.float.com/paths/roles.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "9be8a7d2f1e8a54c8637bd834ed7606d954263e32b73cc866b08280f1f3a59cf",
+        "coordinate": "#/role-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status",
+      "provenance": {
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
+        "source_url": "https://developer.float.com/paths/statuses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
+        "coordinate": "#/statuses/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/status",
+      "provenance": {
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
+        "source_url": "https://developer.float.com/paths/statuses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
+        "coordinate": "#/statuses/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/status/{status_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
+        "source_url": "https://developer.float.com/paths/statuses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
+        "coordinate": "#/statuses-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/status/{status_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
+        "source_url": "https://developer.float.com/paths/statuses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
+        "coordinate": "#/statuses-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/status/{status_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-e0cd500f20c6fc37-7b4372a25858fdea",
+        "source_url": "https://developer.float.com/paths/statuses.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "e0cd500f20c6fc37dd060bae227c0b4df099cf1c92fd5c498fc39743025c994d",
+        "coordinate": "#/statuses-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/statuses",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not modeled by legacy; not implemented in this bundle"
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "float-artifact-2026-08-08",
+        "source_url": "https://developer.float.com/swagger-api-v3.yaml",
+        "source_kind": "swagger",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "d204eae066136386aea4ea955fb9d0d08ef9ca85eafabc2bb2dcd30b8751211c",
+        "coordinate": "existing-surface[GET /statuses]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "not modeled by legacy; not implemented in this bundle",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks",
+      "provenance": {
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
+        "source_url": "https://developer.float.com/paths/tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
+        "coordinate": "#/tasks/get"
+      },
+      "covered_by": {
+        "stream": "tasks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tasks",
+      "provenance": {
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
+        "source_url": "https://developer.float.com/paths/tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
+        "coordinate": "#/tasks/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tasks/{task_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
+        "source_url": "https://developer.float.com/paths/tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
+        "coordinate": "#/tasks-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tasks/{task_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
+        "source_url": "https://developer.float.com/paths/tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
+        "coordinate": "#/tasks-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tasks/{task_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-b5e148795294c788-411814baad557103",
+        "source_url": "https://developer.float.com/paths/tasks.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "b5e148795294c7884790c8c2e5b602856e44cbf8b6f8a399a5d20c00ef06c8c5",
+        "coordinate": "#/tasks-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff-types",
+      "provenance": {
+        "artifact": "float-artifact-ref-34cc76b9c72b3e44-0bf1dde1864d101b",
+        "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "34cc76b9c72b3e4427a7c2ceb438beeb55c9377bb432f87dffa8efca34e24f90",
+        "coordinate": "#/timeoff-types/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timeoff-types",
+      "provenance": {
+        "artifact": "float-artifact-ref-34cc76b9c72b3e44-0bf1dde1864d101b",
+        "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "34cc76b9c72b3e4427a7c2ceb438beeb55c9377bb432f87dffa8efca34e24f90",
+        "coordinate": "#/timeoff-types/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoff-types/{timeoff_type_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-34cc76b9c72b3e44-0bf1dde1864d101b",
+        "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "34cc76b9c72b3e4427a7c2ceb438beeb55c9377bb432f87dffa8efca34e24f90",
+        "coordinate": "#/timeoff-types-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/timeoff-types/{timeoff_type_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-34cc76b9c72b3e44-0bf1dde1864d101b",
+        "source_url": "https://developer.float.com/paths/timeofftypes.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "34cc76b9c72b3e4427a7c2ceb438beeb55c9377bb432f87dffa8efca34e24f90",
+        "coordinate": "#/timeoff-types-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoffs",
+      "provenance": {
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
+        "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
+        "coordinate": "#/timeoffs/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/timeoffs",
+      "provenance": {
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
+        "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
+        "coordinate": "#/timeoffs/post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/timeoffs/{timeoff_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
+        "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
+        "coordinate": "#/timeoffs-id/get"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/timeoffs/{timeoff_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
+        "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
+        "coordinate": "#/timeoffs-id/patch"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/timeoffs/{timeoff_id}",
+      "provenance": {
+        "artifact": "float-artifact-ref-0aa24a0881713678-cf4cebcbc321027a",
+        "source_url": "https://developer.float.com/paths/timeoffs.yaml",
+        "source_kind": "referenced-document",
+        "version": "Float Developer API 3.0.0 (Swagger 2.0)",
+        "retrieved_at": "2026-08-08",
+        "sha256": "0aa24a088171367843c790665b59b37d544242b04a42d14986cbdf50a4be85dd",
+        "coordinate": "#/timeoffs-id/delete"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     }
   ]

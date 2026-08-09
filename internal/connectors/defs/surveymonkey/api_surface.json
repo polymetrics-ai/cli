@@ -1,243 +1,32 @@
 {
-  "api": "SurveyMonkey REST API v3 and SCIM API v2 (https://api.surveymonkey.com)",
+  "api": "SurveyMonkey REST API v3 and SCIM API v2 (https://api.surveymonkey.com); provider artifact version: REST API v3 plus SCIM API v2",
   "docs": "https://developer.surveymonkey.com/api/v3/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B full-surface expansion against SurveyMonkey's rendered static API reference fetched from the official developer portal iframe. All 135 documented operations are covered: 82 GET endpoints as streams (REST v3 resources plus SCIM v2 resources) and 53 POST/PUT/PATCH endpoints as write actions. New non-legacy streams use passthrough projection with minimal catalog schemas so the engine preserves the live API response fields instead of pretending a hand-maintained schema is exhaustive. No documented DELETE endpoints were present in the fetched reference.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 135 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion against SurveyMonkey's rendered static API reference fetched from the official developer portal iframe. All 135 documented operations are covered: 82 GET endpoints as streams (REST v3 resources plus SCIM v2 resources) and 53 POST/PUT/PATCH endpoints as write actions. New non-legacy streams use passthrough projection with minimal catalog schemas so the engine preserves the live API response fields instead of pretending a hand-maintained schema is exhaustive. No documented DELETE endpoints were present in the fetched reference.",
+  "artifacts": [
+    {
+      "id": "surveymonkey-artifact-2026-08-09",
+      "url": "https://api.surveymonkey.com/v3/docs",
+      "kind": "html_reference",
+      "version": "REST API v3 plus SCIM API v2",
+      "retrieved_at": "2026-08-09",
+      "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/v3/benchmark_bundles",
-      "covered_by": {
-        "stream": "benchmark_bundles"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/benchmark_bundles/{bundle_id}",
-      "covered_by": {
-        "stream": "benchmark_bundle"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/benchmark_bundles/{id}/analyze",
-      "covered_by": {
-        "stream": "benchmark_bundle_analysis"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}",
-      "covered_by": {
-        "stream": "collector"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}/messages",
-      "covered_by": {
-        "stream": "collector_messages"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}/messages/{message_id}",
-      "covered_by": {
-        "stream": "collector_message"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients",
-      "covered_by": {
-        "stream": "collector_message_recipients"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}/recipients",
-      "covered_by": {
-        "stream": "collector_recipients"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}/responses",
-      "covered_by": {
-        "stream": "collector_responses"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}/responses/{response_id}",
-      "covered_by": {
-        "stream": "collector_response"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}/responses/{response_id}/details",
-      "covered_by": {
-        "stream": "collector_response_details"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}/responses/bulk",
-      "covered_by": {
-        "stream": "collector_bulk_responses"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/collectors/{collector_id}/stats",
-      "covered_by": {
-        "stream": "collector_stats"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/contact_fields",
-      "covered_by": {
-        "stream": "contact_fields"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/contact_fields/{contact_field_id}",
-      "covered_by": {
-        "stream": "contact_field"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/contact_lists",
-      "covered_by": {
-        "stream": "contact_lists"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/contact_lists/{contact_list_id}",
-      "covered_by": {
-        "stream": "contact_list"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/contact_lists/{contact_list_id}/contacts",
-      "covered_by": {
-        "stream": "contact_list_contacts"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/contact_lists/{contact_list_id}/contacts/bulk",
-      "covered_by": {
-        "stream": "contact_list_contacts_bulk"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/contacts",
-      "covered_by": {
-        "stream": "contacts"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/contacts/{contact_id}",
-      "covered_by": {
-        "stream": "contact"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/contacts/bulk",
-      "covered_by": {
-        "stream": "contacts_bulk"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/errors",
-      "covered_by": {
-        "stream": "errors"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/errors/{error_id}",
-      "covered_by": {
-        "stream": "error"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/groups",
-      "covered_by": {
-        "stream": "groups"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/groups/{group_id}",
-      "covered_by": {
-        "stream": "group"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/groups/{group_id}/activities",
-      "covered_by": {
-        "stream": "group_activities"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/groups/{group_id}/activities/{action_type}",
-      "covered_by": {
-        "stream": "group_activities_by_action"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/groups/{group_id}/members",
-      "covered_by": {
-        "stream": "group_members"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/groups/{group_id}/members/{member_id}",
-      "covered_by": {
-        "stream": "group_member"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/organization/{organization_id}",
-      "covered_by": {
-        "stream": "organization"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/organizations",
-      "covered_by": {
-        "stream": "organizations"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/question_bank/questions",
-      "covered_by": {
-        "stream": "question_bank_questions"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/scim/v2/ResourceTypes",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /scim/v2/ResourceTypes]"
+      },
       "covered_by": {
         "stream": "scim_resource_types"
       }
@@ -245,20 +34,31 @@
     {
       "method": "GET",
       "path": "/scim/v2/ResourceTypes/{id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /scim/v2/ResourceTypes/{id}]"
+      },
       "covered_by": {
         "stream": "scim_resource_type"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/roles",
-      "covered_by": {
-        "stream": "roles"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/scim/v2/Schemas",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /scim/v2/Schemas]"
+      },
       "covered_by": {
         "stream": "scim_schemas"
       }
@@ -266,6 +66,15 @@
     {
       "method": "GET",
       "path": "/scim/v2/Schemas/{id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /scim/v2/Schemas/{id}]"
+      },
       "covered_by": {
         "stream": "scim_schema"
       }
@@ -273,433 +82,303 @@
     {
       "method": "GET",
       "path": "/scim/v2/ServiceProviderConfig",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /scim/v2/ServiceProviderConfig]"
+      },
       "covered_by": {
         "stream": "scim_service_provider_config"
       }
     },
     {
       "method": "GET",
-      "path": "/v3/survey_categories",
-      "covered_by": {
-        "stream": "survey_categories"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/survey_folders",
-      "covered_by": {
-        "stream": "survey_folders"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/survey_languages",
-      "covered_by": {
-        "stream": "survey_languages_catalog"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/survey_templates",
-      "covered_by": {
-        "stream": "survey_templates"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys",
-      "covered_by": {
-        "stream": "surveys"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{id}",
-      "covered_by": {
-        "stream": "survey"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{id}/details",
-      "covered_by": {
-        "stream": "survey_details"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/collectors",
-      "covered_by": {
-        "stream": "collectors"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/collectors/{collector_id}/messages/{message_id}/stats",
-      "covered_by": {
-        "stream": "survey_collector_message_stats"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/collectors/{collector_id}/recipients/{recipient_id}",
-      "covered_by": {
-        "stream": "survey_collector_recipient"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/languages",
-      "covered_by": {
-        "stream": "survey_languages"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/languages/{language_code}",
-      "covered_by": {
-        "stream": "survey_language"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/pages",
-      "covered_by": {
-        "stream": "survey_pages"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}",
-      "covered_by": {
-        "stream": "survey_page"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions",
-      "covered_by": {
-        "stream": "survey_questions"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}",
-      "covered_by": {
-        "stream": "survey_question"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/benchmark",
-      "covered_by": {
-        "stream": "question_benchmark"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/rollups",
-      "covered_by": {
-        "stream": "question_rollups"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/trends",
-      "covered_by": {
-        "stream": "question_trends"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}/rollups",
-      "covered_by": {
-        "stream": "page_rollups"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}/trends",
-      "covered_by": {
-        "stream": "page_trends"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/responses",
-      "covered_by": {
-        "stream": "survey_response_summaries"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/responses/{response_id}",
-      "covered_by": {
-        "stream": "survey_response"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/responses/{response_id}/details",
-      "covered_by": {
-        "stream": "survey_response_details"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/responses/bulk",
-      "covered_by": {
-        "stream": "survey_responses"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/rollups",
-      "covered_by": {
-        "stream": "survey_rollups"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/share_list",
-      "covered_by": {
-        "stream": "survey_share_list"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/{survey_id}/trends",
-      "covered_by": {
-        "stream": "survey_trends"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/surveys/search",
-      "covered_by": {
-        "stream": "survey_search"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/team_survey_templates",
-      "covered_by": {
-        "stream": "team_survey_templates"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/scim/v2/Users",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /scim/v2/Users]"
+      },
       "covered_by": {
         "stream": "scim_users"
       }
     },
     {
+      "method": "POST",
+      "path": "/scim/v2/Users",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /scim/v2/Users]"
+      },
+      "covered_by": {
+        "write": "create_scim_user"
+      }
+    },
+    {
       "method": "GET",
       "path": "/scim/v2/Users/{id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /scim/v2/Users/{id}]"
+      },
       "covered_by": {
         "stream": "scim_user"
       }
     },
     {
-      "method": "GET",
-      "path": "/v3/users/{user_id}/shared",
+      "method": "PUT",
+      "path": "/scim/v2/Users/{id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /scim/v2/Users/{id}]"
+      },
       "covered_by": {
-        "stream": "user_shared"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/users/{user_id}/workgroups",
-      "covered_by": {
-        "stream": "user_workgroups"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/users/me",
-      "covered_by": {
-        "stream": "users_me"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/webhooks",
-      "covered_by": {
-        "stream": "webhooks"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/webhooks/{webhook_id}",
-      "covered_by": {
-        "stream": "webhook"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/workgroups",
-      "covered_by": {
-        "stream": "workgroups"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/workgroups/{workgroup_id}",
-      "covered_by": {
-        "stream": "workgroup"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/workgroups/{workgroup_id}/members",
-      "covered_by": {
-        "stream": "workgroup_members"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/workgroups/{workgroup_id}/members/{member_id}",
-      "covered_by": {
-        "stream": "workgroup_member"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/workgroups/{workgroup_id}/shares",
-      "covered_by": {
-        "stream": "workgroup_shares"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v3/workgroups/{workgroup_id}/shares/{share_id}",
-      "covered_by": {
-        "stream": "workgroup_share"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/collectors/{collector_id}",
-      "covered_by": {
-        "write": "update_collector"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/collectors/{collector_id}/messages/{message_id}",
-      "covered_by": {
-        "write": "update_collector_message"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/collectors/{collector_id}/responses/{response_id}",
-      "covered_by": {
-        "write": "update_collector_response"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/contact_fields/{contact_field_id}",
-      "covered_by": {
-        "write": "update_contact_field"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/contact_lists/{contact_list_id}",
-      "covered_by": {
-        "write": "update_contact_list"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/contacts/{contact_id}",
-      "covered_by": {
-        "write": "update_contact"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/groups/{group_id}/members/{member_id}",
-      "covered_by": {
-        "write": "update_group_member"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/organization/{organization_id}",
-      "covered_by": {
-        "write": "update_organization"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/surveys/{id}",
-      "covered_by": {
-        "write": "update_survey"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/surveys/{survey_id}/languages/{language_code}",
-      "covered_by": {
-        "write": "update_survey_language"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}",
-      "covered_by": {
-        "write": "update_survey_page"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v3/surveys/{survey_id}/responses/{response_id}",
-      "covered_by": {
-        "write": "update_survey_response"
+        "write": "replace_scim_user"
       }
     },
     {
       "method": "PATCH",
       "path": "/scim/v2/Users/{id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /scim/v2/Users/{id}]"
+      },
       "covered_by": {
         "write": "update_scim_user"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v3/webhooks/{webhook_id}",
+      "method": "GET",
+      "path": "/v3/benchmark_bundles",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/benchmark_bundles]"
+      },
       "covered_by": {
-        "write": "update_webhook"
+        "stream": "benchmark_bundles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/benchmark_bundles/{bundle_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/benchmark_bundles/{bundle_id}]"
+      },
+      "covered_by": {
+        "stream": "benchmark_bundle"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/benchmark_bundles/{id}/analyze",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/benchmark_bundles/{id}/analyze]"
+      },
+      "covered_by": {
+        "stream": "benchmark_bundle_analysis"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}]"
+      },
+      "covered_by": {
+        "stream": "collector"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/collectors/{collector_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /v3/collectors/{collector_id}]"
+      },
+      "covered_by": {
+        "write": "replace_collector"
       }
     },
     {
       "method": "PATCH",
-      "path": "/v3/workgroups/{workgroup_id}",
+      "path": "/v3/collectors/{collector_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/collectors/{collector_id}]"
+      },
       "covered_by": {
-        "write": "update_workgroup"
+        "write": "update_collector"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/v3/workgroups/{workgroup_id}/members/{member_id}",
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/messages",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}/messages]"
+      },
       "covered_by": {
-        "write": "update_workgroup_member"
+        "stream": "collector_messages"
       }
     },
     {
       "method": "POST",
       "path": "/v3/collectors/{collector_id}/messages",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/collectors/{collector_id}/messages]"
+      },
       "covered_by": {
         "write": "create_collector_message"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}/messages/{message_id}]"
+      },
+      "covered_by": {
+        "stream": "collector_message"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /v3/collectors/{collector_id}/messages/{message_id}]"
+      },
+      "covered_by": {
+        "write": "replace_collector_message"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/collectors/{collector_id}/messages/{message_id}]"
+      },
+      "covered_by": {
+        "write": "update_collector_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}/messages/{message_id}/recipients]"
+      },
+      "covered_by": {
+        "stream": "collector_message_recipients"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/collectors/{collector_id}/messages/{message_id}/recipients]"
+      },
       "covered_by": {
         "write": "create_message_recipient"
       }
@@ -707,6 +386,15 @@
     {
       "method": "POST",
       "path": "/v3/collectors/{collector_id}/messages/{message_id}/recipients/bulk",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/collectors/{collector_id}/messages/{message_id}/recipients/bulk]"
+      },
       "covered_by": {
         "write": "create_message_recipients_bulk"
       }
@@ -714,34 +402,351 @@
     {
       "method": "POST",
       "path": "/v3/collectors/{collector_id}/messages/{message_id}/send",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/collectors/{collector_id}/messages/{message_id}/send]"
+      },
       "covered_by": {
         "write": "send_collector_message"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/recipients",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}/recipients]"
+      },
+      "covered_by": {
+        "stream": "collector_recipients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/responses",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}/responses]"
+      },
+      "covered_by": {
+        "stream": "collector_responses"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/collectors/{collector_id}/responses",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/collectors/{collector_id}/responses]"
+      },
       "covered_by": {
         "write": "create_collector_response"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/responses/bulk",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}/responses/bulk]"
+      },
+      "covered_by": {
+        "stream": "collector_bulk_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/responses/{response_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}/responses/{response_id}]"
+      },
+      "covered_by": {
+        "stream": "collector_response"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/collectors/{collector_id}/responses/{response_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /v3/collectors/{collector_id}/responses/{response_id}]"
+      },
+      "covered_by": {
+        "write": "replace_collector_response"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/collectors/{collector_id}/responses/{response_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/collectors/{collector_id}/responses/{response_id}]"
+      },
+      "covered_by": {
+        "write": "update_collector_response"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/responses/{response_id}/details",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}/responses/{response_id}/details]"
+      },
+      "covered_by": {
+        "stream": "collector_response_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/collectors/{collector_id}/stats",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/collectors/{collector_id}/stats]"
+      },
+      "covered_by": {
+        "stream": "collector_stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_fields",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/contact_fields]"
+      },
+      "covered_by": {
+        "stream": "contact_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_fields/{contact_field_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/contact_fields/{contact_field_id}]"
+      },
+      "covered_by": {
+        "stream": "contact_field"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/contact_fields/{contact_field_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/contact_fields/{contact_field_id}]"
+      },
+      "covered_by": {
+        "write": "update_contact_field"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_lists",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/contact_lists]"
+      },
+      "covered_by": {
+        "stream": "contact_lists"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/contact_lists",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/contact_lists]"
+      },
       "covered_by": {
         "write": "create_contact_list"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/contact_lists/{contact_list_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/contact_lists/{contact_list_id}]"
+      },
+      "covered_by": {
+        "stream": "contact_list"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contact_lists/{contact_list_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /v3/contact_lists/{contact_list_id}]"
+      },
+      "covered_by": {
+        "write": "replace_contact_list"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/contact_lists/{contact_list_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/contact_lists/{contact_list_id}]"
+      },
+      "covered_by": {
+        "write": "update_contact_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/contact_lists/{contact_list_id}/contacts",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/contact_lists/{contact_list_id}/contacts]"
+      },
+      "covered_by": {
+        "stream": "contact_list_contacts"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/contact_lists/{contact_list_id}/contacts",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/contact_lists/{contact_list_id}/contacts]"
+      },
       "covered_by": {
         "write": "add_contact_to_contact_list"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/contact_lists/{contact_list_id}/contacts/bulk",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/contact_lists/{contact_list_id}/contacts/bulk]"
+      },
+      "covered_by": {
+        "stream": "contact_list_contacts_bulk"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/contact_lists/{contact_list_id}/contacts/bulk",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/contact_lists/{contact_list_id}/contacts/bulk]"
+      },
       "covered_by": {
         "write": "add_contacts_to_contact_list_bulk"
       }
@@ -749,6 +754,15 @@
     {
       "method": "POST",
       "path": "/v3/contact_lists/{contact_list_id}/copy",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/contact_lists/{contact_list_id}/copy]"
+      },
       "covered_by": {
         "write": "copy_contact_list"
       }
@@ -756,104 +770,1295 @@
     {
       "method": "POST",
       "path": "/v3/contact_lists/{contact_list_id}/merge",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/contact_lists/{contact_list_id}/merge]"
+      },
       "covered_by": {
         "write": "merge_contact_list"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/contacts",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/contacts]"
+      },
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/contacts",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/contacts]"
+      },
       "covered_by": {
         "write": "create_contact"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/contacts/bulk",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/contacts/bulk]"
+      },
+      "covered_by": {
+        "stream": "contacts_bulk"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/contacts/bulk",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/contacts/bulk]"
+      },
       "covered_by": {
         "write": "create_contacts_bulk"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/contacts/{contact_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/contacts/{contact_id}]"
+      },
+      "covered_by": {
+        "stream": "contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/contacts/{contact_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /v3/contacts/{contact_id}]"
+      },
+      "covered_by": {
+        "write": "replace_contact"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/contacts/{contact_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/contacts/{contact_id}]"
+      },
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/errors",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/errors]"
+      },
+      "covered_by": {
+        "stream": "errors"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/errors/{error_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/errors/{error_id}]"
+      },
+      "covered_by": {
+        "stream": "error"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/groups]"
+      },
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/groups/{group_id}]"
+      },
+      "covered_by": {
+        "stream": "group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}/activities",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/groups/{group_id}/activities]"
+      },
+      "covered_by": {
+        "stream": "group_activities"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}/activities/{action_type}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/groups/{group_id}/activities/{action_type}]"
+      },
+      "covered_by": {
+        "stream": "group_activities_by_action"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}/members",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/groups/{group_id}/members]"
+      },
+      "covered_by": {
+        "stream": "group_members"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/groups/{group_id}/members/{member_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/groups/{group_id}/members/{member_id}]"
+      },
+      "covered_by": {
+        "stream": "group_member"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/groups/{group_id}/members/{member_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/groups/{group_id}/members/{member_id}]"
+      },
+      "covered_by": {
+        "write": "update_group_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/organization/{organization_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/organization/{organization_id}]"
+      },
+      "covered_by": {
+        "stream": "organization"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/organization/{organization_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/organization/{organization_id}]"
+      },
+      "covered_by": {
+        "write": "update_organization"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/organizations",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/organizations]"
+      },
+      "covered_by": {
+        "stream": "organizations"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/organizations",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/organizations]"
+      },
       "covered_by": {
         "write": "create_organization"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/question_bank/questions",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/question_bank/questions]"
+      },
+      "covered_by": {
+        "stream": "question_bank_questions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/roles",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/roles]"
+      },
+      "covered_by": {
+        "stream": "roles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey_categories",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/survey_categories]"
+      },
+      "covered_by": {
+        "stream": "survey_categories"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey_folders",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/survey_folders]"
+      },
+      "covered_by": {
+        "stream": "survey_folders"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/survey_folders",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/survey_folders]"
+      },
       "covered_by": {
         "write": "create_survey_folder"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/survey_languages",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/survey_languages]"
+      },
+      "covered_by": {
+        "stream": "survey_languages_catalog"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/survey_templates",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/survey_templates]"
+      },
+      "covered_by": {
+        "stream": "survey_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys]"
+      },
+      "covered_by": {
+        "stream": "surveys"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/surveys",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/surveys]"
+      },
       "covered_by": {
         "write": "create_survey"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/surveys/search",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/search]"
+      },
+      "covered_by": {
+        "stream": "survey_search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{id}]"
+      },
+      "covered_by": {
+        "stream": "survey"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/surveys/{id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /v3/surveys/{id}]"
+      },
+      "covered_by": {
+        "write": "replace_survey"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/surveys/{id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/surveys/{id}]"
+      },
+      "covered_by": {
+        "write": "update_survey"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{id}/details",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{id}/details]"
+      },
+      "covered_by": {
+        "stream": "survey_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/collectors",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/collectors]"
+      },
+      "covered_by": {
+        "stream": "collectors"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/surveys/{survey_id}/collectors",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/surveys/{survey_id}/collectors]"
+      },
       "covered_by": {
         "write": "create_survey_collector"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/collectors/{collector_id}/messages/{message_id}/stats",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/collectors/{collector_id}/messages/{message_id}/stats]"
+      },
+      "covered_by": {
+        "stream": "survey_collector_message_stats"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/collectors/{collector_id}/recipients/{recipient_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/collectors/{collector_id}/recipients/{recipient_id}]"
+      },
+      "covered_by": {
+        "stream": "survey_collector_recipient"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/languages",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/languages]"
+      },
+      "covered_by": {
+        "stream": "survey_languages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/languages/{language_code}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/languages/{language_code}]"
+      },
+      "covered_by": {
+        "stream": "survey_language"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/surveys/{survey_id}/languages/{language_code}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/surveys/{survey_id}/languages/{language_code}]"
+      },
       "covered_by": {
         "write": "create_survey_language"
       }
     },
     {
+      "method": "PATCH",
+      "path": "/v3/surveys/{survey_id}/languages/{language_code}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/surveys/{survey_id}/languages/{language_code}]"
+      },
+      "covered_by": {
+        "write": "update_survey_language"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/pages]"
+      },
+      "covered_by": {
+        "stream": "survey_pages"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/surveys/{survey_id}/pages",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/surveys/{survey_id}/pages]"
+      },
       "covered_by": {
         "write": "create_survey_page"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/pages/{page_id}]"
+      },
+      "covered_by": {
+        "stream": "survey_page"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /v3/surveys/{survey_id}/pages/{page_id}]"
+      },
+      "covered_by": {
+        "write": "replace_survey_page"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/surveys/{survey_id}/pages/{page_id}]"
+      },
+      "covered_by": {
+        "write": "update_survey_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/pages/{page_id}/questions]"
+      },
+      "covered_by": {
+        "stream": "survey_questions"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/surveys/{survey_id}/pages/{page_id}/questions]"
+      },
       "covered_by": {
         "write": "create_survey_question"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}]"
+      },
+      "covered_by": {
+        "stream": "survey_question"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/benchmark",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/benchmark]"
+      },
+      "covered_by": {
+        "stream": "question_benchmark"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/rollups",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/rollups]"
+      },
+      "covered_by": {
+        "stream": "question_rollups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/trends",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/pages/{page_id}/questions/{question_id}/trends]"
+      },
+      "covered_by": {
+        "stream": "question_trends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/rollups",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/pages/{page_id}/rollups]"
+      },
+      "covered_by": {
+        "stream": "page_rollups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/pages/{page_id}/trends",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/pages/{page_id}/trends]"
+      },
+      "covered_by": {
+        "stream": "page_trends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/responses",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/responses]"
+      },
+      "covered_by": {
+        "stream": "survey_response_summaries"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/responses/bulk",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/responses/bulk]"
+      },
+      "covered_by": {
+        "stream": "survey_responses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/responses/{response_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/responses/{response_id}]"
+      },
+      "covered_by": {
+        "stream": "survey_response"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/surveys/{survey_id}/responses/{response_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /v3/surveys/{survey_id}/responses/{response_id}]"
+      },
+      "covered_by": {
+        "write": "replace_survey_response"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/surveys/{survey_id}/responses/{response_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/surveys/{survey_id}/responses/{response_id}]"
+      },
+      "covered_by": {
+        "write": "update_survey_response"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/responses/{response_id}/details",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/responses/{response_id}/details]"
+      },
+      "covered_by": {
+        "stream": "survey_response_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/rollups",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/rollups]"
+      },
+      "covered_by": {
+        "stream": "survey_rollups"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/surveys/{survey_id}/share",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/surveys/{survey_id}/share]"
+      },
       "covered_by": {
         "write": "share_survey"
       }
     },
     {
-      "method": "POST",
-      "path": "/scim/v2/Users",
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/share_list",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/share_list]"
+      },
       "covered_by": {
-        "write": "create_scim_user"
+        "stream": "survey_share_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/surveys/{survey_id}/trends",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/surveys/{survey_id}/trends]"
+      },
+      "covered_by": {
+        "stream": "survey_trends"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/team_survey_templates",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/team_survey_templates]"
+      },
+      "covered_by": {
+        "stream": "team_survey_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/me",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/users/me]"
+      },
+      "covered_by": {
+        "stream": "users_me"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/{user_id}/shared",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/users/{user_id}/shared]"
+      },
+      "covered_by": {
+        "stream": "user_shared"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/users/{user_id}/workgroups",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/users/{user_id}/workgroups]"
+      },
+      "covered_by": {
+        "stream": "user_workgroups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/webhooks",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/webhooks]"
+      },
+      "covered_by": {
+        "stream": "webhooks"
       }
     },
     {
       "method": "POST",
       "path": "/v3/webhooks",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/webhooks]"
+      },
       "covered_by": {
         "write": "create_webhook"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/webhooks/{webhook_id}]"
+      },
+      "covered_by": {
+        "stream": "webhook"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/v3/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PUT /v3/webhooks/{webhook_id}]"
+      },
+      "covered_by": {
+        "write": "replace_webhook"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/webhooks/{webhook_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/webhooks/{webhook_id}]"
+      },
+      "covered_by": {
+        "write": "update_webhook"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/workgroups",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/workgroups]"
+      },
+      "covered_by": {
+        "stream": "workgroups"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/workgroups",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/workgroups]"
+      },
       "covered_by": {
         "write": "create_workgroup"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/workgroups/{workgroup_id}]"
+      },
+      "covered_by": {
+        "stream": "workgroup"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/workgroups/{workgroup_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/workgroups/{workgroup_id}]"
+      },
+      "covered_by": {
+        "write": "update_workgroup"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}/members",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/workgroups/{workgroup_id}/members]"
+      },
+      "covered_by": {
+        "stream": "workgroup_members"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/workgroups/{workgroup_id}/members",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/workgroups/{workgroup_id}/members]"
+      },
       "covered_by": {
         "write": "create_workgroup_member"
       }
@@ -861,13 +2066,79 @@
     {
       "method": "POST",
       "path": "/v3/workgroups/{workgroup_id}/members/bulk",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/workgroups/{workgroup_id}/members/bulk]"
+      },
       "covered_by": {
         "write": "create_workgroup_members_bulk"
       }
     },
     {
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}/members/{member_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/workgroups/{workgroup_id}/members/{member_id}]"
+      },
+      "covered_by": {
+        "stream": "workgroup_member"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v3/workgroups/{workgroup_id}/members/{member_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[PATCH /v3/workgroups/{workgroup_id}/members/{member_id}]"
+      },
+      "covered_by": {
+        "write": "update_workgroup_member"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}/shares",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/workgroups/{workgroup_id}/shares]"
+      },
+      "covered_by": {
+        "stream": "workgroup_shares"
+      }
+    },
+    {
       "method": "POST",
       "path": "/v3/workgroups/{workgroup_id}/shares",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/workgroups/{workgroup_id}/shares]"
+      },
       "covered_by": {
         "write": "create_workgroup_share"
       }
@@ -875,78 +2146,33 @@
     {
       "method": "POST",
       "path": "/v3/workgroups/{workgroup_id}/shares/bulk",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[POST /v3/workgroups/{workgroup_id}/shares/bulk]"
+      },
       "covered_by": {
         "write": "create_workgroup_shares_bulk"
       }
     },
     {
-      "method": "PUT",
-      "path": "/v3/collectors/{collector_id}",
+      "method": "GET",
+      "path": "/v3/workgroups/{workgroup_id}/shares/{share_id}",
+      "provenance": {
+        "artifact": "surveymonkey-artifact-2026-08-09",
+        "source_url": "https://api.surveymonkey.com/v3/docs",
+        "source_kind": "html_reference",
+        "version": "REST API v3 plus SCIM API v2",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7ea5db81aab2589c5261f355648d0c56d71e3faa859bf76ceb6a5a7d9fa34a46",
+        "coordinate": "existing-complete-surface[GET /v3/workgroups/{workgroup_id}/shares/{share_id}]"
+      },
       "covered_by": {
-        "write": "replace_collector"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v3/collectors/{collector_id}/messages/{message_id}",
-      "covered_by": {
-        "write": "replace_collector_message"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v3/collectors/{collector_id}/responses/{response_id}",
-      "covered_by": {
-        "write": "replace_collector_response"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v3/contact_lists/{contact_list_id}",
-      "covered_by": {
-        "write": "replace_contact_list"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v3/contacts/{contact_id}",
-      "covered_by": {
-        "write": "replace_contact"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v3/surveys/{id}",
-      "covered_by": {
-        "write": "replace_survey"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v3/surveys/{survey_id}/pages/{page_id}",
-      "covered_by": {
-        "write": "replace_survey_page"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v3/surveys/{survey_id}/responses/{response_id}",
-      "covered_by": {
-        "write": "replace_survey_response"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/scim/v2/Users/{id}",
-      "covered_by": {
-        "write": "replace_scim_user"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/v3/webhooks/{webhook_id}",
-      "covered_by": {
-        "write": "replace_webhook"
+        "stream": "workgroup_share"
       }
     }
   ]

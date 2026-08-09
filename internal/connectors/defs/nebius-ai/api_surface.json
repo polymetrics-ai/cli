@@ -1,189 +1,48 @@
 {
-  "api": "Nebius OpenAI-compatible inference API",
+  "api": "Nebius OpenAI-compatible inference API; provider artifact version: Nebius OpenAI-compatible inference API 20260729-026192a63 (OpenAPI 3.1.0)",
   "docs": "https://api.tokenfactory.nebius.com/docs",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion from Nebius Token Factory OpenAPI: 26 streams, 20 write actions, 3 binary upload exclusions, plus the legacy /v1/batches read stream retained for parity.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (47 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "nebius-ai-artifact-2026-08-09",
+      "url": "https://api.tokenfactory.nebius.com/openapi.json",
+      "kind": "openapi",
+      "version": "3.1.0",
+      "retrieved_at": "2026-08-09",
+      "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
-      "path": "/v1/models",
-      "covered_by": {
-        "stream": "models"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/files",
-      "covered_by": {
-        "stream": "files"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/batches",
-      "covered_by": {
-        "stream": "batches"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/completions",
-      "covered_by": {
-        "write": "create_completions"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/chat/completions",
-      "covered_by": {
-        "write": "create_chat_completions"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/embeddings",
-      "covered_by": {
-        "write": "create_embeddings"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/rerank",
-      "covered_by": {
-        "write": "create_rerank"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/responses",
-      "covered_by": {
-        "write": "create_responses"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/files",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Upload file uses multipart/form-data request payloads that are outside the JSON declarative write dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v0/models/upload",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Upload custom model archive uses multipart/form-data request payloads that are outside the JSON declarative write dialect."
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/files/{file_id}",
-      "covered_by": {
-        "stream": "files_file_id"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/files/{file_id}",
-      "covered_by": {
-        "write": "delete_files_file_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/files/{file_id}/content",
-      "covered_by": {
-        "stream": "files_file_id_content"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/files/{file_id}/link",
-      "covered_by": {
-        "stream": "files_file_id_link"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/images/generations",
-      "covered_by": {
-        "write": "create_images_generations"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/fine_tuning/jobs",
-      "covered_by": {
-        "stream": "fine_tuning_jobs"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/fine_tuning/jobs",
-      "covered_by": {
-        "write": "create_fine_tuning_jobs"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/fine_tuning/jobs/{job_id}",
-      "covered_by": {
-        "stream": "fine_tuning_jobs_job_id"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/fine_tuning/jobs/{job_id}/cancel",
-      "covered_by": {
-        "write": "execute_fine_tuning_jobs_job_id_cancel"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/fine_tuning/jobs/{job_id}/events",
-      "covered_by": {
-        "stream": "fine_tuning_jobs_job_id_events"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/fine_tuning/jobs/{job_id}/checkpoints",
-      "covered_by": {
-        "stream": "fine_tuning_jobs_job_id_checkpoints"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/fine_tuning/jobs/{job_id}/checkpoints/{checkpoint_id}",
-      "covered_by": {
-        "stream": "fine_tuning_jobs_job_id_checkpoints_checkpoint_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/fine_tuning/models/spec-draft",
-      "covered_by": {
-        "stream": "fine_tuning_models_spec_draft"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/fine_tuning/models/spec-draft",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/fine_tuning/models/spec-draft\"].get"
+      },
       "covered_by": {
         "stream": "fine_tuning_models_spec_draft_2"
       }
     },
     {
       "method": "GET",
-      "path": "/v0/dedicated_endpoints/templates",
-      "covered_by": {
-        "stream": "dedicated_endpoints_templates"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v0/dedicated_endpoints",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v0/dedicated_endpoints\"].get"
+      },
       "covered_by": {
         "stream": "dedicated_endpoints"
       }
@@ -191,13 +50,47 @@
     {
       "method": "POST",
       "path": "/v0/dedicated_endpoints",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v0/dedicated_endpoints\"].post"
+      },
       "covered_by": {
         "write": "create_dedicated_endpoints"
       }
     },
     {
+      "method": "GET",
+      "path": "/v0/dedicated_endpoints/templates",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v0/dedicated_endpoints/templates\"].get"
+      },
+      "covered_by": {
+        "stream": "dedicated_endpoints_templates"
+      }
+    },
+    {
       "method": "PATCH",
       "path": "/v0/dedicated_endpoints/{endpoint_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v0/dedicated_endpoints/{endpoint_id}\"].patch"
+      },
       "covered_by": {
         "write": "update_dedicated_endpoints_endpoint_id"
       }
@@ -205,13 +98,102 @@
     {
       "method": "DELETE",
       "path": "/v0/dedicated_endpoints/{endpoint_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v0/dedicated_endpoints/{endpoint_id}\"].delete"
+      },
       "covered_by": {
         "write": "delete_dedicated_endpoints_endpoint_id"
       }
     },
     {
+      "method": "POST",
+      "path": "/v0/models/upload",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "Nebius OpenAI-compatible inference API 20260729-026192a63 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "existing-surface[POST /v0/models/upload]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Upload custom model archive uses multipart/form-data request payloads that are outside the JSON declarative write dialect.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/batches",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "Nebius OpenAI-compatible inference API 20260729-026192a63 (OpenAPI 3.1.0)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "existing-surface[GET /v1/batches]"
+      },
+      "covered_by": {
+        "stream": "batches"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/chat/completions",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/chat/completions\"].post"
+      },
+      "covered_by": {
+        "write": "create_chat_completions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/completions",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/completions\"].post"
+      },
+      "covered_by": {
+        "write": "create_completions"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v1/datasets",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets\"].get"
+      },
       "covered_by": {
         "stream": "datasets"
       }
@@ -219,84 +201,47 @@
     {
       "method": "POST",
       "path": "/v1/datasets",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets\"].post"
+      },
       "covered_by": {
         "write": "create_datasets"
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/datasets/{dataset_id}",
-      "covered_by": {
-        "stream": "datasets_dataset_id"
-      }
-    },
-    {
-      "method": "PATCH",
-      "path": "/v1/datasets/{dataset_id}",
-      "covered_by": {
-        "write": "update_datasets_dataset_id"
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/v1/datasets/{dataset_id}",
-      "covered_by": {
-        "write": "delete_datasets_dataset_id"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/datasets/{dataset_id}/query_templates",
-      "covered_by": {
-        "stream": "datasets_dataset_id_query_templates"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/datasets/{dataset_id}/content",
-      "covered_by": {
-        "stream": "datasets_dataset_id_content"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/v1/datasets/{dataset_id}/export",
-      "covered_by": {
-        "stream": "datasets_dataset_id_export"
-      }
-    },
-    {
       "method": "POST",
       "path": "/v1/datasets/uploads",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/uploads\"].post"
+      },
       "covered_by": {
         "write": "create_datasets_uploads"
       }
     },
     {
       "method": "GET",
-      "path": "/v1/datasets/uploads/{upload_id}/parts",
-      "covered_by": {
-        "stream": "datasets_uploads_upload_id_parts"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/datasets/uploads/{upload_id}/parts",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Upload a new part for a multipart upload uses application/octet-stream request payloads that are outside the JSON declarative write dialect."
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/v1/datasets/uploads/{upload_id}/complete",
-      "covered_by": {
-        "write": "create_datasets_uploads_upload_id_complete"
-      }
-    },
-    {
-      "method": "GET",
       "path": "/v1/datasets/uploads/{upload_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/uploads/{upload_id}\"].get"
+      },
       "covered_by": {
         "stream": "datasets_uploads_upload_id"
       }
@@ -304,13 +249,457 @@
     {
       "method": "POST",
       "path": "/v1/datasets/uploads/{upload_id}/cancel",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/uploads/{upload_id}/cancel\"].post"
+      },
       "covered_by": {
         "write": "execute_datasets_uploads_upload_id_cancel"
       }
     },
     {
+      "method": "POST",
+      "path": "/v1/datasets/uploads/{upload_id}/complete",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/uploads/{upload_id}/complete\"].post"
+      },
+      "covered_by": {
+        "write": "create_datasets_uploads_upload_id_complete"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/uploads/{upload_id}/parts",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/uploads/{upload_id}/parts\"].get"
+      },
+      "covered_by": {
+        "stream": "datasets_uploads_upload_id_parts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/datasets/uploads/{upload_id}/parts",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/uploads/{upload_id}/parts\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Upload a new part for a multipart upload uses application/octet-stream request payloads that are outside the JSON declarative write dialect.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/{dataset_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/{dataset_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "datasets_dataset_id"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/datasets/{dataset_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/{dataset_id}\"].patch"
+      },
+      "covered_by": {
+        "write": "update_datasets_dataset_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/datasets/{dataset_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/{dataset_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_datasets_dataset_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/{dataset_id}/content",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/{dataset_id}/content\"].get"
+      },
+      "covered_by": {
+        "stream": "datasets_dataset_id_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/{dataset_id}/export",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/{dataset_id}/export\"].get"
+      },
+      "covered_by": {
+        "stream": "datasets_dataset_id_export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/datasets/{dataset_id}/query_templates",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/datasets/{dataset_id}/query_templates\"].get"
+      },
+      "covered_by": {
+        "stream": "datasets_dataset_id_query_templates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/embeddings",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/embeddings\"].post"
+      },
+      "covered_by": {
+        "write": "create_embeddings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/files",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/files\"].get"
+      },
+      "covered_by": {
+        "stream": "files"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/files",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/files\"].post"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Upload file uses multipart/form-data request payloads that are outside the JSON declarative write dialect.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/files/{file_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/files/{file_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "files_file_id"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/v1/files/{file_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/files/{file_id}\"].delete"
+      },
+      "covered_by": {
+        "write": "delete_files_file_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/files/{file_id}/content",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/files/{file_id}/content\"].get"
+      },
+      "covered_by": {
+        "stream": "files_file_id_content"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/files/{file_id}/link",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/files/{file_id}/link\"].get"
+      },
+      "covered_by": {
+        "stream": "files_file_id_link"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/fine_tuning/jobs\"].get"
+      },
+      "covered_by": {
+        "stream": "fine_tuning_jobs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/fine_tuning/jobs",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/fine_tuning/jobs\"].post"
+      },
+      "covered_by": {
+        "write": "create_fine_tuning_jobs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs/{job_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/fine_tuning/jobs/{job_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "fine_tuning_jobs_job_id"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/fine_tuning/jobs/{job_id}/cancel",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/fine_tuning/jobs/{job_id}/cancel\"].post"
+      },
+      "covered_by": {
+        "write": "execute_fine_tuning_jobs_job_id_cancel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs/{job_id}/checkpoints",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/fine_tuning/jobs/{job_id}/checkpoints\"].get"
+      },
+      "covered_by": {
+        "stream": "fine_tuning_jobs_job_id_checkpoints"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs/{job_id}/checkpoints/{checkpoint_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/fine_tuning/jobs/{job_id}/checkpoints/{checkpoint_id}\"].get"
+      },
+      "covered_by": {
+        "stream": "fine_tuning_jobs_job_id_checkpoints_checkpoint_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/jobs/{job_id}/events",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/fine_tuning/jobs/{job_id}/events\"].get"
+      },
+      "covered_by": {
+        "stream": "fine_tuning_jobs_job_id_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fine_tuning/models/spec-draft",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/fine_tuning/models/spec-draft\"].get"
+      },
+      "covered_by": {
+        "stream": "fine_tuning_models_spec_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/images/generations",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/images/generations\"].post"
+      },
+      "covered_by": {
+        "write": "create_images_generations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/models",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/models\"].get"
+      },
+      "covered_by": {
+        "stream": "models"
+      }
+    },
+    {
       "method": "GET",
       "path": "/v1/operations",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/operations\"].get"
+      },
       "covered_by": {
         "stream": "operations"
       }
@@ -318,6 +707,15 @@
     {
       "method": "POST",
       "path": "/v1/operations",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/operations\"].post"
+      },
       "covered_by": {
         "write": "create_operations"
       }
@@ -325,6 +723,15 @@
     {
       "method": "GET",
       "path": "/v1/operations/{operation_id}",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/operations/{operation_id}\"].get"
+      },
       "covered_by": {
         "stream": "operations_operation_id"
       }
@@ -332,22 +739,81 @@
     {
       "method": "POST",
       "path": "/v1/operations/{operation_id}/cancel",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/operations/{operation_id}/cancel\"].post"
+      },
       "covered_by": {
         "write": "execute_operations_operation_id_cancel"
       }
     },
     {
       "method": "GET",
+      "path": "/v1/operations/{operation_id}/errors",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/operations/{operation_id}/errors\"].get"
+      },
+      "covered_by": {
+        "stream": "operations_operation_id_errors"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/v1/operations/{operation_id}/results",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/operations/{operation_id}/results\"].get"
+      },
       "covered_by": {
         "stream": "operations_operation_id_results"
       }
     },
     {
-      "method": "GET",
-      "path": "/v1/operations/{operation_id}/errors",
+      "method": "POST",
+      "path": "/v1/rerank",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/rerank\"].post"
+      },
       "covered_by": {
-        "stream": "operations_operation_id_errors"
+        "write": "create_rerank"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/responses",
+      "provenance": {
+        "artifact": "nebius-ai-artifact-2026-08-09",
+        "source_url": "https://api.tokenfactory.nebius.com/openapi.json",
+        "source_kind": "openapi",
+        "version": "3.1.0",
+        "retrieved_at": "2026-08-09",
+        "sha256": "1e6d7209da93d9fe5b47d866eb4df4ea915b27698339198bb4e99b3162f9129a",
+        "coordinate": "paths[\"/v1/responses\"].post"
+      },
+      "covered_by": {
+        "write": "create_responses"
       }
     }
   ]

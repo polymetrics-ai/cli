@@ -1,0 +1,1234 @@
+{
+  "tagline": "Run dbt Cloud's declared streams and reverse-ETL actions.",
+  "usage": "pm dbt \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v2 accounts",
+        "api get api v2 accounts account-id",
+        "api get api v2 accounts account-id encryptions id",
+        "api get api v2 accounts account-id environments id",
+        "api get api v2 accounts account-id invites id",
+        "api get api v2 accounts account-id jobs id",
+        "api get api v2 accounts account-id jobs job-id artifacts remainder",
+        "api get api v2 accounts account-id notifications id",
+        "api get api v2 accounts account-id projects id",
+        "api get api v2 accounts account-id repositories id",
+        "api get api v2 accounts account-id runs id",
+        "api get api v2 accounts account-id runs run-id artifacts",
+        "api get api v2 accounts account-id runs run-id artifacts remainder",
+        "api get api v2 accounts account-id runs run-id retry",
+        "api get api v2 accounts account-id steps id",
+        "api get api v2 users id",
+        "environments list",
+        "invites list",
+        "jobs list",
+        "licenses list",
+        "notifications list",
+        "projects list",
+        "repositories list",
+        "runs list",
+        "ssh tunnels list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api v2 accounts account-id environments id",
+        "api delete api v2 accounts account-id projects id",
+        "api delete api v2 accounts account-id repositories id",
+        "api patch api v2 accounts account-id",
+        "api post api v2 accounts account-id",
+        "api post api v2 accounts account-id environments",
+        "api post api v2 accounts account-id environments id",
+        "api post api v2 accounts account-id permissions id",
+        "api post api v2 accounts account-id projects",
+        "api post api v2 accounts account-id projects id",
+        "api post api v2 accounts account-id repositories",
+        "api post api v2 notifications unsubscribe",
+        "api post api v2 users id",
+        "cancel run apply",
+        "create job apply",
+        "create notification apply",
+        "create ssh tunnel apply",
+        "delete job apply",
+        "delete notification apply",
+        "delete ssh tunnel apply",
+        "retry failed job apply",
+        "retry run apply",
+        "trigger job run apply",
+        "update job apply",
+        "update notification apply",
+        "update ssh tunnel apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete api v2 accounts account-id environments id",
+      "summary": "Documented DELETE /api/v2/accounts/{account_id}/environments/{id}/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api delete api v2 accounts account-id environments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/environments/{id}/"
+        }
+      ],
+      "operation": "dbt.delete.api-v2-accounts-account-id-environments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v2 accounts account-id projects id",
+      "summary": "Documented DELETE /api/v2/accounts/{account_id}/projects/{id}/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api delete api v2 accounts account-id projects id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/projects/{id}/"
+        }
+      ],
+      "operation": "dbt.delete.api-v2-accounts-account-id-projects-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api v2 accounts account-id repositories id",
+      "summary": "Documented DELETE /api/v2/accounts/{account_id}/repositories/{id}/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api delete api v2 accounts account-id repositories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/repositories/{id}/"
+        }
+      ],
+      "operation": "dbt.delete.api-v2-accounts-account-id-repositories-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v2 accounts",
+      "summary": "Documented GET /api/v2/accounts/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id encryptions id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/encryptions/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id encryptions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/encryptions/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-encryptions-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id environments id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/environments/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id environments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/environments/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-environments-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id invites id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/invites/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id invites id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/invites/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-invites-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id jobs id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/jobs/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id jobs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/jobs/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-jobs-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id jobs job-id artifacts remainder",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id jobs job-id artifacts remainder --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/artifacts/{remainder}"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-jobs-job-id-artifacts-remainder",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id notifications id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/notifications/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id notifications id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/notifications/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-notifications-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id projects id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/projects/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id projects id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/projects/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-projects-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id repositories id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/repositories/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id repositories id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/repositories/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-repositories-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id runs id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/runs/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id runs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-runs-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id runs run-id artifacts",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/runs/{run_id}/artifacts/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id runs run-id artifacts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-runs-run-id-artifacts",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id runs run-id artifacts remainder",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id runs run-id artifacts remainder --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{remainder}"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-runs-run-id-artifacts-remainder",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id runs run-id retry",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/runs/{run_id}/retry/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id runs run-id retry --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-runs-run-id-retry",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 accounts account-id steps id",
+      "summary": "Documented GET /api/v2/accounts/{account_id}/steps/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 accounts account-id steps id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/steps/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-accounts-account-id-steps-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v2 users id",
+      "summary": "Documented GET /api/v2/users/{id}/ (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api get api v2 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/users/{id}/"
+        }
+      ],
+      "operation": "dbt.get.api-v2-users-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch api v2 accounts account-id",
+      "summary": "Documented PATCH /api/v2/accounts/{account_id}/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api patch api v2 accounts account-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/v2/accounts/{account_id}/"
+        }
+      ],
+      "operation": "dbt.patch.api-v2-accounts-account-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 accounts account-id",
+      "summary": "Documented POST /api/v2/accounts/{account_id}/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api post api v2 accounts account-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/"
+        }
+      ],
+      "operation": "dbt.post.api-v2-accounts-account-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 accounts account-id environments",
+      "summary": "Documented POST /api/v2/accounts/{account_id}/environments/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api post api v2 accounts account-id environments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/environments/"
+        }
+      ],
+      "operation": "dbt.post.api-v2-accounts-account-id-environments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 accounts account-id environments id",
+      "summary": "Documented POST /api/v2/accounts/{account_id}/environments/{id}/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api post api v2 accounts account-id environments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/environments/{id}/"
+        }
+      ],
+      "operation": "dbt.post.api-v2-accounts-account-id-environments-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 accounts account-id permissions id",
+      "summary": "Documented POST /api/v2/accounts/{account_id}/permissions/{id}/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api post api v2 accounts account-id permissions id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/permissions/{id}/"
+        }
+      ],
+      "operation": "dbt.post.api-v2-accounts-account-id-permissions-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 accounts account-id projects",
+      "summary": "Documented POST /api/v2/accounts/{account_id}/projects/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api post api v2 accounts account-id projects --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/projects/"
+        }
+      ],
+      "operation": "dbt.post.api-v2-accounts-account-id-projects",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 accounts account-id projects id",
+      "summary": "Documented POST /api/v2/accounts/{account_id}/projects/{id}/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api post api v2 accounts account-id projects id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/projects/{id}/"
+        }
+      ],
+      "operation": "dbt.post.api-v2-accounts-account-id-projects-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 accounts account-id repositories",
+      "summary": "Documented POST /api/v2/accounts/{account_id}/repositories/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api post api v2 accounts account-id repositories --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/repositories/"
+        }
+      ],
+      "operation": "dbt.post.api-v2-accounts-account-id-repositories",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 notifications unsubscribe",
+      "summary": "Documented POST /api/v2/notifications/unsubscribe/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api post api v2 notifications unsubscribe --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/notifications/unsubscribe/"
+        }
+      ],
+      "operation": "dbt.post.api-v2-notifications-unsubscribe",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v2 users id",
+      "summary": "Documented POST /api/v2/users/{id}/ (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt api post api v2 users id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/users/{id}/"
+        }
+      ],
+      "operation": "dbt.post.api-v2-users-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "cancel run apply",
+      "summary": "Plan and execute the cancel run reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cancel_run",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "run_id",
+          "type": "integer",
+          "summary": "Required run id record field.",
+          "maps_to": "record.run_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt cancel run apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/cancel/"
+        }
+      ],
+      "risk": "cancels an in-progress dbt Cloud run; stops warehouse queries mid-execution, external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create job apply",
+      "summary": "Plan and execute the create job reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_job",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "environment_id",
+          "type": "integer",
+          "summary": "Required environment id record field.",
+          "maps_to": "record.environment_id",
+          "required": true
+        },
+        {
+          "name": "execute_steps",
+          "type": "string_array",
+          "summary": "Required execute steps record field.",
+          "maps_to": "record.execute_steps",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        },
+        {
+          "name": "project_id",
+          "type": "integer",
+          "summary": "Required project id record field.",
+          "maps_to": "record.project_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt create job apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/"
+        }
+      ],
+      "risk": "creates a new scheduled/triggerable dbt Cloud job definition; low-risk until triggered, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create notification apply",
+      "summary": "Plan and execute the create notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_notification",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt create notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/notifications/"
+        }
+      ],
+      "risk": "registers an outbound job-status notification (email or Slack channel of the caller's choosing); low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create ssh tunnel apply",
+      "summary": "Plan and execute the create ssh tunnel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_ssh_tunnel",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "connection_id",
+          "type": "integer",
+          "summary": "Required connection id record field.",
+          "maps_to": "record.connection_id",
+          "required": true
+        },
+        {
+          "name": "hostname",
+          "type": "string",
+          "summary": "Required hostname record field.",
+          "maps_to": "record.hostname",
+          "required": true
+        },
+        {
+          "name": "port",
+          "type": "integer",
+          "summary": "Required port record field.",
+          "maps_to": "record.port",
+          "required": true
+        },
+        {
+          "name": "state",
+          "type": "integer",
+          "summary": "Required state record field.",
+          "maps_to": "record.state",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "Required username record field.",
+          "maps_to": "record.username",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt create ssh tunnel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/encryptions/"
+        }
+      ],
+      "risk": "creates an SSH tunnel encrypting traffic for a warehouse connection; may carry a private key in the request body, external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete job apply",
+      "summary": "Plan and execute the delete job reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_job",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt delete job apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/jobs/{id}/"
+        }
+      ],
+      "risk": "irreversible removal of a job definition (its schedule/trigger and run history reference); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete notification apply",
+      "summary": "Plan and execute the delete notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_notification",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt delete notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/notifications/{id}/"
+        }
+      ],
+      "risk": "removes an existing job-status notification configuration; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete ssh tunnel apply",
+      "summary": "Plan and execute the delete ssh tunnel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_ssh_tunnel",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt delete ssh tunnel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v2/accounts/{account_id}/encryptions/{id}/"
+        }
+      ],
+      "risk": "removes an SSH tunnel; the associated warehouse connection falls back to unencrypted/direct connectivity, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "environments list",
+      "summary": "Run the environments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "environments",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt environments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/environments/"
+        }
+      ]
+    },
+    {
+      "path": "invites list",
+      "summary": "Run the invites ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "invites",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt invites list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/invites/"
+        }
+      ]
+    },
+    {
+      "path": "jobs list",
+      "summary": "Run the jobs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "jobs",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt jobs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/jobs/"
+        }
+      ]
+    },
+    {
+      "path": "licenses list",
+      "summary": "Run the licenses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "licenses",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt licenses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/licenses/"
+        }
+      ]
+    },
+    {
+      "path": "notifications list",
+      "summary": "Run the notifications ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notifications",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt notifications list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/notifications/"
+        }
+      ]
+    },
+    {
+      "path": "projects list",
+      "summary": "Run the projects ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt projects list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/projects/"
+        }
+      ]
+    },
+    {
+      "path": "repositories list",
+      "summary": "Run the repositories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "repositories",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt repositories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/repositories/"
+        }
+      ]
+    },
+    {
+      "path": "retry failed job apply",
+      "summary": "Plan and execute the retry failed job reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "retry_failed_job",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "job_id",
+          "type": "integer",
+          "summary": "Required job id record field.",
+          "maps_to": "record.job_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt retry failed job apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/rerun/"
+        }
+      ],
+      "risk": "retries a job's most recent failed run from the point of failure; runs real warehouse queries, external mutation with warehouse side effects, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "retry run apply",
+      "summary": "Plan and execute the retry run reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "retry_run",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "run_id",
+          "type": "integer",
+          "summary": "Required run id record field.",
+          "maps_to": "record.run_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt retry run apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/runs/{run_id}/retry/"
+        }
+      ],
+      "risk": "retries a specific failed run from the point of failure; runs real warehouse queries, external mutation with warehouse side effects, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "runs list",
+      "summary": "Run the runs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "runs",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt runs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/runs/"
+        }
+      ]
+    },
+    {
+      "path": "ssh tunnels list",
+      "summary": "Run the ssh tunnels ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "ssh_tunnels",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt ssh tunnels list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/encryptions/"
+        }
+      ]
+    },
+    {
+      "path": "trigger job run apply",
+      "summary": "Plan and execute the trigger job run reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "trigger_job_run",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "cause",
+          "type": "string",
+          "summary": "Required cause record field.",
+          "maps_to": "record.cause",
+          "required": true
+        },
+        {
+          "name": "job_id",
+          "type": "integer",
+          "summary": "Required job id record field.",
+          "maps_to": "record.job_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt trigger job run apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/{job_id}/run/"
+        }
+      ],
+      "risk": "kicks off a real dbt Cloud job run against the configured warehouse connection (builds/materializes models, can run arbitrary project SQL); external mutation with warehouse side effects, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update job apply",
+      "summary": "Plan and execute the update job reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_job",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt update job apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/jobs/{id}/"
+        }
+      ],
+      "risk": "mutates an existing dbt Cloud job's definition (steps, schedule, environment); a changed schema/target affects the next triggered run, external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update notification apply",
+      "summary": "Plan and execute the update notification reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_notification",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt update notification apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/notifications/{id}/"
+        }
+      ],
+      "risk": "repoints or reconfigures an existing job-status notification's destination (email/Slack channel); external mutation, approval required for a changed destination",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update ssh tunnel apply",
+      "summary": "Plan and execute the update ssh tunnel reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_ssh_tunnel",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm dbt update ssh tunnel apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v2/accounts/{account_id}/encryptions/{id}/"
+        }
+      ],
+      "risk": "mutates an existing SSH tunnel's connection details; may carry a private key in the request body, external mutation, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://raw.githubusercontent.com/dbt-labs/dbt-cloud-openapi-spec/master/openapi-v2.yaml",
+      "examples": [
+        "pm dbt users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/{account_id}/users/"
+        }
+      ]
+    }
+  ]
+}

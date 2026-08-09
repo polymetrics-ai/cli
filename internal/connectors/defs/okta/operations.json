@@ -1,0 +1,334 @@
+{
+  "operations": [
+    {
+      "id": "okta.post.api-v1-apps-appid-credentials-csrs-csrid-lifecycle-publish",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/apps/{appId}/credentials/csrs/{csrId}/lifecycle/publish",
+      "description": "Mutation request content type application/x-x509-ca-cert, application/pkix-cert, application/x-pem-file is outside the JSON/bodyless declarative write dialect.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/apps/{appId}/credentials/csrs/{csrId}/lifecycle/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-apps-appid-credentials-keys-generate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/apps/{appId}/credentials/keys/generate",
+      "description": "Mutation requires query parameter(s) validityYears, but declarative writes model path and body fields only.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/apps/{appId}/credentials/keys/generate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-apps-appid-credentials-keys-keyid-clone",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/apps/{appId}/credentials/keys/{keyId}/clone",
+      "description": "Mutation requires query parameter(s) targetAid, but declarative writes model path and body fields only.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/apps/{appId}/credentials/keys/{keyId}/clone",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.delete.api-v1-apps-appid-group-push-mappings-mappingid",
+      "kind": "rest_write",
+      "summary": "DELETE /api/v1/apps/{appId}/group-push/mappings/{mappingId}",
+      "description": "Mutation requires query parameter(s) deleteTargetGroup, but declarative writes model path and body fields only.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/v1/apps/{appId}/group-push/mappings/{mappingId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.patch.api-v1-apps-appid-groups-groupid",
+      "kind": "rest_write",
+      "summary": "PATCH /api/v1/apps/{appId}/groups/{groupId}",
+      "description": "Mutation request body is a top-level JSON array; declarative writes build object bodies from record fields.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/api/v1/apps/{appId}/groups/{groupId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.get.api-v1-apps-appid-interclient-allowed-apps",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/apps/{appId}/interclient-allowed-apps",
+      "description": "GET response is a top-level array of scalar values; the declarative extractor emits object records only.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/apps/{appId}/interclient-allowed-apps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.get.api-v1-apps-appid-interclient-target-apps",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/apps/{appId}/interclient-target-apps",
+      "description": "GET response is a top-level array of scalar values; the declarative extractor emits object records only.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/apps/{appId}/interclient-target-apps",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-apps-appid-logo",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/apps/{appId}/logo",
+      "description": "Mutation request content type multipart/form-data is outside the JSON/bodyless declarative write dialect.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/apps/{appId}/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.get.api-v1-apps-appid-sso-saml-metadata",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/apps/{appId}/sso/saml/metadata",
+      "description": "GET response content type text/xml is not JSON and cannot be decoded by the declarative record extractor.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/apps/{appId}/sso/saml/metadata",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.get.api-v1-brands-brandid-pages-sign-in-widget-versions",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/brands/{brandId}/pages/sign-in/widget-versions",
+      "description": "GET response is a top-level array of scalar values; the declarative extractor emits object records only.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/brands/{brandId}/pages/sign-in/widget-versions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-brands-brandid-themes-themeid-background-image",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/brands/{brandId}/themes/{themeId}/background-image",
+      "description": "Mutation request content type multipart/form-data is outside the JSON/bodyless declarative write dialect.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/brands/{brandId}/themes/{themeId}/background-image",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-brands-brandid-themes-themeid-favicon",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/brands/{brandId}/themes/{themeId}/favicon",
+      "description": "Mutation request content type multipart/form-data is outside the JSON/bodyless declarative write dialect.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/brands/{brandId}/themes/{themeId}/favicon",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-brands-brandid-themes-themeid-logo",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/brands/{brandId}/themes/{themeId}/logo",
+      "description": "Mutation request content type multipart/form-data is outside the JSON/bodyless declarative write dialect.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/brands/{brandId}/themes/{themeId}/logo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.get.api-v1-devices-deviceid-os-accounts",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/devices/{deviceId}/os-accounts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/devices/{deviceId}/os-accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.get.api-v1-devices-deviceid-os-accounts-osaccountid",
+      "kind": "rest_read",
+      "summary": "GET /api/v1/devices/{deviceId}/os-accounts/{osAccountId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/devices/{deviceId}/os-accounts/{osAccountId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-idps-idpid-credentials-csrs-idpcsrid-lifecycle-publish",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/idps/{idpId}/credentials/csrs/{idpCsrId}/lifecycle/publish",
+      "description": "Mutation request content type application/pkix-cert, application/x-x509-ca-cert, application/x-pem-file is outside the JSON/bodyless declarative write dialect.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/idps/{idpId}/credentials/csrs/{idpCsrId}/lifecycle/publish",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-idps-idpid-credentials-keys-generate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/idps/{idpId}/credentials/keys/generate",
+      "description": "Mutation requires query parameter(s) validityYears, but declarative writes model path and body fields only.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/idps/{idpId}/credentials/keys/generate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-idps-idpid-credentials-keys-kid-clone",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/idps/{idpId}/credentials/keys/{kid}/clone",
+      "description": "Mutation requires query parameter(s) targetIdpId, but declarative writes model path and body fields only.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/idps/{idpId}/credentials/keys/{kid}/clone",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-policies-simulate",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/policies/simulate",
+      "description": "Mutation request body is a top-level JSON array; declarative writes build object bodies from record fields.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/policies/simulate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.api-v1-users-id-lifecycle-reset-password",
+      "kind": "rest_write",
+      "summary": "POST /api/v1/users/{id}/lifecycle/reset_password",
+      "description": "Mutation requires query parameter(s) sendEmail, but declarative writes model path and body fields only.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/users/{id}/lifecycle/reset_password",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "okta.post.security-api-v1-security-events",
+      "kind": "rest_write",
+      "summary": "POST /security/api/v1/security-events",
+      "description": "Mutation request content type application/secevent+jwt is outside the JSON/bodyless declarative write dialect.",
+      "source_url": "https://raw.githubusercontent.com/okta/okta-management-openapi-spec/master/dist/current/management-minimal.yaml",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/security/api/v1/security-events",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

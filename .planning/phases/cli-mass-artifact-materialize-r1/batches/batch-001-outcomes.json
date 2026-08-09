@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "batch": "batch-001",
+  "manifest": "batches/batch-001-manifest.json",
+  "outcomes": [
+    {
+      "connector": "avni",
+      "state": "materialized",
+      "reachability": "reachable",
+      "foundation_pending": true,
+      "evidence": "batches/batch-001-materialize.json"
+    },
+    {
+      "connector": "akeneo",
+      "state": "materialized",
+      "reachability": "reachable",
+      "foundation_pending": true,
+      "evidence": "batches/batch-001-materialize.json"
+    },
+    {
+      "connector": "apify-dataset",
+      "state": "materialized",
+      "reachability": "reachable",
+      "foundation_pending": true,
+      "evidence": "batches/batch-001-materialize.json"
+    },
+    {
+      "connector": "basecamp",
+      "state": "materialized",
+      "reachability": "reachable",
+      "foundation_pending": true,
+      "evidence": "batches/batch-001-materialize.json"
+    },
+    {
+      "connector": "algolia",
+      "state": "materialized",
+      "reachability": "reachable",
+      "foundation_pending": true,
+      "evidence": "batches/batch-001-algolia-materialize.json"
+    }
+  ]
+}

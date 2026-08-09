@@ -1,13 +1,41 @@
 {
-  "api": "Google Fonts Developer API (https://developers.google.com/fonts/docs/developer_api)",
+  "api": "Google Fonts Developer API (https://developers.google.com/fonts/docs/developer_api); provider artifact version: Web Fonts Developer API v1; discovery revision 20260729",
   "docs": "https://developers.google.com/fonts/docs/developer_api",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (webfonts, popular_fonts, trending_fonts, newest_fonts, alpha_fonts); the Google Fonts Developer API has no mutation endpoints (read-only public catalog), so there are no write endpoints in or out of scope",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited openapi artifact (1 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "google-webfonts-artifact-2026-08-09",
+      "url": "https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest",
+      "kind": "openapi",
+      "version": "Web Fonts Developer API v1; discovery revision 20260729",
+      "retrieved_at": "2026-08-09",
+      "sha256": "6b6c8291ec70189c95706465a4448e81e7152b4b30f40025b7592824757261e1"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "webfonts" } },
-    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "popular_fonts" } },
-    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "trending_fonts" } },
-    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "newest_fonts" } },
-    { "method": "GET", "path": "/webfonts", "covered_by": { "stream": "alpha_fonts" } }
+    {
+      "method": "GET",
+      "path": "/webfonts",
+      "provenance": {
+        "artifact": "google-webfonts-artifact-2026-08-09",
+        "source_url": "https://www.googleapis.com/discovery/v1/apis/webfonts/v1/rest",
+        "source_kind": "openapi",
+        "version": "Web Fonts Developer API v1; discovery revision 20260729",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6b6c8291ec70189c95706465a4448e81e7152b4b30f40025b7592824757261e1",
+        "coordinate": "resources[\"webfonts\"].methods[\"list\"]"
+      },
+      "covered_by": {
+        "streams": [
+          "alpha_fonts",
+          "newest_fonts",
+          "popular_fonts",
+          "trending_fonts",
+          "webfonts"
+        ]
+      }
+    }
   ]
 }

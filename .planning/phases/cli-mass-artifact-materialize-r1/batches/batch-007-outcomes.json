@@ -1,0 +1,335 @@
+{
+  "schema_version": 1,
+  "batch": "batch-007",
+  "manifest": "batches/batch-007-manifest.json",
+  "outcomes": [
+    {
+      "connector": "7shifts",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "auth0",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "box",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "box-data-extract",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://developer.box.com/reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "brex",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no brex.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "chargebee",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "cisco-meraki",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "clockify",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "codefresh",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "commercetools",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "fastly",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (Postman collection has no request items), and official reference fallback \"https://www.fastly.com/documentation/reference/api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "firehydrant",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "freshservice",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "genesys",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_fetch",
+      "reason": "/Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-007-artifacts/genesys.json exceeds 16777216-byte artifact limit"
+    },
+    {
+      "connector": "github",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-github-retry-materialize.json"
+    },
+    {
+      "connector": "high-level",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://marketplace.gohighlevel.com/docs/ghl/contacts/get-contact\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "insightly",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "invoiceninja",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "iterable",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "kisi",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 21: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "lob",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 42: found character that cannot start any token"
+    },
+    {
+      "connector": "lokalise",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 53: did not find expected <document start>"
+    },
+    {
+      "connector": "metabase",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "metricool",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "n8n",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "okta",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "pagerduty",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: operation POST /extensions contains callbacks that cannot be represented as provider request paths), and official reference fallback \"https://developer.pagerduty.com/api-reference/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "prestashop",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://devdocs.prestashop-project.org/9/webservice/\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "railz",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "recurly",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_fetch",
+      "reason": "artifact cache has no recurly.{json,yaml,yml,txt,md,html,htm}"
+    },
+    {
+      "connector": "rocketlane",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developer.rocketlane.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "secoda",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: did not find expected comment or line break), and official reference fallback \"https://docs.secoda.co/api/authentication.md\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "sendgrid",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://www.twilio.com/docs/sendgrid/api-reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "sendpulse",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact has no HTTP or webhook operations), and official reference fallback \"https://sendpulse.com/integrations/api\" failed: fetch artifact: provider returned HTTP 403"
+    },
+    {
+      "connector": "statuspage",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 23: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "stripe",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "todoist",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 14: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "toggl",
+      "state": "retry_pending",
+      "reachability": "not_checked",
+      "foundation_pending": false,
+      "evidence": "batches/batch-007-materialize.json",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 25: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "vercel",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    },
+    {
+      "connector": "zendesk-support",
+      "state": "materialized",
+      "reachability": "pending_static_gate",
+      "foundation_pending": true,
+      "evidence": "batches/batch-007-materialize.json"
+    }
+  ]
+}

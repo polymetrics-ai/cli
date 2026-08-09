@@ -1,0 +1,1865 @@
+{
+  "tagline": "Run Tavus's declared streams and reverse-ETL actions.",
+  "usage": "pm tavus \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v2 conversations conversation-id",
+        "api get v2 conversations conversation-id canvas interactions",
+        "api get v2 deployments",
+        "api get v2 deployments deployment-id",
+        "api get v2 deployments deployment-id init",
+        "api get v2 documents document-id",
+        "api get v2 faces",
+        "api get v2 faces face-id",
+        "api get v2 guardrails guardrail-id",
+        "api get v2 guardrails tags",
+        "api get v2 lipsync",
+        "api get v2 lipsync lipsync-id",
+        "api get v2 objectives objectives-id",
+        "api get v2 pals check-username",
+        "api get v2 pals pal-id",
+        "api get v2 pals pal-id skills",
+        "api get v2 pals pal-id skills skill-id",
+        "api get v2 pals pal-id tools",
+        "api get v2 pronunciation-dictionaries dictionary-id",
+        "api get v2 replacements",
+        "api get v2 replacements replacement-id",
+        "api get v2 skills skill-id",
+        "api get v2 tools",
+        "api get v2 tools tool-id",
+        "api get v2 transcriptions",
+        "api get v2 transcriptions transcription-id",
+        "api get v2 videos video-id",
+        "conversations list",
+        "documents list",
+        "guardrails list",
+        "objectives list",
+        "pals list",
+        "pronunciation dictionaries list",
+        "replicas list",
+        "skills list",
+        "videos list",
+        "voices list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v2 deployments deployment-id",
+        "api delete v2 faces face-id",
+        "api delete v2 lipsync lipsync-id",
+        "api delete v2 pals pal-id skills skill-id",
+        "api delete v2 pals pal-id tools tool-id",
+        "api delete v2 replacements replacement-id",
+        "api delete v2 tools tool-id",
+        "api delete v2 transcriptions transcription-id",
+        "api patch v2 deployments deployment-id",
+        "api patch v2 documents document-id",
+        "api patch v2 faces face-id name",
+        "api patch v2 guardrails guardrail-id",
+        "api patch v2 objectives objectives-id",
+        "api patch v2 pals pal-id",
+        "api patch v2 pals pal-id skills skill-id",
+        "api patch v2 pronunciation-dictionaries dictionary-id",
+        "api patch v2 tools tool-id",
+        "api patch v2 videos video-id name",
+        "api post v2 conversations conversation-id canvas interactions",
+        "api post v2 deployments",
+        "api post v2 deployments deployment-id conversations conversation-id end",
+        "api post v2 deployments deployment-id start",
+        "api post v2 documents document-id recrawl",
+        "api post v2 faces",
+        "api post v2 lipsync",
+        "api post v2 pals pal-id publish",
+        "api post v2 pals pal-id tools",
+        "api post v2 replacements",
+        "api post v2 tools",
+        "api post v2 transcriptions",
+        "api put v2 pals pal-id skills",
+        "api put v2 pals pal-id skills skill-id",
+        "create conversation apply",
+        "create document apply",
+        "create guardrail apply",
+        "create objective apply",
+        "create pal apply",
+        "create pronunciation dictionary apply",
+        "create video apply",
+        "delete conversation apply",
+        "delete document apply",
+        "delete guardrail apply",
+        "delete objective apply",
+        "delete pal apply",
+        "delete pronunciation dictionary apply",
+        "delete video apply",
+        "end conversation apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v2 deployments deployment-id",
+      "summary": "Documented DELETE /v2/deployments/{deployment_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api delete v2 deployments deployment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/deployments/{deployment_id}"
+        }
+      ],
+      "operation": "tavus.delete.v2-deployments-deployment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 faces face-id",
+      "summary": "Documented DELETE /v2/faces/{face_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api delete v2 faces face-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/faces/{face_id}"
+        }
+      ],
+      "operation": "tavus.delete.v2-faces-face-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 lipsync lipsync-id",
+      "summary": "Documented DELETE /v2/lipsync/{lipsync_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api delete v2 lipsync lipsync-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/lipsync/{lipsync_id}"
+        }
+      ],
+      "operation": "tavus.delete.v2-lipsync-lipsync-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 pals pal-id skills skill-id",
+      "summary": "Documented DELETE /v2/pals/{pal_id}/skills/{skill_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api delete v2 pals pal-id skills skill-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/pals/{pal_id}/skills/{skill_id}"
+        }
+      ],
+      "operation": "tavus.delete.v2-pals-pal-id-skills-skill-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 pals pal-id tools tool-id",
+      "summary": "Documented DELETE /v2/pals/{pal_id}/tools/{tool_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api delete v2 pals pal-id tools tool-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/pals/{pal_id}/tools/{tool_id}"
+        }
+      ],
+      "operation": "tavus.delete.v2-pals-pal-id-tools-tool-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 replacements replacement-id",
+      "summary": "Documented DELETE /v2/replacements/{replacement_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api delete v2 replacements replacement-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/replacements/{replacement_id}"
+        }
+      ],
+      "operation": "tavus.delete.v2-replacements-replacement-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 tools tool-id",
+      "summary": "Documented DELETE /v2/tools/{tool_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api delete v2 tools tool-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/tools/{tool_id}"
+        }
+      ],
+      "operation": "tavus.delete.v2-tools-tool-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v2 transcriptions transcription-id",
+      "summary": "Documented DELETE /v2/transcriptions/{transcription_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api delete v2 transcriptions transcription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/transcriptions/{transcription_id}"
+        }
+      ],
+      "operation": "tavus.delete.v2-transcriptions-transcription-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v2 conversations conversation-id",
+      "summary": "Documented GET /v2/conversations/{conversation_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 conversations conversation-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations/{conversation_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-conversations-conversation-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 conversations conversation-id canvas interactions",
+      "summary": "Documented GET /v2/conversations/{conversation_id}/canvas/interactions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 conversations conversation-id canvas interactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations/{conversation_id}/canvas/interactions"
+        }
+      ],
+      "operation": "tavus.get.v2-conversations-conversation-id-canvas-interactions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 deployments",
+      "summary": "Documented GET /v2/deployments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 deployments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/deployments"
+        }
+      ],
+      "operation": "tavus.get.v2-deployments",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 deployments deployment-id",
+      "summary": "Documented GET /v2/deployments/{deployment_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 deployments deployment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/deployments/{deployment_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-deployments-deployment-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 deployments deployment-id init",
+      "summary": "Documented GET /v2/deployments/{deployment_id}/init (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 deployments deployment-id init --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/deployments/{deployment_id}/init"
+        }
+      ],
+      "operation": "tavus.get.v2-deployments-deployment-id-init",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 documents document-id",
+      "summary": "Documented GET /v2/documents/{document_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 documents document-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/documents/{document_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-documents-document-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 faces",
+      "summary": "Documented GET /v2/faces (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 faces --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/faces"
+        }
+      ],
+      "operation": "tavus.get.v2-faces",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 faces face-id",
+      "summary": "Documented GET /v2/faces/{face_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 faces face-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/faces/{face_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-faces-face-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 guardrails guardrail-id",
+      "summary": "Documented GET /v2/guardrails/{guardrail_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 guardrails guardrail-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/guardrails/{guardrail_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-guardrails-guardrail-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 guardrails tags",
+      "summary": "Documented GET /v2/guardrails/tags (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 guardrails tags --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/guardrails/tags"
+        }
+      ],
+      "operation": "tavus.get.v2-guardrails-tags",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 lipsync",
+      "summary": "Documented GET /v2/lipsync (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 lipsync --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/lipsync"
+        }
+      ],
+      "operation": "tavus.get.v2-lipsync",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 lipsync lipsync-id",
+      "summary": "Documented GET /v2/lipsync/{lipsync_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 lipsync lipsync-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/lipsync/{lipsync_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-lipsync-lipsync-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 objectives objectives-id",
+      "summary": "Documented GET /v2/objectives/{objectives_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 objectives objectives-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/objectives/{objectives_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-objectives-objectives-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 pals check-username",
+      "summary": "Documented GET /v2/pals/check-username (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 pals check-username --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/pals/check-username"
+        }
+      ],
+      "operation": "tavus.get.v2-pals-check-username",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 pals pal-id",
+      "summary": "Documented GET /v2/pals/{pal_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 pals pal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/pals/{pal_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-pals-pal-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 pals pal-id skills",
+      "summary": "Documented GET /v2/pals/{pal_id}/skills (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 pals pal-id skills --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/pals/{pal_id}/skills"
+        }
+      ],
+      "operation": "tavus.get.v2-pals-pal-id-skills",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 pals pal-id skills skill-id",
+      "summary": "Documented GET /v2/pals/{pal_id}/skills/{skill_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 pals pal-id skills skill-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/pals/{pal_id}/skills/{skill_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-pals-pal-id-skills-skill-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 pals pal-id tools",
+      "summary": "Documented GET /v2/pals/{pal_id}/tools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 pals pal-id tools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/pals/{pal_id}/tools"
+        }
+      ],
+      "operation": "tavus.get.v2-pals-pal-id-tools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 pronunciation-dictionaries dictionary-id",
+      "summary": "Documented GET /v2/pronunciation-dictionaries/{dictionary_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 pronunciation-dictionaries dictionary-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/pronunciation-dictionaries/{dictionary_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-pronunciation-dictionaries-dictionary-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 replacements",
+      "summary": "Documented GET /v2/replacements (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 replacements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/replacements"
+        }
+      ],
+      "operation": "tavus.get.v2-replacements",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 replacements replacement-id",
+      "summary": "Documented GET /v2/replacements/{replacement_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 replacements replacement-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/replacements/{replacement_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-replacements-replacement-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 skills skill-id",
+      "summary": "Documented GET /v2/skills/{skill_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 skills skill-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/skills/{skill_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-skills-skill-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 tools",
+      "summary": "Documented GET /v2/tools (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 tools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tools"
+        }
+      ],
+      "operation": "tavus.get.v2-tools",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 tools tool-id",
+      "summary": "Documented GET /v2/tools/{tool_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 tools tool-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/tools/{tool_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-tools-tool-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 transcriptions",
+      "summary": "Documented GET /v2/transcriptions (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 transcriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/transcriptions"
+        }
+      ],
+      "operation": "tavus.get.v2-transcriptions",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 transcriptions transcription-id",
+      "summary": "Documented GET /v2/transcriptions/{transcription_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 transcriptions transcription-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/transcriptions/{transcription_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-transcriptions-transcription-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 videos video-id",
+      "summary": "Documented GET /v2/videos/{video_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api get v2 videos video-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos/{video_id}"
+        }
+      ],
+      "operation": "tavus.get.v2-videos-video-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v2 deployments deployment-id",
+      "summary": "Documented PATCH /v2/deployments/{deployment_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 deployments deployment-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/deployments/{deployment_id}"
+        }
+      ],
+      "operation": "tavus.patch.v2-deployments-deployment-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 documents document-id",
+      "summary": "Documented PATCH /v2/documents/{document_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 documents document-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/documents/{document_id}"
+        }
+      ],
+      "operation": "tavus.patch.v2-documents-document-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 faces face-id name",
+      "summary": "Documented PATCH /v2/faces/{face_id}/name (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 faces face-id name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/faces/{face_id}/name"
+        }
+      ],
+      "operation": "tavus.patch.v2-faces-face-id-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 guardrails guardrail-id",
+      "summary": "Documented PATCH /v2/guardrails/{guardrail_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 guardrails guardrail-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/guardrails/{guardrail_id}"
+        }
+      ],
+      "operation": "tavus.patch.v2-guardrails-guardrail-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 objectives objectives-id",
+      "summary": "Documented PATCH /v2/objectives/{objectives_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 objectives objectives-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/objectives/{objectives_id}"
+        }
+      ],
+      "operation": "tavus.patch.v2-objectives-objectives-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 pals pal-id",
+      "summary": "Documented PATCH /v2/pals/{pal_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 pals pal-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/pals/{pal_id}"
+        }
+      ],
+      "operation": "tavus.patch.v2-pals-pal-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 pals pal-id skills skill-id",
+      "summary": "Documented PATCH /v2/pals/{pal_id}/skills/{skill_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 pals pal-id skills skill-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/pals/{pal_id}/skills/{skill_id}"
+        }
+      ],
+      "operation": "tavus.patch.v2-pals-pal-id-skills-skill-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 pronunciation-dictionaries dictionary-id",
+      "summary": "Documented PATCH /v2/pronunciation-dictionaries/{dictionary_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 pronunciation-dictionaries dictionary-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/pronunciation-dictionaries/{dictionary_id}"
+        }
+      ],
+      "operation": "tavus.patch.v2-pronunciation-dictionaries-dictionary-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 tools tool-id",
+      "summary": "Documented PATCH /v2/tools/{tool_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 tools tool-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/tools/{tool_id}"
+        }
+      ],
+      "operation": "tavus.patch.v2-tools-tool-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api patch v2 videos video-id name",
+      "summary": "Documented PATCH /v2/videos/{video_id}/name (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api patch v2 videos video-id name --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/videos/{video_id}/name"
+        }
+      ],
+      "operation": "tavus.patch.v2-videos-video-id-name",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 conversations conversation-id canvas interactions",
+      "summary": "Documented POST /v2/conversations/{conversation_id}/canvas/interactions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 conversations conversation-id canvas interactions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversation_id}/canvas/interactions"
+        }
+      ],
+      "operation": "tavus.post.v2-conversations-conversation-id-canvas-interactions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 deployments",
+      "summary": "Documented POST /v2/deployments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 deployments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/deployments"
+        }
+      ],
+      "operation": "tavus.post.v2-deployments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 deployments deployment-id conversations conversation-id end",
+      "summary": "Documented POST /v2/deployments/{deployment_id}/conversations/{conversation_id}/end (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 deployments deployment-id conversations conversation-id end --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/deployments/{deployment_id}/conversations/{conversation_id}/end"
+        }
+      ],
+      "operation": "tavus.post.v2-deployments-deployment-id-conversations-conversation-id-end",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 deployments deployment-id start",
+      "summary": "Documented POST /v2/deployments/{deployment_id}/start (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 deployments deployment-id start --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/deployments/{deployment_id}/start"
+        }
+      ],
+      "operation": "tavus.post.v2-deployments-deployment-id-start",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 documents document-id recrawl",
+      "summary": "Documented POST /v2/documents/{document_id}/recrawl (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 documents document-id recrawl --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/documents/{document_id}/recrawl"
+        }
+      ],
+      "operation": "tavus.post.v2-documents-document-id-recrawl",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 faces",
+      "summary": "Documented POST /v2/faces (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 faces --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/faces"
+        }
+      ],
+      "operation": "tavus.post.v2-faces",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 lipsync",
+      "summary": "Documented POST /v2/lipsync (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 lipsync --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/lipsync"
+        }
+      ],
+      "operation": "tavus.post.v2-lipsync",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 pals pal-id publish",
+      "summary": "Documented POST /v2/pals/{pal_id}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 pals pal-id publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/pals/{pal_id}/publish"
+        }
+      ],
+      "operation": "tavus.post.v2-pals-pal-id-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 pals pal-id tools",
+      "summary": "Documented POST /v2/pals/{pal_id}/tools (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 pals pal-id tools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/pals/{pal_id}/tools"
+        }
+      ],
+      "operation": "tavus.post.v2-pals-pal-id-tools",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 replacements",
+      "summary": "Documented POST /v2/replacements (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 replacements --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/replacements"
+        }
+      ],
+      "operation": "tavus.post.v2-replacements",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 tools",
+      "summary": "Documented POST /v2/tools (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 tools --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/tools"
+        }
+      ],
+      "operation": "tavus.post.v2-tools",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 transcriptions",
+      "summary": "Documented POST /v2/transcriptions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api post v2 transcriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/transcriptions"
+        }
+      ],
+      "operation": "tavus.post.v2-transcriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 pals pal-id skills",
+      "summary": "Documented PUT /v2/pals/{pal_id}/skills (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api put v2 pals pal-id skills --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/pals/{pal_id}/skills"
+        }
+      ],
+      "operation": "tavus.put.v2-pals-pal-id-skills",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 pals pal-id skills skill-id",
+      "summary": "Documented PUT /v2/pals/{pal_id}/skills/{skill_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus api put v2 pals pal-id skills skill-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/pals/{pal_id}/skills/{skill_id}"
+        }
+      ],
+      "operation": "tavus.put.v2-pals-pal-id-skills-skill-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "conversations list",
+      "summary": "Run the conversations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus conversations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/conversations"
+        }
+      ]
+    },
+    {
+      "path": "create conversation apply",
+      "summary": "Plan and execute the create conversation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_conversation",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus create conversation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations"
+        }
+      ],
+      "risk": "starts a real-time video conversation, which begins consuming conversational-minutes billing immediately and (unless test_mode) places a live call",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create document apply",
+      "summary": "Plan and execute the create document reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_document",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "document_url",
+          "type": "string",
+          "summary": "Required document url record field.",
+          "maps_to": "record.document_url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus create document apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/documents"
+        }
+      ],
+      "risk": "uploads a document to the knowledge base; processing is asynchronous and the document becomes available to PALs only once status reaches ready",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create guardrail apply",
+      "summary": "Plan and execute the create guardrail reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_guardrail",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "guardrail_name",
+          "type": "string",
+          "summary": "Required guardrail name record field.",
+          "maps_to": "record.guardrail_name",
+          "required": true
+        },
+        {
+          "name": "guardrail_prompt",
+          "type": "string",
+          "summary": "Required guardrail prompt record field.",
+          "maps_to": "record.guardrail_prompt",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus create guardrail apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/guardrails"
+        }
+      ],
+      "risk": "creates a new behavioral guardrail; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create objective apply",
+      "summary": "Plan and execute the create objective reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_objective",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus create objective apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/objectives"
+        }
+      ],
+      "risk": "creates one or more new PAL objectives; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create pal apply",
+      "summary": "Plan and execute the create pal reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_pal",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "default_face_id",
+          "type": "string",
+          "summary": "Required default face id record field.",
+          "maps_to": "record.default_face_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus create pal apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/pals"
+        }
+      ],
+      "risk": "creates a new PAL persona; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create pronunciation dictionary apply",
+      "summary": "Plan and execute the create pronunciation dictionary reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_pronunciation_dictionary",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus create pronunciation dictionary apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/pronunciation-dictionaries"
+        }
+      ],
+      "risk": "creates a new pronunciation dictionary; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create video apply",
+      "summary": "Plan and execute the create video reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_video",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "replica_id",
+          "type": "string",
+          "summary": "Required replica id record field.",
+          "maps_to": "record.replica_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus create video apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/videos"
+        }
+      ],
+      "risk": "generates a new async video render from a face and script/audio; consumes video-generation minutes on the account",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete conversation apply",
+      "summary": "Plan and execute the delete conversation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_conversation",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus delete conversation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/conversations/{conversation_id}"
+        }
+      ],
+      "risk": "permanently deletes a conversation and its recorded history; use end_conversation instead for routine call cleanup",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete document apply",
+      "summary": "Plan and execute the delete document reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_document",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus delete document apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/documents/{document_id}"
+        }
+      ],
+      "risk": "permanently deletes a knowledge-base document and its processed data; any PAL referencing it via document_ids loses that knowledge source immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete guardrail apply",
+      "summary": "Plan and execute the delete guardrail reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_guardrail",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus delete guardrail apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/guardrails/{guardrail_id}"
+        }
+      ],
+      "risk": "permanently deletes a guardrail; any PAL referencing it via guardrail_ids loses that behavioral boundary immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete objective apply",
+      "summary": "Plan and execute the delete objective reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_objective",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus delete objective apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/objectives/{objectives_id}"
+        }
+      ],
+      "risk": "permanently deletes an objective; any PAL referencing it via objectives_id loses that goal-oriented instruction immediately",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete pal apply",
+      "summary": "Plan and execute the delete pal reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_pal",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus delete pal apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/pals/{pal_id}"
+        }
+      ],
+      "risk": "permanently deletes a PAL; any conversation still referencing its pal_id will fail to start",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete pronunciation dictionary apply",
+      "summary": "Plan and execute the delete pronunciation dictionary reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_pronunciation_dictionary",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus delete pronunciation dictionary apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/pronunciation-dictionaries/{dictionary_id}"
+        }
+      ],
+      "risk": "permanently deletes a pronunciation dictionary and removes it from every linked PAL",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete video apply",
+      "summary": "Plan and execute the delete video reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_video",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus delete video apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/videos/{video_id}"
+        }
+      ],
+      "risk": "permanently deletes a generated video and its hosted/download URLs",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "documents list",
+      "summary": "Run the documents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus documents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/documents"
+        }
+      ]
+    },
+    {
+      "path": "end conversation apply",
+      "summary": "Plan and execute the end conversation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "end_conversation",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm tavus end conversation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/conversations/{conversation_id}/end"
+        }
+      ],
+      "risk": "ends an active conversation for every participant; routine call cleanup, not destructive to conversation history (compare delete_conversation)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "guardrails list",
+      "summary": "Run the guardrails ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "guardrails",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus guardrails list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/guardrails"
+        }
+      ]
+    },
+    {
+      "path": "objectives list",
+      "summary": "Run the objectives ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "objectives",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus objectives list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/objectives"
+        }
+      ]
+    },
+    {
+      "path": "pals list",
+      "summary": "Run the pals ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pals",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus pals list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/pals"
+        }
+      ]
+    },
+    {
+      "path": "pronunciation dictionaries list",
+      "summary": "Run the pronunciation dictionaries ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "pronunciation_dictionaries",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus pronunciation dictionaries list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/pronunciation-dictionaries"
+        }
+      ]
+    },
+    {
+      "path": "replicas list",
+      "summary": "Run the replicas ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "replicas",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus replicas list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/replicas"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "skills list",
+      "summary": "Run the skills ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "skills",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus skills list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/skills"
+        }
+      ]
+    },
+    {
+      "path": "videos list",
+      "summary": "Run the videos ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "videos",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus videos list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/videos"
+        }
+      ]
+    },
+    {
+      "path": "voices list",
+      "summary": "Run the voices ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "voices",
+      "source_url": "https://docs.tavus.io/openapi.yaml",
+      "examples": [
+        "pm tavus voices list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/voices"
+        }
+      ]
+    }
+  ]
+}

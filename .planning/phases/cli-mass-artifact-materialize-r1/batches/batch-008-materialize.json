@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-008-manifest.json",
+  "candidates": 37,
+  "included": [
+    {
+      "connector": "invoiced",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developer.invoiced.com/api",
+        "version": "Invoiced API Documentation (live HTML)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "3cac8b33175adb720a3331696efac49305e89903823b755dd206a138ddc439d4"
+      },
+      "artifact_operations": 111,
+      "declared_operations": 192,
+      "operation_split": {
+        "executable": 110,
+        "provider_blocked": 45,
+        "excluded": 37
+      },
+      "cli_commands": 192,
+      "implemented_commands": 55,
+      "named_dependency_commands": 137,
+      "flagged_discrepancies": 81,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 82
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "chameleon",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 31 operation(s), below the ledger's 99"
+    },
+    {
+      "connector": "everhour",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 3 operation(s), below the ledger's 101; official reference fallback \"https://everhour.docs.apiary.io/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "northpass-lms",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "chartmogul",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://dev.chartmogul.com/reference/\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "nutshell",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "easypost",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://docs.easypost.com/sitemap.xml\" is neither a parseable OpenAPI/Swagger or Postman artifact nor a recognized reference document), and official reference fallback \"https://docs.easypost.com/docs/shipments\" failed: artifact operation inventory is unknown: official reference \"https://docs.easypost.com/branding/favicons/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "survey-sparrow",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "instatus",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "campaign-monitor",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://www.campaignmonitor.com/api/v3-2/feed/\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://www.campaignmonitor.com/api/v3-3/getting-started/\" failed: artifact operation inventory is unknown: official reference link \"https://www.campaignmonitor.com/api/getting-started/feed/\" could not be fetched: fetch artifact: provider returned HTTP 404"
+    },
+    {
+      "connector": "webflow",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget"
+    },
+    {
+      "connector": "freshsales",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference link \"https://developers.freshsales.io/api/favicon.ico\" could not be fetched: fetch artifact: provider returned HTTP 403"
+    },
+    {
+      "connector": "sonar-cloud",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 1 operation(s), below the ledger's 118; official reference fallback \"https://sonarcloud.io/web_api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "harvest",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "lemlist",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "buildkite",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://buildkite.com/docs/apis/rest-api\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "capsule-crm",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://developer.capsulecrm.com/v2/overview/authentication\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "serpstat",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://serpstat.com/api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "hubspot",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference link \"https://developers.hubspot.com/api-reference/latest/cms/pages/landing-pages/drafts/get-landing-page-draft\" could not be fetched: fetch artifact: provider returned HTTP 403"
+    },
+    {
+      "connector": "planhat",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "freshbooks",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode Postman collection: invalid character '\u003c' looking for beginning of value), and official reference fallback \"https://www.freshbooks.com/api/postman-collection\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "mux",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget), and official reference fallback \"https://www.mux.com/docs/api-reference\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the bounded 67108864-byte source budget"
+    },
+    {
+      "connector": "mailjet-mail",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a malformed selected link"
+    },
+    {
+      "connector": "sparkpost",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://github.com/SparkPost/developers.sparkpost.com/commits/main/content/api/ab-testing.apib\" could not be fetched: fetch artifact: provider returned HTTP 429), and official reference fallback \"https://developers.sparkpost.com/api/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "miro",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.miro.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "salesloft",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.salesloft.com/docs/api/salesloft-platform/\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "free-agent-connector",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "nylas",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "freshdesk",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "sentry",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://docs.sentry.io/api/\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "katana",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developer.katanamrp.com/reference/api-authentication\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "grafana",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "discord",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://docs.discord.com/developers/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "shopwired",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://shopwired.readme.io/reference\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "pinterest",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "pretix",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://docs.pretix.eu/en/latest/api/\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "signnow",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    }
+  ]
+}

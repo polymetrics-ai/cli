@@ -1,0 +1,139 @@
+{
+  "operations": [
+    {
+      "id": "nytimes.get.archive-v1-year-month-json",
+      "kind": "rest_read",
+      "summary": "GET /archive/v1/{year}/{month}.json",
+      "description": "/archive/v1/{year}/{month}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/archive/v1/{year}/{month}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nytimes.get.books-v3-lists-current-list-json",
+      "kind": "rest_read",
+      "summary": "GET /books/v3/lists/current/{list}.json",
+      "description": "/books/v3/lists/current/{list}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/books/v3/lists/current/{list}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nytimes.get.emailed-period-json",
+      "kind": "rest_read",
+      "summary": "GET /emailed/{period}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/emailed/{period}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nytimes.get.mostpopular-v2-shared-period-share-type-json",
+      "kind": "rest_read",
+      "summary": "GET /mostpopular/v2/shared/{period}/{share_type}.json",
+      "description": "/mostpopular/v2/shared/{period}/{share_type}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/mostpopular/v2/shared/{period}/{share_type}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nytimes.get.search-v2-articlesearch-json",
+      "kind": "rest_read",
+      "summary": "GET /search/v2/articlesearch.json",
+      "description": "/search/v2/articlesearch.json is a reporting/analytics/query surface with endpoint-specific parameters; this bundle does not declare a stable collection schema and fixture for it",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/search/v2/articlesearch.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nytimes.get.shared-period-json",
+      "kind": "rest_read",
+      "summary": "GET /shared/{period}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shared/{period}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nytimes.get.shared-period-share-type-json",
+      "kind": "rest_read",
+      "summary": "GET /shared/{period}/{share_type}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/shared/{period}/{share_type}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nytimes.get.topstories-v2-section-json",
+      "kind": "rest_read",
+      "summary": "GET /topstories/v2/{section}.json",
+      "description": "/topstories/v2/{section}.json is a detail or scoped sub-resource endpoint requiring caller-supplied identifiers or fan-out beyond this bundle's current spec; the implemented list streams cover the configured collection surface where applicable",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/topstories/v2/{section}.json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nytimes.get.viewed-period-json",
+      "kind": "rest_read",
+      "summary": "GET /viewed/{period}.json",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/viewed/{period}.json",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

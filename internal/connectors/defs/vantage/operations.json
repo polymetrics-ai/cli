@@ -1,0 +1,1916 @@
+{
+  "operations": [
+    {
+      "id": "vantage.get.access-grants",
+      "kind": "rest_read",
+      "summary": "GET /access_grants",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/access_grants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.access-grants",
+      "kind": "rest_write",
+      "summary": "POST /access_grants",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/access_grants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.access-grants-access-grant-token",
+      "kind": "rest_read",
+      "summary": "GET /access_grants/{access_grant_token}",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/access_grants/{access_grant_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.access-grants-access-grant-token",
+      "kind": "rest_write",
+      "summary": "PUT /access_grants/{access_grant_token}",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/access_grants/{access_grant_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.access-grants-access-grant-token",
+      "kind": "rest_write",
+      "summary": "DELETE /access_grants/{access_grant_token}",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/access_grants/{access_grant_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.anomaly-alerts-anomaly-alert-token",
+      "kind": "rest_read",
+      "summary": "GET /anomaly_alerts/{anomaly_alert_token}",
+      "description": "single-anomaly_alerts-item detail; identical record shape to the anomaly_alerts list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/anomaly_alerts/{anomaly_alert_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.anomaly-notifications-anomaly-notification-token",
+      "kind": "rest_read",
+      "summary": "GET /anomaly_notifications/{anomaly_notification_token}",
+      "description": "single-item detail GET; identical record shape to the anomaly_notifications list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/anomaly_notifications/{anomaly_notification_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.audit-logs",
+      "kind": "rest_read",
+      "summary": "GET /audit_logs",
+      "description": "audit-trail event log, not a primary cost-management object collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/audit_logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.audit-logs-audit-log-token",
+      "kind": "rest_read",
+      "summary": "GET /audit_logs/{audit_log_token}",
+      "description": "single audit-log-entry detail, not a primary cost-management object collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/audit_logs/{audit_log_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.billing-profiles",
+      "kind": "rest_read",
+      "summary": "GET /billing_profiles",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/billing_profiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.billing-profiles",
+      "kind": "rest_write",
+      "summary": "POST /billing_profiles",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/billing_profiles",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.billing-profiles-billing-profile-token",
+      "kind": "rest_read",
+      "summary": "GET /billing_profiles/{billing_profile_token}",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/billing_profiles/{billing_profile_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.billing-profiles-billing-profile-token",
+      "kind": "rest_write",
+      "summary": "PUT /billing_profiles/{billing_profile_token}",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/billing_profiles/{billing_profile_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.billing-profiles-billing-profile-token",
+      "kind": "rest_write",
+      "summary": "DELETE /billing_profiles/{billing_profile_token}",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/billing_profiles/{billing_profile_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.billing-rules",
+      "kind": "rest_read",
+      "summary": "GET /billing_rules",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/billing_rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.billing-rules",
+      "kind": "rest_write",
+      "summary": "POST /billing_rules",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/billing_rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.billing-rules-billing-rule-token",
+      "kind": "rest_read",
+      "summary": "GET /billing_rules/{billing_rule_token}",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/billing_rules/{billing_rule_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.billing-rules-billing-rule-token",
+      "kind": "rest_write",
+      "summary": "PUT /billing_rules/{billing_rule_token}",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/billing_rules/{billing_rule_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.billing-rules-billing-rule-token",
+      "kind": "rest_write",
+      "summary": "DELETE /billing_rules/{billing_rule_token}",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/billing_rules/{billing_rule_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.budget-alerts-budget-alert-token",
+      "kind": "rest_read",
+      "summary": "GET /budget_alerts/{budget_alert_token}",
+      "description": "single-budget_alerts-item detail; identical record shape to the budget_alerts list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/budget_alerts/{budget_alert_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.budgets-budget-token",
+      "kind": "rest_read",
+      "summary": "GET /budgets/{budget_token}",
+      "description": "single-budgets-item detail; identical record shape to the budgets list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/budgets/{budget_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.business-metrics-business-metric-token",
+      "kind": "rest_read",
+      "summary": "GET /business_metrics/{business_metric_token}",
+      "description": "single-business_metrics-item detail; identical record shape to the business_metrics list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/business_metrics/{business_metric_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.business-metrics-business-metric-token-forecasted-values",
+      "kind": "rest_read",
+      "summary": "GET /business_metrics/{business_metric_token}/forecasted_values",
+      "description": "computed forecast projection derived from a business metric's historical values, not a syncable stored record",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/business_metrics/{business_metric_token}/forecasted_values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.business-metrics-business-metric-token-labels",
+      "kind": "rest_read",
+      "summary": "GET /business_metrics/{business_metric_token}/labels",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/business_metrics/{business_metric_token}/labels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.business-metrics-business-metric-token-values",
+      "kind": "rest_read",
+      "summary": "GET /business_metrics/{business_metric_token}/values",
+      "description": "per-metric raw value time series; the business_metrics list stream's own record already carries current values inline, and this sub-resource has no independent top-level collection identity",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/business_metrics/{business_metric_token}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.business-metrics-business-metric-token-values",
+      "kind": "rest_write",
+      "summary": "DELETE /business_metrics/{business_metric_token}/values",
+      "description": "bulk-clears a single business metric's entire value history; a narrow, high-blast-radius admin action on a sub-resource this connector does not otherwise read independently",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/business_metrics/{business_metric_token}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.business-metrics-business-metric-token-values-csv",
+      "kind": "rest_write",
+      "summary": "PUT /business_metrics/{business_metric_token}/values.csv",
+      "description": "CSV file upload to bulk-replace a business metric's value history, not a JSON record this dialect's write body construction can express",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/business_metrics/{business_metric_token}/values.csv",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.canvases-canvas-token",
+      "kind": "rest_read",
+      "summary": "GET /canvases/{canvas_token}",
+      "description": "single-item detail GET; identical record shape to the canvases list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/canvases/{canvas_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.cost-alerts-cost-alert-token",
+      "kind": "rest_read",
+      "summary": "GET /cost_alerts/{cost_alert_token}",
+      "description": "single-cost_alerts-item detail; identical record shape to the cost_alerts list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cost_alerts/{cost_alert_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.cost-alerts-cost-alert-token-events",
+      "kind": "rest_read",
+      "summary": "GET /cost_alerts/{cost_alert_token}/events",
+      "description": "per-alert firing-event history sub-resource; no independent top-level collection identity and no corresponding write requirement in this pass",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cost_alerts/{cost_alert_token}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.cost-alerts-cost-alert-token-events-event-token",
+      "kind": "rest_read",
+      "summary": "GET /cost_alerts/{cost_alert_token}/events/{event_token}",
+      "description": "single-item detail GET on the already out-of-scope cost-alert-events sub-resource",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cost_alerts/{cost_alert_token}/events/{event_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.cost-provider-accounts",
+      "kind": "rest_read",
+      "summary": "GET /cost_provider_accounts",
+      "description": "connected-provider-account metadata list serving the integrations UI, not a primary cost-management object collection targeted by this connector's practical stream set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cost_provider_accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.cost-providers",
+      "kind": "rest_read",
+      "summary": "GET /cost_providers",
+      "description": "static enum of supported cloud providers, not an account-scoped object collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cost_providers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.cost-reports-cost-report-token",
+      "kind": "rest_read",
+      "summary": "GET /cost_reports/{cost_report_token}",
+      "description": "single-cost_reports-item detail; identical record shape to the cost_reports list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cost_reports/{cost_report_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.cost-reports-cost-report-token-forecasted-costs",
+      "kind": "rest_read",
+      "summary": "GET /cost_reports/{cost_report_token}/forecasted_costs",
+      "description": "computed cost forecast projection derived from a cost report's historical data, not a syncable stored record",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cost_reports/{cost_report_token}/forecasted_costs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.cost-services",
+      "kind": "rest_read",
+      "summary": "GET /cost_services",
+      "description": "static per-workspace enum of queryable cost service names for VQL filter construction, not a syncable object collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/cost_services",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.costs-data-exports",
+      "kind": "rest_write",
+      "summary": "POST /costs/data_exports",
+      "description": "queues an asynchronous CSV data-export job (202 Accepted, polled via a Location header) of raw cost data, not itself a syncable record — the costs stream already reads the same underlying data synchronously",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/costs/data_exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.dashboards-dashboard-token",
+      "kind": "rest_read",
+      "summary": "GET /dashboards/{dashboard_token}",
+      "description": "single-dashboards-item detail; identical record shape to the dashboards list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/dashboards/{dashboard_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.data-exports-data-export-token",
+      "kind": "rest_read",
+      "summary": "GET /data_exports/{data_export_token}",
+      "description": "async export-job status poller keyed to a job id returned by a POST kickoff, not a standalone syncable resource",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/data_exports/{data_export_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.exchange-rates",
+      "kind": "rest_read",
+      "summary": "GET /exchange_rates",
+      "description": "static currency exchange-rate reference table, not an account-scoped syncable object",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/exchange_rates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.exchange-rates-csv",
+      "kind": "rest_write",
+      "summary": "POST /exchange_rates/csv",
+      "description": "bulk CSV exchange-rate upload; binary/file-upload mutation the dialect cannot express",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/exchange_rates/csv",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.financial-commitment-reports",
+      "kind": "rest_read",
+      "summary": "GET /financial_commitment_reports",
+      "description": "list endpoint for the financial-commitment-report configuration object; the financial_commitments stream already covers the underlying commitment records this report type summarizes, and a second, structurally distinct report-config stream adds administrative overhead disproportionate to its read value in this pass",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/financial_commitment_reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.financial-commitment-reports",
+      "kind": "rest_write",
+      "summary": "POST /financial_commitment_reports",
+      "description": "creates a financial-commitment-report configuration object; the underlying financial_commitments stream and its data are already covered without this connector needing to author report configuration",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/financial_commitment_reports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.financial-commitment-reports-financial-commitment-report-token",
+      "kind": "rest_read",
+      "summary": "GET /financial_commitment_reports/{financial_commitment_report_token}",
+      "description": "single-item detail GET on the already out-of-scope financial_commitment_reports collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/financial_commitment_reports/{financial_commitment_report_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.financial-commitment-reports-financial-commitment-report-token",
+      "kind": "rest_write",
+      "summary": "PUT /financial_commitment_reports/{financial_commitment_report_token}",
+      "description": "same report-configuration narrowing as financial_commitment_reports creation above",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/financial_commitment_reports/{financial_commitment_report_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.financial-commitment-reports-financial-commitment-report-token",
+      "kind": "rest_write",
+      "summary": "DELETE /financial_commitment_reports/{financial_commitment_report_token}",
+      "description": "same report-configuration narrowing as financial_commitment_reports creation above",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/financial_commitment_reports/{financial_commitment_report_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.folders-folder-token",
+      "kind": "rest_read",
+      "summary": "GET /folders/{folder_token}",
+      "description": "single-folders-item detail; identical record shape to the folders list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/folders/{folder_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.integrations-azure",
+      "kind": "rest_write",
+      "summary": "POST /integrations/azure",
+      "description": "Azure Service Principal credential-onboarding write (tenant/app_id/password are live cloud credentials); a distinct per-provider credential shape from GCP/custom-provider onboarding, each carrying its own live-secret fields this dialect's schema/write model is not the right place to collect",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/integrations/azure",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.integrations-custom-provider",
+      "kind": "rest_write",
+      "summary": "POST /integrations/custom_provider",
+      "description": "custom-provider integration creation is gated behind a 403-capable elevated-tier check per Vantage's own documented response codes for this endpoint",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/integrations/custom_provider",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.integrations-gcp",
+      "kind": "rest_write",
+      "summary": "POST /integrations/gcp",
+      "description": "GCP billing-account/BigQuery-dataset onboarding write; same per-provider live-credential-collection concern as the Azure integration endpoint above",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/integrations/gcp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.integrations-integration-token",
+      "kind": "rest_read",
+      "summary": "GET /integrations/{integration_token}",
+      "description": "single-item detail GET; identical record shape to the integrations list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integrations/{integration_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.integrations-integration-token",
+      "kind": "rest_write",
+      "summary": "PUT /integrations/{integration_token}",
+      "description": "same integration-configuration-mutation narrowing as integration deletion above",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/integrations/{integration_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.integrations-integration-token",
+      "kind": "rest_write",
+      "summary": "DELETE /integrations/{integration_token}",
+      "description": "deletes a configured cloud-billing integration entirely (a highly destructive account-configuration action, not a business-data record); no corresponding create action is migrated for any single provider, so a bare delete without its own create counterpart is left for a future wave",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/integrations/{integration_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.integrations-integration-token-costs",
+      "kind": "rest_read",
+      "summary": "GET /integrations/{integration_token}/costs",
+      "description": "per-integration cost sub-listing; identical record shape to the costs stream, already covered by that stream (unfiltered by integration)",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/integrations/{integration_token}/costs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.integrations-integration-token-costs-csv",
+      "kind": "rest_write",
+      "summary": "POST /integrations/{integration_token}/costs.csv",
+      "description": "CSV file upload of externally-computed integration costs, not a JSON record this dialect's write body construction can express",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/integrations/{integration_token}/costs.csv",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.integrations-integration-token-costs-user-costs-upload-token",
+      "kind": "rest_write",
+      "summary": "DELETE /integrations/{integration_token}/costs/{user_costs_upload_token}",
+      "description": "deletes a single previously-uploaded custom-provider cost CSV batch; a narrow admin action paired with the CSV-upload endpoint this connector does not implement",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/integrations/{integration_token}/costs/{user_costs_upload_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.invoices",
+      "kind": "rest_write",
+      "summary": "POST /invoices",
+      "description": "invoice creation is MSP-invoicing-tier only per Vantage's own documentation ('MSP accounts only'), a billing capability gated behind an account tier this connector's declared scope does not assume",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.invoices-invoice-token",
+      "kind": "rest_read",
+      "summary": "GET /invoices/{invoice_token}",
+      "description": "single-item detail GET; identical record shape to the invoices list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/{invoice_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.invoices-invoice-token-cost-report",
+      "kind": "rest_read",
+      "summary": "GET /invoices/{invoice_token}/cost_report",
+      "description": "returns a cost-report URL reference for the invoice's billing period, not a syncable record",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/invoices/{invoice_token}/cost_report",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.invoices-invoice-token-download",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_token}/download",
+      "description": "returns a signed download URL for a rendered PDF/CSV invoice file, not a JSON business-data record",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_token}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.invoices-invoice-token-regenerate",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_token}/regenerate",
+      "description": "invoice regeneration is MSP-accounts-only per Vantage's own documentation, the same billing-tier gate as invoice creation above",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_token}/regenerate",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.invoices-invoice-token-send",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_token}/send",
+      "description": "sends an invoice via email; an MSP-invoicing-workflow action outside this connector's declared read/write data-sync scope",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_token}/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.invoices-invoice-token-send-and-approve",
+      "kind": "rest_write",
+      "summary": "POST /invoices/{invoice_token}/send_and_approve",
+      "description": "same MSP-invoicing-workflow narrowing as invoice send above, additionally gated to MSP accounts only per Vantage's own documentation",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/invoices/{invoice_token}/send_and_approve",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.kubernetes-efficiency-reports-data-exports",
+      "kind": "rest_write",
+      "summary": "POST /kubernetes_efficiency_reports/data_exports",
+      "description": "queues an asynchronous CSV data-export job (202 Accepted, polled via a Location header), not itself a syncable record — see costs/data_exports and unit_costs/data_exports for the same async-job shape",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/kubernetes_efficiency_reports/data_exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.kubernetes-efficiency-reports-kubernetes-efficiency-report-token",
+      "kind": "rest_read",
+      "summary": "GET /kubernetes_efficiency_reports/{kubernetes_efficiency_report_token}",
+      "description": "single-item detail GET; identical record shape to the kubernetes_efficiency_reports list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/kubernetes_efficiency_reports/{kubernetes_efficiency_report_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.managed-accounts",
+      "kind": "rest_write",
+      "summary": "POST /managed_accounts",
+      "description": "provisions a new child-account relationship under an Enterprise parent account; org-topology admin action gated to Enterprise plans, out of scope for this connector's per-account cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/managed_accounts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.managed-accounts-managed-account-token",
+      "kind": "rest_read",
+      "summary": "GET /managed_accounts/{managed_account_token}",
+      "description": "single-managed_accounts-item detail; identical record shape to the managed_accounts list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/managed_accounts/{managed_account_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.managed-accounts-managed-account-token",
+      "kind": "rest_write",
+      "summary": "PUT /managed_accounts/{managed_account_token}",
+      "description": "modifies an Enterprise managed-account relationship; org-topology admin action, not a routine cost-management mutation",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/managed_accounts/{managed_account_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.managed-accounts-managed-account-token",
+      "kind": "rest_write",
+      "summary": "DELETE /managed_accounts/{managed_account_token}",
+      "description": "severs an Enterprise managed-account relationship; destructive org-topology admin action requiring elevated Enterprise-tier scope",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/managed_accounts/{managed_account_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.managed-accounts-managed-account-token-sso-connection",
+      "kind": "rest_write",
+      "summary": "POST /managed_accounts/{managed_account_token}/sso_connection",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/managed_accounts/{managed_account_token}/sso_connection",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.managed-accounts-managed-account-token-sso-connection",
+      "kind": "rest_write",
+      "summary": "PUT /managed_accounts/{managed_account_token}/sso_connection",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/managed_accounts/{managed_account_token}/sso_connection",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.managed-accounts-managed-account-token-sso-connection",
+      "kind": "rest_write",
+      "summary": "DELETE /managed_accounts/{managed_account_token}/sso_connection",
+      "description": "billing/access-grant/SSO administrative configuration requiring elevated account-owner or Enterprise-tier scope, distinct from this connector's per-workspace cost-management write set",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/managed_accounts/{managed_account_token}/sso_connection",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.me",
+      "kind": "rest_read",
+      "summary": "GET /me",
+      "description": "authenticated-account/user profile introspection, not a syncable object stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.me",
+      "kind": "rest_write",
+      "summary": "PUT /me",
+      "description": "authenticated-user profile self-update, not a syncable-collection mutation",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.network-flow-logs",
+      "kind": "rest_read",
+      "summary": "GET /network_flow_logs",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/network_flow_logs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.network-flow-reports-network-flow-report-token",
+      "kind": "rest_read",
+      "summary": "GET /network_flow_reports/{network_flow_report_token}",
+      "description": "single-item detail GET; identical record shape to the network_flow_reports list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/network_flow_reports/{network_flow_report_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.ping",
+      "kind": "rest_read",
+      "summary": "GET /ping",
+      "description": "health-check heartbeat endpoint, not a syncable object stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/ping",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.products",
+      "kind": "rest_read",
+      "summary": "GET /products",
+      "description": "Vantage's own billing/subscription product catalog (Vantage's own SaaS pricing plans), not cloud cost-management business data this connector syncs",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.products-id",
+      "kind": "rest_read",
+      "summary": "GET /products/{id}",
+      "description": "single-item detail GET on the already out-of-scope products collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.products-product-id-prices",
+      "kind": "rest_read",
+      "summary": "GET /products/{product_id}/prices",
+      "description": "Vantage's own billing/subscription price-tier catalog nested under a product; same non-business-data narrowing as products above",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{product_id}/prices",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.products-product-id-prices-id",
+      "kind": "rest_read",
+      "summary": "GET /products/{product_id}/prices/{id}",
+      "description": "single-item detail GET on the already out-of-scope product-prices sub-resource",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/products/{product_id}/prices/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.recommendation-views-recommendation-view-token",
+      "kind": "rest_read",
+      "summary": "GET /recommendation_views/{recommendation_view_token}",
+      "description": "single-item detail GET; identical record shape to the recommendation_views list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recommendation_views/{recommendation_view_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.recommendations-by-type-type-resources",
+      "kind": "rest_read",
+      "summary": "GET /recommendations/by_type/{type}/resources",
+      "description": "per-type resource fan-out sub-listing of a recommendation; the resources these point to are already reachable via the recommendations stream's own per-record resource references",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recommendations/by_type/{type}/resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.recommendations-recommendation-token",
+      "kind": "rest_read",
+      "summary": "GET /recommendations/{recommendation_token}",
+      "description": "single-recommendations-item detail; identical record shape to the recommendations list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recommendations/{recommendation_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.recommendations-recommendation-token-resources",
+      "kind": "rest_read",
+      "summary": "GET /recommendations/{recommendation_token}/resources",
+      "description": "per-recommendation affected-resource sub-listing; no independent top-level collection identity and no fan_out parent-id iteration declared for it in this pass",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recommendations/{recommendation_token}/resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.recommendations-recommendation-token-resources-resource-token",
+      "kind": "rest_read",
+      "summary": "GET /recommendations/{recommendation_token}/resources/{resource_token}",
+      "description": "single-item detail GET on the already out-of-scope per-recommendation resources sub-listing",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/recommendations/{recommendation_token}/resources/{resource_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.report-forecasts",
+      "kind": "rest_read",
+      "summary": "GET /report_forecasts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/report_forecasts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.report-forecasts",
+      "kind": "rest_write",
+      "summary": "POST /report_forecasts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/report_forecasts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.report-forecasts-report-forecast-token",
+      "kind": "rest_read",
+      "summary": "GET /report_forecasts/{report_forecast_token}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/report_forecasts/{report_forecast_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.report-forecasts-report-forecast-token",
+      "kind": "rest_write",
+      "summary": "PUT /report_forecasts/{report_forecast_token}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/report_forecasts/{report_forecast_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.report-forecasts-report-forecast-token",
+      "kind": "rest_write",
+      "summary": "DELETE /report_forecasts/{report_forecast_token}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/report_forecasts/{report_forecast_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.report-notifications-report-notification-token",
+      "kind": "rest_read",
+      "summary": "GET /report_notifications/{report_notification_token}",
+      "description": "single-item detail GET; identical record shape to the report_notifications list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/report_notifications/{report_notification_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.resource-reports-columns",
+      "kind": "rest_read",
+      "summary": "GET /resource_reports/columns",
+      "description": "static column-metadata enum for building a resource_reports query, not a syncable object collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/resource_reports/columns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.resource-reports-resource-report-token",
+      "kind": "rest_read",
+      "summary": "GET /resource_reports/{resource_report_token}",
+      "description": "single-resource_reports-item detail; identical record shape to the resource_reports list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/resource_reports/{resource_report_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.resources",
+      "kind": "rest_read",
+      "summary": "GET /resources",
+      "description": "requires a resource_report_token (or workspace_token) parent-scoping query parameter with no bare top-level collection semantics of its own; the resource_reports stream already covers the parent report objects, and this dialect has no fan_out iteration declared across every resource_report_token to enumerate this sub-collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.resources-resource-token",
+      "kind": "rest_read",
+      "summary": "GET /resources/{resource_token}",
+      "description": "single-item detail GET on the already out-of-scope resources sub-resource",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/resources/{resource_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.saved-filters-saved-filter-token",
+      "kind": "rest_read",
+      "summary": "GET /saved_filters/{saved_filter_token}",
+      "description": "single-saved_filters-item detail; identical record shape to the saved_filters list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/saved_filters/{saved_filter_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.scenario-models",
+      "kind": "rest_read",
+      "summary": "GET /scenario_models",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scenario_models",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.scenario-models",
+      "kind": "rest_write",
+      "summary": "POST /scenario_models",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/scenario_models",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.scenario-models-scenario-model-token",
+      "kind": "rest_read",
+      "summary": "GET /scenario_models/{scenario_model_token}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/scenario_models/{scenario_model_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.scenario-models-scenario-model-token",
+      "kind": "rest_write",
+      "summary": "PUT /scenario_models/{scenario_model_token}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/scenario_models/{scenario_model_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.scenario-models-scenario-model-token",
+      "kind": "rest_write",
+      "summary": "DELETE /scenario_models/{scenario_model_token}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/scenario_models/{scenario_model_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.segments-segment-token",
+      "kind": "rest_read",
+      "summary": "GET /segments/{segment_token}",
+      "description": "single-item detail GET; identical record shape to the segments list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/segments/{segment_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.tags",
+      "kind": "rest_write",
+      "summary": "PUT /tags",
+      "description": "bulk tag-rename/merge administrative action, not a per-record object mutation this dialect models",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/tags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.tags-key-values",
+      "kind": "rest_read",
+      "summary": "GET /tags/{key}/values",
+      "description": "per-tag-key value enumeration sub-resource of the tags stream, not a distinct syncable collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/tags/{key}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.teams-team-token",
+      "kind": "rest_read",
+      "summary": "GET /teams/{team_token}",
+      "description": "single-teams-item detail; identical record shape to the teams list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.teams-team-token-members",
+      "kind": "rest_read",
+      "summary": "GET /teams/{team_token}/members",
+      "description": "team-membership sub-list; account-administration data outside this connector's cost-management scope",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/teams/{team_token}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.teams-team-token-members",
+      "kind": "rest_write",
+      "summary": "POST /teams/{team_token}/members",
+      "description": "team-membership mutation; account-administration action outside this connector's cost-management write scope",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/teams/{team_token}/members",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.teams-team-token-members-user-token",
+      "kind": "rest_write",
+      "summary": "DELETE /teams/{team_token}/members/{user_token}",
+      "description": "team-membership removal; account-administration action outside this connector's cost-management write scope",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/teams/{team_token}/members/{user_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.unit-costs",
+      "kind": "rest_read",
+      "summary": "GET /unit_costs",
+      "description": "requires a mandatory cost_report_token parent-scoping query parameter with no bare top-level collection semantics of its own; the cost_reports stream already covers the parent report objects, and this dialect has no fan_out iteration declared across every cost_report_token to enumerate this per-report sub-collection",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/unit_costs",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.unit-costs-data-exports",
+      "kind": "rest_write",
+      "summary": "POST /unit_costs/data_exports",
+      "description": "queues an asynchronous CSV data-export job (202 Accepted, polled via a Location header), not itself a syncable record — see costs/data_exports and kubernetes_efficiency_reports/data_exports for the same async-job shape",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/unit_costs/data_exports",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.user-feedback",
+      "kind": "rest_write",
+      "summary": "POST /user_feedback",
+      "description": "submits free-text product feedback to Vantage itself; a UI-support action with no read/write business-data shape relevant to a cost-management data-sync connector",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/user_feedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.users",
+      "kind": "rest_read",
+      "summary": "GET /users",
+      "description": "workspace member/user directory; account-administration data outside this connector's cost-management scope",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.users-user-token",
+      "kind": "rest_read",
+      "summary": "GET /users/{user_token}",
+      "description": "single-user detail; account-administration data outside this connector's cost-management scope",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/users/{user_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.users-user-token",
+      "kind": "rest_write",
+      "summary": "PUT /users/{user_token}",
+      "description": "user profile/role mutation; account-administration action outside this connector's cost-management write scope",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{user_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.virtual-tag-configs-async-request-id",
+      "kind": "rest_read",
+      "summary": "GET /virtual_tag_configs/async/{request_id}",
+      "description": "polls the status/result of an asynchronous virtual-tag-config recompute job queued by the /async write variant, not itself a syncable record",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/virtual_tag_configs/async/{request_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.virtual-tag-configs-token",
+      "kind": "rest_read",
+      "summary": "GET /virtual_tag_configs/{token}",
+      "description": "single-virtual_tag_configs-item detail; identical record shape to the virtual_tag_configs list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/virtual_tag_configs/{token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.put.virtual-tag-configs-token-async",
+      "kind": "rest_write",
+      "summary": "PUT /virtual_tag_configs/{token}/async",
+      "description": "asynchronous variant of update_virtual_tag_config that queues a background recompute job (202 Accepted, polled via /virtual_tag_configs/async/{request_id}) instead of applying synchronously; the synchronous PUT this dialect already covers (update_virtual_tag_config) is the practical, immediately-observable write path",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/virtual_tag_configs/{token}/async",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.virtual-tag-configs-token-status",
+      "kind": "rest_read",
+      "summary": "GET /virtual_tag_configs/{token}/status",
+      "description": "returns the backfill/recompute job status for a single virtual tag config, a transient job-state poll, not a syncable record",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/virtual_tag_configs/{token}/status",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.post.virtual-tag-configs-virtual-tag-config-token-values",
+      "kind": "rest_write",
+      "summary": "POST /virtual_tag_configs/{virtual_tag_config_token}/values",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/virtual_tag_configs/{virtual_tag_config_token}/values",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.virtual-tag-configs-virtual-tag-config-token-values-virtual-tag-config-value-token",
+      "kind": "rest_read",
+      "summary": "GET /virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.patch.virtual-tag-configs-virtual-tag-config-token-values-virtual-tag-config-value-token",
+      "kind": "rest_write",
+      "summary": "PATCH /virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.delete.virtual-tag-configs-virtual-tag-config-token-values-virtual-tag-config-value-token",
+      "kind": "rest_write",
+      "summary": "DELETE /virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/virtual_tag_configs/{virtual_tag_config_token}/values/{virtual_tag_config_value_token}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "vantage.get.workspaces-workspace-token",
+      "kind": "rest_read",
+      "summary": "GET /workspaces/{workspace_token}",
+      "description": "single-workspaces-item detail; identical record shape to the workspaces list stream's per-item object, already covered by that stream",
+      "source_url": "https://api.vantage.sh/v2/oas_v3.json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/workspaces/{workspace_token}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

@@ -1,0 +1,260 @@
+{
+  "tagline": "Run New York Times's declared streams and reverse-ETL actions.",
+  "usage": "pm nytimes \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get archive v1 year month json",
+        "api get books v3 lists current list json",
+        "api get emailed period json",
+        "api get mostpopular v2 shared period share-type json",
+        "api get search v2 articlesearch-json",
+        "api get shared period json",
+        "api get shared period share-type json",
+        "api get topstories v2 section json",
+        "api get viewed period json",
+        "most popular emailed list",
+        "most popular shared list",
+        "most popular viewed list"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api get archive v1 year month json",
+      "summary": "Documented GET /archive/v1/{year}/{month}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes api get archive v1 year month json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/archive/v1/{year}/{month}.json"
+        }
+      ],
+      "operation": "nytimes.get.archive-v1-year-month-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get books v3 lists current list json",
+      "summary": "Documented GET /books/v3/lists/current/{list}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes api get books v3 lists current list json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/books/v3/lists/current/{list}.json"
+        }
+      ],
+      "operation": "nytimes.get.books-v3-lists-current-list-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get emailed period json",
+      "summary": "Documented GET /emailed/{period}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes api get emailed period json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/emailed/{period}.json"
+        }
+      ],
+      "operation": "nytimes.get.emailed-period-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get mostpopular v2 shared period share-type json",
+      "summary": "Documented GET /mostpopular/v2/shared/{period}/{share_type}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes api get mostpopular v2 shared period share-type json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mostpopular/v2/shared/{period}/{share_type}.json"
+        }
+      ],
+      "operation": "nytimes.get.mostpopular-v2-shared-period-share-type-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get search v2 articlesearch-json",
+      "summary": "Documented GET /search/v2/articlesearch.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes api get search v2 articlesearch-json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/search/v2/articlesearch.json"
+        }
+      ],
+      "operation": "nytimes.get.search-v2-articlesearch-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shared period json",
+      "summary": "Documented GET /shared/{period}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes api get shared period json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shared/{period}.json"
+        }
+      ],
+      "operation": "nytimes.get.shared-period-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get shared period share-type json",
+      "summary": "Documented GET /shared/{period}/{share_type}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes api get shared period share-type json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/shared/{period}/{share_type}.json"
+        }
+      ],
+      "operation": "nytimes.get.shared-period-share-type-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get topstories v2 section json",
+      "summary": "Documented GET /topstories/v2/{section}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes api get topstories v2 section json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/topstories/v2/{section}.json"
+        }
+      ],
+      "operation": "nytimes.get.topstories-v2-section-json",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get viewed period json",
+      "summary": "Documented GET /viewed/{period}.json (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes api get viewed period json --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/viewed/{period}.json"
+        }
+      ],
+      "operation": "nytimes.get.viewed-period-json",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "most popular emailed list",
+      "summary": "Run the most popular emailed ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "most_popular_emailed",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes most popular emailed list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mostpopular/v2/emailed/{period}.json"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "most popular shared list",
+      "summary": "Run the most popular shared ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "most_popular_shared",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes most popular shared list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mostpopular/v2/shared/{period}.json"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "most popular viewed list",
+      "summary": "Run the most popular viewed ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "most_popular_viewed",
+      "source_url": "https://developer.nytimes.com/portals/api/sites/nyt-apigeex-prd-devportal/liveportal/apis/most-popular-product/download_spec",
+      "examples": [
+        "pm nytimes most popular viewed list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/mostpopular/v2/viewed/{period}.json"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

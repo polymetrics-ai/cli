@@ -1,0 +1,979 @@
+{
+  "operations": [
+    {
+      "id": "rki-covid.get.districts-history",
+      "kind": "rest_read",
+      "summary": "GET /districts/history",
+      "description": "Section/default redirect in the public docs; the concrete target endpoint is covered or excluded separately.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-history-cases-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/history/cases/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/history/cases/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-history-deaths-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/history/deaths/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/history/deaths/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-history-frozen-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/history/frozen-incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/history/frozen-incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-history-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/history/incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/history/incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-history-recovered-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/history/recovered/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/history/recovered/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-age-groups",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/age-groups",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/age-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-cases",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/cases",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/cases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-cases-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/cases/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/cases/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-deaths",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/deaths",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/deaths",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-deaths-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/deaths/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/deaths/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-frozen-incidence",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/frozen-incidence",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/frozen-incidence",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-frozen-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/frozen-incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/frozen-incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-incidence",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/incidence",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/incidence",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-recovered",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/recovered",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/recovered",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.districts-ags-history-recovered-days",
+      "kind": "rest_read",
+      "summary": "GET /districts/{ags}/history/recovered/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/districts/{ags}/history/recovered/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.germany-history",
+      "kind": "rest_read",
+      "summary": "GET /germany/history",
+      "description": "Section/default redirect in the public docs; the concrete target endpoint is covered or excluded separately.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/germany/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.germany-history-cases-days",
+      "kind": "rest_read",
+      "summary": "GET /germany/history/cases/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/germany/history/cases/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.germany-history-deaths-days",
+      "kind": "rest_read",
+      "summary": "GET /germany/history/deaths/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/germany/history/deaths/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.germany-history-frozen-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /germany/history/frozen-incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/germany/history/frozen-incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.germany-history-hospitalization-days",
+      "kind": "rest_read",
+      "summary": "GET /germany/history/hospitalization/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/germany/history/hospitalization/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.germany-history-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /germany/history/incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/germany/history/incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.germany-history-rvalue-days",
+      "kind": "rest_read",
+      "summary": "GET /germany/history/rValue/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/germany/history/rValue/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.germany-history-recovered-days",
+      "kind": "rest_read",
+      "summary": "GET /germany/history/recovered/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/germany/history/recovered/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map",
+      "kind": "rest_read",
+      "summary": "GET /map",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-districts",
+      "kind": "rest_read",
+      "summary": "GET /map/districts",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/districts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-districts-legend",
+      "kind": "rest_read",
+      "summary": "GET /map/districts-legend",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/districts-legend",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-districts-legend-history-date",
+      "kind": "rest_read",
+      "summary": "GET /map/districts-legend/history/{date}",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/districts-legend/history/{date}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-districts-history-date",
+      "kind": "rest_read",
+      "summary": "GET /map/districts/history/{date}",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/districts/history/{date}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-districts-legend-2",
+      "kind": "rest_read",
+      "summary": "GET /map/districts/legend",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/districts/legend",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-states",
+      "kind": "rest_read",
+      "summary": "GET /map/states",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/states",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-states-legend",
+      "kind": "rest_read",
+      "summary": "GET /map/states-legend",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/states-legend",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-states-legend-history-date",
+      "kind": "rest_read",
+      "summary": "GET /map/states-legend/history/{date}",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/states-legend/history/{date}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-states-legend-hospitalization",
+      "kind": "rest_read",
+      "summary": "GET /map/states-legend/hospitalization",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/states-legend/hospitalization",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-states-legend-hospitalization-history-date",
+      "kind": "rest_read",
+      "summary": "GET /map/states-legend/hospitalization/history/{date}",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/states-legend/hospitalization/history/{date}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-states-hospitalization",
+      "kind": "rest_read",
+      "summary": "GET /map/states/hospitalization",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/states/hospitalization",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-states-hospitalization-history-date",
+      "kind": "rest_read",
+      "summary": "GET /map/states/hospitalization/history/{date}",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/states/hospitalization/history/{date}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.map-states-legend-2",
+      "kind": "rest_read",
+      "summary": "GET /map/states/legend",
+      "description": "Visualization map or legend payload used for choropleth rendering, not a syncable tabular metric stream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/map/states/legend",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-history",
+      "kind": "rest_read",
+      "summary": "GET /states/history",
+      "description": "Section/default redirect in the public docs; the concrete target endpoint is covered or excluded separately.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-history-cases-days",
+      "kind": "rest_read",
+      "summary": "GET /states/history/cases/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/history/cases/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-history-deaths-days",
+      "kind": "rest_read",
+      "summary": "GET /states/history/deaths/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/history/deaths/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-history-frozen-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /states/history/frozen-incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/history/frozen-incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-history-hospitalization-days",
+      "kind": "rest_read",
+      "summary": "GET /states/history/hospitalization/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/history/hospitalization/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-history-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /states/history/incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/history/incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-history-recovered-days",
+      "kind": "rest_read",
+      "summary": "GET /states/history/recovered/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/history/recovered/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-age-groups",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/age-groups",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/age-groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-cases",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/cases",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/cases",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-cases-days",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/cases/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/cases/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-deaths",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/deaths",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/deaths",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-deaths-days",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/deaths/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/deaths/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-frozen-incidence",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/frozen-incidence",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/frozen-incidence",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-frozen-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/frozen-incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/frozen-incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-hospitalization",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/hospitalization",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/hospitalization",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-hospitalization-days",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/hospitalization/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/hospitalization/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-incidence",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/incidence",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/incidence",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-incidence-days",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/incidence/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/incidence/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-recovered",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/recovered",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/recovered",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.states-state-history-recovered-days",
+      "kind": "rest_read",
+      "summary": "GET /states/{state}/history/recovered/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/states/{state}/history/recovered/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.testing-history-weeks",
+      "kind": "rest_read",
+      "summary": "GET /testing/history/{weeks}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/testing/history/{weeks}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.vaccinations-germany",
+      "kind": "rest_read",
+      "summary": "GET /vaccinations/germany",
+      "description": "Germany-specific vaccination alias; the /vaccinations stream covers the same Germany-wide record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vaccinations/germany",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.vaccinations-history-days",
+      "kind": "rest_read",
+      "summary": "GET /vaccinations/history/{days}",
+      "description": "Path-parameter-limited time-window alias of the corresponding full history stream; consumers can filter the covered full stream by date/window downstream.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vaccinations/history/{days}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "rki-covid.get.vaccinations-states-state",
+      "kind": "rest_read",
+      "summary": "GET /vaccinations/states/{state}",
+      "description": "Single state/district detail or scoped-history alias of the covered all-states/all-districts collection stream with the same record shape.",
+      "source_url": "https://api.corona-zahlen.org/docs/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vaccinations/states/{state}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}
