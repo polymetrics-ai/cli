@@ -1,0 +1,1524 @@
+{
+  "schema_version": 1,
+  "connector": "activecampaign",
+  "retrieval": {
+    "root_index": {
+      "url": "https://developers.activecampaign.com/llms.txt",
+      "retrieved_at": "2026-08-09",
+      "sha256": "22fce6017106a369afa6f12587fb04b6d70d2795d1af89af61890b6a44a84347",
+      "reference_entries": 147
+    },
+    "direct_selection": {
+      "selection_index_sha256": "6a1d0a8dd761c8cf1a17803e0728427d2b3fe3f0b777efe457ca9c24c90d4866",
+      "successfully_fetched_pages": 147,
+      "selected_v3_openapi_fragments": 87,
+      "expected_operations": 87,
+      "observed_operations": 87,
+      "observed_read_operations": 40,
+      "observed_write_operations": 47,
+      "provider_scope_filter": "OpenAPI servers.url contains /api/3",
+      "nonrecursive": true
+    },
+    "derived_combined_openapi": {
+      "sha256": "38cc7a803cbf730fac0d67fea26af899e9e3cd7ea7169a3ffbd6a45d43af110a",
+      "bytes": 408739,
+      "paths": 65,
+      "operations": 87
+    }
+  },
+  "pages": [
+    {
+      "slug": "about-the-graphql-api",
+      "url": "https://developers.activecampaign.com/reference/about-the-graphql-api.md",
+      "sha256": "9bb24877f4f8da3826063059cf909d474928dfac28683d50f84f1bebeb2c7531",
+      "bytes": 4136
+    },
+    {
+      "slug": "add-custom-field-to-field-group",
+      "url": "https://developers.activecampaign.com/reference/add-custom-field-to-field-group.md",
+      "sha256": "918d0cad9e49242e6efd3a9d41b92dc7189f8e8efd1b2256f6c753d92a234362",
+      "bytes": 8342
+    },
+    {
+      "slug": "authentication",
+      "url": "https://developers.activecampaign.com/reference/authentication.md",
+      "sha256": "48cd01bd28e3084f3c3e069903c88fb009209566fbb648c5e479e05ebbb652ff",
+      "bytes": 967
+    },
+    {
+      "slug": "browse-abandonment",
+      "url": "https://developers.activecampaign.com/reference/browse-abandonment.md",
+      "sha256": "0780b218a7e05ea06ee1371e9538c730458525b98780fe5b26da490d5189f97f",
+      "bytes": 20259
+    },
+    {
+      "slug": "browse-session-apis",
+      "url": "https://developers.activecampaign.com/reference/browse-session-apis.md",
+      "sha256": "8cdf283a13904c4b92d187208e87992499664a5aab8b033d6504db04667e1eae",
+      "bytes": 26350
+    },
+    {
+      "slug": "bulk-delete-accounts",
+      "url": "https://developers.activecampaign.com/reference/bulk-delete-accounts.md",
+      "sha256": "2069df9a94253cde52f2131b4cab18e98fd96f00e1ab75ec92f1af61b86a58c2",
+      "bytes": 2943
+    },
+    {
+      "slug": "bulk-delete-variables",
+      "url": "https://developers.activecampaign.com/reference/bulk-delete-variables.md",
+      "sha256": "d564f61e9480735c1e891b7c228de4955f9bd89a4fe0dbaeaaa9a8ed2c17c2f2",
+      "bytes": 2146
+    },
+    {
+      "slug": "bulk-import-contacts",
+      "url": "https://developers.activecampaign.com/reference/bulk-import-contacts.md",
+      "sha256": "6e6abdd6feb8e6e5041d9d5f7811c70f3d99c40c766cee1f7e1705e5a7bfd3d3",
+      "bytes": 21856
+    },
+    {
+      "slug": "bulk-import-status-info",
+      "url": "https://developers.activecampaign.com/reference/bulk-import-status-info.md",
+      "sha256": "619f7269dc0a8e4f2335056a699cbb7310b7c69bfc14dda39b33b66a45b7d2c4",
+      "bytes": 4992
+    },
+    {
+      "slug": "bulk-import-status-list",
+      "url": "https://developers.activecampaign.com/reference/bulk-import-status-list.md",
+      "sha256": "e6b651def733c49345899f9036ca82c789f412336c23cd3249cd5e731b8295f7",
+      "bytes": 2784
+    },
+    {
+      "slug": "channels_whatsapp_template_update",
+      "url": "https://developers.activecampaign.com/reference/channels_whatsapp_template_update.md",
+      "sha256": "59db92e672a5f28f295720e9c41b12c9411d7f916e6b4958f02635709dc5723d",
+      "bytes": 11124
+    },
+    {
+      "slug": "contact-custom-fields-api-guide",
+      "url": "https://developers.activecampaign.com/reference/contact-custom-fields-api-guide.md",
+      "sha256": "6c5fcfa158512f44ed6841bb4647c38215e0cf3a4d282b8d0318ce73a2ffa8a3",
+      "bytes": 14006
+    },
+    {
+      "slug": "create_match_all_request_with_segment_id",
+      "url": "https://developers.activecampaign.com/reference/create_match_all_request_with_segment_id.md",
+      "sha256": "2ec18b927df6e912778adff9875ab66b196a95889a7d8738710de5cda246366e",
+      "bytes": 10386
+    },
+    {
+      "slug": "create_match_all_request",
+      "url": "https://developers.activecampaign.com/reference/create_match_all_request.md",
+      "sha256": "e609fb156013239e13bdb661e6644d07ccf6fbd8d9c73f07726425f565f45ade",
+      "bytes": 23146
+    },
+    {
+      "slug": "create_match_one_request",
+      "url": "https://developers.activecampaign.com/reference/create_match_one_request.md",
+      "sha256": "bba1e3199847e42c942d8822fc9832ec347749f697b5288b9b0c0fbe0e56d217",
+      "bytes": 6788
+    },
+    {
+      "slug": "create_segment",
+      "url": "https://developers.activecampaign.com/reference/create_segment.md",
+      "sha256": "4ce3e95b1adee7a00b6e3081bd150c9413a83614f8ac8f6bdd7ca1df76c6b854",
+      "bytes": 18924
+    },
+    {
+      "slug": "create-a-contact-custom-field",
+      "url": "https://developers.activecampaign.com/reference/create-a-contact-custom-field.md",
+      "sha256": "5505d5cc53dd78408d11c590f0f8b650cee720132b0687e6583a0f1d11a0fac4",
+      "bytes": 22059
+    },
+    {
+      "slug": "create-a-customfieldmeta",
+      "url": "https://developers.activecampaign.com/reference/create-a-customfieldmeta.md",
+      "sha256": "8fffc62a8f5108c2bc7d0ae1e3aeb81a9c3f953cf13fd61ef248bb55df57b5fb",
+      "bytes": 13955
+    },
+    {
+      "slug": "create-a-deal-new",
+      "url": "https://developers.activecampaign.com/reference/create-a-deal-new.md",
+      "sha256": "824c22e937bad06b17101b02604ca57bb51eac2794e7a3ec507bed787dd22e49",
+      "bytes": 15109
+    },
+    {
+      "slug": "create-a-flow-execution",
+      "url": "https://developers.activecampaign.com/reference/create-a-flow-execution.md",
+      "sha256": "ed7636deafec9471694324214e4da74512e9b7fad574f32abd182063643fd117",
+      "bytes": 13855
+    },
+    {
+      "slug": "create-a-new-form",
+      "url": "https://developers.activecampaign.com/reference/create-a-new-form.md",
+      "sha256": "3637b4e3e8e29604346b610843452fa70462471e34c39544cac722011fa7be9e",
+      "bytes": 9876
+    },
+    {
+      "slug": "create-a-task-reminder",
+      "url": "https://developers.activecampaign.com/reference/create-a-task-reminder.md",
+      "sha256": "12d852946a0ec3821615cdc138a7bc5a2bdaa3d16f3257f044a2123c7a35043a",
+      "bytes": 2848
+    },
+    {
+      "slug": "create-campaign",
+      "url": "https://developers.activecampaign.com/reference/create-campaign.md",
+      "sha256": "793ac6a5a6236da78d6162f7292f144dfc90f3b7ad6243b04e37d22dca6fb6af",
+      "bytes": 4254
+    },
+    {
+      "slug": "create-connection",
+      "url": "https://developers.activecampaign.com/reference/create-connection.md",
+      "sha256": "c887e6598da2161494442172c6697f244d193231095fd91c9068047159e01411",
+      "bytes": 7424
+    },
+    {
+      "slug": "create-custom-deal-field-meta",
+      "url": "https://developers.activecampaign.com/reference/create-custom-deal-field-meta.md",
+      "sha256": "5382104255f7496539fce0d464e01e5730cbc22ca5e53a4f9d913cc262305a82",
+      "bytes": 16206
+    },
+    {
+      "slug": "create-fieldvalue",
+      "url": "https://developers.activecampaign.com/reference/create-fieldvalue.md",
+      "sha256": "f01c7501b4374b4bda605a9ec10d4beb4886b2c2aed37e0723a6a04d2ebc1ea6",
+      "bytes": 20143
+    },
+    {
+      "slug": "create-new-list",
+      "url": "https://developers.activecampaign.com/reference/create-new-list.md",
+      "sha256": "7d6b04920e5c6f139f9411105eb95c6cbfc66e16d19782238b92dd5e335d09b6",
+      "bytes": 11113
+    },
+    {
+      "slug": "create-variable",
+      "url": "https://developers.activecampaign.com/reference/create-variable.md",
+      "sha256": "5f6190a0acee897e972da4c4a2da55c1054282e831e824553ba5341be345bf3a",
+      "bytes": 5867
+    },
+    {
+      "slug": "createaibroadcast",
+      "url": "https://developers.activecampaign.com/reference/createaibroadcast.md",
+      "sha256": "4405eca62c5425dbbc4c8635356e5d35fa84cce778dd6c57795f449daf38d7d8",
+      "bytes": 2950
+    },
+    {
+      "slug": "createbroadcast",
+      "url": "https://developers.activecampaign.com/reference/createbroadcast.md",
+      "sha256": "e361b8250eca7ee087efaa824dc52387c2c2f531e304141f693839a64b415559",
+      "bytes": 8394
+    },
+    {
+      "slug": "delete_ai_customizations_documents_delete",
+      "url": "https://developers.activecampaign.com/reference/delete_ai_customizations_documents_delete.md",
+      "sha256": "135a4b8d115096f996ff0f53873f3cad7a0726245370c6c60ba86d9b253e7763",
+      "bytes": 5547
+    },
+    {
+      "slug": "delete_ai_customizations_instructions_delete",
+      "url": "https://developers.activecampaign.com/reference/delete_ai_customizations_instructions_delete.md",
+      "sha256": "792cb6e9165d032b26f198512c80a1589c2acc746173fb1a2f42e5ad12280c82",
+      "bytes": 6026
+    },
+    {
+      "slug": "delete_ai_customizations_profiles_delete",
+      "url": "https://developers.activecampaign.com/reference/delete_ai_customizations_profiles_delete.md",
+      "sha256": "e1158c116de7666a1651275048df41fd6c8b7c29eb365c9ce01f1a67b5eeb719",
+      "bytes": 5603
+    },
+    {
+      "slug": "delete_child_account_snapshots_delete_snapshot",
+      "url": "https://developers.activecampaign.com/reference/delete_child_account_snapshots_delete_snapshot.md",
+      "sha256": "ed1cd6560114abf72c4b920632a4b2b2b92a677562198fbbe80fefb185e3a5b2",
+      "bytes": 5551
+    },
+    {
+      "slug": "delete_segment",
+      "url": "https://developers.activecampaign.com/reference/delete_segment.md",
+      "sha256": "cca874075af02a6e6b1460976f5b73006896aeed5b9c1e68e25cb963a5afad76",
+      "bytes": 15551
+    },
+    {
+      "slug": "delete-a-form",
+      "url": "https://developers.activecampaign.com/reference/delete-a-form.md",
+      "sha256": "4e80714dfef7dff84fdbd2f93737c16198bfba426c203e73c83676e821280535",
+      "bytes": 1732
+    },
+    {
+      "slug": "delete-variable",
+      "url": "https://developers.activecampaign.com/reference/delete-variable.md",
+      "sha256": "1edcc10650cb74e8257edcbf4573ee6f9784bb5f356bfdd3dd745f06d262d0ed",
+      "bytes": 3490
+    },
+    {
+      "slug": "delete-whatsapp-template",
+      "url": "https://developers.activecampaign.com/reference/delete-whatsapp-template.md",
+      "sha256": "d4e2126ca50cd30bde66af3d3a287776614a1054fd09a55f5088797808a10bd9",
+      "bytes": 2442
+    },
+    {
+      "slug": "deletebroadcast",
+      "url": "https://developers.activecampaign.com/reference/deletebroadcast.md",
+      "sha256": "3c1957ba04cd9fef7664b9de7edbf6c80f2b38e61b47e52b7a18dd8aefe1bbd4",
+      "bytes": 6572
+    },
+    {
+      "slug": "duplicate-campaign",
+      "url": "https://developers.activecampaign.com/reference/duplicate-campaign.md",
+      "sha256": "a82f44d33a7e33bdb1e1e7c4fba8ac1a615cb30c77f0ca09cb903e4c950c5ea2",
+      "bytes": 2810
+    },
+    {
+      "slug": "edit-campaign",
+      "url": "https://developers.activecampaign.com/reference/edit-campaign.md",
+      "sha256": "6df7f77f7f065f9cf0667fe9435c361f2acad8b5aa4d9094e780aecf31307648",
+      "bytes": 7279
+    },
+    {
+      "slug": "edit-variable",
+      "url": "https://developers.activecampaign.com/reference/edit-variable.md",
+      "sha256": "e5530ec2c76fd5cdab7e23d84814ea4ad9cbfabcaf7f24c155f8e0f19f64b189",
+      "bytes": 7187
+    },
+    {
+      "slug": "exportbroadcastmetrics",
+      "url": "https://developers.activecampaign.com/reference/exportbroadcastmetrics.md",
+      "sha256": "a72532fcb430d6fcae51b8c93ca6b0407636f02f765bea17de97219a08e69dde",
+      "bytes": 2233
+    },
+    {
+      "slug": "exportbroadcastrecipients",
+      "url": "https://developers.activecampaign.com/reference/exportbroadcastrecipients.md",
+      "sha256": "e7c3c57fedcd465a0263303d64f03d060c672cd4f31afe799bef2d6b25583e6a",
+      "bytes": 3213
+    },
+    {
+      "slug": "find_contact_id_by_ac_playload",
+      "url": "https://developers.activecampaign.com/reference/find_contact_id_by_ac_playload.md",
+      "sha256": "3b061108817f2f067de0f22f536e4100b672cb41527bbb911770461b4fa08edf",
+      "bytes": 21737
+    },
+    {
+      "slug": "get_ai_customizations_documents_download",
+      "url": "https://developers.activecampaign.com/reference/get_ai_customizations_documents_download.md",
+      "sha256": "99fa1cddae1fe9f4e67b031ac86beb247e1ab235253f9feca5cb15bdaa566721",
+      "bytes": 6259
+    },
+    {
+      "slug": "get_ai_customizations_documents_get",
+      "url": "https://developers.activecampaign.com/reference/get_ai_customizations_documents_get.md",
+      "sha256": "022635b73ad6c76f7393fe423c93ef8fdaf82e339d2fc1835ba9ea5552cbdf4c",
+      "bytes": 7332
+    },
+    {
+      "slug": "get_ai_customizations_documents_list",
+      "url": "https://developers.activecampaign.com/reference/get_ai_customizations_documents_list.md",
+      "sha256": "0234540676f1e07f62c31a466948ef51772e858d482bfc890b87b2e73edb890f",
+      "bytes": 8715
+    },
+    {
+      "slug": "get_ai_customizations_instructions_get",
+      "url": "https://developers.activecampaign.com/reference/get_ai_customizations_instructions_get.md",
+      "sha256": "a05809e0820ee6c0c21c7a0c1abd3fe1062dc7c1fe4aa2a4c64a74d8fe1ea280",
+      "bytes": 6990
+    },
+    {
+      "slug": "get_ai_customizations_instructions_list",
+      "url": "https://developers.activecampaign.com/reference/get_ai_customizations_instructions_list.md",
+      "sha256": "39b3606ce56b79face47c8a32c3631ca1dbc222395c1f28db8378ec952cee898",
+      "bytes": 7380
+    },
+    {
+      "slug": "get_ai_customizations_profiles_get_by_child_account",
+      "url": "https://developers.activecampaign.com/reference/get_ai_customizations_profiles_get_by_child_account.md",
+      "sha256": "1a11fab7f061209e355de0d830ebf19a0fa127cc9f9a4e1ba2aed653348d90f8",
+      "bytes": 6868
+    },
+    {
+      "slug": "get_ai_customizations_profiles_get",
+      "url": "https://developers.activecampaign.com/reference/get_ai_customizations_profiles_get.md",
+      "sha256": "cc0cea49238f1aa0f381975e201ed3278314084396311b625c61d34925ca3056",
+      "bytes": 7794
+    },
+    {
+      "slug": "get_ai_customizations_profiles_list",
+      "url": "https://developers.activecampaign.com/reference/get_ai_customizations_profiles_list.md",
+      "sha256": "191902154b38727315b1a70b428ca6fcc077b3b4b86a299e4f61bd79a86fa8c1",
+      "bytes": 8141
+    },
+    {
+      "slug": "get_child_account_snapshots_get_list",
+      "url": "https://developers.activecampaign.com/reference/get_child_account_snapshots_get_list.md",
+      "sha256": "3a8044879ec6ff22235ef2fb20494ef57f5d2995ee4ea3786cf34a255ae54859",
+      "bytes": 9786
+    },
+    {
+      "slug": "get_child_account_snapshots_list_snapshot_by_reseller",
+      "url": "https://developers.activecampaign.com/reference/get_child_account_snapshots_list_snapshot_by_reseller.md",
+      "sha256": "23ad74c82c0f488a1ef2a37cd98173936a3a10db045608697a2e40d71f18bbe2",
+      "bytes": 9196
+    },
+    {
+      "slug": "get_child_accounts_get_for_snapshots",
+      "url": "https://developers.activecampaign.com/reference/get_child_accounts_get_for_snapshots.md",
+      "sha256": "2fe9e0b5d61b5d363d32a1871d8d5a93668a2424c7144490848e3703e793e32c",
+      "bytes": 7968
+    },
+    {
+      "slug": "get_child_accounts_get_list",
+      "url": "https://developers.activecampaign.com/reference/get_child_accounts_get_list.md",
+      "sha256": "7369bc1492f67c3fa57bae19b79d975faf424da00296abc3efb838c69a6bcd79",
+      "bytes": 9365
+    },
+    {
+      "slug": "get_count_history_by_segment_id",
+      "url": "https://developers.activecampaign.com/reference/get_count_history_by_segment_id.md",
+      "sha256": "bd53729cd626d3e3fdab2f9752db0e3eeecd8404acb24cf04648158d0f55b695",
+      "bytes": 6546
+    },
+    {
+      "slug": "get_count_history_with_timestamp",
+      "url": "https://developers.activecampaign.com/reference/get_count_history_with_timestamp.md",
+      "sha256": "141553a900ced4b81dd5424066eca707e1f2650166356f337aa2259e58cf5a37",
+      "bytes": 6887
+    },
+    {
+      "slug": "get_crm_reporting_list_pipelines",
+      "url": "https://developers.activecampaign.com/reference/get_crm_reporting_list_pipelines.md",
+      "sha256": "c35e5dc2fc6cf2a41773f43480a9c6c66096d7970f7627f2be821a53f40ce9ff",
+      "bytes": 10884
+    },
+    {
+      "slug": "get_crm_reporting_pipelines_summary",
+      "url": "https://developers.activecampaign.com/reference/get_crm_reporting_pipelines_summary.md",
+      "sha256": "11b130b6dfea0fb326259eb538e3294681bdd99722ab6021335f9fa620572cf2",
+      "bytes": 9169
+    },
+    {
+      "slug": "get_crm_sync_get_pipeline_sync_config",
+      "url": "https://developers.activecampaign.com/reference/get_crm_sync_get_pipeline_sync_config.md",
+      "sha256": "e5cbce929456fbcf3b89bbbbafd0bbd9512066a4977911c92c8cc0d4ab2e8c4c",
+      "bytes": 6641
+    },
+    {
+      "slug": "get_crm_sync_list_pipelines",
+      "url": "https://developers.activecampaign.com/reference/get_crm_sync_list_pipelines.md",
+      "sha256": "61af4ef895d8c51fd22c5f53d093c60478644fceb59e38c7bb468e933f63c34c",
+      "bytes": 9384
+    },
+    {
+      "slug": "get_crm_sync_settings_get",
+      "url": "https://developers.activecampaign.com/reference/get_crm_sync_settings_get.md",
+      "sha256": "2200a1e6841145ea20f51dde08026d03f42ffd2ad3ecc835f981be651c74a545",
+      "bytes": 5560
+    },
+    {
+      "slug": "get_files_quota_status",
+      "url": "https://developers.activecampaign.com/reference/get_files_quota_status.md",
+      "sha256": "50d638babb0b6e275c33e3d799f8ccb157e0c6a280a077504d035bbe9d29d24a",
+      "bytes": 5745
+    },
+    {
+      "slug": "get_insight_cards_get_list_latest",
+      "url": "https://developers.activecampaign.com/reference/get_insight_cards_get_list_latest.md",
+      "sha256": "1a8608a313835d76dd9b42f7984e4348476c1ce9882eec54dc385ca60ea49d32",
+      "bytes": 6885
+    },
+    {
+      "slug": "get_locales_get_catalogs",
+      "url": "https://developers.activecampaign.com/reference/get_locales_get_catalogs.md",
+      "sha256": "a74f8318d3b46d8aee5f92ad79b7d3c9221c24fdaa3502498dddb4e2780b108e",
+      "bytes": 7027
+    },
+    {
+      "slug": "get_recent_count_history",
+      "url": "https://developers.activecampaign.com/reference/get_recent_count_history.md",
+      "sha256": "83876b44730f925d28b2cc691dd54ab5995d7624c651dfab9c04d7b3cbbdff5b",
+      "bytes": 6680
+    },
+    {
+      "slug": "get_result_set_by_id",
+      "url": "https://developers.activecampaign.com/reference/get_result_set_by_id.md",
+      "sha256": "0528a516f9279979eb9ace28010c893584e4466c5ca290af1b99e3b943dfae84",
+      "bytes": 13269
+    },
+    {
+      "slug": "get_result_set_by_run_id",
+      "url": "https://developers.activecampaign.com/reference/get_result_set_by_run_id.md",
+      "sha256": "4cfb8ddfd2771819ffd25c78a92757b5d1d378c3726f93d638ad1ff100571a45",
+      "bytes": 11639
+    },
+    {
+      "slug": "get_saved_segment_summaries_by_id",
+      "url": "https://developers.activecampaign.com/reference/get_saved_segment_summaries_by_id.md",
+      "sha256": "902a18fb9804c5cc6b5242c27f617ed67f82ee62a660516ab6eba245245bedf1",
+      "bytes": 7271
+    },
+    {
+      "slug": "get_saved_segment_summaries",
+      "url": "https://developers.activecampaign.com/reference/get_saved_segment_summaries.md",
+      "sha256": "8ed6460289a1c130225b96cfcc102c99cceef1b1c58d96e07982574a252f1886",
+      "bytes": 8526
+    },
+    {
+      "slug": "get_segment_historic",
+      "url": "https://developers.activecampaign.com/reference/get_segment_historic.md",
+      "sha256": "85aaa9c92b4bf5762b3f4509b37150defb5a34c649c08cc3a0f0a286c179af75",
+      "bytes": 16197
+    },
+    {
+      "slug": "get-all-custom-field-groups",
+      "url": "https://developers.activecampaign.com/reference/get-all-custom-field-groups.md",
+      "sha256": "349335682ebe9c1aa8643bf5469ee804b8ac948492debbbf14f4235e7af5e313",
+      "bytes": 5199
+    },
+    {
+      "slug": "get-connection",
+      "url": "https://developers.activecampaign.com/reference/get-connection.md",
+      "sha256": "b81a4a7c67f9b1ff2a5af060879980f97b973c492b6117ff63aa6af467dd0157",
+      "bytes": 5461
+    },
+    {
+      "slug": "get-custom-field-to-field-group",
+      "url": "https://developers.activecampaign.com/reference/get-custom-field-to-field-group.md",
+      "sha256": "708ef7f893f9b2cf716b916f8437c9ed4f9177139f9b314284f52c3ce9452ecb",
+      "bytes": 5054
+    },
+    {
+      "slug": "get-flow-execution-contact",
+      "url": "https://developers.activecampaign.com/reference/get-flow-execution-contact.md",
+      "sha256": "eb88f50b62cb02e599a62e95df6c0f8b0951145d6b08416c6d68556a3233e94d",
+      "bytes": 65094
+    },
+    {
+      "slug": "get-flow-execution",
+      "url": "https://developers.activecampaign.com/reference/get-flow-execution.md",
+      "sha256": "2670e65b94d2059bbd36b7e83de7066c99bd4033e4235efee35a2a68287ec88d",
+      "bytes": 16468
+    },
+    {
+      "slug": "get-whatsapp-template",
+      "url": "https://developers.activecampaign.com/reference/get-whatsapp-template.md",
+      "sha256": "109e3ed584bab4b24c191c83c9eaa380014a304f2e4bf0420c9517555afabdbd",
+      "bytes": 10507
+    },
+    {
+      "slug": "getaibroadcaststatus",
+      "url": "https://developers.activecampaign.com/reference/getaibroadcaststatus.md",
+      "sha256": "dfcd9d631827c542a9769f0d3412fc7e0dc70f012d64c3a4aaa893eaaef00dcc",
+      "bytes": 2687
+    },
+    {
+      "slug": "getbroadcast",
+      "url": "https://developers.activecampaign.com/reference/getbroadcast.md",
+      "sha256": "8d8a1b55d8426ed1e7d43c22d8b395dc3d2121c986aef51384231c29d2149e58",
+      "bytes": 6559
+    },
+    {
+      "slug": "getbroadcastfailures",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastfailures.md",
+      "sha256": "bb1513166e66aa645e000e672664c685fb6612a37462a343f6102afd3e041693",
+      "bytes": 3298
+    },
+    {
+      "slug": "getbroadcastmetrics",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastmetrics.md",
+      "sha256": "82f5a51162900a4c84fae9b6af522e69267301883078459c65e202de6d76fda5",
+      "bytes": 3641
+    },
+    {
+      "slug": "getbroadcastrecipients",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastrecipients.md",
+      "sha256": "9eb9ea297dbc6e1bd94bac45be981631553168d10e6eae10d95562a5e9f4deb6",
+      "bytes": 6788
+    },
+    {
+      "slug": "getbroadcastsnapshot",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastsnapshot.md",
+      "sha256": "b375d1fbce37d8bb92b0f4bcf79164b7a60d96343e6a95a14d641bc62bbde92b",
+      "bytes": 3137
+    },
+    {
+      "slug": "getbroadcastsnapshotbyids",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastsnapshotbyids.md",
+      "sha256": "effaaf046dbacdbe44c31256c3c8db18f58a9e0b34a2cb8e0128a9ad56157814",
+      "bytes": 3063
+    },
+    {
+      "slug": "getsmscreditdata",
+      "url": "https://developers.activecampaign.com/reference/getsmscreditdata.md",
+      "sha256": "fe4771c3ea1ec446e51485eeb3a3126114c0a178676497bbcbf37b5292863f58",
+      "bytes": 2755
+    },
+    {
+      "slug": "graphql-overview",
+      "url": "https://developers.activecampaign.com/reference/graphql-overview.md",
+      "sha256": "c46260f3f8175e3f2fdd82d2bd0a0384328385bdfc83e876cda98aaf10e3b69f",
+      "bytes": 1483
+    },
+    {
+      "slug": "list-all-connections",
+      "url": "https://developers.activecampaign.com/reference/list-all-connections.md",
+      "sha256": "c3dea88a9bf8bb1127f45918ce2085d28da25be4523d3936a45744e8f85ae9b5",
+      "bytes": 7958
+    },
+    {
+      "slug": "list-all-contacts",
+      "url": "https://developers.activecampaign.com/reference/list-all-contacts.md",
+      "sha256": "274721c1dc83f877f62f3313b00642374bfaaa395ef9f631988aa2f850ce3a28",
+      "bytes": 60707
+    },
+    {
+      "slug": "list-all-custom-fields-meta",
+      "url": "https://developers.activecampaign.com/reference/list-all-custom-fields-meta.md",
+      "sha256": "bb5a25acebee0475ebb33a707fff220f0ded38b04ae9767f79d102becbce3cd1",
+      "bytes": 8213
+    },
+    {
+      "slug": "list-all-tasks",
+      "url": "https://developers.activecampaign.com/reference/list-all-tasks.md",
+      "sha256": "a8fcff70164714f36b42006730a0a75244bbbb5228e7cd79175ee4e0f6cd375c",
+      "bytes": 14617
+    },
+    {
+      "slug": "list-contact-activities",
+      "url": "https://developers.activecampaign.com/reference/list-contact-activities.md",
+      "sha256": "50599a888295f0857402b66350284c8d30fe72554b46b7357715ebad015e911a",
+      "bytes": 8395
+    },
+    {
+      "slug": "list-conversations",
+      "url": "https://developers.activecampaign.com/reference/list-conversations.md",
+      "sha256": "9f634b9c235deeb6279f4cd2398c471803d0400e8bd0446560bc9d70fe44da49",
+      "bytes": 15526
+    },
+    {
+      "slug": "list-flow-execution-contact",
+      "url": "https://developers.activecampaign.com/reference/list-flow-execution-contact.md",
+      "sha256": "9e4a41afbbd8375e4e5fe6a7c0b2cebed01655938f577e2728379d976acd75e8",
+      "bytes": 11509
+    },
+    {
+      "slug": "list-flow-execution",
+      "url": "https://developers.activecampaign.com/reference/list-flow-execution.md",
+      "sha256": "db787621a50d10082457274b5de9f82653c6640c7f5df6f81bbd25636e1ad214",
+      "bytes": 9816
+    },
+    {
+      "slug": "list-variables",
+      "url": "https://developers.activecampaign.com/reference/list-variables.md",
+      "sha256": "33215cf93837ccdbc2c19553e3fb37d2888e2a6d8136dc39dd13e964bce49dda",
+      "bytes": 10414
+    },
+    {
+      "slug": "list-whatsapp-templates",
+      "url": "https://developers.activecampaign.com/reference/list-whatsapp-templates.md",
+      "sha256": "1a8a9bffe2169bc4dfe5f42b0757609e233ada58cc04d7220fea068b88ebc9ad",
+      "bytes": 15558
+    },
+    {
+      "slug": "listbroadcastlists",
+      "url": "https://developers.activecampaign.com/reference/listbroadcastlists.md",
+      "sha256": "12d448d557f8b0697c0afe7e9f4ba705991d2b6c20b8a1f3735b0ec46b051190",
+      "bytes": 3244
+    },
+    {
+      "slug": "listbroadcasts",
+      "url": "https://developers.activecampaign.com/reference/listbroadcasts.md",
+      "sha256": "db5afe38f44cbc4672f0fa8a02e716682dd8c4a333735673d0ecaf267846dc64",
+      "bytes": 8958
+    },
+    {
+      "slug": "lock-a-variable",
+      "url": "https://developers.activecampaign.com/reference/lock-a-variable.md",
+      "sha256": "f1c4d0162ba214153a5dd83baed16813e0ecde6ac28893b8834cddedc93b64a0",
+      "bytes": 2659
+    },
+    {
+      "slug": "orders-1",
+      "url": "https://developers.activecampaign.com/reference/orders-1.md",
+      "sha256": "67bdd247cb65d3af1a30d3a562f7cceff05bca3655001a333301d0dcb50bb801",
+      "bytes": 36964
+    },
+    {
+      "slug": "pagination",
+      "url": "https://developers.activecampaign.com/reference/pagination.md",
+      "sha256": "fcfd21a1b2f1b3a88137b797163e5af2a5fd2a75d03a0dde1540b767f0474e82",
+      "bytes": 4830
+    },
+    {
+      "slug": "paging-ordering-sorting-and-filtering",
+      "url": "https://developers.activecampaign.com/reference/paging-ordering-sorting-and-filtering.md",
+      "sha256": "d72e5b156c0159a48a687314ac17dfd1b40f0e73d4eec99ba43d7b9616960686",
+      "bytes": 5081
+    },
+    {
+      "slug": "partially-update-a-conversation",
+      "url": "https://developers.activecampaign.com/reference/partially-update-a-conversation.md",
+      "sha256": "cf30de0786e802b06e1345c02a71a7c2af578ea7831c2d27381a1dc6b810e440",
+      "bytes": 7678
+    },
+    {
+      "slug": "patch_ai_customizations_documents_update",
+      "url": "https://developers.activecampaign.com/reference/patch_ai_customizations_documents_update.md",
+      "sha256": "42fb6e8d866a4474dc42e61fbbf2e14f4b28f3129a21c7aa5687e9f21fb90e98",
+      "bytes": 8597
+    },
+    {
+      "slug": "patch_ai_customizations_instructions_update",
+      "url": "https://developers.activecampaign.com/reference/patch_ai_customizations_instructions_update.md",
+      "sha256": "9711fc24702af53163d7441291f49c55b059e26c06acfc9572f6caed9216f6e5",
+      "bytes": 10136
+    },
+    {
+      "slug": "patch_ai_customizations_profiles_assign_accounts",
+      "url": "https://developers.activecampaign.com/reference/patch_ai_customizations_profiles_assign_accounts.md",
+      "sha256": "4250bb9086d5769bcb30b916f6d6aecaf2605d737db8e0b3bd0c1fdb3d9cd1d7",
+      "bytes": 9246
+    },
+    {
+      "slug": "patch_ai_customizations_profiles_update",
+      "url": "https://developers.activecampaign.com/reference/patch_ai_customizations_profiles_update.md",
+      "sha256": "63d08b10a02ee58987c818e3a2d0304776fe6312f8f537743397a900dd5b4616",
+      "bytes": 10051
+    },
+    {
+      "slug": "patch_insight_cards_update_state",
+      "url": "https://developers.activecampaign.com/reference/patch_insight_cards_update_state.md",
+      "sha256": "5595c2fa6f49ef053aaa5a3edb200b23cb4fc6d70869ba28d4c9d123925f3ba3",
+      "bytes": 8993
+    },
+    {
+      "slug": "post_ai_customizations_documents_upload",
+      "url": "https://developers.activecampaign.com/reference/post_ai_customizations_documents_upload.md",
+      "sha256": "8e73c7e0d233ca1368474c6e89ef031a0dd2164eaa60afe6beed9feb617bf33b",
+      "bytes": 8250
+    },
+    {
+      "slug": "post_ai_customizations_instructions_create",
+      "url": "https://developers.activecampaign.com/reference/post_ai_customizations_instructions_create.md",
+      "sha256": "2f480b09df2ceedfc0744051a90a168991d820ed299f2dd8101569efc3bed5ca",
+      "bytes": 8087
+    },
+    {
+      "slug": "post_ai_customizations_profiles_create",
+      "url": "https://developers.activecampaign.com/reference/post_ai_customizations_profiles_create.md",
+      "sha256": "b86b745441cf4c64d9c5d0fdda75d0492c192d8cfffb249ff2c8830317dbfefc",
+      "bytes": 7932
+    },
+    {
+      "slug": "post_child_account_snapshots_create_snapshot",
+      "url": "https://developers.activecampaign.com/reference/post_child_account_snapshots_create_snapshot.md",
+      "sha256": "3d4538b8bce41816f275c4b50739a4b9e601f703c088d3fa4760298e187072cc",
+      "bytes": 6870
+    },
+    {
+      "slug": "post_child_accounts_create",
+      "url": "https://developers.activecampaign.com/reference/post_child_accounts_create.md",
+      "sha256": "d66072c53d5f1ae51df7bc7b76b9e025a9d401c42c5e325e6028b9b7e6632900",
+      "bytes": 13186
+    },
+    {
+      "slug": "products",
+      "url": "https://developers.activecampaign.com/reference/products.md",
+      "sha256": "d7aca7430e97d0d376c3eaca1577e425d0254b4fa84968e59ba79b0a3e751c4b",
+      "bytes": 54568
+    },
+    {
+      "slug": "put_crm_sync_put_pipeline_sync_config",
+      "url": "https://developers.activecampaign.com/reference/put_crm_sync_put_pipeline_sync_config.md",
+      "sha256": "fee343f58fcb83eaf9854a8120ab329b14c3ea0f60411971bfe42d9c779913ef",
+      "bytes": 6999
+    },
+    {
+      "slug": "put_crm_sync_settings_update",
+      "url": "https://developers.activecampaign.com/reference/put_crm_sync_settings_update.md",
+      "sha256": "a2e5b57874f092d8557bc4d9dc6c0e48d104e9d33dd28cc92125492add7b559d",
+      "bytes": 6805
+    },
+    {
+      "slug": "recurring-payments",
+      "url": "https://developers.activecampaign.com/reference/recurring-payments.md",
+      "sha256": "6612fc483912c2821b227f9c4c5de21899e3a922f27b41be5571359f7d7f0060",
+      "bytes": 27233
+    },
+    {
+      "slug": "retrieve_segment",
+      "url": "https://developers.activecampaign.com/reference/retrieve_segment.md",
+      "sha256": "3e92dc0d9e4ea2a521aae99dee4559be58bdb907a47f259216581b83aa8b8101",
+      "bytes": 15483
+    },
+    {
+      "slug": "retrieve-a-contacts-geo-ip-address",
+      "url": "https://developers.activecampaign.com/reference/retrieve-a-contacts-geo-ip-address.md",
+      "sha256": "e10caffcbea99b2db18ee50f7ba1060a11c0ee2d76d5df254f303ab08ce4978b",
+      "bytes": 6559
+    },
+    {
+      "slug": "retrieve-a-custom-deal-field-meta",
+      "url": "https://developers.activecampaign.com/reference/retrieve-a-custom-deal-field-meta.md",
+      "sha256": "4d79b7ab8ce09bea222b39e16b1d7c5d58e5164d8dfd17ec23e571ffea4f8403",
+      "bytes": 6816
+    },
+    {
+      "slug": "retrieve-a-custom-field-contact",
+      "url": "https://developers.activecampaign.com/reference/retrieve-a-custom-field-contact.md",
+      "sha256": "90a523a68a24d64422b46563a4b05b626618bad1fd385bc4c1700c6e84b16a7a",
+      "bytes": 9035
+    },
+    {
+      "slug": "retrieve-a-custom-field-meta",
+      "url": "https://developers.activecampaign.com/reference/retrieve-a-custom-field-meta.md",
+      "sha256": "f53aa2093dd75408cc3aa1874522a3901769dd0bbfbcf3e9619419b1bfa5829b",
+      "bytes": 6853
+    },
+    {
+      "slug": "retrieve-all-custom-deal-field-meta",
+      "url": "https://developers.activecampaign.com/reference/retrieve-all-custom-deal-field-meta.md",
+      "sha256": "7985d926ac8b64b7aa716e0d7fa5a601f6e3693a432ac432d0363588f58a5c28",
+      "bytes": 8417
+    },
+    {
+      "slug": "retrieve-contact-geo-ips",
+      "url": "https://developers.activecampaign.com/reference/retrieve-contact-geo-ips.md",
+      "sha256": "ddb83c1fc84bb4cb050f7766c84988892f28295c377814a4faec79a7751e27e3",
+      "bytes": 6945
+    },
+    {
+      "slug": "retrieve-fields",
+      "url": "https://developers.activecampaign.com/reference/retrieve-fields.md",
+      "sha256": "ec29c845ff9f5d3e08195e213d10d10d6eeaacd8d8591d3cfbcf31901d0be957",
+      "bytes": 9635
+    },
+    {
+      "slug": "retrieve-variable",
+      "url": "https://developers.activecampaign.com/reference/retrieve-variable.md",
+      "sha256": "924047bf720a8c9683ed9e61400af695663ac6c67d4c9c0905f79f4c91b98880",
+      "bytes": 5287
+    },
+    {
+      "slug": "searches",
+      "url": "https://developers.activecampaign.com/reference/searches.md",
+      "sha256": "cebe154186b617515463ea43c36b9b37c9a5b841c27115571c3f04c9a93c9045",
+      "bytes": 5606
+    },
+    {
+      "slug": "segment_match_check_by_external_id",
+      "url": "https://developers.activecampaign.com/reference/segment_match_check_by_external_id.md",
+      "sha256": "165c3e7533534849c316902ce410d3a3ca04fdb2ed12db0854b230b1db55484b",
+      "bytes": 5907
+    },
+    {
+      "slug": "segment_revert_to_history",
+      "url": "https://developers.activecampaign.com/reference/segment_revert_to_history.md",
+      "sha256": "054e14eab24e5c9300b3c14bc3c60cc49caa971eba7d699ab582836306f6fe63",
+      "bytes": 16288
+    },
+    {
+      "slug": "send-a-whatsapp-template-message",
+      "url": "https://developers.activecampaign.com/reference/send-a-whatsapp-template-message.md",
+      "sha256": "dc8b01140893fcd366e028c23aa15b75ae9fc3fabcbcd8d142d05f00a72421c8",
+      "bytes": 5410
+    },
+    {
+      "slug": "set-opt-in",
+      "url": "https://developers.activecampaign.com/reference/set-opt-in.md",
+      "sha256": "a76689378c6c825beb96fdc0957e9f0446ac4c04fe0d299cb56dab1bf0624f8d",
+      "bytes": 1284
+    },
+    {
+      "slug": "shared-objects",
+      "url": "https://developers.activecampaign.com/reference/shared-objects.md",
+      "sha256": "163da78937e87234d81702055e8bbfc674cae6d1496a2b5874b1b1b700ebf3c9",
+      "bytes": 3033
+    },
+    {
+      "slug": "sync-a-contacts-data",
+      "url": "https://developers.activecampaign.com/reference/sync-a-contacts-data.md",
+      "sha256": "f972fca598e36e6d767c31dd3dbd70002074c14fbe1846e560cdc12ff9290e86",
+      "bytes": 20889
+    },
+    {
+      "slug": "unlock-a-variable",
+      "url": "https://developers.activecampaign.com/reference/unlock-a-variable.md",
+      "sha256": "906e8bd55ff6c7b0987e26a450121fb6f082d477a3e19a87f9c8e3f335dd5e0c",
+      "bytes": 2585
+    },
+    {
+      "slug": "update_segment",
+      "url": "https://developers.activecampaign.com/reference/update_segment.md",
+      "sha256": "f145fd4742ec26039a1484fcdc886606bcee782e41f728ff172e876429ab1340",
+      "bytes": 16048
+    },
+    {
+      "slug": "update-a-conversation",
+      "url": "https://developers.activecampaign.com/reference/update-a-conversation.md",
+      "sha256": "317ff5688ce070b20550a71be7eac958536dc39248cb4c72c7db1fceecbc9878",
+      "bytes": 6135
+    },
+    {
+      "slug": "update-a-custom-field-value-for-contact",
+      "url": "https://developers.activecampaign.com/reference/update-a-custom-field-value-for-contact.md",
+      "sha256": "1168eb434a69d633a3392c8ad701113bc9e4e795c3b2ab94cbdcf66bf44f3070",
+      "bytes": 21217
+    },
+    {
+      "slug": "update-a-form",
+      "url": "https://developers.activecampaign.com/reference/update-a-form.md",
+      "sha256": "e7bbf24505c8b194d72ec7fcf4c71c6d6bff44aba8cb4144ff5e834c964e2e54",
+      "bytes": 10288
+    },
+    {
+      "slug": "update-a-message",
+      "url": "https://developers.activecampaign.com/reference/update-a-message.md",
+      "sha256": "a6de1f71136e00af933a7e946e554497a1384958814cb03fe2c11ce2d8a8d28a",
+      "bytes": 12299
+    },
+    {
+      "slug": "update-connection",
+      "url": "https://developers.activecampaign.com/reference/update-connection.md",
+      "sha256": "9c276656979c19c18f852cc71153ddd3e8f9fdc0a38e4dbf7635107f5000fc63",
+      "bytes": 8185
+    },
+    {
+      "slug": "updateaibroadcast",
+      "url": "https://developers.activecampaign.com/reference/updateaibroadcast.md",
+      "sha256": "e0abd8cc6b914dc6fc77f9a8e2994b0d409d56a04226c60dac958246b2f5c743",
+      "bytes": 2904
+    },
+    {
+      "slug": "updatebroadcast",
+      "url": "https://developers.activecampaign.com/reference/updatebroadcast.md",
+      "sha256": "74584e026e88bccf38559a9f7cf74021a78dc03f4c6024cf24947e1c27a9eff6",
+      "bytes": 8766
+    },
+    {
+      "slug": "url",
+      "url": "https://developers.activecampaign.com/reference/url.md",
+      "sha256": "3da917b691f90bfb19e19fd425faff97f86ef2a3badf8098168f4a5c29c3f056",
+      "bytes": 1356
+    },
+    {
+      "slug": "variables",
+      "url": "https://developers.activecampaign.com/reference/variables.md",
+      "sha256": "5f08e2ef6dd1041a673063124943fe66e0b581c4df2a24ed0193c91f4c6c5713",
+      "bytes": 912
+    },
+    {
+      "slug": "webhooks",
+      "url": "https://developers.activecampaign.com/reference/webhooks.md",
+      "sha256": "15a5147bfe436f283b4576b7fb3c9ca1b4baddefe36563222c96daf8499b34eb",
+      "bytes": 5637
+    }
+  ],
+  "operations": [
+    {
+      "method": "GET",
+      "path": "/accountCustomFieldMeta",
+      "url": "https://developers.activecampaign.com/reference/list-all-custom-fields-meta.md",
+      "sha256": "bb5a25acebee0475ebb33a707fff220f0ded38b04ae9767f79d102becbce3cd1",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/accountCustomFieldMeta",
+      "url": "https://developers.activecampaign.com/reference/create-a-customfieldmeta.md",
+      "sha256": "8fffc62a8f5108c2bc7d0ae1e3aeb81a9c3f953cf13fd61ef248bb55df57b5fb",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/accountCustomFieldMeta/{id}",
+      "url": "https://developers.activecampaign.com/reference/retrieve-a-custom-field-meta.md",
+      "sha256": "f53aa2093dd75408cc3aa1874522a3901769dd0bbfbcf3e9619419b1bfa5829b",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/bulk_delete",
+      "url": "https://developers.activecampaign.com/reference/bulk-delete-accounts.md",
+      "sha256": "2069df9a94253cde52f2131b4cab18e98fd96f00e1ab75ec92f1af61b86a58c2",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/activities",
+      "url": "https://developers.activecampaign.com/reference/list-contact-activities.md",
+      "sha256": "50599a888295f0857402b66350284c8d30fe72554b46b7357715ebad015e911a",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/audiences",
+      "url": "https://developers.activecampaign.com/reference/get_saved_segment_summaries.md",
+      "sha256": "8ed6460289a1c130225b96cfcc102c99cceef1b1c58d96e07982574a252f1886",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/audiences/{segmentId}",
+      "url": "https://developers.activecampaign.com/reference/get_saved_segment_summaries_by_id.md",
+      "sha256": "902a18fb9804c5cc6b5242c27f617ed67f82ee62a660516ab6eba245245bedf1",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/campaign",
+      "url": "https://developers.activecampaign.com/reference/create-campaign.md",
+      "sha256": "793ac6a5a6236da78d6162f7292f144dfc90f3b7ad6243b04e37d22dca6fb6af",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/campaigns/{id}/copy",
+      "url": "https://developers.activecampaign.com/reference/duplicate-campaign.md",
+      "sha256": "a82f44d33a7e33bdb1e1e7c4fba8ac1a615cb30c77f0ca09cb903e4c950c5ea2",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/campaigns/{id}/edit",
+      "url": "https://developers.activecampaign.com/reference/edit-campaign.md",
+      "sha256": "6df7f77f7f065f9cf0667fe9435c361f2acad8b5aa4d9094e780aecf31307648",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/channel/whatsapp/channels/whatsapp/template",
+      "url": "https://developers.activecampaign.com/reference/list-whatsapp-templates.md",
+      "sha256": "1a8a9bffe2169bc4dfe5f42b0757609e233ada58cc04d7220fea068b88ebc9ad",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "DELETE",
+      "path": "/channel/whatsapp/channels/whatsapp/template/{id}",
+      "url": "https://developers.activecampaign.com/reference/delete-whatsapp-template.md",
+      "sha256": "d4e2126ca50cd30bde66af3d3a287776614a1054fd09a55f5088797808a10bd9",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/channel/whatsapp/channels/whatsapp/template/{id}",
+      "url": "https://developers.activecampaign.com/reference/get-whatsapp-template.md",
+      "sha256": "109e3ed584bab4b24c191c83c9eaa380014a304f2e4bf0420c9517555afabdbd",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/channel/whatsapp/channels/whatsapp/template/{id}",
+      "url": "https://developers.activecampaign.com/reference/channels_whatsapp_template_update.md",
+      "sha256": "59db92e672a5f28f295720e9c41b12c9411d7f916e6b4958f02635709dc5723d",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/channel/whatsapp/channels/whatsapp/template/{id}/send",
+      "url": "https://developers.activecampaign.com/reference/send-a-whatsapp-template-message.md",
+      "sha256": "dc8b01140893fcd366e028c23aa15b75ae9fc3fabcbcd8d142d05f00a72421c8",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/channel/whatsapp/flow-execution",
+      "url": "https://developers.activecampaign.com/reference/list-flow-execution.md",
+      "sha256": "db787621a50d10082457274b5de9f82653c6640c7f5df6f81bbd25636e1ad214",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/channel/whatsapp/flow-execution-contact",
+      "url": "https://developers.activecampaign.com/reference/list-flow-execution-contact.md",
+      "sha256": "9e4a41afbbd8375e4e5fe6a7c0b2cebed01655938f577e2728379d976acd75e8",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/channel/whatsapp/flow-execution-contact/{id}",
+      "url": "https://developers.activecampaign.com/reference/get-flow-execution-contact.md",
+      "sha256": "eb88f50b62cb02e599a62e95df6c0f8b0951145d6b08416c6d68556a3233e94d",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/channel/whatsapp/flow-execution/{id}",
+      "url": "https://developers.activecampaign.com/reference/get-flow-execution.md",
+      "sha256": "2670e65b94d2059bbd36b7e83de7066c99bd4033e4235efee35a2a68287ec88d",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/channel/whatsapp/flow/{id}/run",
+      "url": "https://developers.activecampaign.com/reference/create-a-flow-execution.md",
+      "sha256": "ed7636deafec9471694324214e4da74512e9b7fad574f32abd182063643fd117",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/channel/whatsapp/inbox/conversation",
+      "url": "https://developers.activecampaign.com/reference/list-conversations.md",
+      "sha256": "9f634b9c235deeb6279f4cd2398c471803d0400e8bd0446560bc9d70fe44da49",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PATCH",
+      "path": "/channel/whatsapp/inbox/conversation/{id}/update",
+      "url": "https://developers.activecampaign.com/reference/partially-update-a-conversation.md",
+      "sha256": "cf30de0786e802b06e1345c02a71a7c2af578ea7831c2d27381a1dc6b810e440",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/channel/whatsapp/inbox/conversation/{id}/update",
+      "url": "https://developers.activecampaign.com/reference/update-a-conversation.md",
+      "sha256": "317ff5688ce070b20550a71be7eac958536dc39248cb4c72c7db1fceecbc9878",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/connections",
+      "url": "https://developers.activecampaign.com/reference/list-all-connections.md",
+      "sha256": "c3dea88a9bf8bb1127f45918ce2085d28da25be4523d3936a45744e8f85ae9b5",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/connections",
+      "url": "https://developers.activecampaign.com/reference/create-connection.md",
+      "sha256": "c887e6598da2161494442172c6697f244d193231095fd91c9068047159e01411",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/connections/{id}",
+      "url": "https://developers.activecampaign.com/reference/get-connection.md",
+      "sha256": "b81a4a7c67f9b1ff2a5af060879980f97b973c492b6117ff63aa6af467dd0157",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/connections/{id}",
+      "url": "https://developers.activecampaign.com/reference/update-connection.md",
+      "sha256": "9c276656979c19c18f852cc71153ddd3e8f9fdc0a38e4dbf7635107f5000fc63",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/contact/sync",
+      "url": "https://developers.activecampaign.com/reference/sync-a-contacts-data.md",
+      "sha256": "f972fca598e36e6d767c31dd3dbd70002074c14fbe1846e560cdc12ff9290e86",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "url": "https://developers.activecampaign.com/reference/list-all-contacts.md",
+      "sha256": "274721c1dc83f877f62f3313b00642374bfaaa395ef9f631988aa2f850ce3a28",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/geoIps",
+      "url": "https://developers.activecampaign.com/reference/retrieve-contact-geo-ips.md",
+      "sha256": "ddb83c1fc84bb4cb050f7766c84988892f28295c377814a4faec79a7751e27e3",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/dealCustomFieldMeta",
+      "url": "https://developers.activecampaign.com/reference/retrieve-all-custom-deal-field-meta.md",
+      "sha256": "7985d926ac8b64b7aa716e0d7fa5a601f6e3693a432ac432d0363588f58a5c28",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/dealCustomFieldMeta",
+      "url": "https://developers.activecampaign.com/reference/create-custom-deal-field-meta.md",
+      "sha256": "5382104255f7496539fce0d464e01e5730cbc22ca5e53a4f9d913cc262305a82",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/dealCustomFieldMeta/{id}",
+      "url": "https://developers.activecampaign.com/reference/retrieve-a-custom-deal-field-meta.md",
+      "sha256": "4d79b7ab8ce09bea222b39e16b1d7c5d58e5164d8dfd17ec23e571ffea4f8403",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/dealTasks",
+      "url": "https://developers.activecampaign.com/reference/list-all-tasks.md",
+      "sha256": "a8fcff70164714f36b42006730a0a75244bbbb5228e7cd79175ee4e0f6cd375c",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/deals",
+      "url": "https://developers.activecampaign.com/reference/create-a-deal-new.md",
+      "sha256": "824c22e937bad06b17101b02604ca57bb51eac2794e7a3ec507bed787dd22e49",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/fieldValues",
+      "url": "https://developers.activecampaign.com/reference/create-fieldvalue.md",
+      "sha256": "f01c7501b4374b4bda605a9ec10d4beb4886b2c2aed37e0723a6a04d2ebc1ea6",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/fieldValues/{id}",
+      "url": "https://developers.activecampaign.com/reference/update-a-custom-field-value-for-contact.md",
+      "sha256": "1168eb434a69d633a3392c8ad701113bc9e4e795c3b2ab94cbdcf66bf44f3070",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/fields",
+      "url": "https://developers.activecampaign.com/reference/retrieve-fields.md",
+      "sha256": "ec29c845ff9f5d3e08195e213d10d10d6eeaacd8d8591d3cfbcf31901d0be957",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/fields",
+      "url": "https://developers.activecampaign.com/reference/create-a-contact-custom-field.md",
+      "sha256": "5505d5cc53dd78408d11c590f0f8b650cee720132b0687e6583a0f1d11a0fac4",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/fields/{id}",
+      "url": "https://developers.activecampaign.com/reference/retrieve-a-custom-field-contact.md",
+      "sha256": "90a523a68a24d64422b46563a4b05b626618bad1fd385bc4c1700c6e84b16a7a",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/form/optin",
+      "url": "https://developers.activecampaign.com/reference/set-opt-in.md",
+      "sha256": "a76689378c6c825beb96fdc0957e9f0446ac4c04fe0d299cb56dab1bf0624f8d",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/forms",
+      "url": "https://developers.activecampaign.com/reference/create-a-new-form.md",
+      "sha256": "3637b4e3e8e29604346b610843452fa70462471e34c39544cac722011fa7be9e",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "DELETE",
+      "path": "/forms/{id}",
+      "url": "https://developers.activecampaign.com/reference/delete-a-form.md",
+      "sha256": "4e80714dfef7dff84fdbd2f93737c16198bfba426c203e73c83676e821280535",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/forms/{id}",
+      "url": "https://developers.activecampaign.com/reference/update-a-form.md",
+      "sha256": "e7bbf24505c8b194d72ec7fcf4c71c6d6bff44aba8cb4144ff5e834c964e2e54",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/geoIps/{geoAddressID}/geoAddress",
+      "url": "https://developers.activecampaign.com/reference/retrieve-a-contacts-geo-ip-address.md",
+      "sha256": "e10caffcbea99b2db18ee50f7ba1060a11c0ee2d76d5df254f303ab08ce4978b",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/groupMembers",
+      "url": "https://developers.activecampaign.com/reference/get-all-custom-field-groups.md",
+      "sha256": "349335682ebe9c1aa8643bf5469ee804b8ac948492debbbf14f4235e7af5e313",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/groupMembers",
+      "url": "https://developers.activecampaign.com/reference/add-custom-field-to-field-group.md",
+      "sha256": "918d0cad9e49242e6efd3a9d41b92dc7189f8e8efd1b2256f6c753d92a234362",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/groupMembers/{groupID}",
+      "url": "https://developers.activecampaign.com/reference/get-custom-field-to-field-group.md",
+      "sha256": "708ef7f893f9b2cf716b916f8437c9ed4f9177139f9b314284f52c3ce9452ecb",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/import/bulk_import",
+      "url": "https://developers.activecampaign.com/reference/bulk-import-status-list.md",
+      "sha256": "e6b651def733c49345899f9036ca82c789f412336c23cd3249cd5e731b8295f7",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/import/bulk_import",
+      "url": "https://developers.activecampaign.com/reference/bulk-import-contacts.md",
+      "sha256": "6e6abdd6feb8e6e5041d9d5f7811c70f3d99c40c766cee1f7e1705e5a7bfd3d3",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/import/info",
+      "url": "https://developers.activecampaign.com/reference/bulk-import-status-info.md",
+      "sha256": "619f7269dc0a8e4f2335056a699cbb7310b7c69bfc14dda39b33b66a45b7d2c4",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/lists",
+      "url": "https://developers.activecampaign.com/reference/create-new-list.md",
+      "sha256": "7d6b04920e5c6f139f9411105eb95c6cbfc66e16d19782238b92dd5e335d09b6",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/messages/{id}",
+      "url": "https://developers.activecampaign.com/reference/update-a-message.md",
+      "sha256": "a6de1f71136e00af933a7e946e554497a1384958814cb03fe2c11ce2d8a8d28a",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/personalizations",
+      "url": "https://developers.activecampaign.com/reference/list-variables.md",
+      "sha256": "33215cf93837ccdbc2c19553e3fb37d2888e2a6d8136dc39dd13e964bce49dda",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/personalizations",
+      "url": "https://developers.activecampaign.com/reference/create-variable.md",
+      "sha256": "5f6190a0acee897e972da4c4a2da55c1054282e831e824553ba5341be345bf3a",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "DELETE",
+      "path": "/personalizations/bulkdelete",
+      "url": "https://developers.activecampaign.com/reference/bulk-delete-variables.md",
+      "sha256": "d564f61e9480735c1e891b7c228de4955f9bd89a4fe0dbaeaaa9a8ed2c17c2f2",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "DELETE",
+      "path": "/personalizations/{variableID}",
+      "url": "https://developers.activecampaign.com/reference/delete-variable.md",
+      "sha256": "1edcc10650cb74e8257edcbf4573ee6f9784bb5f356bfdd3dd745f06d262d0ed",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/personalizations/{variableID}",
+      "url": "https://developers.activecampaign.com/reference/retrieve-variable.md",
+      "sha256": "924047bf720a8c9683ed9e61400af695663ac6c67d4c9c0905f79f4c91b98880",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/personalizations/{variableID}",
+      "url": "https://developers.activecampaign.com/reference/edit-variable.md",
+      "sha256": "e5530ec2c76fd5cdab7e23d84814ea4ad9cbfabcaf7f24c155f8e0f19f64b189",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PATCH",
+      "path": "/personalizations/{variableID}/lock",
+      "url": "https://developers.activecampaign.com/reference/lock-a-variable.md",
+      "sha256": "f1c4d0162ba214153a5dd83baed16813e0ecde6ac28893b8834cddedc93b64a0",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PATCH",
+      "path": "/personalizations/{variableID}/unlock",
+      "url": "https://developers.activecampaign.com/reference/unlock-a-variable.md",
+      "sha256": "906e8bd55ff6c7b0987e26a450121fb6f082d477a3e19a87f9c8e3f335dd5e0c",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/segmentMatch/{segmentId}/{contactId}",
+      "url": "https://developers.activecampaign.com/reference/create_match_one_request.md",
+      "sha256": "bba1e3199847e42c942d8822fc9832ec347749f697b5288b9b0c0fbe0e56d217",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/segmentMatch/{segmentId}/{contactId}/{externalId}",
+      "url": "https://developers.activecampaign.com/reference/segment_match_check_by_external_id.md",
+      "sha256": "165c3e7533534849c316902ce410d3a3ca04fdb2ed12db0854b230b1db55484b",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/segmentsV2",
+      "url": "https://developers.activecampaign.com/reference/create_segment.md",
+      "sha256": "4ce3e95b1adee7a00b6e3081bd150c9413a83614f8ac8f6bdd7ca1df76c6b854",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "DELETE",
+      "path": "/segmentsV2/{segmentId}",
+      "url": "https://developers.activecampaign.com/reference/delete_segment.md",
+      "sha256": "cca874075af02a6e6b1460976f5b73006896aeed5b9c1e68e25cb963a5afad76",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/segmentsV2/{segmentId}",
+      "url": "https://developers.activecampaign.com/reference/retrieve_segment.md",
+      "sha256": "3e92dc0d9e4ea2a521aae99dee4559be58bdb907a47f259216581b83aa8b8101",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/segmentsV2/{segmentId}",
+      "url": "https://developers.activecampaign.com/reference/update_segment.md",
+      "sha256": "f145fd4742ec26039a1484fcdc886606bcee782e41f728ff172e876429ab1340",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/segmentsV2/{segmentId}/createdDate/{timestamp}",
+      "url": "https://developers.activecampaign.com/reference/get_segment_historic.md",
+      "sha256": "85aaa9c92b4bf5762b3f4509b37150defb5a34c649c08cc3a0f0a286c179af75",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/segmentsV2/{segmentId}/createdDate/{timestamp}",
+      "url": "https://developers.activecampaign.com/reference/segment_revert_to_history.md",
+      "sha256": "054e14eab24e5c9300b3c14bc3c60cc49caa971eba7d699ab582836306f6fe63",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/sms/broadcasts",
+      "url": "https://developers.activecampaign.com/reference/listbroadcasts.md",
+      "sha256": "db5afe38f44cbc4672f0fa8a02e716682dd8c4a333735673d0ecaf267846dc64",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/sms/broadcasts",
+      "url": "https://developers.activecampaign.com/reference/createbroadcast.md",
+      "sha256": "e361b8250eca7ee087efaa824dc52387c2c2f531e304141f693839a64b415559",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/sms/broadcasts/ai",
+      "url": "https://developers.activecampaign.com/reference/createaibroadcast.md",
+      "sha256": "4405eca62c5425dbbc4c8635356e5d35fa84cce778dd6c57795f449daf38d7d8",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/sms/broadcasts/ai",
+      "url": "https://developers.activecampaign.com/reference/updateaibroadcast.md",
+      "sha256": "e0abd8cc6b914dc6fc77f9a8e2994b0d409d56a04226c60dac958246b2f5c743",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/sms/broadcasts/ai/{Id}",
+      "url": "https://developers.activecampaign.com/reference/getaibroadcaststatus.md",
+      "sha256": "dfcd9d631827c542a9769f0d3412fc7e0dc70f012d64c3a4aaa893eaaef00dcc",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/sms/broadcasts/export",
+      "url": "https://developers.activecampaign.com/reference/exportbroadcastmetrics.md",
+      "sha256": "a72532fcb430d6fcae51b8c93ca6b0407636f02f765bea17de97219a08e69dde",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/sms/broadcasts/metrics",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastmetrics.md",
+      "sha256": "82f5a51162900a4c84fae9b6af522e69267301883078459c65e202de6d76fda5",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/sms/broadcasts/metrics/snapshot",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastsnapshot.md",
+      "sha256": "b375d1fbce37d8bb92b0f4bcf79164b7a60d96343e6a95a14d641bc62bbde92b",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/sms/broadcasts/metrics/snapshot",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastsnapshotbyids.md",
+      "sha256": "effaaf046dbacdbe44c31256c3c8db18f58a9e0b34a2cb8e0128a9ad56157814",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/sms/broadcasts/metrics/{broadcastId}/failures",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastfailures.md",
+      "sha256": "bb1513166e66aa645e000e672664c685fb6612a37462a343f6102afd3e041693",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/sms/broadcasts/{broadcastId}/recipients",
+      "url": "https://developers.activecampaign.com/reference/getbroadcastrecipients.md",
+      "sha256": "9eb9ea297dbc6e1bd94bac45be981631553168d10e6eae10d95562a5e9f4deb6",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/sms/broadcasts/{broadcastId}/recipients/export",
+      "url": "https://developers.activecampaign.com/reference/exportbroadcastrecipients.md",
+      "sha256": "e7c3c57fedcd465a0263303d64f03d060c672cd4f31afe799bef2d6b25583e6a",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "DELETE",
+      "path": "/sms/broadcasts/{id}",
+      "url": "https://developers.activecampaign.com/reference/deletebroadcast.md",
+      "sha256": "3c1957ba04cd9fef7664b9de7edbf6c80f2b38e61b47e52b7a18dd8aefe1bbd4",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/sms/broadcasts/{id}",
+      "url": "https://developers.activecampaign.com/reference/getbroadcast.md",
+      "sha256": "8d8a1b55d8426ed1e7d43c22d8b395dc3d2121c986aef51384231c29d2149e58",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "PUT",
+      "path": "/sms/broadcasts/{id}",
+      "url": "https://developers.activecampaign.com/reference/updatebroadcast.md",
+      "sha256": "74584e026e88bccf38559a9f7cf74021a78dc03f4c6024cf24947e1c27a9eff6",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/sms/credits",
+      "url": "https://developers.activecampaign.com/reference/getsmscreditdata.md",
+      "sha256": "fe4771c3ea1ec446e51485eeb3a3126114c0a178676497bbcbf37b5292863f58",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "GET",
+      "path": "/sms/lists",
+      "url": "https://developers.activecampaign.com/reference/listbroadcastlists.md",
+      "sha256": "12d448d557f8b0697c0afe7e9f4ba705991d2b6c20b8a1f3735b0ec46b051190",
+      "coordinate": "OpenAPI definition paths entry"
+    },
+    {
+      "method": "POST",
+      "path": "/taskNotifications",
+      "url": "https://developers.activecampaign.com/reference/create-a-task-reminder.md",
+      "sha256": "12d852946a0ec3821615cdc138a7bc5a2bdaa3d16f3257f044a2123c7a35043a",
+      "coordinate": "OpenAPI definition paths entry"
+    }
+  ]
+}

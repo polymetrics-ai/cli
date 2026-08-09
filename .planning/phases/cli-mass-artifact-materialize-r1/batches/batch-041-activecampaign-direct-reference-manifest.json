@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "official_direct_reference_fragments",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 10000,
+    "criteria": "ActiveCampaign provider-published llms API Reference index was enumerated once; each listed reference fragment was fetched directly and only provider fragments whose server URL names the connector's /api/3 REST scope were combined. No recursive reference traversal was used."
+  },
+  "connectors": [
+    {
+      "connector": "activecampaign",
+      "operations_total": 87,
+      "operations_read": 40,
+      "operations_write": 47,
+      "artifact": {
+        "url": "https://developers.activecampaign.com/llms.txt",
+        "kind": "openapi",
+        "version": "v3",
+        "retrieved_at": "2026-08-09"
+      },
+      "provider_reference_url": "https://developers.activecampaign.com/reference/overview",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Provider-published https://developers.activecampaign.com/llms.txt and directly linked /reference/*.md OpenAPI fragments.",
+      "counting_note": "The official index contains 147 reference links. The current direct extraction identifies 87 fragments whose declared server URL contains /api/3; each contains exactly one unique documented operation. The resulting immutable v3 inventory has exactly 40 GET/HEAD reads and 47 mutation writes, with no duplicate method/path pair.",
+      "processed_at": "2026-08-09T00:00:00Z",
+      "selection_reason": "direct official-reference extraction after the generic parser treated the llms index as an invalid OpenAPI document"
+    }
+  ]
+}
