@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "explicit",
+    "requested_size": 2,
+    "min_operations": 0,
+    "max_operations": 10000,
+    "criteria": "special retained-source retry: canonical HTTPS object endpoint or fragment-free canonical provider portal root, preserving the cited official source record"
+  },
+  "connectors": [
+    {
+      "connector": "pipeliner",
+      "operations_total": 1510,
+      "operations_read": 412,
+      "operations_write": 1098,
+      "artifact": {
+        "url": "https://pipeliner-api-doc.s3.eu-west-1.amazonaws.com/latest/rest/space/openapi.json",
+        "kind": "openapi",
+        "version": "Pipeliner Cloud API v100; OpenAPI 3.1.0; artifact Last-Modified 2026-07-01",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developers.pipelinersales.com/api-docs/overview/quick-start",
+      "auth_model": "basic",
+      "access_model": "public",
+      "evidence_source": "Pipeliner's current official developer site (now branded Coevera) explicitly links this downloadable REST OpenAPI file from its Quick Start and About the API pages; it was parsed without credentials.",
+      "counting_note": "Parsed every documented HTTP operation in Pipeliner's provider-linked REST v100 OpenAPI artifact: 412 GET, 732 POST, 183 PATCH, and 183 DELETE operations. All POST operation IDs are expressly create, batch_delete, batch_create_or_update, batch_restore, or merge actions, so they are writes; PATCH and DELETE operations also mutate state. There are no deprecated operations or OpenAPI webhook callbacks in the artifact. Callable webhook and webhook-event configuration CRUD is retained; inbound delivery events are excluded.",
+      "processed_at": "2026-08-06T12:51:06Z",
+      "selection_reason": "The retained Pipeliner source points to this exact public S3 bucket and key through an HTTP-only website endpoint; use the equivalent HTTPS S3 object endpoint for static materialization."
+    },
+    {
+      "connector": "retailexpress-by-maropost",
+      "operations_total": 199,
+      "operations_read": 125,
+      "operations_write": 74,
+      "artifact": {
+        "url": "https://developer.retailexpress.com.au/api-details",
+        "kind": "html_reference",
+        "version": "Retail Express API v2.1; current provider portal revision 16 (Release 3.19.04)",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://developer.retailexpress.com.au/getting-started",
+      "auth_model": "api_key",
+      "access_model": "partner_gated",
+      "evidence_source": "Maropost's current Retail Express community article labels this REST API its primary API for current, new, and upcoming features and directly links the provider's developer portal. That live portal calls v2.1 the latest/current REST API, publishes its versioned operation index and API-definition options, and identifies revision 16 as Release 3.19.04. The provider's getting-started guide says a developer must obtain an API key from the Retail Express client being integrated, then use it to obtain the short-lived bearer access token required for client data requests. The metadata-linked Atlassian reference now returns HTTP 401, but the provider's current Maropost documentation provides this successor portal. No Retail Express client, API key, access token, API request, product, customer, order, stock level, store, or other provider data was accessed.",
+      "counting_note": "The provider's current v2.1 developer-portal operation index paginates across four complete pages with 200 unique method/path actions: 126 GET, 30 POST, 25 PUT, and 19 DELETE. `GET /auth/token` acquires a bearer access token from the caller's API key and is excluded as credential-minting support infrastructure. The remaining 125 GET actions retrieve Retail Express records or searches and are reads. The provider's getting-started reference states that POST creates, PUT updates, and DELETE deletes/disables; every retained non-GET operation in the exhaustive index is correspondingly named create, update, delete/disable, bulk update, apply a discount, or other state-changing lifecycle action, yielding 74 writes. The portal offers OpenAPI 3 export formats, but its current v2.1 export response contains only contract metadata and no paths, so the complete paginated provider operation index is the reproducible enumeration evidence. The older v2 surface was not added to the current v2.1 total. Schemas, parameters, examples, and authentication prose do not add actions.",
+      "processed_at": "2026-08-06T15:50:37Z",
+      "selection_reason": "The retained Retail Express source is a fragment-addressed provider portal; use the canonical fragment-free portal root with the retained provider reference and exhaustive operation-count evidence."
+    }
+  ]
+}

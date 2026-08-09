@@ -1,0 +1,2076 @@
+{
+  "tagline": "Run Coassemble's declared streams and reverse-ETL actions.",
+  "usage": "pm coassemble \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api v1 headless client identifier",
+        "api get api v1 headless collection tracking id",
+        "api get api v1 headless collections id",
+        "api get api v1 headless course action",
+        "api get api v1 headless course content id",
+        "api get api v1 headless course scorm id",
+        "api get api v1 headless courses id",
+        "api get api v1 headless screen trackings",
+        "api get api v1 headless tracking id",
+        "api get api v1 headless user identifier",
+        "api get v1 headless client identifier",
+        "api get v1 headless clients",
+        "api get v1 headless collection tracking id",
+        "api get v1 headless collection trackings",
+        "api get v1 headless collections",
+        "api get v1 headless collections id",
+        "api get v1 headless course action",
+        "api get v1 headless course content id",
+        "api get v1 headless course scorm id",
+        "api get v1 headless courses",
+        "api get v1 headless courses id",
+        "api get v1 headless screen trackings",
+        "api get v1 headless themes",
+        "api get v1 headless themes id",
+        "api get v1 headless tracking id",
+        "api get v1 headless trackings",
+        "api get v1 headless translations id",
+        "api get v1 headless usage allowances",
+        "api get v1 headless usage client identifier",
+        "api get v1 headless usage clients",
+        "api get v1 headless user identifier",
+        "api get v1 headless user trackings",
+        "api get v1 headless users",
+        "api get v1 headless webhooks",
+        "clients list",
+        "collection trackings list",
+        "collections list",
+        "courses list",
+        "screen types list",
+        "trackings list",
+        "translations list",
+        "user trackings list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 headless client identifier",
+        "api delete v1 headless collection id",
+        "api delete v1 headless course id",
+        "api delete v1 headless themes id",
+        "api delete v1 headless tracking",
+        "api delete v1 headless translation id language",
+        "api delete v1 headless user identifier",
+        "api delete v1 headless webhooks id",
+        "api post api v1 headless course generate",
+        "api post api v1 headless course id revert",
+        "api post api v1 headless course url",
+        "api post v1 headless collection",
+        "api post v1 headless collection id restore",
+        "api post v1 headless course generate",
+        "api post v1 headless course id duplicate",
+        "api post v1 headless course id publish",
+        "api post v1 headless course id restore",
+        "api post v1 headless course id revert",
+        "api post v1 headless course url",
+        "api post v1 headless embed course",
+        "api post v1 headless generate course",
+        "api post v1 headless generate course id quiz",
+        "api post v1 headless generate course id screen",
+        "api post v1 headless themes",
+        "api post v1 headless translation default id language",
+        "api post v1 headless translation sync id language",
+        "api post v1 headless translation translate id",
+        "api post v1 headless webhooks",
+        "api put v1 headless client identifier",
+        "api put v1 headless themes id",
+        "api put v1 headless usage client identifier",
+        "api put v1 headless user identifier",
+        "create collection apply",
+        "delete client apply",
+        "delete collection apply",
+        "delete course apply",
+        "delete tracking apply",
+        "delete translation apply",
+        "delete user apply",
+        "duplicate course apply",
+        "publish course apply",
+        "restore collection apply",
+        "restore course apply",
+        "set default translation apply",
+        "sync translation apply",
+        "translate course apply",
+        "update client apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v1 headless client identifier",
+      "summary": "Documented DELETE /v1/headless/client/{identifier} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api delete v1 headless client identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/headless/client/{identifier}"
+        }
+      ],
+      "operation": "coassemble.delete.v1-headless-client-identifier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 headless collection id",
+      "summary": "Documented DELETE /v1/headless/collection/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api delete v1 headless collection id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/headless/collection/{id}"
+        }
+      ],
+      "operation": "coassemble.delete.v1-headless-collection-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 headless course id",
+      "summary": "Documented DELETE /v1/headless/course/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api delete v1 headless course id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/headless/course/{id}"
+        }
+      ],
+      "operation": "coassemble.delete.v1-headless-course-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 headless themes id",
+      "summary": "Documented DELETE /v1/headless/themes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api delete v1 headless themes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/headless/themes/{id}"
+        }
+      ],
+      "operation": "coassemble.delete.v1-headless-themes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 headless tracking",
+      "summary": "Documented DELETE /v1/headless/tracking (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api delete v1 headless tracking --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/headless/tracking"
+        }
+      ],
+      "operation": "coassemble.delete.v1-headless-tracking",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 headless translation id language",
+      "summary": "Documented DELETE /v1/headless/translation/{id}/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api delete v1 headless translation id language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/headless/translation/{id}/{language}"
+        }
+      ],
+      "operation": "coassemble.delete.v1-headless-translation-id-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 headless user identifier",
+      "summary": "Documented DELETE /v1/headless/user/{identifier} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api delete v1 headless user identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/headless/user/{identifier}"
+        }
+      ],
+      "operation": "coassemble.delete.v1-headless-user-identifier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 headless webhooks id",
+      "summary": "Documented DELETE /v1/headless/webhooks/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api delete v1 headless webhooks id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/headless/webhooks/{id}"
+        }
+      ],
+      "operation": "coassemble.delete.v1-headless-webhooks-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api v1 headless client identifier",
+      "summary": "Documented GET /api/v1/headless/client/{identifier} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless client identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/client/{identifier}"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-client-identifier",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 headless collection tracking id",
+      "summary": "Documented GET /api/v1/headless/collection/tracking/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless collection tracking id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/collection/tracking/{id}"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-collection-tracking-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 headless collections id",
+      "summary": "Documented GET /api/v1/headless/collections/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless collections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/collections/{id}"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-collections-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 headless course action",
+      "summary": "Documented GET /api/v1/headless/course/{action} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless course action --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/course/{action}"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-course-action",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 headless course content id",
+      "summary": "Documented GET /api/v1/headless/course/content/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless course content id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/course/content/{id}"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-course-content-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 headless course scorm id",
+      "summary": "Documented GET /api/v1/headless/course/scorm/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless course scorm id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/course/scorm/{id}"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-course-scorm-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 headless courses id",
+      "summary": "Documented GET /api/v1/headless/courses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless courses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/courses/{id}"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-courses-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 headless screen trackings",
+      "summary": "Documented GET /api/v1/headless/screen/trackings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless screen trackings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/screen/trackings"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-screen-trackings",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 headless tracking id",
+      "summary": "Documented GET /api/v1/headless/tracking/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless tracking id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/tracking/{id}"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-tracking-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api v1 headless user identifier",
+      "summary": "Documented GET /api/v1/headless/user/{identifier} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get api v1 headless user identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/user/{identifier}"
+        }
+      ],
+      "operation": "coassemble.get.api-v1-headless-user-identifier",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless client identifier",
+      "summary": "Documented GET /v1/headless/client/{identifier} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless client identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/client/{identifier}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-client-identifier",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless clients",
+      "summary": "Documented GET /v1/headless/clients (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless clients --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/clients"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-clients",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless collection tracking id",
+      "summary": "Documented GET /v1/headless/collection/tracking/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless collection tracking id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/collection/tracking/{id}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-collection-tracking-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless collection trackings",
+      "summary": "Documented GET /v1/headless/collection/trackings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless collection trackings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/collection/trackings"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-collection-trackings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless collections",
+      "summary": "Documented GET /v1/headless/collections (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless collections --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/collections"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-collections",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless collections id",
+      "summary": "Documented GET /v1/headless/collections/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless collections id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/collections/{id}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-collections-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless course action",
+      "summary": "Documented GET /v1/headless/course/{action} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless course action --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/course/{action}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-course-action",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless course content id",
+      "summary": "Documented GET /v1/headless/course/content/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless course content id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/course/content/{id}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-course-content-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless course scorm id",
+      "summary": "Documented GET /v1/headless/course/scorm/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless course scorm id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/course/scorm/{id}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-course-scorm-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless courses",
+      "summary": "Documented GET /v1/headless/courses (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless courses --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/courses"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-courses",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless courses id",
+      "summary": "Documented GET /v1/headless/courses/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless courses id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/courses/{id}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-courses-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless screen trackings",
+      "summary": "Documented GET /v1/headless/screen/trackings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless screen trackings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/screen/trackings"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-screen-trackings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless themes",
+      "summary": "Documented GET /v1/headless/themes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless themes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/themes"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-themes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless themes id",
+      "summary": "Documented GET /v1/headless/themes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless themes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/themes/{id}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-themes-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless tracking id",
+      "summary": "Documented GET /v1/headless/tracking/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless tracking id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/tracking/{id}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-tracking-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless trackings",
+      "summary": "Documented GET /v1/headless/trackings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless trackings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/trackings"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-trackings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless translations id",
+      "summary": "Documented GET /v1/headless/translations/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless translations id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/translations/{id}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-translations-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless usage allowances",
+      "summary": "Documented GET /v1/headless/usage/allowances (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless usage allowances --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/usage/allowances"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-usage-allowances",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless usage client identifier",
+      "summary": "Documented GET /v1/headless/usage/client/{identifier} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless usage client identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/usage/client/{identifier}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-usage-client-identifier",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless usage clients",
+      "summary": "Documented GET /v1/headless/usage/clients (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless usage clients --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/usage/clients"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-usage-clients",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless user identifier",
+      "summary": "Documented GET /v1/headless/user/{identifier} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless user identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/user/{identifier}"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-user-identifier",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless user trackings",
+      "summary": "Documented GET /v1/headless/user/trackings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless user trackings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/user/trackings"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-user-trackings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless users",
+      "summary": "Documented GET /v1/headless/users (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/users"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-users",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 headless webhooks",
+      "summary": "Documented GET /v1/headless/webhooks (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api get v1 headless webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/headless/webhooks"
+        }
+      ],
+      "operation": "coassemble.get.v1-headless-webhooks",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post api v1 headless course generate",
+      "summary": "Documented POST /api/v1/headless/course/generate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post api v1 headless course generate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/course/generate"
+        }
+      ],
+      "operation": "coassemble.post.api-v1-headless-course-generate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 headless course id revert",
+      "summary": "Documented POST /api/v1/headless/course/{id}/revert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post api v1 headless course id revert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/course/{id}/revert"
+        }
+      ],
+      "operation": "coassemble.post.api-v1-headless-course-id-revert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api v1 headless course url",
+      "summary": "Documented POST /api/v1/headless/course/url (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post api v1 headless course url --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/course/url"
+        }
+      ],
+      "operation": "coassemble.post.api-v1-headless-course-url",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless collection",
+      "summary": "Documented POST /v1/headless/collection (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless collection --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/collection"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-collection",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless collection id restore",
+      "summary": "Documented POST /v1/headless/collection/{id}/restore (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless collection id restore --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/collection/{id}/restore"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-collection-id-restore",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless course generate",
+      "summary": "Documented POST /v1/headless/course/generate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless course generate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/course/generate"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-course-generate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless course id duplicate",
+      "summary": "Documented POST /v1/headless/course/{id}/duplicate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless course id duplicate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/course/{id}/duplicate"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-course-id-duplicate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless course id publish",
+      "summary": "Documented POST /v1/headless/course/{id}/publish (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless course id publish --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/course/{id}/publish"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-course-id-publish",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless course id restore",
+      "summary": "Documented POST /v1/headless/course/{id}/restore (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless course id restore --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/course/{id}/restore"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-course-id-restore",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless course id revert",
+      "summary": "Documented POST /v1/headless/course/{id}/revert (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless course id revert --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/course/{id}/revert"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-course-id-revert",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless course url",
+      "summary": "Documented POST /v1/headless/course/url (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless course url --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/course/url"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-course-url",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless embed course",
+      "summary": "Documented POST /v1/headless/embed/course (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless embed course --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/embed/course"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-embed-course",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless generate course",
+      "summary": "Documented POST /v1/headless/generate/course (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless generate course --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/generate/course"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-generate-course",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless generate course id quiz",
+      "summary": "Documented POST /v1/headless/generate/course/{id}/quiz (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless generate course id quiz --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/generate/course/{id}/quiz"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-generate-course-id-quiz",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless generate course id screen",
+      "summary": "Documented POST /v1/headless/generate/course/{id}/screen (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless generate course id screen --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/generate/course/{id}/screen"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-generate-course-id-screen",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless themes",
+      "summary": "Documented POST /v1/headless/themes (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless themes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/themes"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-themes",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless translation default id language",
+      "summary": "Documented POST /v1/headless/translation/default/{id}/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless translation default id language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/translation/default/{id}/{language}"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-translation-default-id-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless translation sync id language",
+      "summary": "Documented POST /v1/headless/translation/sync/{id}/{language} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless translation sync id language --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/translation/sync/{id}/{language}"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-translation-sync-id-language",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless translation translate id",
+      "summary": "Documented POST /v1/headless/translation/translate/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless translation translate id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/translation/translate/{id}"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-translation-translate-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 headless webhooks",
+      "summary": "Documented POST /v1/headless/webhooks (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api post v1 headless webhooks --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/headless/webhooks"
+        }
+      ],
+      "operation": "coassemble.post.v1-headless-webhooks",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 headless client identifier",
+      "summary": "Documented PUT /v1/headless/client/{identifier} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api put v1 headless client identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/headless/client/{identifier}"
+        }
+      ],
+      "operation": "coassemble.put.v1-headless-client-identifier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 headless themes id",
+      "summary": "Documented PUT /v1/headless/themes/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api put v1 headless themes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/headless/themes/{id}"
+        }
+      ],
+      "operation": "coassemble.put.v1-headless-themes-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 headless usage client identifier",
+      "summary": "Documented PUT /v1/headless/usage/client/{identifier} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api put v1 headless usage client identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/headless/usage/client/{identifier}"
+        }
+      ],
+      "operation": "coassemble.put.v1-headless-usage-client-identifier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v1 headless user identifier",
+      "summary": "Documented PUT /v1/headless/user/{identifier} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble api put v1 headless user identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v1/headless/user/{identifier}"
+        }
+      ],
+      "operation": "coassemble.put.v1-headless-user-identifier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "clients list",
+      "summary": "Run the clients ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "clients",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble clients list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/clients"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "collection trackings list",
+      "summary": "Run the collection trackings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collection_trackings",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble collection trackings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/collection/trackings"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "collections list",
+      "summary": "Run the collections ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "collections",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble collections list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/collections"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "courses list",
+      "summary": "Run the courses ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "courses",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble courses list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/courses"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "create collection apply",
+      "summary": "Plan and execute the create collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_collection",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "title",
+          "type": "string",
+          "summary": "Required title record field.",
+          "maps_to": "record.title",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble create collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/collection"
+        }
+      ],
+      "risk": "creates a new collection of courses; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete client apply",
+      "summary": "Plan and execute the delete client reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_client",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "clientIdentifier",
+          "type": "string",
+          "summary": "Required clientIdentifier record field.",
+          "maps_to": "record.clientIdentifier",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble delete client apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/headless/client/{identifier}"
+        }
+      ],
+      "risk": "irreversibly removes a client (multi-tenant sub-account) and its documented on-delete effects on associated users; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete collection apply",
+      "summary": "Plan and execute the delete collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_collection",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble delete collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/headless/collection/{id}"
+        }
+      ],
+      "risk": "soft-deletes a collection (recoverable via restore_collection); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete course apply",
+      "summary": "Plan and execute the delete course reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_course",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble delete course apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/headless/course/{id}"
+        }
+      ],
+      "risk": "soft-deletes a course (recoverable via restore_course within Coassemble's retention window); approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete tracking apply",
+      "summary": "Plan and execute the delete tracking reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_tracking",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "identifier",
+          "type": "string",
+          "summary": "Required identifier record field.",
+          "maps_to": "record.identifier",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble delete tracking apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/headless/tracking"
+        }
+      ],
+      "risk": "permanently erases one learner's tracking/progress record for a course; irreversible, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete translation apply",
+      "summary": "Plan and execute the delete translation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_translation",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "course_id",
+          "type": "integer",
+          "summary": "Required course id record field.",
+          "maps_to": "record.course_id",
+          "required": true
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "Required language record field.",
+          "maps_to": "record.language",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble delete translation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/headless/translation/{id}/{language}"
+        }
+      ],
+      "risk": "permanently removes a language variant of a course; irreversible, approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete user apply",
+      "summary": "Plan and execute the delete user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_user",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "identifier",
+          "type": "string",
+          "summary": "Required identifier record field.",
+          "maps_to": "record.identifier",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble delete user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/v1/headless/user/{identifier}"
+        }
+      ],
+      "risk": "irreversibly removes a learner identity, applying Coassemble's server-side DEFAULT handling for that identity's course progress (the real endpoint also accepts optional action=reallocate|delete|ignore/reallocateTo/clientIdentifier query params to control that handling explicitly, and Coassemble's own docs do not fully specify their exact semantics beyond \"choose what to do with any courses associated with this identifier\" — this action deliberately does not expose them, since the write-action path/query dialect has no way to send an optional record field only when present, and silently defaulting an ambiguous, irreversible per-learner-data-retention choice would be worse than declaring it out of scope; approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "duplicate course apply",
+      "summary": "Plan and execute the duplicate course reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "duplicate_course",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble duplicate course apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/course/{id}/duplicate"
+        }
+      ],
+      "risk": "creates a full copy of an existing course; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "publish course apply",
+      "summary": "Plan and execute the publish course reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "publish_course",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble publish course apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/course/{id}/publish"
+        }
+      ],
+      "risk": "publishes the current draft of a course, making it live for learners; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "restore collection apply",
+      "summary": "Plan and execute the restore collection reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "restore_collection",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble restore collection apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/collection/{id}/restore"
+        }
+      ],
+      "risk": "restores a previously soft-deleted collection; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "restore course apply",
+      "summary": "Plan and execute the restore course reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "restore_course",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble restore course apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/course/{id}/restore"
+        }
+      ],
+      "risk": "restores a previously soft-deleted course; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "screen types list",
+      "summary": "Run the screen types ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "screen_types",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble screen types list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/screen/types"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "set default translation apply",
+      "summary": "Plan and execute the set default translation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_default_translation",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "course_id",
+          "type": "integer",
+          "summary": "Required course id record field.",
+          "maps_to": "record.course_id",
+          "required": true
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "Required language record field.",
+          "maps_to": "record.language",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble set default translation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/translation/default/{id}/{language}"
+        }
+      ],
+      "risk": "changes which language variant learners see by default for this course; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "sync translation apply",
+      "summary": "Plan and execute the sync translation reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sync_translation",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "course_id",
+          "type": "integer",
+          "summary": "Required course id record field.",
+          "maps_to": "record.course_id",
+          "required": true
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "Required language record field.",
+          "maps_to": "record.language",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble sync translation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/translation/sync/{id}/{language}"
+        }
+      ],
+      "risk": "re-syncs a translated variant's content with upstream changes to the source-language course, which can overwrite manual edits made directly in the translated variant; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "trackings list",
+      "summary": "Run the trackings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "trackings",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble trackings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/trackings"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "translate course apply",
+      "summary": "Plan and execute the translate course reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "translate_course",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "course_id",
+          "type": "integer",
+          "summary": "Required course id record field.",
+          "maps_to": "record.course_id",
+          "required": true
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "Required language record field.",
+          "maps_to": "record.language",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble translate course apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/headless/translation/translate/{id}"
+        }
+      ],
+      "risk": "kicks off machine translation of a course into a new BCP-47 language variant; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "translations list",
+      "summary": "Run the translations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "translations",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble translations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/translations/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "update client apply",
+      "summary": "Plan and execute the update client reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_client",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "clientIdentifier",
+          "type": "string",
+          "summary": "Required clientIdentifier record field.",
+          "maps_to": "record.clientIdentifier",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble update client apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/headless/client/{identifier}"
+        }
+      ],
+      "risk": "overwrites a client's arbitrary metadata bag; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://developers.coassemble.com/",
+      "flags": [
+        {
+          "name": "identifier",
+          "type": "string",
+          "summary": "Required identifier record field.",
+          "maps_to": "record.identifier",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm coassemble update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/v1/headless/user/{identifier}"
+        }
+      ],
+      "risk": "overwrites a learner's profile fields (name/avatar/metadata) or reassigns their client; no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "user trackings list",
+      "summary": "Run the user trackings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_trackings",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble user trackings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/user/trackings"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.coassemble.com/",
+      "examples": [
+        "pm coassemble users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/v1/headless/users"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

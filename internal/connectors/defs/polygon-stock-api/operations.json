@@ -1,0 +1,709 @@
+{
+  "operations": [
+    {
+      "id": "polygon-stock-api.get.stocks-filings-10-k-vx-sections",
+      "kind": "rest_read",
+      "summary": "GET /stocks/filings/10-K/vX/sections",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/filings/10-K/vX/sections",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-filings-8-k-vx-disclosures",
+      "kind": "rest_read",
+      "summary": "GET /stocks/filings/8-K/vX/disclosures",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/filings/8-K/vX/disclosures",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-filings-8-k-vx-text",
+      "kind": "rest_read",
+      "summary": "GET /stocks/filings/8-K/vX/text",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/filings/8-K/vX/text",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-filings-vx-13-f",
+      "kind": "rest_read",
+      "summary": "GET /stocks/filings/vX/13-F",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/filings/vX/13-F",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-filings-vx-form-3",
+      "kind": "rest_read",
+      "summary": "GET /stocks/filings/vX/form-3",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/filings/vX/form-3",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-filings-vx-form-4",
+      "kind": "rest_read",
+      "summary": "GET /stocks/filings/vX/form-4",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/filings/vX/form-4",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-filings-vx-index",
+      "kind": "rest_read",
+      "summary": "GET /stocks/filings/vX/index",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/filings/vX/index",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-filings-vx-risk-factors",
+      "kind": "rest_read",
+      "summary": "GET /stocks/filings/vX/risk-factors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/filings/vX/risk-factors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-financials-v1-balance-sheets",
+      "kind": "rest_read",
+      "summary": "GET /stocks/financials/v1/balance-sheets",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/financials/v1/balance-sheets",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-financials-v1-cash-flow-statements",
+      "kind": "rest_read",
+      "summary": "GET /stocks/financials/v1/cash-flow-statements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/financials/v1/cash-flow-statements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-financials-v1-income-statements",
+      "kind": "rest_read",
+      "summary": "GET /stocks/financials/v1/income-statements",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/financials/v1/income-statements",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-financials-v1-ratios",
+      "kind": "rest_read",
+      "summary": "GET /stocks/financials/v1/ratios",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/financials/v1/ratios",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-taxonomies-vx-disclosures",
+      "kind": "rest_read",
+      "summary": "GET /stocks/taxonomies/vX/disclosures",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/taxonomies/vX/disclosures",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-taxonomies-vx-risk-factors",
+      "kind": "rest_read",
+      "summary": "GET /stocks/taxonomies/vX/risk-factors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/taxonomies/vX/risk-factors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-v1-dividends",
+      "kind": "rest_read",
+      "summary": "GET /stocks/v1/dividends",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/v1/dividends",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-v1-short-interest",
+      "kind": "rest_read",
+      "summary": "GET /stocks/v1/short-interest",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/v1/short-interest",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-v1-short-volume",
+      "kind": "rest_read",
+      "summary": "GET /stocks/v1/short-volume",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/v1/short-volume",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-v1-splits",
+      "kind": "rest_read",
+      "summary": "GET /stocks/v1/splits",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/v1/splits",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.stocks-vx-float",
+      "kind": "rest_read",
+      "summary": "GET /stocks/vX/float",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/stocks/vX/float",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v1-indicators-ema-stockticker",
+      "kind": "rest_read",
+      "summary": "GET /v1/indicators/ema/{stockTicker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/indicators/ema/{stockTicker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v1-indicators-macd-stockticker",
+      "kind": "rest_read",
+      "summary": "GET /v1/indicators/macd/{stockTicker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/indicators/macd/{stockTicker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v1-indicators-rsi-stockticker",
+      "kind": "rest_read",
+      "summary": "GET /v1/indicators/rsi/{stockTicker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/indicators/rsi/{stockTicker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v1-indicators-sma-stockticker",
+      "kind": "rest_read",
+      "summary": "GET /v1/indicators/sma/{stockTicker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/indicators/sma/{stockTicker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v1-marketstatus-now",
+      "kind": "rest_read",
+      "summary": "GET /v1/marketstatus/now",
+      "description": "point-in-time market status, not a syncable object stream",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/marketstatus/now",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v1-marketstatus-upcoming",
+      "kind": "rest_read",
+      "summary": "GET /v1/marketstatus/upcoming",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/marketstatus/upcoming",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v1-open-close-stocksticker-date",
+      "kind": "rest_read",
+      "summary": "GET /v1/open-close/{stocksTicker}/{date}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/open-close/{stocksTicker}/{date}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v1-related-companies-ticker",
+      "kind": "rest_read",
+      "summary": "GET /v1/related-companies/{ticker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/related-companies/{ticker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-aggs-grouped-locale-us-market-stocks-date",
+      "kind": "rest_read",
+      "summary": "GET /v2/aggs/grouped/locale/us/market/stocks/{date}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aggs/grouped/locale/us/market/stocks/{date}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-aggs-ticker-stocksticker-prev",
+      "kind": "rest_read",
+      "summary": "GET /v2/aggs/ticker/{stocksTicker}/prev",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aggs/ticker/{stocksTicker}/prev",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-aggs-ticker-stocksticker-range-multiplier-timespan-from-to",
+      "kind": "rest_read",
+      "summary": "GET /v2/aggs/ticker/{stocksTicker}/range/{multiplier}/{timespan}/{from}/{to}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aggs/ticker/{stocksTicker}/range/{multiplier}/{timespan}/{from}/{to}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-aggs-ticker-ticker-range-multiplier-timespan-from-to",
+      "kind": "rest_read",
+      "summary": "GET /v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{from}/{to}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-last-nbbo-stocksticker",
+      "kind": "rest_read",
+      "summary": "GET /v2/last/nbbo/{stocksTicker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/last/nbbo/{stocksTicker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-last-trade-stocksticker",
+      "kind": "rest_read",
+      "summary": "GET /v2/last/trade/{stocksTicker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/last/trade/{stocksTicker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-reference-news",
+      "kind": "rest_read",
+      "summary": "GET /v2/reference/news",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/reference/news",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-snapshot-locale-us-markets-stocks-tickers",
+      "kind": "rest_read",
+      "summary": "GET /v2/snapshot/locale/us/markets/stocks/tickers",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/snapshot/locale/us/markets/stocks/tickers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-snapshot-locale-us-markets-stocks-tickers-stocksticker",
+      "kind": "rest_read",
+      "summary": "GET /v2/snapshot/locale/us/markets/stocks/tickers/{stocksTicker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/snapshot/locale/us/markets/stocks/tickers/{stocksTicker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v2-snapshot-locale-us-markets-stocks-direction",
+      "kind": "rest_read",
+      "summary": "GET /v2/snapshot/locale/us/markets/stocks/{direction}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/snapshot/locale/us/markets/stocks/{direction}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v3-quotes-stockticker",
+      "kind": "rest_read",
+      "summary": "GET /v3/quotes/{stockTicker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/quotes/{stockTicker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v3-reference-conditions",
+      "kind": "rest_read",
+      "summary": "GET /v3/reference/conditions",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/reference/conditions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v3-reference-exchanges",
+      "kind": "rest_read",
+      "summary": "GET /v3/reference/exchanges",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/reference/exchanges",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v3-reference-tickers-types",
+      "kind": "rest_read",
+      "summary": "GET /v3/reference/tickers/types",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/reference/tickers/types",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v3-reference-tickers-ticker",
+      "kind": "rest_read",
+      "summary": "GET /v3/reference/tickers/{ticker}",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/reference/tickers/{ticker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v3-snapshot",
+      "kind": "rest_read",
+      "summary": "GET /v3/snapshot",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/snapshot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.v3-trades-stockticker",
+      "kind": "rest_read",
+      "summary": "GET /v3/trades/{stockTicker}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/trades/{stockTicker}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.vx-reference-financials",
+      "kind": "rest_read",
+      "summary": "GET /vX/reference/financials",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vX/reference/financials",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.vx-reference-ipos",
+      "kind": "rest_read",
+      "summary": "GET /vX/reference/ipos",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vX/reference/ipos",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "polygon-stock-api.get.vx-reference-tickers-id-events",
+      "kind": "rest_read",
+      "summary": "GET /vX/reference/tickers/{id}/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://massive.com/docs/rest/stocks/overview",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/vX/reference/tickers/{id}/events",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

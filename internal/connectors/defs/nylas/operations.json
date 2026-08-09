@@ -1,0 +1,3309 @@
+{
+  "operations": [
+    {
+      "id": "nylas.get.v3-admin-applications-application-id-api-keys",
+      "kind": "rest_read",
+      "summary": "GET /v3/admin/applications/{application_id}/api-keys",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/admin/applications/{application_id}/api-keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-admin-applications-application-id-api-keys",
+      "kind": "rest_write",
+      "summary": "POST /v3/admin/applications/{application_id}/api-keys",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/admin/applications/{application_id}/api-keys",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-admin-applications-application-id-api-keys-api-key-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/admin/applications/{application_id}/api-keys/{api_key_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/admin/applications/{application_id}/api-keys/{api_key_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-admin-applications-application-id-api-keys-api-key-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/admin/applications/{application_id}/api-keys/{api_key_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/admin/applications/{application_id}/api-keys/{api_key_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-admin-domains",
+      "kind": "rest_read",
+      "summary": "GET /v3/admin/domains",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/admin/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-admin-domains",
+      "kind": "rest_write",
+      "summary": "POST /v3/admin/domains",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/admin/domains",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-admin-domains-domain-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/admin/domains/{domain_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/admin/domains/{domain_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-admin-domains-domain-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/admin/domains/{domain_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/admin/domains/{domain_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-admin-domains-domain-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/admin/domains/{domain_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/admin/domains/{domain_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-admin-domains-domain-id-info",
+      "kind": "rest_write",
+      "summary": "POST /v3/admin/domains/{domain_id}/info",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/admin/domains/{domain_id}/info",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-admin-domains-domain-id-verify",
+      "kind": "rest_write",
+      "summary": "POST /v3/admin/domains/{domain_id}/verify",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/admin/domains/{domain_id}/verify",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-applications",
+      "kind": "rest_read",
+      "summary": "GET /v3/applications",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/applications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.patch.v3-applications",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/applications",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/applications",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-applications-redirect-uris",
+      "kind": "rest_read",
+      "summary": "GET /v3/applications/redirect-uris",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/applications/redirect-uris",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-applications-redirect-uris",
+      "kind": "rest_write",
+      "summary": "POST /v3/applications/redirect-uris",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/applications/redirect-uris",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-applications-redirect-uris-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/applications/redirect-uris/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/applications/redirect-uris/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.patch.v3-applications-redirect-uris-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/applications/redirect-uris/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/applications/redirect-uris/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-applications-redirect-uris-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/applications/redirect-uris/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/applications/redirect-uris/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-calendars-availability",
+      "kind": "rest_write",
+      "summary": "POST /v3/calendars/availability",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/calendars/availability",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-channels-pubsub",
+      "kind": "rest_read",
+      "summary": "GET /v3/channels/pubsub",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/channels/pubsub",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-channels-pubsub",
+      "kind": "rest_write",
+      "summary": "POST /v3/channels/pubsub",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/channels/pubsub",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-channels-pubsub-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/channels/pubsub/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/channels/pubsub/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-channels-pubsub-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/channels/pubsub/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/channels/pubsub/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-channels-pubsub-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/channels/pubsub/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/channels/pubsub/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-channels-sns",
+      "kind": "rest_read",
+      "summary": "GET /v3/channels/sns",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/channels/sns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-channels-sns",
+      "kind": "rest_write",
+      "summary": "POST /v3/channels/sns",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/channels/sns",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-channels-sns-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/channels/sns/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/channels/sns/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-channels-sns-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/channels/sns/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/channels/sns/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-channels-sns-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/channels/sns/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/channels/sns/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-connect-auth",
+      "kind": "rest_read",
+      "summary": "GET /v3/connect/auth",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/connect/auth",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-connect-custom",
+      "kind": "rest_write",
+      "summary": "POST /v3/connect/custom",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/connect/custom",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-connect-revoke",
+      "kind": "rest_write",
+      "summary": "POST /v3/connect/revoke",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/connect/revoke",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-connect-token",
+      "kind": "rest_write",
+      "summary": "POST /v3/connect/token",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/connect/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-connect-tokeninfo",
+      "kind": "rest_read",
+      "summary": "GET /v3/connect/tokeninfo",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/connect/tokeninfo",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-connectors",
+      "kind": "rest_read",
+      "summary": "GET /v3/connectors",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/connectors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-connectors",
+      "kind": "rest_write",
+      "summary": "POST /v3/connectors",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/connectors",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-connectors-provider",
+      "kind": "rest_read",
+      "summary": "GET /v3/connectors/{provider}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/connectors/{provider}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.patch.v3-connectors-provider",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/connectors/{provider}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/connectors/{provider}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-connectors-provider",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/connectors/{provider}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/connectors/{provider}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-connectors-provider-creds",
+      "kind": "rest_read",
+      "summary": "GET /v3/connectors/{provider}/creds",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/connectors/{provider}/creds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-connectors-provider-creds",
+      "kind": "rest_write",
+      "summary": "POST /v3/connectors/{provider}/creds",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/connectors/{provider}/creds",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-connectors-provider-creds-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/connectors/{provider}/creds/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/connectors/{provider}/creds/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.patch.v3-connectors-provider-creds-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/connectors/{provider}/creds/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/connectors/{provider}/creds/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-connectors-provider-creds-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/connectors/{provider}/creds/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/connectors/{provider}/creds/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-domains-domain-name-messages-send",
+      "kind": "rest_write",
+      "summary": "POST /v3/domains/{domain_name}/messages/send",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/domains/{domain_name}/messages/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-2",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-e19f8e1a-eb1c-4673-b602-ba4a189b18bd-messages",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/e19f8e1a-eb1c-4673-b602-ba4a189b18bd/messages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/e19f8e1a-eb1c-4673-b602-ba4a189b18bd/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-email",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/email:",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/email:",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-external-user-12345-messages",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/external:user-12345/messages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/external:user-12345/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-e19f8e1a-eb1c-4673-b602-ba4a189b18bd-messages",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/grant:e19f8e1a-eb1c-4673-b602-ba4a189b18bd/messages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/grant:e19f8e1a-eb1c-4673-b602-ba4a189b18bd/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-me",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/me",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/me",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-me-messages",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/me/messages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/me/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-nylas-grant-id-calendars",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{NYLAS_GRANT_ID}/calendars",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{NYLAS_GRANT_ID}/calendars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-nylas-grant-id-contacts",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{NYLAS_GRANT_ID}/contacts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{NYLAS_GRANT_ID}/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-nylas-grant-id-drafts",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{NYLAS_GRANT_ID}/drafts",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{NYLAS_GRANT_ID}/drafts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-nylas-grant-id-events",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{NYLAS_GRANT_ID}/events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{NYLAS_GRANT_ID}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-nylas-grant-id-folders",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{NYLAS_GRANT_ID}/folders",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{NYLAS_GRANT_ID}/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-nylas-grant-id-messages",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{NYLAS_GRANT_ID}/messages",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{NYLAS_GRANT_ID}/messages",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-nylas-grant-id-notetakers",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{NYLAS_GRANT_ID}/notetakers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{NYLAS_GRANT_ID}/notetakers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-nylas-grant-id-threads",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{NYLAS_GRANT_ID}/threads",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{NYLAS_GRANT_ID}/threads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grantid",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grantId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grantId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.patch.v3-grants-grantid",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/grants/{grantId}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/grants/{grantId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grantid",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grantId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grantId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}",
+      "description": "grant metadata lookup, not a syncable object stream",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-attachment-uploads",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/attachment-uploads",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/attachment-uploads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-attachment-uploads-attachment-id-complete",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/attachment-uploads/{attachment_id}/complete",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/attachment-uploads/{attachment_id}/complete",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-attachments-attachment-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/attachments/{attachment_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/attachments/{attachment_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-attachments-attachment-id-download",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/attachments/{attachment_id}/download",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/attachments/{attachment_id}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-calendars",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/calendars",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/calendars",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-calendars-free-busy",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/calendars/free-busy",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/calendars/free-busy",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-calendars-calendar-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/calendars/{calendar_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/calendars/{calendar_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-calendars-calendar-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/calendars/{calendar_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/calendars/{calendar_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-calendars-calendar-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/calendars/{calendar_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/calendars/{calendar_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-contacts",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/contacts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/contacts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-contacts-groups",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/contacts/groups",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/contacts/groups",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-contacts-contact-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/contacts/{contact_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-contacts-contact-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/contacts/{contact_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-contacts-contact-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/contacts/{contact_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/contacts/{contact_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-drafts",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/drafts",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/drafts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-drafts",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/drafts",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/drafts",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-drafts-draft-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/drafts/{draft_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/drafts/{draft_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-drafts-draft-id",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/drafts/{draft_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/drafts/{draft_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-drafts-draft-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/drafts/{draft_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/drafts/{draft_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-drafts-draft-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/drafts/{draft_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/drafts/{draft_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-events",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/events",
+      "description": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-events-import",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/events/import",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/events/import",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-events-event-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/events/{event_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-events-event-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/events/{event_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-events-event-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/events/{event_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-events-event-id-send-rsvp",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/events/{event_id}/send-rsvp",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/events/{event_id}/send-rsvp",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-folders",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/folders",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-folders",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/folders",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/folders",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-folders-folder-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/folders/{folder_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/folders/{folder_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-folders-folder-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/folders/{folder_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/folders/{folder_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-folders-folder-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/folders/{folder_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/folders/{folder_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-messages-clean",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/messages/clean",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/messages/clean",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-messages-schedules",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/messages/schedules",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/messages/schedules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-messages-schedules-scheduleid",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/messages/schedules/{scheduleId}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/messages/schedules/{scheduleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-messages-schedules-scheduleid",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/messages/schedules/{scheduleId}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/messages/schedules/{scheduleId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-messages-send",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/messages/send",
+      "description": "mutation is not exposed as a reverse-ETL action for this connector's current write scope",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/messages/send",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-messages-smart-compose",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/messages/smart-compose",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/messages/smart-compose",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-messages-message-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/messages/{message_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/messages/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-messages-message-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/messages/{message_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/messages/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-messages-message-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/messages/{message_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/messages/{message_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-messages-message-id-smart-compose",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/messages/{message_id}/smart-compose",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/messages/{message_id}/smart-compose",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-notetakers",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/notetakers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/notetakers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-notetakers",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/notetakers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/notetakers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-notetakers-notetaker-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/notetakers/{notetaker_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/notetakers/{notetaker_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.patch.v3-grants-grant-id-notetakers-notetaker-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/grants/{grant_id}/notetakers/{notetaker_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/grants/{grant_id}/notetakers/{notetaker_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-notetakers-notetaker-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/notetakers/{notetaker_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/notetakers/{notetaker_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-notetakers-notetaker-id-cancel",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/notetakers/{notetaker_id}/cancel",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/notetakers/{notetaker_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-notetakers-notetaker-id-history",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/notetakers/{notetaker_id}/history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/notetakers/{notetaker_id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-notetakers-notetaker-id-leave",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/notetakers/{notetaker_id}/leave",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/notetakers/{notetaker_id}/leave",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-notetakers-notetaker-id-media",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/notetakers/{notetaker_id}/media",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/notetakers/{notetaker_id}/media",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-resources",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/resources",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/resources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-rule-evaluations",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/rule-evaluations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/rule-evaluations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-scheduling-configurations",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/scheduling/configurations",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/scheduling/configurations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-scheduling-configurations",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/scheduling/configurations",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/scheduling/configurations",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-scheduling-configurations-configuration-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/scheduling/configurations/{configuration_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/scheduling/configurations/{configuration_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-scheduling-configurations-configuration-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/scheduling/configurations/{configuration_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/scheduling/configurations/{configuration_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-scheduling-configurations-configuration-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/scheduling/configurations/{configuration_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/scheduling/configurations/{configuration_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-scheduling-configurations-configuration-id-group-events",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/scheduling/configurations/{configuration_id}/group-events",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/scheduling/configurations/{configuration_id}/group-events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-scheduling-configurations-configuration-id-group-events",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/scheduling/configurations/{configuration_id}/group-events",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/scheduling/configurations/{configuration_id}/group-events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-scheduling-configurations-configuration-id-group-events-event-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/scheduling/configurations/{configuration_id}/group-events/{event_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/scheduling/configurations/{configuration_id}/group-events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-scheduling-configurations-configuration-id-group-events-event-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/scheduling/configurations/{configuration_id}/group-events/{event_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/scheduling/configurations/{configuration_id}/group-events/{event_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-signatures",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/signatures",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/signatures",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-signatures",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/signatures",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/signatures",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-signatures-signature-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/signatures/{signature_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/signatures/{signature_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-signatures-signature-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/signatures/{signature_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/signatures/{signature_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-signatures-signature-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/signatures/{signature_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/signatures/{signature_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-templates",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-templates",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/templates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-templates-render",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/templates/render",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/templates/render",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-templates-template-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/templates/{template_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/templates/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-templates-template-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/templates/{template_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/templates/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-templates-template-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/templates/{template_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/templates/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-templates-template-id-render",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/templates/{template_id}/render",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/templates/{template_id}/render",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-threads",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/threads",
+      "description": "not implemented as a stream because it introduces an additional resource family or request shape outside this connector's current sync scope",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/threads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-threads-thread-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/threads/{thread_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/threads/{thread_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-threads-thread-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/threads/{thread_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/threads/{thread_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-threads-thread-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/threads/{thread_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/threads/{thread_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-workflows",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/workflows",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-grants-grant-id-workflows",
+      "kind": "rest_write",
+      "summary": "POST /v3/grants/{grant_id}/workflows",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/grants/{grant_id}/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-grants-grant-id-workflows-workflow-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/grants/{grant_id}/workflows/{workflow_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/grants/{grant_id}/workflows/{workflow_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-grants-grant-id-workflows-workflow-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/grants/{grant_id}/workflows/{workflow_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/grants/{grant_id}/workflows/{workflow_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-grants-grant-id-workflows-workflow-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/grants/{grant_id}/workflows/{workflow_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/grants/{grant_id}/workflows/{workflow_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-lists",
+      "kind": "rest_read",
+      "summary": "GET /v3/lists",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-lists",
+      "kind": "rest_write",
+      "summary": "POST /v3/lists",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/lists",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-lists-list-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/lists/{list_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/lists/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-lists-list-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/lists/{list_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/lists/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-lists-list-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/lists/{list_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/lists/{list_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-lists-list-id-items",
+      "kind": "rest_read",
+      "summary": "GET /v3/lists/{list_id}/items",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/lists/{list_id}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-lists-list-id-items",
+      "kind": "rest_write",
+      "summary": "POST /v3/lists/{list_id}/items",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/lists/{list_id}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-lists-list-id-items",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/lists/{list_id}/items",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/lists/{list_id}/items",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-notetakers",
+      "kind": "rest_read",
+      "summary": "GET /v3/notetakers",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/notetakers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-notetakers",
+      "kind": "rest_write",
+      "summary": "POST /v3/notetakers",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/notetakers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-notetakers-notetaker-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/notetakers/{notetaker_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/notetakers/{notetaker_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.patch.v3-notetakers-notetaker-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/notetakers/{notetaker_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/notetakers/{notetaker_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-notetakers-notetaker-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/notetakers/{notetaker_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/notetakers/{notetaker_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-notetakers-notetaker-id-cancel",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/notetakers/{notetaker_id}/cancel",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/notetakers/{notetaker_id}/cancel",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-notetakers-notetaker-id-history",
+      "kind": "rest_read",
+      "summary": "GET /v3/notetakers/{notetaker_id}/history",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/notetakers/{notetaker_id}/history",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-notetakers-notetaker-id-leave",
+      "kind": "rest_write",
+      "summary": "POST /v3/notetakers/{notetaker_id}/leave",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/notetakers/{notetaker_id}/leave",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-notetakers-notetaker-id-media",
+      "kind": "rest_read",
+      "summary": "GET /v3/notetakers/{notetaker_id}/media",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/notetakers/{notetaker_id}/media",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-policies",
+      "kind": "rest_read",
+      "summary": "GET /v3/policies",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/policies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-policies",
+      "kind": "rest_write",
+      "summary": "POST /v3/policies",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/policies",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-policies-policy-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/policies/{policy_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/policies/{policy_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-policies-policy-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/policies/{policy_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/policies/{policy_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-policies-policy-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/policies/{policy_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/policies/{policy_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-providers-detect",
+      "kind": "rest_write",
+      "summary": "POST /v3/providers/detect",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/providers/detect",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-rules",
+      "kind": "rest_read",
+      "summary": "GET /v3/rules",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-rules",
+      "kind": "rest_write",
+      "summary": "POST /v3/rules",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/rules",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-rules-rule-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/rules/{rule_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/rules/{rule_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-rules-rule-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/rules/{rule_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/rules/{rule_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-rules-rule-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/rules/{rule_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/rules/{rule_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-scheduling-availability",
+      "kind": "rest_read",
+      "summary": "GET /v3/scheduling/availability",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/scheduling/availability",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-scheduling-bookings",
+      "kind": "rest_write",
+      "summary": "POST /v3/scheduling/bookings",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/scheduling/bookings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-scheduling-bookings-booking-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/scheduling/bookings/{booking_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/scheduling/bookings/{booking_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-scheduling-bookings-booking-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/scheduling/bookings/{booking_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/scheduling/bookings/{booking_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.patch.v3-scheduling-bookings-booking-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/scheduling/bookings/{booking_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/scheduling/bookings/{booking_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-scheduling-bookings-booking-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/scheduling/bookings/{booking_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/scheduling/bookings/{booking_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-scheduling-configurations-configuration-id-group-events-validate-timeslot",
+      "kind": "rest_write",
+      "summary": "POST /v3/scheduling/configurations/{configuration_id}/group-events/validate-timeslot",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/scheduling/configurations/{configuration_id}/group-events/validate-timeslot",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-scheduling-configurations-configuration-id-import-group-events",
+      "kind": "rest_write",
+      "summary": "POST /v3/scheduling/configurations/{configuration_id}/import-group-events",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/scheduling/configurations/{configuration_id}/import-group-events",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-scheduling-sessions",
+      "kind": "rest_write",
+      "summary": "POST /v3/scheduling/sessions",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/scheduling/sessions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-scheduling-sessions-session-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/scheduling/sessions/{session_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/scheduling/sessions/{session_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-templates",
+      "kind": "rest_read",
+      "summary": "GET /v3/templates",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-templates",
+      "kind": "rest_write",
+      "summary": "POST /v3/templates",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/templates",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-templates-render",
+      "kind": "rest_write",
+      "summary": "POST /v3/templates/render",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/templates/render",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-templates-template-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/templates/{template_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/templates/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-templates-template-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/templates/{template_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/templates/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-templates-template-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/templates/{template_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/templates/{template_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-templates-template-id-render",
+      "kind": "rest_write",
+      "summary": "POST /v3/templates/{template_id}/render",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/templates/{template_id}/render",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-webhooks",
+      "kind": "rest_read",
+      "summary": "GET /v3/webhooks",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-webhooks",
+      "kind": "rest_write",
+      "summary": "POST /v3/webhooks",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-webhooks-mock-payload",
+      "kind": "rest_write",
+      "summary": "POST /v3/webhooks/mock-payload",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/webhooks/mock-payload",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-webhooks-rotate-secret-id",
+      "kind": "rest_write",
+      "summary": "POST /v3/webhooks/rotate-secret/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/webhooks/rotate-secret/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-webhooks-send-test-event",
+      "kind": "rest_write",
+      "summary": "POST /v3/webhooks/send-test-event",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/webhooks/send-test-event",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-webhooks-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/webhooks/{id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-webhooks-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/webhooks/{id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-webhooks-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/webhooks/{id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/webhooks/{id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-workflows",
+      "kind": "rest_read",
+      "summary": "GET /v3/workflows",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-workflows",
+      "kind": "rest_write",
+      "summary": "POST /v3/workflows",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/workflows",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-workflows-workflow-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/workflows/{workflow_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/workflows/{workflow_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.put.v3-workflows-workflow-id",
+      "kind": "rest_write",
+      "summary": "PUT /v3/workflows/{workflow_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v3/workflows/{workflow_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-workflows-workflow-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/workflows/{workflow_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/workflows/{workflow_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-workspaces",
+      "kind": "rest_read",
+      "summary": "GET /v3/workspaces",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/workspaces",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-workspaces",
+      "kind": "rest_write",
+      "summary": "POST /v3/workspaces",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/workspaces",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-workspaces-auto-group",
+      "kind": "rest_write",
+      "summary": "POST /v3/workspaces/auto-group",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/workspaces/auto-group",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.get.v3-workspaces-workspace-id",
+      "kind": "rest_read",
+      "summary": "GET /v3/workspaces/{workspace_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/workspaces/{workspace_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.patch.v3-workspaces-workspace-id",
+      "kind": "rest_write",
+      "summary": "PATCH /v3/workspaces/{workspace_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/v3/workspaces/{workspace_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.delete.v3-workspaces-workspace-id",
+      "kind": "rest_write",
+      "summary": "DELETE /v3/workspaces/{workspace_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v3/workspaces/{workspace_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "nylas.post.v3-workspaces-workspace-id-manual-assign",
+      "kind": "rest_write",
+      "summary": "POST /v3/workspaces/{workspace_id}/manual-assign",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developer.nylas.com/docs/reference/api/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v3/workspaces/{workspace_id}/manual-assign",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

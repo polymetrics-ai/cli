@@ -1,0 +1,641 @@
+{
+  "tagline": "Run ServiceNow's declared streams and reverse-ETL actions.",
+  "usage": "pm service-now \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get api now attachment",
+        "api get api now stats tablename",
+        "api get api now table incident sys-id",
+        "api get api now table sys-user sys-id",
+        "api get api now table sys-user-grmember",
+        "api get api now table sys-user-group sys-id",
+        "api get now table tablename",
+        "api get now table tablename sys-id",
+        "groups list",
+        "incidents list",
+        "users list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete api now table incident sys-id",
+        "api delete api now table sys-user sys-id",
+        "api delete api now table sys-user-group sys-id",
+        "api delete now table tablename sys-id",
+        "api patch now table tablename sys-id",
+        "api post api now import importsettablename",
+        "api post now table tablename",
+        "api put api now table incident sys-id",
+        "api put api now table sys-user sys-id",
+        "api put api now table sys-user-group sys-id",
+        "api put now table tablename sys-id",
+        "create group apply",
+        "create incident apply",
+        "create user apply",
+        "update group apply",
+        "update incident apply",
+        "update user apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete api now table incident sys-id",
+      "summary": "Documented DELETE /api/now/table/incident/{sys_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api delete api now table incident sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/now/table/incident/{sys_id}"
+        }
+      ],
+      "operation": "service-now.delete.api-now-table-incident-sys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api now table sys-user sys-id",
+      "summary": "Documented DELETE /api/now/table/sys_user/{sys_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api delete api now table sys-user sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/now/table/sys_user/{sys_id}"
+        }
+      ],
+      "operation": "service-now.delete.api-now-table-sys-user-sys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete api now table sys-user-group sys-id",
+      "summary": "Documented DELETE /api/now/table/sys_user_group/{sys_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api delete api now table sys-user-group sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/api/now/table/sys_user_group/{sys_id}"
+        }
+      ],
+      "operation": "service-now.delete.api-now-table-sys-user-group-sys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete now table tablename sys-id",
+      "summary": "Documented DELETE /now/table/{tableName}/{sys_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api delete now table tablename sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/now/table/{tableName}/{sys_id}"
+        }
+      ],
+      "operation": "service-now.delete.now-table-tablename-sys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get api now attachment",
+      "summary": "Documented GET /api/now/attachment (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api get api now attachment --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/now/attachment"
+        }
+      ],
+      "operation": "service-now.get.api-now-attachment",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api now stats tablename",
+      "summary": "Documented GET /api/now/stats/{tableName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api get api now stats tablename --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/now/stats/{tableName}"
+        }
+      ],
+      "operation": "service-now.get.api-now-stats-tablename",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api now table incident sys-id",
+      "summary": "Documented GET /api/now/table/incident/{sys_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api get api now table incident sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/now/table/incident/{sys_id}"
+        }
+      ],
+      "operation": "service-now.get.api-now-table-incident-sys-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api now table sys-user sys-id",
+      "summary": "Documented GET /api/now/table/sys_user/{sys_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api get api now table sys-user sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/now/table/sys_user/{sys_id}"
+        }
+      ],
+      "operation": "service-now.get.api-now-table-sys-user-sys-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api now table sys-user-grmember",
+      "summary": "Documented GET /api/now/table/sys_user_grmember (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api get api now table sys-user-grmember --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/now/table/sys_user_grmember"
+        }
+      ],
+      "operation": "service-now.get.api-now-table-sys-user-grmember",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get api now table sys-user-group sys-id",
+      "summary": "Documented GET /api/now/table/sys_user_group/{sys_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api get api now table sys-user-group sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/now/table/sys_user_group/{sys_id}"
+        }
+      ],
+      "operation": "service-now.get.api-now-table-sys-user-group-sys-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get now table tablename",
+      "summary": "Documented GET /now/table/{tableName} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api get now table tablename --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/now/table/{tableName}"
+        }
+      ],
+      "operation": "service-now.get.now-table-tablename",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get now table tablename sys-id",
+      "summary": "Documented GET /now/table/{tableName}/{sys_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api get now table tablename sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/now/table/{tableName}/{sys_id}"
+        }
+      ],
+      "operation": "service-now.get.now-table-tablename-sys-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch now table tablename sys-id",
+      "summary": "Documented PATCH /now/table/{tableName}/{sys_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api patch now table tablename sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/now/table/{tableName}/{sys_id}"
+        }
+      ],
+      "operation": "service-now.patch.now-table-tablename-sys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post api now import importsettablename",
+      "summary": "Documented POST /api/now/import/{importSetTableName} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api post api now import importsettablename --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/now/import/{importSetTableName}"
+        }
+      ],
+      "operation": "service-now.post.api-now-import-importsettablename",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post now table tablename",
+      "summary": "Documented POST /now/table/{tableName} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api post now table tablename --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/now/table/{tableName}"
+        }
+      ],
+      "operation": "service-now.post.now-table-tablename",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api now table incident sys-id",
+      "summary": "Documented PUT /api/now/table/incident/{sys_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api put api now table incident sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/now/table/incident/{sys_id}"
+        }
+      ],
+      "operation": "service-now.put.api-now-table-incident-sys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api now table sys-user sys-id",
+      "summary": "Documented PUT /api/now/table/sys_user/{sys_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api put api now table sys-user sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/now/table/sys_user/{sys_id}"
+        }
+      ],
+      "operation": "service-now.put.api-now-table-sys-user-sys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put api now table sys-user-group sys-id",
+      "summary": "Documented PUT /api/now/table/sys_user_group/{sys_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api put api now table sys-user-group sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/api/now/table/sys_user_group/{sys_id}"
+        }
+      ],
+      "operation": "service-now.put.api-now-table-sys-user-group-sys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put now table tablename sys-id",
+      "summary": "Documented PUT /now/table/{tableName}/{sys_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now api put now table tablename sys-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/now/table/{tableName}/{sys_id}"
+        }
+      ],
+      "operation": "service-now.put.now-table-tablename-sys-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "create group apply",
+      "summary": "Plan and execute the create group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_group",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm service-now create group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/now/table/sys_user_group"
+        }
+      ],
+      "risk": "creates a new user group record; low-risk external mutation, no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create incident apply",
+      "summary": "Plan and execute the create incident reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_incident",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now create incident apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/now/table/incident"
+        }
+      ],
+      "risk": "creates a new incident record; low-risk external mutation (a new ticket), no approval required",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create user apply",
+      "summary": "Plan and execute the create user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "flags": [
+        {
+          "name": "user_name",
+          "type": "string",
+          "summary": "Required user name record field.",
+          "maps_to": "record.user_name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm service-now create user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/now/table/sys_user"
+        }
+      ],
+      "risk": "creates a new ServiceNow user account record; a new user account granted whatever role/ACL defaults the instance applies is a higher-scrutiny mutation than an incident/group create",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "groups list",
+      "summary": "Run the groups ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "groups",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now groups list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/now/table/sys_user_group"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "incidents list",
+      "summary": "Run the incidents ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "incidents",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now incidents list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/now/table/incident"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "update group apply",
+      "summary": "Plan and execute the update group reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_group",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "flags": [
+        {
+          "name": "sys_id",
+          "type": "string",
+          "summary": "Required sys id record field.",
+          "maps_to": "record.sys_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm service-now update group apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/now/table/sys_user_group/{sys_id}"
+        }
+      ],
+      "risk": "mutates an existing group's recorded fields by sys_id, including active/manager; can change who is considered the group's membership owner",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update incident apply",
+      "summary": "Plan and execute the update incident reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_incident",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "flags": [
+        {
+          "name": "sys_id",
+          "type": "string",
+          "summary": "Required sys id record field.",
+          "maps_to": "record.sys_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm service-now update incident apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/now/table/incident/{sys_id}"
+        }
+      ],
+      "risk": "mutates an existing incident's recorded fields (only fields present in the submitted record are changed; ServiceNow's Table API PATCH/PUT both modify only the submitted fields, never the whole record) by sys_id",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update user apply",
+      "summary": "Plan and execute the update user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_user",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "flags": [
+        {
+          "name": "sys_id",
+          "type": "string",
+          "summary": "Required sys id record field.",
+          "maps_to": "record.sys_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm service-now update user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/api/now/table/sys_user/{sys_id}"
+        }
+      ],
+      "risk": "mutates an existing user account's profile fields by sys_id, including active (deactivating a user's account revokes their instance access); higher-scrutiny than incident/group updates",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "examples": [
+        "pm service-now users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/api/now/table/sys_user"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    }
+  ]
+}

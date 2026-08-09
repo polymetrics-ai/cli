@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-052-unattempted-retry-chunk-01-manifest.json",
+  "candidates": 32,
+  "included": [
+    {
+      "connector": "easypromos",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://easypromos-apiref.redoc.ly/",
+        "version": "Easypromos REST API v2.0.1; rendered OpenAPI 3.1.0 reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "2ba070263e48dd37d97b7406c3538c6981e918a7cb74923ef9e9340286e40911"
+      },
+      "artifact_operations": 30,
+      "declared_operations": 32,
+      "operation_split": {
+        "executable": 6,
+        "provider_blocked": 17,
+        "excluded": 9
+      },
+      "cli_commands": 32,
+      "implemented_commands": 6,
+      "named_dependency_commands": 26,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 26
+    },
+    {
+      "connector": "granola",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://docs.granola.ai/introduction",
+        "version": "Granola API reference, live undated",
+        "retrieved_at": "2026-08-09",
+        "sha256": "7a064d5190d4ed1e8d82e81fbd63485dd3c72fee9f22f8605f8bdca4bddd6225"
+      },
+      "artifact_operations": 8,
+      "declared_operations": 9,
+      "operation_split": {
+        "executable": 2,
+        "provider_blocked": 5,
+        "excluded": 2
+      },
+      "cli_commands": 9,
+      "implemented_commands": 2,
+      "named_dependency_commands": 7,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 7
+    },
+    {
+      "connector": "just-sift",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.justsift.com/",
+        "version": "Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "94b78b4728a9deacb591a13dccb8b7767ee9bdaa610a68117fd7c7a0c7b21493"
+      },
+      "artifact_operations": 5,
+      "declared_operations": 7,
+      "operation_split": {
+        "executable": 2,
+        "provider_blocked": 4,
+        "excluded": 1
+      },
+      "cli_commands": 7,
+      "implemented_commands": 2,
+      "named_dependency_commands": 5,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 5
+    },
+    {
+      "connector": "mailosaur",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://mailosaur.com/docs/api",
+        "version": "current provider HTML reference (no API version displayed)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "25ca72a6a7a888bf48f8241ccbb7c295a6575f826d74cb0b2948dd234c3d77dd"
+      },
+      "artifact_operations": 24,
+      "declared_operations": 33,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 16,
+        "excluded": 14
+      },
+      "cli_commands": 33,
+      "implemented_commands": 3,
+      "named_dependency_commands": 30,
+      "flagged_discrepancies": 9,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 30
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "adjust",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "airtable",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://airtable.com/images/favicon/baymax/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "alpha-vantage",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "ashby",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget"
+    },
+    {
+      "connector": "assemblyai",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://www.assemblyai.com/api-reference/overview\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://www.assemblyai.com/docs\" failed: artifact operation inventory is unknown: official reference link \"https://www.assemblyai.com/api-reference/overview\" could not be fetched: fetch artifact: provider returned HTTP 404"
+    },
+    {
+      "connector": "awin-advertiser",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 1 operation(s), below the ledger's 11; official reference fallback \"https://help.awin.com/advertisers/docs/en/awins-apis-overview\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "aws-cloudtrail",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "bamboo-hr",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "braze",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference link \"https://www.braze.com/docs/api/api_campaigns/transactional_api_campaign/index.md\" could not be fetched: fetch artifact: provider returned HTTP 404), and official reference fallback \"https://www.braze.com/docs/api/home/\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "bunny-inc",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://docs.bunny.com/developer\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "care-quality-commission",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://api-portal.service.cqc.org.uk/developer/apis/syndication?export=true\u0026format=openapi%2Bjson\u0026api-version=2022-04-01-preview\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact has no HTTP or webhook operations; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items), and official reference fallback \"https://api-portal.service.cqc.org.uk/api-details\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "churnkey",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link that failed URL admission), and official reference fallback \"https://docs.churnkey.co/data-integrations/data-api\" failed: artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "ding-connect",
+      "stage": "artifact_fetch",
+      "reason": "fetch artifact: provider returned HTTP 403"
+    },
+    {
+      "connector": "dremio",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "dynamodb",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "e-conomic",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://www.e-conomic.com/developer/about-the-rest-api\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "ezofficeinventory",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "factorial",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget"
+    },
+    {
+      "connector": "front",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://dev.frontapp.com/reference/introduction\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "google-analytics-data-api",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact yielded 11 operation(s), below the ledger's 24; official reference fallback \"https://developers.google.com/analytics/devguides/reporting/data/v1/rest\" failed: artifact operation inventory is unknown: official reference \"https://developers.google.com/_pwa/developers/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "harness",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://apidocs.harness.io/\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "hibob",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact is not an OpenAPI or Swagger document), and official reference fallback \"https://apidocs.hibob.com/reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "hubplanner",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 37: mapping values are not allowed in this context), and official reference fallback \"https://github.com/hubplanner/API/tree/master/Sections\" failed: artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "jamf-pro",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "klarna",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "looker",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "mailjet-sms",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference \"https://dev.mailjet.com/page-data/sms/reference/sms-messages/page-data.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items), and official reference fallback \"https://dev.mailjet.com/sms/reference/overview/\" failed: artifact operation inventory is unknown: official reference \"https://dev.mailjet.com/page-data/sms/reference/overview/page-data.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "marketo",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 321 operation(s), below the ledger's 322"
+    }
+  ]
+}

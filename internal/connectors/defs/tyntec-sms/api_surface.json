@@ -1,13 +1,419 @@
 {
-  "api": "tyntec Messaging API",
+  "api": "tyntec Messaging API; provider artifact version: current tyntec SMS API reference",
   "docs": "https://api.tyntec.com/reference/",
-  "reviewed_at": "2026-07-04",
-  "scope": "Pass B expansion for the tyntec SMS API surface reachable from the official API reference index. The four legacy read streams remain unchanged and the documented SMS send mutation is covered by a declarative write action. Other tyntec products linked from the same reference index (Conversations, OTP, Verify, Network APIs, Account self-service, Voice) are separate APIs and not part of this SMS connector surface.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (15 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "tyntec-sms-artifact-2026-08-09",
+      "url": "https://api.tyntec.com/reference/sms/current.html",
+      "kind": "html_reference",
+      "version": "current tyntec SMS API reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/sms/v1/messages", "covered_by": { "stream": "messages" } },
-    { "method": "GET", "path": "/sms/v1/templates", "covered_by": { "stream": "templates" } },
-    { "method": "GET", "path": "/sms/v1/sender-ids", "covered_by": { "stream": "sender_ids" } },
-    { "method": "GET", "path": "/sms/v1/reports", "covered_by": { "stream": "delivery_reports" } },
-    { "method": "POST", "path": "/sms/v1/messages", "covered_by": { "write": "send_message" } }
+    {
+      "method": "GET",
+      "path": "/byon/contacts/v1",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#GET /byon/contacts/v1"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/byon/contacts/v1",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#POST /byon/contacts/v1"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/byon/contacts/v1/{contactId}",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#GET /byon/contacts/v1/{contactId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/byon/contacts/v1/{contactId}",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#POST /byon/contacts/v1/{contactId}"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/byon/contacts/v1/{contactId}",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#DELETE /byon/contacts/v1/{contactId}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/byon/phonebook/v1/numbers",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#GET /byon/phonebook/v1/numbers"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/byon/phonebook/v1/numbers/{phoneNumber}",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#GET /byon/phonebook/v1/numbers/{phoneNumber}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/byon/provisioning/v1",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#GET /byon/provisioning/v1"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/byon/provisioning/v1",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#POST /byon/provisioning/v1"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/byon/provisioning/v1/{requestId}",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#GET /byon/provisioning/v1/{requestId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/incoming",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#POST /incoming"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/conversion",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#POST /messaging/v1/conversion"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messaging/v1/messages/{requestId}",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#GET /messaging/v1/messages/{requestId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messaging/v1/sms",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#GET /messaging/v1/sms"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messaging/v1/sms",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "https://api.tyntec.com/reference/sms/current.html#POST /messaging/v1/sms"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms/v1/messages",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "existing-surface[GET /sms/v1/messages]"
+      },
+      "covered_by": {
+        "stream": "messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/sms/v1/messages",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "existing-surface[POST /sms/v1/messages]"
+      },
+      "covered_by": {
+        "write": "send_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms/v1/reports",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "existing-surface[GET /sms/v1/reports]"
+      },
+      "covered_by": {
+        "stream": "delivery_reports"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms/v1/sender-ids",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "existing-surface[GET /sms/v1/sender-ids]"
+      },
+      "covered_by": {
+        "stream": "sender_ids"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/sms/v1/templates",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "tyntec-sms-artifact-2026-08-09",
+        "source_url": "https://api.tyntec.com/reference/sms/current.html",
+        "source_kind": "html_reference",
+        "version": "current tyntec SMS API reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "0719264c874d704a9a2962128e0e90be23b9bbfa53e82069653e02c4bd2022ce",
+        "coordinate": "existing-surface[GET /sms/v1/templates]"
+      },
+      "covered_by": {
+        "stream": "templates"
+      }
+    }
   ]
 }

@@ -1,0 +1,743 @@
+{
+  "tagline": "Run Strava's declared streams and reverse-ETL actions.",
+  "usage": "pm strava \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "activities list",
+        "api get activities id",
+        "api get activities id comments",
+        "api get activities id kudos",
+        "api get activities id laps",
+        "api get activities id streams",
+        "api get activities id zones",
+        "api get athlete zones",
+        "api get athletes id routes",
+        "api get clubs id",
+        "api get clubs id activities",
+        "api get clubs id admins",
+        "api get clubs id members",
+        "api get gear id",
+        "api get routes id",
+        "api get routes id export-gpx",
+        "api get routes id export-tcx",
+        "api get routes id streams",
+        "api get segment-efforts",
+        "api get segment-efforts id",
+        "api get segment-efforts id streams",
+        "api get segments explore",
+        "api get segments id",
+        "api get segments id streams",
+        "api get segments starred",
+        "api get uploads uploadid",
+        "athlete list",
+        "athlete stats list",
+        "clubs list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api post activities",
+        "api post push-subscriptions",
+        "api post uploads",
+        "api put activities id",
+        "api put athlete",
+        "api put segments id starred"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "activities list",
+      "summary": "Run the activities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "activities",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava activities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/athlete/activities"
+        }
+      ]
+    },
+    {
+      "path": "api get activities id",
+      "summary": "Documented GET /activities/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get activities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{id}"
+        }
+      ],
+      "operation": "strava.get.activities-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get activities id comments",
+      "summary": "Documented GET /activities/{id}/comments (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get activities id comments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{id}/comments"
+        }
+      ],
+      "operation": "strava.get.activities-id-comments",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get activities id kudos",
+      "summary": "Documented GET /activities/{id}/kudos (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get activities id kudos --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{id}/kudos"
+        }
+      ],
+      "operation": "strava.get.activities-id-kudos",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get activities id laps",
+      "summary": "Documented GET /activities/{id}/laps (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get activities id laps --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{id}/laps"
+        }
+      ],
+      "operation": "strava.get.activities-id-laps",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get activities id streams",
+      "summary": "Documented GET /activities/{id}/streams (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get activities id streams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{id}/streams"
+        }
+      ],
+      "operation": "strava.get.activities-id-streams",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get activities id zones",
+      "summary": "Documented GET /activities/{id}/zones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get activities id zones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/activities/{id}/zones"
+        }
+      ],
+      "operation": "strava.get.activities-id-zones",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get athlete zones",
+      "summary": "Documented GET /athlete/zones (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get athlete zones --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/athlete/zones"
+        }
+      ],
+      "operation": "strava.get.athlete-zones",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get athletes id routes",
+      "summary": "Documented GET /athletes/{id}/routes (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get athletes id routes --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/athletes/{id}/routes"
+        }
+      ],
+      "operation": "strava.get.athletes-id-routes",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get clubs id",
+      "summary": "Documented GET /clubs/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get clubs id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clubs/{id}"
+        }
+      ],
+      "operation": "strava.get.clubs-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get clubs id activities",
+      "summary": "Documented GET /clubs/{id}/activities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get clubs id activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clubs/{id}/activities"
+        }
+      ],
+      "operation": "strava.get.clubs-id-activities",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get clubs id admins",
+      "summary": "Documented GET /clubs/{id}/admins (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get clubs id admins --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clubs/{id}/admins"
+        }
+      ],
+      "operation": "strava.get.clubs-id-admins",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get clubs id members",
+      "summary": "Documented GET /clubs/{id}/members (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get clubs id members --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/clubs/{id}/members"
+        }
+      ],
+      "operation": "strava.get.clubs-id-members",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get gear id",
+      "summary": "Documented GET /gear/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get gear id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/gear/{id}"
+        }
+      ],
+      "operation": "strava.get.gear-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get routes id",
+      "summary": "Documented GET /routes/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get routes id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/routes/{id}"
+        }
+      ],
+      "operation": "strava.get.routes-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get routes id export-gpx",
+      "summary": "Documented GET /routes/{id}/export_gpx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get routes id export-gpx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/routes/{id}/export_gpx"
+        }
+      ],
+      "operation": "strava.get.routes-id-export-gpx",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get routes id export-tcx",
+      "summary": "Documented GET /routes/{id}/export_tcx (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get routes id export-tcx --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/routes/{id}/export_tcx"
+        }
+      ],
+      "operation": "strava.get.routes-id-export-tcx",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get routes id streams",
+      "summary": "Documented GET /routes/{id}/streams (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get routes id streams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/routes/{id}/streams"
+        }
+      ],
+      "operation": "strava.get.routes-id-streams",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segment-efforts",
+      "summary": "Documented GET /segment_efforts (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get segment-efforts --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segment_efforts"
+        }
+      ],
+      "operation": "strava.get.segment-efforts",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segment-efforts id",
+      "summary": "Documented GET /segment_efforts/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get segment-efforts id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segment_efforts/{id}"
+        }
+      ],
+      "operation": "strava.get.segment-efforts-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segment-efforts id streams",
+      "summary": "Documented GET /segment_efforts/{id}/streams (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get segment-efforts id streams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segment_efforts/{id}/streams"
+        }
+      ],
+      "operation": "strava.get.segment-efforts-id-streams",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segments explore",
+      "summary": "Documented GET /segments/explore (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get segments explore --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/explore"
+        }
+      ],
+      "operation": "strava.get.segments-explore",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segments id",
+      "summary": "Documented GET /segments/{id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get segments id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/{id}"
+        }
+      ],
+      "operation": "strava.get.segments-id",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segments id streams",
+      "summary": "Documented GET /segments/{id}/streams (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get segments id streams --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/{id}/streams"
+        }
+      ],
+      "operation": "strava.get.segments-id-streams",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get segments starred",
+      "summary": "Documented GET /segments/starred (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get segments starred --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/starred"
+        }
+      ],
+      "operation": "strava.get.segments-starred",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get uploads uploadid",
+      "summary": "Documented GET /uploads/{uploadId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api get uploads uploadid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/uploads/{uploadId}"
+        }
+      ],
+      "operation": "strava.get.uploads-uploadid",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post activities",
+      "summary": "Documented POST /activities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api post activities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/activities"
+        }
+      ],
+      "operation": "strava.post.activities",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post push-subscriptions",
+      "summary": "Documented POST /push_subscriptions (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api post push-subscriptions --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/push_subscriptions"
+        }
+      ],
+      "operation": "strava.post.push-subscriptions",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post uploads",
+      "summary": "Documented POST /uploads (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api post uploads --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/uploads"
+        }
+      ],
+      "operation": "strava.post.uploads",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put activities id",
+      "summary": "Documented PUT /activities/{id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api put activities id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/activities/{id}"
+        }
+      ],
+      "operation": "strava.put.activities-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put athlete",
+      "summary": "Documented PUT /athlete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api put athlete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/athlete"
+        }
+      ],
+      "operation": "strava.put.athlete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put segments id starred",
+      "summary": "Documented PUT /segments/{id}/starred (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava api put segments id starred --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/segments/{id}/starred"
+        }
+      ],
+      "operation": "strava.put.segments-id-starred",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "athlete list",
+      "summary": "Run the athlete ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "athlete",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava athlete list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/athlete"
+        }
+      ]
+    },
+    {
+      "path": "athlete stats list",
+      "summary": "Run the athlete stats ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "athlete_stats",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava athlete stats list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/athletes/{id}/stats"
+        }
+      ]
+    },
+    {
+      "path": "clubs list",
+      "summary": "Run the clubs ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "clubs",
+      "source_url": "https://developers.strava.com/docs/reference/",
+      "examples": [
+        "pm strava clubs list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/athlete/clubs"
+        }
+      ]
+    }
+  ]
+}

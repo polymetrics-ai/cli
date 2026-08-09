@@ -1,0 +1,300 @@
+{
+  "operations": [
+    {
+      "id": "service-now.get.api-now-attachment",
+      "kind": "rest_read",
+      "summary": "GET /api/now/attachment",
+      "description": "the separate Attachment API returns/accepts binary file payloads (multipart upload, raw byte download), not JSON table rows; the engine's declarative HTTP dialect has no multipart/binary-body primitive",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/now/attachment",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.post.api-now-import-importsettablename",
+      "kind": "rest_write",
+      "summary": "POST /api/now/import/{importSetTableName}",
+      "description": "the separate Import Set API for staged bulk loads is a distinct API surface from the Table API this connector targets; not implemented by legacy",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/api/now/import/{importSetTableName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.get.api-now-stats-tablename",
+      "kind": "rest_read",
+      "summary": "GET /api/now/stats/{tableName}",
+      "description": "the separate Aggregate API (COUNT/SUM/AVG/MIN/MAX over a table) is a distinct API surface from the Table API this connector targets; not implemented by legacy",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/now/stats/{tableName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.get.api-now-table-incident-sys-id",
+      "kind": "rest_read",
+      "summary": "GET /api/now/table/incident/{sys_id}",
+      "description": "single-record detail fetch for a resource the incidents stream (GET /api/now/table/incident) already lists in full; no additional field is reachable only through this endpoint",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/now/table/incident/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.put.api-now-table-incident-sys-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/now/table/incident/{sys_id}",
+      "description": "ServiceNow's Table API documents PUT and PATCH as functionally identical on this resource (both modify only the fields present in the request body, unlike standard REST PUT's whole-resource replace semantics) — update_incident (PATCH) already covers this exact capability; declaring both would send byte-identical requests for any accepted input",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/now/table/incident/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.delete.api-now-table-incident-sys-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/now/table/incident/{sys_id}",
+      "description": "a hard, unrecoverable delete of an incident record gated by ServiceNow's own delete ACL; legacy exposed zero mutation capability (Capabilities{Write:false}) and this expansion's write additions are scoped to the reversible/low-risk create+update surface, not destructive deletes",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/now/table/incident/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.get.api-now-table-sys-user-sys-id",
+      "kind": "rest_read",
+      "summary": "GET /api/now/table/sys_user/{sys_id}",
+      "description": "single-record detail fetch for a resource the users stream (GET /api/now/table/sys_user) already lists in full",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/now/table/sys_user/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.put.api-now-table-sys-user-sys-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/now/table/sys_user/{sys_id}",
+      "description": "same PUT/PATCH functional-identity reasoning as incident; update_user (PATCH) already covers it",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/now/table/sys_user/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.delete.api-now-table-sys-user-sys-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/now/table/sys_user/{sys_id}",
+      "description": "a hard, unrecoverable delete of a user account record gated by ServiceNow's own delete ACL; deleting a sys_user row can cascade-orphan every record that references it (assigned incidents, group membership, approvals) and is normally performed only through ServiceNow's own admin UI, not an unattended API mutation",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/now/table/sys_user/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.get.api-now-table-sys-user-grmember",
+      "kind": "rest_read",
+      "summary": "GET /api/now/table/sys_user_grmember",
+      "description": "group-membership join table not implemented by legacy and not one of this migration's 3 legacy-parity tables; a future capability expansion could add it as a 4th table following the identical stream+write shape used here",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/now/table/sys_user_grmember",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.get.api-now-table-sys-user-group-sys-id",
+      "kind": "rest_read",
+      "summary": "GET /api/now/table/sys_user_group/{sys_id}",
+      "description": "single-record detail fetch for a resource the groups stream (GET /api/now/table/sys_user_group) already lists in full",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/api/now/table/sys_user_group/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.put.api-now-table-sys-user-group-sys-id",
+      "kind": "rest_write",
+      "summary": "PUT /api/now/table/sys_user_group/{sys_id}",
+      "description": "same PUT/PATCH functional-identity reasoning as incident; update_group (PATCH) already covers it",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/api/now/table/sys_user_group/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.delete.api-now-table-sys-user-group-sys-id",
+      "kind": "rest_write",
+      "summary": "DELETE /api/now/table/sys_user_group/{sys_id}",
+      "description": "a hard, unrecoverable delete of a group record gated by ServiceNow's own delete ACL; deleting a group can orphan every membership/assignment rule that references it",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/api/now/table/sys_user_group/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.get.now-table-tablename",
+      "kind": "rest_read",
+      "summary": "GET /now/table/{tableName}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/now/table/{tableName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.post.now-table-tablename",
+      "kind": "rest_write",
+      "summary": "POST /now/table/{tableName}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/now/table/{tableName}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.get.now-table-tablename-sys-id",
+      "kind": "rest_read",
+      "summary": "GET /now/table/{tableName}/{sys_id}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/now/table/{tableName}/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.put.now-table-tablename-sys-id",
+      "kind": "rest_write",
+      "summary": "PUT /now/table/{tableName}/{sys_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/now/table/{tableName}/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.patch.now-table-tablename-sys-id",
+      "kind": "rest_write",
+      "summary": "PATCH /now/table/{tableName}/{sys_id}",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PATCH",
+        "path": "/now/table/{tableName}/{sys_id}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "service-now.delete.now-table-tablename-sys-id",
+      "kind": "rest_write",
+      "summary": "DELETE /now/table/{tableName}/{sys_id}",
+      "description": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+      "source_url": "https://www.servicenow.com/docs/r/zurich/api-reference/rest-apis/c_TableAPI.html",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/now/table/{tableName}/{sys_id}",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

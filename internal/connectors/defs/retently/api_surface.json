@@ -1,99 +1,925 @@
 {
-  "api": "Retently API v2 (https://app.retently.com/api/v2)",
+  "api": "Retently API v2 (https://app.retently.com/api/v2); provider artifact version: Retently CX API v2 current REST API Reference",
   "docs": "https://www.retently.com/api/",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 4 legacy-parity read streams only (customers, responses, surveys, campaigns); legacy ships no writes (capabilities.write is false) and the full Retently surface (feedback import, transactional survey queueing, templates, NPS/CSAT/CES score endpoints, campaign reports) is out of scope until Pass B.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (41 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "retently-artifact-2026-08-09",
+      "url": "https://www.retently.com/docs/api/",
+      "kind": "html_reference",
+      "version": "Retently CX API v2 current REST API Reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4"
+    }
+  ],
   "endpoints": [
     {
       "method": "GET",
+      "path": "/api/v2/campaigns",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/campaigns"
+      },
+      "covered_by": {
+        "stream": "campaigns"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/companies/{companyId",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/companies/{companyId"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/companies{",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/companies{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api/v2/customers",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "existing-surface[GET /api/v2/customers]"
+      },
       "covered_by": {
         "stream": "customers"
       }
     },
     {
+      "method": "POST",
+      "path": "/api/v2/customers",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/customers"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Legacy connector never implemented customer create/update",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/customers",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#DELETE /api/v2/customers"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "bulk customer deletion; legacy never implemented writes",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/customers/resubscribe",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/customers/resubscribe"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/customers/unsubscribe",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/customers/unsubscribe"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/customers/{customerId}",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/customers/{customerId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/customers{",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/customers{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/feedback",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/feedback"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/feedback",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#DELETE /api/v2/feedback"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "response soft-delete; legacy never implemented writes",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/feedback/{feedbackId}",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/feedback/{feedbackId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/feedback{",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/feedback{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/import",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/import"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Batch historical feedback import not modeled by legacy",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/nps/campaigns",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/nps/campaigns"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/nps/customers/response/tags",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/nps/customers/response/tags"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/nps/customers/response{",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/nps/customers/response{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/nps/customers/survey",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/nps/customers/survey"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/nps/templates",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/nps/templates"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/outbox",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/outbox"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/outbox",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#DELETE /api/v2/outbox"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/outbox{",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/outbox{"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/ping",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/ping"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/reports/",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/reports/"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Campaign report/trend endpoints not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/response/tags",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/response/tags"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/response/topics",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/response/topics"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
       "method": "GET",
       "path": "/api/v2/responses",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "existing-surface[GET /api/v2/responses]"
+      },
       "covered_by": {
         "stream": "responses"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v2/surveys",
-      "covered_by": {
-        "stream": "surveys"
+      "path": "/api/v2/suppressions/domains",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/suppressions/domains"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/suppressions/domains",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/suppressions/domains"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/v2/suppressions/domains/{id}",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#DELETE /api/v2/suppressions/domains/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
-      "path": "/api/v2/campaigns",
-      "covered_by": {
-        "stream": "campaigns"
+      "path": "/api/v2/suppressions/emails",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/suppressions/emails"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "POST",
-      "path": "/api/v2/customers",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Legacy connector never implemented customer create/update"
+      "path": "/api/v2/suppressions/emails",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/suppressions/emails"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "DELETE",
-      "path": "/api/v2/customers",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "bulk customer deletion; legacy never implemented writes"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/api/v2/import",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Batch historical feedback import not modeled by legacy"
+      "path": "/api/v2/suppressions/emails/by-email",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#DELETE /api/v2/suppressions/emails/by-email"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "DELETE",
-      "path": "/api/v2/feedback",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "response soft-delete; legacy never implemented writes"
+      "path": "/api/v2/suppressions/emails/{id}",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#DELETE /api/v2/suppressions/emails/{id}"
+      },
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "POST",
       "path": "/api/v2/survey",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Transactional survey queueing not modeled by legacy"
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/survey"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Transactional survey queueing not modeled by legacy",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/surveys",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "existing-surface[GET /api/v2/surveys]"
+      },
+      "covered_by": {
+        "stream": "surveys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v2/sync-attributes",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#POST /api/v2/sync-attributes"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/templates",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Survey template catalog not modeled by legacy"
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/templates"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Survey template catalog not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/templates/{templateId}",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/templates/{templateId}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/templates/{templateId}.",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/templates/{templateId}."
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/trends",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/trends"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/trends/:groupId",
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/trends/:groupId"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     },
     {
       "method": "GET",
       "path": "/api/v2/{metric}/score",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Aggregate NPS/CSAT/CES score endpoints not modeled by legacy"
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/api/v2/reports/",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Campaign report/trend endpoints not modeled by legacy"
+      "provenance": {
+        "artifact": "retently-artifact-2026-08-09",
+        "source_url": "https://www.retently.com/docs/api/",
+        "source_kind": "html_reference",
+        "version": "Retently CX API v2 current REST API Reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "6897d409ddc4e770381086fda2553014bbbe44e26ccdf634a061f664f01b4fc4",
+        "coordinate": "https://www.retently.com/docs/api/#GET /api/v2/{metric}/score"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Aggregate NPS/CSAT/CES score endpoints not modeled by legacy",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
       }
     }
   ]

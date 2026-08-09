@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-052-unattempted-retry-chunk-02-manifest.json",
+  "candidates": 32,
+  "included": [
+    {
+      "connector": "notion",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developers.notion.com/reference/intro",
+        "version": "provider-published reference without an explicit version",
+        "retrieved_at": "2026-08-09",
+        "sha256": "012d0475f85801aaea450b4f6d30253fabee909d839afe21bd82995819aed096"
+      },
+      "artifact_operations": 51,
+      "declared_operations": 55,
+      "operation_split": {
+        "executable": 48,
+        "provider_blocked": 1,
+        "excluded": 6
+      },
+      "cli_commands": 55,
+      "implemented_commands": 43,
+      "named_dependency_commands": 9,
+      "flagged_discrepancies": 4,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 26
+    },
+    {
+      "connector": "nylas",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://developer.nylas.com/docs/reference/api/",
+        "version": "Nylas API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "8668e8e1fb0fcb0407c6dc31ad605e782e5e8077ad5f9d5fa483e984ee112372"
+      },
+      "artifact_operations": 215,
+      "declared_operations": 216,
+      "operation_split": {
+        "executable": 4,
+        "provider_blocked": 118,
+        "excluded": 94
+      },
+      "cli_commands": 216,
+      "implemented_commands": 4,
+      "named_dependency_commands": 212,
+      "flagged_discrepancies": 1,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 212
+    },
+    {
+      "connector": "openaq",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://docs.openaq.org/sitemap-0.xml",
+        "version": "OpenAQ API v3",
+        "retrieved_at": "2026-08-09",
+        "sha256": "b3696ade3ddae3f7e501602865b332ad7bd0292df07a3f7eed2030782d095846"
+      },
+      "artifact_operations": 39,
+      "declared_operations": 41,
+      "operation_split": {
+        "executable": 5,
+        "provider_blocked": 32,
+        "excluded": 4
+      },
+      "cli_commands": 41,
+      "implemented_commands": 5,
+      "named_dependency_commands": 36,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 36
+    },
+    {
+      "connector": "polygon-stock-api",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://massive.com/docs/rest/stocks/overview",
+        "version": "Massive Stocks REST API current rendered reference (successor to Polygon.io)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "d929c7434874ca13d7594aad91b2c7357836cf216792d898fd1a376084c817a8"
+      },
+      "artifact_operations": 48,
+      "declared_operations": 50,
+      "operation_split": {
+        "executable": 3,
+        "provider_blocked": 40,
+        "excluded": 7
+      },
+      "cli_commands": 50,
+      "implemented_commands": 3,
+      "named_dependency_commands": 47,
+      "flagged_discrepancies": 2,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 47
+    }
+  ],
+  "dropped": [
+    {
+      "connector": "mention",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 2 operation(s), below the ledger's 36"
+    },
+    {
+      "connector": "merge",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "miro",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host), and official reference fallback \"https://developers.miro.com/reference/overview\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "missive",
+      "stage": "artifact_fetch",
+      "reason": "fetch artifact: response exceeds 16777216-byte artifact limit"
+    },
+    {
+      "connector": "mixpanel",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "mode",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 5 operation(s), below the ledger's 94"
+    },
+    {
+      "connector": "monday",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference link \"https://developer.monday.com/api-reference/reference/apps-api-reference-other-types\" could not be fetched: fetch artifact: provider returned HTTP 404"
+    },
+    {
+      "connector": "mux",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget), and official reference fallback \"https://www.mux.com/docs/api-reference\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the bounded 67108864-byte source budget"
+    },
+    {
+      "connector": "navan",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 18 operation(s), below the ledger's 19"
+    },
+    {
+      "connector": "nexiopay",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "nocrm",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "northpass-lms",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "omnisend",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://api-docs.omnisend.com/reference/overview\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "onesignal",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host"
+    },
+    {
+      "connector": "open-exchange-rates",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 6 operation(s), below the ledger's 7"
+    },
+    {
+      "connector": "openweather",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference contains a selected link that failed URL admission"
+    },
+    {
+      "connector": "outbrain-amplify",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract), and official reference fallback \"https://developer.outbrain.com/home-page/amplify-api/documentation/\" failed: artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "oveit",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "papersign",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://paperform.readme.io/reference/getting-started-1\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "pardot",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 6 operation(s), below the ledger's 181"
+    },
+    {
+      "connector": "partnerize",
+      "stage": "artifact_parse",
+      "reason": "decode OpenAPI or Swagger artifact: yaml: line 11: mapping values are not allowed in this context"
+    },
+    {
+      "connector": "perk",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.perk.com/reference/authentication\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "picqer",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official reference \"https://picqer.com/manifest.json\" is a machine-readable artifact that could not be parsed: OpenAPI/Swagger: artifact is not an OpenAPI or Swagger document; Google Discovery: artifact is not a Google Discovery REST description; Postman: Postman collection has no request items"
+    },
+    {
+      "connector": "pinterest",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "planhat",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: official HTML reference traversal found no explicit operations or linked machine-readable contract"
+    },
+    {
+      "connector": "poplar",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: artifact inventory yielded 1 operation(s), below the ledger's 20"
+    },
+    {
+      "connector": "prestashop",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://devdocs.prestashop-project.org/9/webservice/\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    },
+    {
+      "connector": "pretix",
+      "stage": "artifact_inventory_unknown",
+      "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://docs.pretix.eu/en/latest/api/\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit"
+    }
+  ]
+}

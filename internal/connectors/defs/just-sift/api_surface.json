@@ -1,10 +1,158 @@
 {
-  "api": "JustSift (Sift) API v1 (https://api.justsift.com/v1)",
+  "api": "JustSift (Sift) API v1 (https://api.justsift.com/v1); provider artifact version: Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
   "docs": "https://sift.com/developers/docs/curl/apis-overview",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 2 legacy-parity read streams only; any other JustSift surface is out of scope until Pass B",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Provider-artifact inventory generated from the cited html_reference artifact (5 documented operations across 1 provider-owned source document(s)). Every documented operation is represented; existing source-surface bindings absent from the artifact are retained and flagged with present-in-surface-absent-from-artifact.",
+  "artifacts": [
+    {
+      "id": "just-sift-artifact-2026-08-09",
+      "url": "https://developers.justsift.com/",
+      "kind": "html_reference",
+      "version": "Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
+      "retrieved_at": "2026-08-09",
+      "sha256": "94b78b4728a9deacb591a13dccb8b7767ee9bdaa610a68117fd7c7a0c7b21493"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v1/search/people", "covered_by": { "stream": "peoples" } },
-    { "method": "GET", "path": "/v1/fields/person", "covered_by": { "stream": "fields" } }
+    {
+      "method": "GET",
+      "path": "/fields/person",
+      "provenance": {
+        "artifact": "just-sift-artifact-2026-08-09",
+        "source_url": "https://developers.justsift.com/",
+        "source_kind": "html_reference",
+        "version": "Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "94b78b4728a9deacb591a13dccb8b7767ee9bdaa610a68117fd7c7a0c7b21493",
+        "coordinate": "https://developers.justsift.com/#GET /fields/person"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/media/people/{idOrEmail}/{mediaKind}",
+      "provenance": {
+        "artifact": "just-sift-artifact-2026-08-09",
+        "source_url": "https://developers.justsift.com/",
+        "source_kind": "html_reference",
+        "version": "Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "94b78b4728a9deacb591a13dccb8b7767ee9bdaa610a68117fd7c7a0c7b21493",
+        "coordinate": "https://developers.justsift.com/#GET /media/people/{idOrEmail}/{mediaKind}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/people/{idOrEmail}",
+      "provenance": {
+        "artifact": "just-sift-artifact-2026-08-09",
+        "source_url": "https://developers.justsift.com/",
+        "source_kind": "html_reference",
+        "version": "Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "94b78b4728a9deacb591a13dccb8b7767ee9bdaa610a68117fd7c7a0c7b21493",
+        "coordinate": "https://developers.justsift.com/#GET /people/{idOrEmail}"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/search/people",
+      "provenance": {
+        "artifact": "just-sift-artifact-2026-08-09",
+        "source_url": "https://developers.justsift.com/",
+        "source_kind": "html_reference",
+        "version": "Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "94b78b4728a9deacb591a13dccb8b7767ee9bdaa610a68117fd7c7a0c7b21493",
+        "coordinate": "https://developers.justsift.com/#GET /search/people"
+      },
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/search/people",
+      "provenance": {
+        "artifact": "just-sift-artifact-2026-08-09",
+        "source_url": "https://developers.justsift.com/",
+        "source_kind": "html_reference",
+        "version": "Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "94b78b4728a9deacb591a13dccb8b7767ee9bdaa610a68117fd7c7a0c7b21493",
+        "coordinate": "https://developers.justsift.com/#POST /search/people"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+        "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/fields/person",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "just-sift-artifact-2026-08-09",
+        "source_url": "https://developers.justsift.com/",
+        "source_kind": "html_reference",
+        "version": "Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "94b78b4728a9deacb591a13dccb8b7767ee9bdaa610a68117fd7c7a0c7b21493",
+        "coordinate": "existing-surface[GET /v1/fields/person]"
+      },
+      "covered_by": {
+        "stream": "fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/search/people",
+      "discrepancy": "present-in-surface-absent-from-artifact",
+      "provenance": {
+        "artifact": "just-sift-artifact-2026-08-09",
+        "source_url": "https://developers.justsift.com/",
+        "source_kind": "html_reference",
+        "version": "Sift API 1.0.0 (provider Redoc reference with downloadable OpenAPI specification)",
+        "retrieved_at": "2026-08-09",
+        "sha256": "94b78b4728a9deacb591a13dccb8b7767ee9bdaa610a68117fd7c7a0c7b21493",
+        "coordinate": "existing-surface[GET /v1/search/people]"
+      },
+      "covered_by": {
+        "stream": "peoples"
+      }
+    }
   ]
 }

@@ -1,0 +1,80 @@
+{
+  "operations": [
+    {
+      "id": "just-sift.get.fields-person",
+      "kind": "rest_read",
+      "summary": "GET /fields/person",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.justsift.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/fields/person",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "just-sift.get.media-people-idoremail-mediakind",
+      "kind": "rest_read",
+      "summary": "GET /media/people/{idOrEmail}/{mediaKind}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.justsift.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/media/people/{idOrEmail}/{mediaKind}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "just-sift.get.people-idoremail",
+      "kind": "rest_read",
+      "summary": "GET /people/{idOrEmail}",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.justsift.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/people/{idOrEmail}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "just-sift.get.search-people",
+      "kind": "rest_read",
+      "summary": "GET /search/people",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.justsift.com/",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/search/people",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "just-sift.post.search-people",
+      "kind": "rest_write",
+      "summary": "POST /search/people",
+      "description": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract in this batch.",
+      "source_url": "https://developers.justsift.com/",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/search/people",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

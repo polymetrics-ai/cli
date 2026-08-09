@@ -50,3 +50,28 @@ func TestAssertCountsRequiresRateLimitFileConservation(t *testing.T) {
 		t.Fatalf("missing rate-limit file error = %v, want conservation failure", err)
 	}
 }
+
+func TestFinalBlockedAttemptRequiresExplicitTerminalOutcome(t *testing.T) {
+	retry := BatchEvent{State: "retry_pending", Evidence: "batches/primary.json", Stage: "artifact_inventory_unknown", Reason: "primary source did not yield a complete inventory"}
+	if _, ok := finalBlockedAttempt([]BatchEvent{retry}); ok {
+		t.Fatal("retry_pending event resolved as genuinely blocked")
+	}
+
+	blocked := BatchEvent{State: "genuinely_blocked", Evidence: "batches/final-exhaustion.json", Route: "retained official sources exhausted", Stage: "official_source_exhausted", Reason: "all retained static official routes were attempted"}
+	got, ok := finalBlockedAttempt([]BatchEvent{retry, blocked})
+	if !ok {
+		t.Fatal("explicit genuinely_blocked event was not selected")
+	}
+	if got != blocked {
+		t.Fatalf("final blocked event = %+v, want %+v", got, blocked)
+	}
+
+	malformed := blocked
+	malformed.Stage = "artifact_inventory_unknown"
+	if _, ok := finalBlockedAttempt([]BatchEvent{malformed}); ok {
+		t.Fatal("non-terminal genuinely_blocked event resolved the queue")
+	}
+	if _, ok := finalBlockedAttempt([]BatchEvent{blocked, retry}); ok {
+		t.Fatal("terminal outcome superseded by a later retry resolved the queue")
+	}
+}

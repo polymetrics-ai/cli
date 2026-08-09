@@ -1,0 +1,204 @@
+{
+  "tagline": "Run Granola's declared streams and reverse-ETL actions.",
+  "usage": "pm granola \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v1 folders",
+        "api get v1 notes note-id",
+        "api get v1 webhook-endpoints",
+        "detailed notes list",
+        "notes list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v1 webhook-endpoints",
+        "api delete v1 webhook-endpoints webhook-endpoint-id",
+        "api patch v1 webhook-endpoints webhook-endpoint-id",
+        "api post v1 webhook-endpoints"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v1 webhook-endpoints",
+      "summary": "Documented DELETE /v1/webhook-endpoints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.granola.ai/introduction",
+      "examples": [
+        "pm granola api delete v1 webhook-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/webhook-endpoints"
+        }
+      ],
+      "operation": "granola.delete.v1-webhook-endpoints",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api delete v1 webhook-endpoints webhook-endpoint-id",
+      "summary": "Documented DELETE /v1/webhook-endpoints/{webhook_endpoint_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.granola.ai/introduction",
+      "examples": [
+        "pm granola api delete v1 webhook-endpoints webhook-endpoint-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v1/webhook-endpoints/{webhook_endpoint_id}"
+        }
+      ],
+      "operation": "granola.delete.v1-webhook-endpoints-webhook-endpoint-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v1 folders",
+      "summary": "Documented GET /v1/folders (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.granola.ai/introduction",
+      "examples": [
+        "pm granola api get v1 folders --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/folders"
+        }
+      ],
+      "operation": "granola.get.v1-folders",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 notes note-id",
+      "summary": "Documented GET /v1/notes/{note_id} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.granola.ai/introduction",
+      "examples": [
+        "pm granola api get v1 notes note-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/notes/{note_id}"
+        }
+      ],
+      "operation": "granola.get.v1-notes-note-id",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v1 webhook-endpoints",
+      "summary": "Documented GET /v1/webhook-endpoints (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://docs.granola.ai/introduction",
+      "examples": [
+        "pm granola api get v1 webhook-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v1/webhook-endpoints"
+        }
+      ],
+      "operation": "granola.get.v1-webhook-endpoints",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api patch v1 webhook-endpoints webhook-endpoint-id",
+      "summary": "Documented PATCH /v1/webhook-endpoints/{webhook_endpoint_id} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.granola.ai/introduction",
+      "examples": [
+        "pm granola api patch v1 webhook-endpoints webhook-endpoint-id --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v1/webhook-endpoints/{webhook_endpoint_id}"
+        }
+      ],
+      "operation": "granola.patch.v1-webhook-endpoints-webhook-endpoint-id",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v1 webhook-endpoints",
+      "summary": "Documented POST /v1/webhook-endpoints (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://docs.granola.ai/introduction",
+      "examples": [
+        "pm granola api post v1 webhook-endpoints --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v1/webhook-endpoints"
+        }
+      ],
+      "operation": "granola.post.v1-webhook-endpoints",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "detailed notes list",
+      "summary": "Run the detailed notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "detailed_notes",
+      "source_url": "https://docs.granola.ai/introduction",
+      "examples": [
+        "pm granola detailed notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes/{id}"
+        }
+      ],
+      "notes": "discrepancy=present-in-surface-absent-from-artifact"
+    },
+    {
+      "path": "notes list",
+      "summary": "Run the notes ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "notes",
+      "source_url": "https://docs.granola.ai/introduction",
+      "examples": [
+        "pm granola notes list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes"
+        }
+      ]
+    }
+  ]
+}
