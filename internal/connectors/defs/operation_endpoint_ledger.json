@@ -9090,6 +9090,144 @@
       "max_bytes": 1048576
     },
     {
+      "method": "GET",
+      "path": "/api/v1/profile",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/conversations",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/conversations/",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/first_response_time_distribution",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/inbox_label_matrix",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/outgoing_messages_count",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/reports/summary",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/agent",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/channel",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/inbox",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts/{account_id}/summary_reports/team",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/accounts/{account_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/accounts/{account_id}/account_users",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/agent_bots",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/agent_bots/{id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/platform/api/v1/users/{id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/public/api/v1/inboxes/{inbox_identifier}/contacts/{contact_identifier}/conversations/{conversation_id}/messages",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/survey/responses/{conversation_uuid}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
       "method": "POST",
       "path": "/api/v1/accounts/{account_id}/contacts/filter",
       "kind": "rest_read",
@@ -30520,7 +30658,32 @@
     }
   ],
   "glassfrog": [],
-  "gmail": [],
+  "gmail": [
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/cse/identities",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/cse/keypairs",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    }
+  ],
   "gnews": [],
   "gocardless": [
     {
@@ -31728,7 +31891,38 @@
   "harvest": [],
   "height": [],
   "hellobaton": [],
-  "help-scout": [],
+  "help-scout": [
+    {
+      "method": "GET",
+      "path": "/v3/conversations/{conversationId}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/v3/conversations/{conversationId}/threads",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/v3/customers",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/v3/system-users",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    },
+    {
+      "method": "GET",
+      "path": "/v3/system-users/{systemUserId}",
+      "kind": "rest_read",
+      "max_bytes": 16777216
+    }
+  ],
   "hibob": [],
   "high-level": [],
   "hoorayhr": [],
@@ -78691,18 +78885,6 @@
     },
     {
       "method": "GET",
-      "path": "/discovery/v2/attractions.json",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
-      "path": "/discovery/v2/attractions/K8vZ9175BhV.json",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
       "path": "/discovery/v2/attractions/{id}",
       "kind": "rest_read",
       "max_bytes": 16777216
@@ -78715,43 +78897,13 @@
     },
     {
       "method": "GET",
-      "path": "/discovery/v2/classifications.json",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
-      "path": "/discovery/v2/classifications/KZFzniwnSyZfZ7v7nE",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
-      "path": "/discovery/v2/classifications/genres/KnvZfZ7vA71.json",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
       "path": "/discovery/v2/classifications/genres/{id}",
       "kind": "rest_read",
       "max_bytes": 16777216
     },
     {
       "method": "GET",
-      "path": "/discovery/v2/classifications/segments/KZazBEonSMnZfZ7vFta.json",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
       "path": "/discovery/v2/classifications/segments/{id}",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
-      "path": "/discovery/v2/classifications/subgenres/KZazBEonSMnZfZ7vFta.json",
       "kind": "rest_read",
       "max_bytes": 16777216
     },
@@ -78770,24 +78922,6 @@
     {
       "method": "GET",
       "path": "/discovery/v2/events",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
-      "path": "/discovery/v2/events.json",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
-      "path": "/discovery/v2/events/0B004F0401BD55E5/images.json",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
-      "path": "/discovery/v2/events/G5diZfkn0B-bh.json",
       "kind": "rest_read",
       "max_bytes": 16777216
     },
@@ -78812,18 +78946,6 @@
     {
       "method": "GET",
       "path": "/discovery/v2/venues",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
-      "path": "/discovery/v2/venues.json",
-      "kind": "rest_read",
-      "max_bytes": 16777216
-    },
-    {
-      "method": "GET",
-      "path": "/discovery/v2/venues/KovZpZAFnIEA.json",
       "kind": "rest_read",
       "max_bytes": 16777216
     },
