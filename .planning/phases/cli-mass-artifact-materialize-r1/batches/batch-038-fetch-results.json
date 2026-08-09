@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-038-pexels-rendered-reference-manifest.json",
+  "fetched": [
+    {
+      "connector": "pexels-api",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "cache_file": null,
+      "status": "challenge_gated",
+      "reason": "direct HTTP returned 403 and browser rendering returned Pexels Cloudflare verification"
+    },
+    {
+      "connector": "pexels-api",
+      "source_url": "https://www.pexels.com/api/documentation/",
+      "cache_file": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-038-pexels-artifacts/pexels-api.txt",
+      "status": "retrieved_via_official_document_renderer",
+      "reason": "official rendered endpoint headings captured exactly; no credentialed request or provider response was made"
+    }
+  ]
+}

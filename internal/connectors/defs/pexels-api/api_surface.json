@@ -1,17 +1,173 @@
 {
-  "api": "Pexels API v1 (https://www.pexels.com/api/documentation/)",
+  "api": "Pexels API v1 (https://www.pexels.com/api/documentation/); provider artifact version: Pexels API v1 current HTML reference",
   "docs": "https://www.pexels.com/api/documentation/",
-  "reviewed_at": "2026-07-03",
-  "scope": "Pass B full-surface expansion: the Pexels API's entire documented surface is exactly 9 GET endpoints across Photos/Videos/Collections; this bundle now covers all 7 that are discoverable/enumerable without an externally-supplied id (photos, curated_photos, videos, popular_videos, featured_collections, my_collections, collection_media via fan_out over my_collections) and excludes the 2 lone detail-by-id lookups that have no server-side discovery path of their own. Pexels' own docs state plainly that 'Collections cannot be created or modified using the Pexels API' and the API is otherwise entirely read-only (no POST/PUT/PATCH/DELETE endpoint exists anywhere in the documented surface), so capabilities.write stays false and this bundle ships no writes.json.",
+  "reviewed_at": "2026-08-09",
+  "operation_ledger_version": 2,
+  "scope": "Exact existing-surface evidence fallback: the preserved source inventory contains 9 official-survey operation entries, exactly matching the immutable count. Shared executable bindings for the same provider method/path are merged into one normalized endpoint. The cited official html_reference artifact is retained as the v2 provenance root; no operation was inferred from a documentation crawl. Prior source-surface scope: Pass B full-surface expansion: the Pexels API's entire documented surface is exactly 9 GET endpoints across Photos/Videos/Collections; this bundle now covers all 7 that are discoverable/enumerable without an externally-supplied id (photos, curated_photos, videos, popular_videos, featured_collections, my_collections, collection_media via fan_out over my_collections) and excludes the 2 lone detail-by-id lookups that have no server-side discovery path of their own. Pexels' own docs state plainly that 'Collections cannot be created or modified using the Pexels API' and the API is otherwise entirely read-only (no POST/PUT/PATCH/DELETE endpoint exists anywhere in the documented surface), so capabilities.write stays false and this bundle ships no writes.json.",
+  "artifacts": [
+    {
+      "id": "pexels-api-artifact-2026-08-09",
+      "url": "https://www.pexels.com/api/documentation/",
+      "kind": "html_reference",
+      "version": "Pexels API v1 current HTML reference",
+      "retrieved_at": "2026-08-09",
+      "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093"
+    }
+  ],
   "endpoints": [
-    { "method": "GET", "path": "/v1/search", "covered_by": { "stream": "photos" } },
-    { "method": "GET", "path": "/v1/curated", "covered_by": { "stream": "curated_photos" } },
-    { "method": "GET", "path": "/v1/photos/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "single-photo detail lookup by id; no list endpoint enumerates arbitrary photo ids independent of a search/curated query already covered by the photos/curated_photos streams, so there is no server-side id source to drive this as a syncable stream without an id supplied from outside the sync" } },
-    { "method": "GET", "path": "/v1/videos/search", "covered_by": { "stream": "videos" } },
-    { "method": "GET", "path": "/v1/videos/popular", "covered_by": { "stream": "popular_videos" } },
-    { "method": "GET", "path": "/v1/videos/videos/{id}", "excluded": { "category": "requires_elevated_scope", "reason": "single-video detail lookup by id; no list endpoint enumerates arbitrary video ids independent of a search/popular query already covered by the videos/popular_videos streams, so there is no server-side id source to drive this as a syncable stream without an id supplied from outside the sync" } },
-    { "method": "GET", "path": "/v1/collections/featured", "covered_by": { "stream": "featured_collections" } },
-    { "method": "GET", "path": "/v1/collections", "covered_by": { "stream": "my_collections" } },
-    { "method": "GET", "path": "/v1/collections/{id}", "covered_by": { "stream": "collection_media" } }
+    {
+      "method": "GET",
+      "path": "/v1/collections",
+      "provenance": {
+        "artifact": "pexels-api-artifact-2026-08-09",
+        "source_url": "https://www.pexels.com/api/documentation/",
+        "source_kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093",
+        "coordinate": "existing-complete-surface[GET /v1/collections]"
+      },
+      "covered_by": {
+        "stream": "my_collections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/collections/featured",
+      "provenance": {
+        "artifact": "pexels-api-artifact-2026-08-09",
+        "source_url": "https://www.pexels.com/api/documentation/",
+        "source_kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093",
+        "coordinate": "existing-complete-surface[GET /v1/collections/featured]"
+      },
+      "covered_by": {
+        "stream": "featured_collections"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/collections/{id}",
+      "provenance": {
+        "artifact": "pexels-api-artifact-2026-08-09",
+        "source_url": "https://www.pexels.com/api/documentation/",
+        "source_kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093",
+        "coordinate": "existing-complete-surface[GET /v1/collections/{id}]"
+      },
+      "covered_by": {
+        "stream": "collection_media"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/curated",
+      "provenance": {
+        "artifact": "pexels-api-artifact-2026-08-09",
+        "source_url": "https://www.pexels.com/api/documentation/",
+        "source_kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093",
+        "coordinate": "existing-complete-surface[GET /v1/curated]"
+      },
+      "covered_by": {
+        "stream": "curated_photos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/photos/{id}",
+      "provenance": {
+        "artifact": "pexels-api-artifact-2026-08-09",
+        "source_url": "https://www.pexels.com/api/documentation/",
+        "source_kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093",
+        "coordinate": "existing-complete-surface[GET /v1/photos/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-photo detail lookup by id; no list endpoint enumerates arbitrary photo ids independent of a search/curated query already covered by the photos/curated_photos streams, so there is no server-side id source to drive this as a syncable stream without an id supplied from outside the sync",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/search",
+      "provenance": {
+        "artifact": "pexels-api-artifact-2026-08-09",
+        "source_url": "https://www.pexels.com/api/documentation/",
+        "source_kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093",
+        "coordinate": "existing-complete-surface[GET /v1/search]"
+      },
+      "covered_by": {
+        "stream": "photos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/videos/popular",
+      "provenance": {
+        "artifact": "pexels-api-artifact-2026-08-09",
+        "source_url": "https://www.pexels.com/api/documentation/",
+        "source_kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093",
+        "coordinate": "existing-complete-surface[GET /v1/videos/popular]"
+      },
+      "covered_by": {
+        "stream": "popular_videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/videos/search",
+      "provenance": {
+        "artifact": "pexels-api-artifact-2026-08-09",
+        "source_url": "https://www.pexels.com/api/documentation/",
+        "source_kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093",
+        "coordinate": "existing-complete-surface[GET /v1/videos/search]"
+      },
+      "covered_by": {
+        "stream": "videos"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/videos/videos/{id}",
+      "provenance": {
+        "artifact": "pexels-api-artifact-2026-08-09",
+        "source_url": "https://www.pexels.com/api/documentation/",
+        "source_kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093",
+        "coordinate": "existing-complete-surface[GET /v1/videos/videos/{id}]"
+      },
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "single-video detail lookup by id; no list endpoint enumerates arbitrary video ids independent of a search/popular query already covered by the videos/popular_videos streams, so there is no server-side id source to drive this as a syncable stream without an id supplied from outside the sync",
+        "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      }
+    }
   ]
 }

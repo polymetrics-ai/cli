@@ -2,23 +2,23 @@
   "assertions": {
     "lost_provenance": false,
     "materialized_plus_retry_pending_plus_blocked": 426,
-    "queue_entries": 225,
-    "resolved_entries": 201,
+    "queue_entries": 223,
+    "resolved_entries": 203,
     "target_total": 426,
     "unique_target_names": 426
   },
   "authority": "CAPTAIN-ORDER-unblock-to-mergeable-20260809.md",
   "counts": {
     "already_complete": 5,
-    "foundation_pending": 187,
+    "foundation_pending": 189,
     "genuinely_blocked": 0,
-    "materialized_total": 201,
-    "newly_materialized": 185,
-    "reachable": 21,
+    "materialized_total": 203,
+    "newly_materialized": 187,
+    "reachable": 22,
     "recovered_pilot": 4,
     "recovered_seven": 7,
-    "remaining": 225,
-    "retry_pending": 225
+    "remaining": 223,
+    "retry_pending": 223
   },
   "inputs": {
     "batch_report_files": [
@@ -159,7 +159,19 @@
       "batches/batch-036-brex-materialize.json",
       "batches/batch-036-brex-reference-manifest.json",
       "batches/batch-036-fetch-results.json",
-      "batches/batch-036-outcomes.json"
+      "batches/batch-036-outcomes.json",
+      "batches/batch-037-100ms-outcomes.json",
+      "batches/batch-037-100ms-sdk-postman-route.json",
+      "batches/batch-038-fetch-results.json",
+      "batches/batch-038-outcomes.json",
+      "batches/batch-038-pexels-materialize.json",
+      "batches/batch-038-pexels-rendered-reference-manifest.json",
+      "batches/batch-039-7shifts-direct-reference-manifest.json",
+      "batches/batch-039-7shifts-inspect.json",
+      "batches/batch-039-7shifts-materialize.json",
+      "batches/batch-039-7shifts-source-index.json",
+      "batches/batch-039-fetch-results.json",
+      "batches/batch-039-outcomes.json"
     ],
     "current_defs_root": "internal/connectors/defs",
     "reconciliation_outcomes": "reconciled-complete-outcomes.json",
@@ -175,5 +187,5 @@
     "workday-rest"
   ],
   "schema_version": 1,
-  "v2_bundle_count": 194
+  "v2_bundle_count": 196
 }

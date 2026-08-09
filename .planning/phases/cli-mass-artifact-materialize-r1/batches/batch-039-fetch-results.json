@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "source_index": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-039-7shifts-source-index.json",
+  "results": [
+    {
+      "connector": "7shifts",
+      "status": "retrieved",
+      "route": "official direct llms API Reference index plus exactly 147 directly linked OpenAPI fragments",
+      "url": "https://developers.7shifts.com/llms.txt",
+      "documents": 148,
+      "operations": 147,
+      "read_operations": 66,
+      "write_operations": 81,
+      "cache": "batch-039-7shifts-reference-artifacts (reproducible, not staged)"
+    }
+  ]
+}

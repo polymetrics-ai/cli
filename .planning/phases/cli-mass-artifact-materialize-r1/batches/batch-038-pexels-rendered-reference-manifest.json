@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "source_ledger": {
+    "schema_version": "cli-provider-artifact-sweep-r1",
+    "created_at": "2026-08-05T00:00:00Z",
+    "record_count": 526
+  },
+  "selection": {
+    "mode": "official_rendered_reference_exact_evidence",
+    "requested_size": 1,
+    "min_operations": 0,
+    "max_operations": 10000,
+    "criteria": "Pexels's official rendered API v1 reference explicitly lists nine GET endpoint headings, exactly matching the preserved nine-operation immutable survey surface; direct HTTP and browser access are Cloudflare challenge-gated."
+  },
+  "connectors": [
+    {
+      "connector": "pexels-api",
+      "operations_total": 9,
+      "operations_read": 9,
+      "operations_write": 0,
+      "artifact": {
+        "url": "https://www.pexels.com/api/documentation/",
+        "kind": "html_reference",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-06"
+      },
+      "provider_reference_url": "https://www.pexels.com/api/documentation/",
+      "auth_model": "api_key",
+      "access_model": "public",
+      "evidence_source": "Pexels official API reference rendered endpoint headings; direct HTTP/browser challenge recorded in batch-038 outcome",
+      "counting_note": "The official rendered Pexels API reference lists nine GET endpoint headings across Photos, Videos, and Collections. Collections cannot be created or modified with the API.",
+      "processed_at": "2026-08-06T14:38:35Z",
+      "selection_reason": "official Pexels renderer endpoint capture exact-surface evidence fallback after provider Cloudflare challenge blocked direct cached and browser retrieval"
+    }
+  ]
+}
