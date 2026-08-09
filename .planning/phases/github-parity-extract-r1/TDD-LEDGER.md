@@ -2622,3 +2622,25 @@ held aliases; the 77 REST rows are 67 former `duplicate`, 9 former `disallowed`,
 historical phrase “45 no-command endpoints”.  The planned green state may not hide a source row by
 changing the test: it must supply a concrete operation/command contract, or use the forthcoming
 schema-validated named-dependency model for a genuine captain-held capability boundary.
+
+**Red/Green 33b(1) — materialized structured record flags.** The former
+`materializedWriteFlags` path rejected every required nested object or object-array because it
+could only invent scalar flags. That disagreed with the already-green runtime contract
+`TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags`, which permits one
+declaration-bound `json` value for a closed top-level record property. The new focused test
+`TestMaterializedWriteFlagsUseTopLevelStructuredJSONForRequiredContainers` locks the bridge:
+required descendants of `payload` and `items` normalize to exactly `--payload`/`--items` JSON
+flags, never flattened child flags. Green evidence:
+
+```
+$ go test -timeout 20m ./cmd/connectorgen \
+  -run '^TestMaterializedWriteFlagsUseTopLevelStructuredJSONForRequiredContainers$' -count=1
+ok   polymetrics.ai/cmd/connectorgen
+
+$ go test -timeout 20m ./cmd/connectorgen -run '^TestBatchMaterialize' -count=1
+ok   polymetrics.ai/cmd/connectorgen
+```
+
+The materializer still rejects unrepresentable scalar/union shapes; `json` is accepted only for
+a top-level object/array validated by `engine.ValidateStructuredJSONRecordField`, so this does
+not add an arbitrary request-body channel.
