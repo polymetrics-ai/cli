@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "outcomes": [
+    {
+      "connector": "100ms",
+      "state": "retry_pending",
+      "route": "official Postman collection or SDK endpoint source",
+      "stage": "artifact_inventory_unknown",
+      "reason": "Provider-linked Postman fork has no static export and the provider-linked SDK tree has no OpenAPI/Postman contract; preserve the 73-operation target for official documented-reference traversal."
+    }
+  ]
+}

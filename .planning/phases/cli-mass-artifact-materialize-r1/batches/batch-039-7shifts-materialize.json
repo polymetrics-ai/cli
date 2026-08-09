@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-039-7shifts-direct-reference-manifest.json",
+  "candidates": 1,
+  "included": [
+    {
+      "connector": "7shifts",
+      "artifact": {
+        "kind": "openapi",
+        "url": "https://developers.7shifts.com/llms.txt",
+        "version": "2026-06-01",
+        "retrieved_at": "2026-08-09",
+        "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e"
+      },
+      "artifact_operations": 147,
+      "declared_operations": 154,
+      "operation_split": {
+        "executable": 141,
+        "provider_blocked": 0,
+        "excluded": 13
+      },
+      "cli_commands": 154,
+      "implemented_commands": 129,
+      "named_dependency_commands": 25,
+      "flagged_discrepancies": 7,
+      "runtime_preflight_commands": 0,
+      "operation_executors": 13
+    }
+  ],
+  "dropped": []
+}
