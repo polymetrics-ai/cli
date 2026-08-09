@@ -1158,6 +1158,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if err != nil {
 		return err
 	}
+	explicitReservedFlags := connectorCommandExplicitReservedFlags(flags)
 	// The page flags stay in commandFlags on purpose: only a direct_read can
 	// honour them, and the runner drops them for that intent alone. Stripping
 	// them here for every intent made `--page 3` on an ETL command
@@ -1195,15 +1196,16 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 
 	rows := make([]connectors.Record, 0, limit)
 	result, err := commandrunner.Run(ctx, connector, commandrunner.Request{
-		Path:       path,
-		Flags:      commandFlags,
-		Config:     cfg,
-		Limit:      limit,
-		MaxBytes:   maxBytes,
-		Page:       page,
-		PageCursor: pageCursor,
-		DestRoot:   flags.first("dest-root"),
-		FileName:   flags.first("file-name"),
+		Path:                  path,
+		Flags:                 commandFlags,
+		Config:                cfg,
+		Limit:                 limit,
+		MaxBytes:              maxBytes,
+		ExplicitReservedFlags: explicitReservedFlags,
+		Page:                  page,
+		PageCursor:            pageCursor,
+		DestRoot:              flags.first("dest-root"),
+		FileName:              flags.first("file-name"),
 	}, func(record connectors.Record) error {
 		rows = append(rows, record)
 		return nil
@@ -1303,6 +1305,20 @@ func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
 		}
 	}
 	return nil
+}
+
+// connectorCommandExplicitReservedFlags preserves whether a caller selected
+// a generic connector-command control before runConnectorCommand removes it
+// from the per-command flag map. A closed intent can then refuse an option it
+// cannot faithfully honour rather than accepting and ignoring it.
+func connectorCommandExplicitReservedFlags(flags parsedFlags) map[string]bool {
+	selected := map[string]bool{}
+	for _, name := range []string{"limit", "max-bytes", "page", "page-cursor", "plan", "preview", "dest-root", "file-name", "approve", "confirm", "plan-name"} {
+		if _, ok := flags.values[name]; ok {
+			selected[name] = true
+		}
+	}
+	return selected
 }
 
 // connectorCommandMaxBytes returns what the user asked for, and nothing else.

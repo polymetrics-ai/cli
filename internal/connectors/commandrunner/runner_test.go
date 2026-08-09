@@ -1975,7 +1975,7 @@ func TestRunImplementedWebSocketSessionCommandRejectsReservedControls(t *testing
 		t.Fatalf("write fixture PCM16: %v", err)
 	}
 
-	for _, reserved := range []string{"limit", "max-bytes", "preview", "dest-root", "file-name", "approve", "confirm", "plan-name"} {
+	for _, reserved := range []string{"limit", "max-bytes", "page", "page-cursor", "plan", "preview", "dest-root", "file-name", "approve", "confirm", "plan-name"} {
 		t.Run(reserved, func(t *testing.T) {
 			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 				Path:         "live scribe",
@@ -1999,7 +1999,7 @@ func TestRunImplementedWebSocketSessionCommandRejectsReservedControls(t *testing
 				Config:                connectors.RuntimeConfig{ProjectDir: projectDir},
 				ExplicitReservedFlags: map[string]bool{reserved: true},
 			}, func(connectors.Record) error { return nil })
-			if err == nil || !strings.Contains(err.Error(), "does not accept --"+reserved) {
+			if err == nil || !strings.Contains(err.Error(), "websocket_session commands do not accept --"+reserved) {
 				t.Fatalf("reserved --%s error = %v, want closed-session refusal", reserved, err)
 			}
 			if connector.webSocketSessionReq.Operation != "" {

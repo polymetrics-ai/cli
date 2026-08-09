@@ -361,6 +361,42 @@ The next green slice must preserve the selected-reserved-flag bit through the CL
 every such WebSocket control before any file read or session dispatch, and make static conformance
 validate a GET coverage operation ID against an implemented `websocket_session` command.
 
+## Reserved-controls and static-conformance GREEN — captured 2026-08-10
+
+The CLI now records explicit generic controls in `commandrunner.Request` before it removes them
+from command-specific flags. `websocket_session` rejects `--limit`, `--max-bytes`, paging,
+plan/approval/confirmation, preview, and binary-download destination controls before metadata,
+file access, or operation dispatch. Value-only fallback checks preserve the same boundary for direct
+callers. Credential/connection/config selection remains allowed because it is needed to construct
+the connector's fixed authenticated request boundary.
+
+Static conformance now recognizes `websocket_session` as a closed operation model and treats a GET
+endpoint as covered only when `covered_by.websocket_session` names an implemented session command's
+operation ID. Planned or mismatched commands remain unclassified errors.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestRunImplementedWebSocketSessionCommandRejectsReservedControls$'
+ok  	polymetrics.ai/internal/connectors/commandrunner	0.732s
+
+$ go test -count=1 -timeout 20m ./internal/cli -run '^TestConnectorCommandExplicitReservedFlags$'
+ok  	polymetrics.ai/internal/cli	0.895s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/conformance -run '^TestCheckSurfaceComplete_WebSocketSessionCoverage$'
+ok  	polymetrics.ai/internal/connectors/conformance	0.417s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner
+ok  	polymetrics.ai/internal/connectors/commandrunner	7.349s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/conformance
+ok  	polymetrics.ai/internal/connectors/conformance	14.410s
+
+$ go test -count=1 -timeout 20m ./internal/cli -run '^(TestConnectorCommandExplicitReservedFlags|TestConnectorCommandMaxBytesDoesNotImposeAnIntentsCeiling|TestConnectorCommandMaxBytesRejectsNegative)$'
+ok  	polymetrics.ai/internal/cli	0.888s
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen
+ok  	polymetrics.ai/cmd/connectorgen	11.026s
+```
+
 All fixtures are local and synthetic. The command test writes four PCM16 bytes under `t.TempDir()`;
 it does not open a provider connection or reveal a credential, token-derived value, transcript,
 signed URL, raw authorization header, or audio recording.

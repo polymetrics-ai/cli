@@ -8,6 +8,9 @@
   redaction, and malformed-frame rejection.
 - [x] Commandrunner permits only matching implemented operation declarations and rejects
   caller-controlled WebSocket transport controls.
+- [x] The CLI preserves explicitly selected generic controls so a closed session rejects them rather
+  than silently accepting an ignored executor-specific option; static conformance recognizes only
+  implemented GET `covered_by.websocket_session` operation coverage.
 - [x] No new dependency, credentialed call, reverse-ETL execution, or generic tool surface.
 - [x] Targeted tests, vet, build, declarative surface validation, and generated-surface drift check
   recorded. The first full `internal/cli` run is recorded in `TDD-LEDGER.md` as inherited Zoom CRC

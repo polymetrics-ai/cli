@@ -73,6 +73,7 @@ func TestConnectorCommandExplicitReservedFlags(t *testing.T) {
 		"live", "scribe",
 		"--limit", "1",
 		"--max-bytes", "0",
+		"--plan", "plan-fixture",
 		"--preview",
 		"--dest-root", "out",
 		"--file-name", "result.pcm",
@@ -80,7 +81,7 @@ func TestConnectorCommandExplicitReservedFlags(t *testing.T) {
 		"--config", "region=fixture",
 	}))
 	want := map[string]bool{
-		"limit": true, "max-bytes": true, "preview": true, "dest-root": true, "file-name": true,
+		"limit": true, "max-bytes": true, "plan": true, "preview": true, "dest-root": true, "file-name": true,
 	}
 	if len(selected) != len(want) {
 		t.Fatalf("explicit reserved flags = %#v, want %#v", selected, want)

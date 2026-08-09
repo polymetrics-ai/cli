@@ -31,6 +31,12 @@ type Request struct {
 	Config   connectors.RuntimeConfig
 	Limit    int
 	MaxBytes int
+	// ExplicitReservedFlags records CLI-reserved controls that the caller
+	// selected before the CLI removed them from Flags. Most intents consume
+	// their respective controls directly; a closed websocket_session uses the
+	// information to reject every control it cannot honour instead of silently
+	// accepting an ignored value.
+	ExplicitReservedFlags map[string]bool
 	// Page and PageCursor navigate a direct read's declared pagination. A
 	// direct read returns ONE page; these say which one. They are ignored by
 	// every other intent.
@@ -564,12 +570,12 @@ func runWebSocketSession(ctx context.Context, connector connectors.Connector, cm
 	if !ok {
 		return Result{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not support websocket sessions"}
 	}
+	if err := rejectWebSocketSessionReservedControls(connector.Name(), cmd, req); err != nil {
+		return Result{}, err
+	}
 	metadata, err := operationWebSocketSessionCommandMetadata(connector, cmd)
 	if err != nil {
 		return Result{}, err
-	}
-	if req.MaxBytes != 0 {
-		return Result{}, &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "websocket_session commands do not accept --max-bytes; the declared session bound is fixed"}
 	}
 	update, audioPath, err := websocketSessionOverrides(cmd, req.Flags)
 	if err != nil {
@@ -592,6 +598,48 @@ func runWebSocketSession(ctx context.Context, connector connectors.Connector, cm
 		return Result{}, err
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, WebSocketSession: &result}, nil
+}
+
+// rejectWebSocketSessionReservedControls refuses every CLI control that is
+// meaningful only to an ETL, direct-read, binary-download, or write-plan
+// executor. The command runner receives only a parsed request, so the CLI
+// preserves explicit selection in ExplicitReservedFlags; value-only fallback
+// checks keep direct callers from smuggling a non-default transport setting.
+func rejectWebSocketSessionReservedControls(connectorName string, cmd connectors.CommandSurfaceCommand, req Request) error {
+	for _, name := range []string{"limit", "max-bytes", "page", "page-cursor", "plan", "preview", "dest-root", "file-name", "approve", "confirm", "plan-name"} {
+		if req.ExplicitReservedFlags[name] {
+			return websocketSessionReservedControlError(connectorName, cmd, name)
+		}
+	}
+	if req.MaxBytes != 0 {
+		return websocketSessionReservedControlError(connectorName, cmd, "max-bytes")
+	}
+	if req.Page != 0 {
+		return websocketSessionReservedControlError(connectorName, cmd, "page")
+	}
+	if strings.TrimSpace(req.PageCursor) != "" {
+		return websocketSessionReservedControlError(connectorName, cmd, "page-cursor")
+	}
+	if strings.TrimSpace(req.DestRoot) != "" {
+		return websocketSessionReservedControlError(connectorName, cmd, "dest-root")
+	}
+	if strings.TrimSpace(req.FileName) != "" {
+		return websocketSessionReservedControlError(connectorName, cmd, "file-name")
+	}
+	if req.Preview {
+		return websocketSessionReservedControlError(connectorName, cmd, "preview")
+	}
+	return nil
+}
+
+func websocketSessionReservedControlError(connectorName string, cmd connectors.CommandSurfaceCommand, name string) error {
+	return &BlockedCommandError{
+		Connector:    connectorName,
+		Command:      cmd.Path,
+		Intent:       cmd.Intent,
+		Availability: cmd.Availability,
+		Reason:       fmt.Sprintf("websocket_session commands do not accept --%s; the declared session contract is fixed", name),
+	}
 }
 
 func validateDirectReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
