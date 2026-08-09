@@ -779,6 +779,15 @@ func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, apiRoot string) st
 	return resolvedPath
 }
 
+func RequestURLPathForBaseURL(resolvedPath, baseURL, apiRoot string) string {
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL, apiRoot)
+	parsed, err := url.Parse(joinURL(baseURL, requestPath))
+	if err != nil || parsed.Path == "" {
+		return requestPath
+	}
+	return parsed.Path
+}
+
 func redactJSONValue(value any) any {
 	switch v := value.(type) {
 	case map[string]any:

@@ -151,16 +151,17 @@ func (h *Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig,
 // scimAPIPath is the SCIM 2.0 sub-path every bearerSCIMAuth endpoint sits
 // under (dockerhub's api_surface.json /v2/scim/2.0/** rows), relative to the
 // Docker Hub API root.
-const scimAPIPath = "/scim/2.0/"
+const (
+	scimAPIPath      = "/scim/2.0/"
+	dockerHubAPIRoot = "/v2"
+)
 
 func scimPathPrefixes(cfg connectors.RuntimeConfig) []string {
-	basePath := "/v2"
-	if parsed, err := url.Parse(strings.TrimSpace(cfg.Config["base_url"])); err == nil {
-		if path := strings.TrimRight(parsed.EscapedPath(), "/"); path != "" {
-			basePath = path
-		}
+	baseURL := strings.TrimSpace(cfg.Config["base_url"])
+	if baseURL == "" {
+		return []string{dockerHubAPIRoot + scimAPIPath}
 	}
-	return []string{basePath + scimAPIPath}
+	return []string{engine.RequestURLPathForBaseURL(dockerHubAPIRoot+scimAPIPath, baseURL, dockerHubAPIRoot)}
 }
 
 // dualAuth routes each outgoing request to one of two independent

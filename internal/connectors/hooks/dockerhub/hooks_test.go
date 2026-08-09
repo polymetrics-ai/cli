@@ -626,6 +626,37 @@ func TestAuthenticator_SCIMRoutingHonorsProxyBaseURLPathPrefix(t *testing.T) {
 	}
 }
 
+func TestAuthenticator_SCIMRoutingNormalizesProxyAPIRoot(t *testing.T) {
+	now := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	srv, client, hits := loginHTTPSServer(t, func(map[string]string) (int, map[string]any) {
+		return http.StatusOK, map[string]any{"token": fakeJWT(t, now, time.Hour)}
+	})
+	for _, tt := range []struct {
+		name string
+		cfg  connectors.RuntimeConfig
+		spec engine.AuthSpec
+	}{
+		{name: "SCIM-only", cfg: scimOnlyCfg(), spec: scimOnlySpec()},
+		{name: "dual credential", cfg: scimCfg(), spec: baseSpec(srv.URL)},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.cfg.Config["base_url"] = "https://proxy.internal/dockerhub"
+			h := newTestHooks(func() time.Time { return now }, client)
+			auth, err := h.Authenticator(context.Background(), tt.cfg, tt.spec)
+			if err != nil {
+				t.Fatalf("Authenticator: %v", err)
+			}
+			req := doAuthenticatedRequestToPath(t, auth, "/dockerhub/v2/scim/2.0/Users")
+			if got := req.Header.Get("Authorization"); got != "Bearer fixture-scim-token" {
+				t.Fatalf("proxy SCIM Authorization = %q, want SCIM bearer token", got)
+			}
+		})
+	}
+	if *hits != 0 {
+		t.Fatalf("login endpoint hits = %d, want 0 for normalized SCIM routing", *hits)
+	}
+}
+
 func TestAuthenticator_LoginRedirectDoesNotReplayPAT(t *testing.T) {
 	var destinationHits int32
 	server, client := httpsTestServer(t, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

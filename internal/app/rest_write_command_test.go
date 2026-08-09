@@ -2,6 +2,8 @@ package app_test
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -21,6 +23,31 @@ const (
 	restWriteDemoConnector          = "restwrite-demo"
 	multipartRestWriteDemoConnector = "multipart-restwrite-demo"
 )
+
+func trustDefaultTransportForTLSServers(t *testing.T, servers ...*httptest.Server) {
+	t.Helper()
+	roots := x509.NewCertPool()
+	for _, server := range servers {
+		roots.AddCert(server.Certificate())
+	}
+	previous, ok := http.DefaultTransport.(*http.Transport)
+	if !ok {
+		t.Fatalf("default transport = %T, want *http.Transport", http.DefaultTransport)
+	}
+	transport := previous.Clone()
+	tlsConfig := &tls.Config{RootCAs: roots}
+	if transport.TLSClientConfig != nil {
+		tlsConfig = transport.TLSClientConfig.Clone()
+		tlsConfig.RootCAs = roots
+	}
+	transport.TLSClientConfig = tlsConfig
+	previousDefaultTransport := http.DefaultTransport
+	http.DefaultTransport = transport
+	t.Cleanup(func() {
+		http.DefaultTransport = previousDefaultTransport
+		transport.CloseIdleConnections()
+	})
+}
 
 func setupRestWriteDemoApp(t *testing.T, ctx context.Context, baseURL string) *app.App {
 	return setupRestWriteDemoAppWithBundle(t, ctx, baseURL, nil)
@@ -293,14 +320,14 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 	const suppliedPassword = "fixture-password"
 	const returnedToken = "fixture-session-token"
 	foreignCalls := 0
-	foreign := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+	foreign := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		foreignCalls++
 		w.WriteHeader(http.StatusInternalServerError)
 	}))
 	t.Cleanup(foreign.Close)
 
 	authCalls := 0
-	authServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	authServer := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authCalls++
 		if r.Method != http.MethodPost || r.URL.Path != "/v2/users/login" {
 			t.Fatalf("request = %s %s, want POST /v2/users/login", r.Method, r.URL.Path)
@@ -319,6 +346,7 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 		_, _ = w.Write([]byte(`{"token":"` + returnedToken + `"}`))
 	}))
 	t.Cleanup(authServer.Close)
+	trustDefaultTransportForTLSServers(t, foreign, authServer)
 
 	root := t.TempDir()
 	if err := app.InitProject(root); err != nil {
@@ -417,6 +445,99 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 	}
 	if strings.Contains(string(stateBytes), returnedToken) {
 		t.Fatal("state retained the session token")
+	}
+}
+
+func TestDockerHubAuthFailureRedactsProviderBody(t *testing.T) {
+	ctx := context.Background()
+	const providerBodyMarker = "fixture-auth-failure-body"
+	foreignCalls := 0
+	foreign := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		foreignCalls++
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	t.Cleanup(foreign.Close)
+
+	authCalls := 0
+	authServer := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authCalls++
+		if r.Method != http.MethodPost || r.URL.Path != "/v2/users/login" {
+			t.Fatalf("request = %s %s, want POST /v2/users/login", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		_, _ = w.Write([]byte(`{"error":"` + providerBodyMarker + `"}`))
+	}))
+	t.Cleanup(authServer.Close)
+	trustDefaultTransportForTLSServers(t, foreign, authServer)
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-auth-failure",
+		Connector: "dockerhub",
+		Config: map[string]string{
+			"namespace": "fixture",
+			"base_url":  foreign.URL + "/v2",
+			"auth_url":  authServer.URL + "/v2",
+		},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+	plan, _, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Connector:  "dockerhub",
+		Credential: "dockerhub-auth-failure",
+		Path:       []string{"auth", "login", "create"},
+		Flags: map[string][]string{
+			"username": {"fixture-user"},
+			"password": {"fixture-password"},
+		},
+		Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand: %v", err)
+	}
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
+	if err == nil {
+		t.Fatal("RunReverseETL error = nil, want provider failure")
+	}
+	if authCalls != 1 || foreignCalls != 0 {
+		t.Fatalf("auth and foreign calls = %d and %d, want 1 and 0", authCalls, foreignCalls)
+	}
+	if !strings.Contains(err.Error(), "http 401") || strings.Contains(err.Error(), providerBodyMarker) {
+		t.Fatal("returned direct authentication error did not redact the provider body")
+	}
+	if strings.Contains(run.Error, providerBodyMarker) {
+		t.Fatal("immediate reverse run retained the provider body")
+	}
+
+	persisted, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("reopen after direct auth failure: %v", err)
+	}
+	history, err := persisted.GetReverseRun(run.ID)
+	if err != nil {
+		t.Fatalf("GetReverseRun: %v", err)
+	}
+	if strings.Contains(history.Error, providerBodyMarker) {
+		t.Fatal("reverse-run history retained the provider body")
+	}
+	listed := persisted.ListReverseRuns()
+	if len(listed) != 1 || strings.Contains(listed[0].Error, providerBodyMarker) {
+		t.Fatal("reverse-run listing retained the provider body")
+	}
+	stateBytes, err := os.ReadFile(filepath.Join(a.ProjectDir(), "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read reverse-run state: %v", err)
+	}
+	if strings.Contains(string(stateBytes), providerBodyMarker) {
+		t.Fatal("state retained the provider body")
 	}
 }
 

@@ -84,9 +84,10 @@ Authentication behavior:
   cached from a prior non-SCIM command.
 - The two credentials are independently sufficient. `scim_bearer_token` alone (no `docker_pat`)
   authenticates every SCIM command, and every non-SCIM command then fails closed naming
-  `docker_pat` rather than being sent unauthenticated. SCIM routing is anchored on the resolved
-  `base_url` path, so a proxy `base_url` carrying its own path prefix still routes SCIM requests to
-  the SCIM credential instead of falling back to the account session JWT.
+  `docker_pat` rather than being sent unauthenticated. SCIM routing derives from the request path
+  after the same `base_url`/API-root normalization used for dispatch, so a proxy `base_url` carrying
+  its own path prefix still routes SCIM requests to the SCIM credential instead of falling back to
+  the account session JWT.
 
 Requests use the configured `base_url` value after applying defaults.
 

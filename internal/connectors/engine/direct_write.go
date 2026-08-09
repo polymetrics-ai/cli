@@ -141,14 +141,18 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		}
 		if err != nil {
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			message := operationDirectWriteErrorText(err, prepared.op.Kind == "graphql_mutation", prepared.redactionValues)
+			message := operationDirectWriteErrorText(err, prepared.op.ResponseSensitive, prepared.op.Kind == "graphql_mutation", prepared.redactionValues)
 			if hint != "" {
 				message += ": " + hint
 			}
 			if class != "" {
 				message = class + ": " + message
 			}
-			return &operationDirectWriteError{operation: prepared.op.ID, message: message, cause: err}
+			cause := err
+			if prepared.op.ResponseSensitive {
+				cause = nil
+			}
+			return &operationDirectWriteError{operation: prepared.op.ID, message: message, cause: cause}
 		}
 		if len(response.Body) > prepared.maxBytes {
 			return fmt.Errorf("operation direct write response too large: %d bytes exceeds limit %d", len(response.Body), prepared.maxBytes)
@@ -205,20 +209,29 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 	return result, nil
 }
 
-// operationDirectWriteErrorText preserves the established complete REST write
-// diagnostics, but a fixed GraphQL mutation must redact its HTTP error body:
-// unlike a successful GraphQL response it has no errors[] envelope sanitizer
-// and can otherwise echo a caller value in its raw provider body.
-func operationDirectWriteErrorText(err error, redact bool, values []string) string {
+// operationDirectWriteErrorText retains the complete response diagnostics for
+// ordinary REST writes, redacts fixed GraphQL diagnostics, and omits body
+// content entirely for response-sensitive operations.
+func operationDirectWriteErrorText(err error, responseSensitive, redact bool, values []string) string {
 	var output string
 	var httpErr *connsdk.HTTPError
 	if errors.As(err, &httpErr) {
+		if responseSensitive {
+			message := http.StatusText(httpErr.Status)
+			if message == "" {
+				message = "request failed"
+			}
+			return fmt.Sprintf("http %d: %s", httpErr.Status, message)
+		}
 		message := strings.TrimSpace(httpErr.Body)
 		if message == "" {
 			message = http.StatusText(httpErr.Status)
 		}
 		output = fmt.Sprintf("http %d for %s: %s", httpErr.Status, httpErr.URL, message)
 	} else {
+		if responseSensitive {
+			return "request failed"
+		}
 		output = err.Error()
 	}
 	return redactOperationDirectWriteErrorText(output, redact, values)
@@ -748,8 +761,15 @@ func operationDirectWriteBaseURL(b Bundle, op OperationSpec, cfg connectors.Runt
 	if err != nil {
 		return "", fmt.Errorf("operation direct write resolve base URL: %w", err)
 	}
-	if strings.TrimSpace(baseURL) == "" {
+	baseURL = strings.TrimSpace(baseURL)
+	if baseURL == "" {
 		return "", fmt.Errorf("operation direct write base URL is required")
+	}
+	if op.ResponseSensitive {
+		parsed, parseErr := url.Parse(baseURL)
+		if parseErr != nil || !strings.EqualFold(parsed.Scheme, "https") || parsed.Host == "" {
+			return "", fmt.Errorf("response-sensitive operation %q requires an HTTPS base URL", op.ID)
+		}
 	}
 	return baseURL, nil
 }

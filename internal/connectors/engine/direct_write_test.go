@@ -74,6 +74,62 @@ func TestOperationDirectWriteAuthModeNoneSkipsAuthenticatorConstruction(t *testi
 	}
 }
 
+func TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS(t *testing.T) {
+	bundle := Bundle{
+		Name: "acme",
+		HTTP: HTTPBase{URL: "https://data.example.invalid/v2"},
+		Operations: []OperationSpec{{
+			ID:                "acme.login",
+			Kind:              "rest_write",
+			Summary:           "Exchange credentials",
+			Risk:              "low",
+			Approval:          "none",
+			OutputPolicy:      "json",
+			MutationClass:     "create",
+			ResponseSensitive: true,
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/v2/users/login",
+				BaseURL:     "{{ config.auth_url }}",
+				ContentType: "application/json",
+				AuthMode:    "none",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["username","password"],"properties":{"username":{"type":"string"},"password":{"type":"string"}}}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method:    http.MethodPost,
+			Path:      "/v2/users/login",
+			Operation: &SurfaceOperation{Model: "write_action"},
+		}}},
+	}
+	for _, tt := range []struct {
+		name    string
+		authURL string
+		wantErr bool
+	}{
+		{name: "rejects cleartext config overlay", authURL: "http://auth.example.invalid/v2", wantErr: true},
+		{name: "accepts HTTPS config overlay", authURL: "https://auth.example.invalid/v2"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := PreviewOperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{
+				Operation: "acme.login",
+				Config:    connectors.RuntimeConfig{Config: map[string]string{"auth_url": tt.authURL}},
+				Body:      map[string]any{"username": "fixture-user", "password": "fixture-password"},
+			}, nil)
+			if tt.wantErr {
+				if err == nil || !strings.Contains(err.Error(), "requires an HTTPS base URL") {
+					t.Fatalf("PreviewOperationDirectWrite error = %v, want HTTPS rejection", err)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("PreviewOperationDirectWrite: %v", err)
+			}
+		})
+	}
+}
+
 func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *testing.T) {
 	calls := 0
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

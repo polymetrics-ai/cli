@@ -1037,6 +1037,31 @@ make lint
 0 issues.
 ```
 
+## Review repair — Docker Hub sensitive auth transport and routing (2026-08-10)
+
+Red: response-sensitive direct authentication operations accepted a cleartext `auth_url` overlay,
+their raw provider failure body could cross the direct-write error boundary into reverse-run state,
+and SCIM routing inferred a prefix from `base_url` without applying the dispatcher’s API-root
+normalization. A proxy prefix without a trailing `/v2` could therefore use the account session
+credential for a SCIM request.
+
+Green: response-sensitive direct-write bases now require HTTPS before planning or dispatch; their
+failure boundary omits provider bodies and does not unwrap the captured HTTP error. The direct-auth
+command regression uses trusted TLS test servers while preserving its immediate successful provider
+response and redacted persisted history. Docker Hub SCIM classification now uses the engine’s final
+request-path derivation, covering SCIM-only and dual-credential connections through a proxy prefix.
+The Docker Hub manual and skill artifacts are regenerated from the bundle after the source-doc update.
+
+This gate-owned review uses golang-how-to, golang-security, golang-safety, golang-error-handling,
+golang-lint, and golang-testing; the outer executor retains GSD lifecycle ownership.
+
+```text
+go test -timeout 20m ./internal/app ./internal/connectors/engine ./internal/connectors/hooks/dockerhub ./internal/connectors/defs/dockerhub -run '^(TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken|TestDockerHubAuthFailureRedactsProviderBody|TestOperationDirectWriteResponseSensitiveBaseURLRequiresHTTPS|TestAuthenticator_SCIMRoutingHonorsProxyBaseURLPathPrefix|TestAuthenticator_SCIMRoutingNormalizesProxyAPIRoot|TestDockerhubPATExchangeUsesDedicatedAuthURL)$' -count=1
+```
+
+Result: passed (`internal/app`, `internal/connectors/engine`,
+`internal/connectors/hooks/dockerhub`, and `internal/connectors/defs/dockerhub`).
+
 ## Review repair — direct authentication routing and response history (2026-08-10)
 
 Red: the Docker Hub custom PAT hook used the dedicated auth_url, but the three approved direct
