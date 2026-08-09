@@ -1,0 +1,2 @@
+$ sh scripts/tests/post-commit-autopush.sh
+post-commit autopush test failed: post-commit hook is missing or not executable

@@ -1,0 +1,11 @@
+$ shellcheck -s sh .githooks/post-commit scripts/tests/post-commit-autopush.sh
+$ sh scripts/tests/post-commit-autopush.sh
+Rebasing (1/2)
+Rebasing (2/2)
+Successfully rebased and updated refs/heads/feature.
+post-commit autopush: all executable refusal and safety checks passed
+
+$ make docs-check
+go build ./cmd/pm
+./pm docs validate --connectors-dir docs/connectors
+Validated connector docs in docs/connectors

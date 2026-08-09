@@ -402,13 +402,29 @@ go run ./cmd/connectorgen gen            # only when hook/native package sets ch
 make verify                              # must stay green
 ```
 
-Optional local hook setup:
+Optional local hook setup (explicit opt-in):
 
 ```bash
 git config core.hooksPath .githooks
 ```
 
-The hook and CI both route through the same docs/icon validation path, so a connector cannot
-ship without icon metadata, a local SVG asset, generated docs, and safe SVG content.
+This repository does not set `core.hooksPath` for you. Enabling it also enables the tracked
+pre-commit hook, which runs formatting, focused tests, a build, and docs validation; choose it
+deliberately, especially in shared worker worktrees.
+
+The tracked post-commit hook then attempts one ordinary (never force) feature-branch push at most
+once every ten minutes. It skips `main`, detached HEADs, and Git operations such as rebases, and
+runs the push detached so a network failure cannot hold up or fail the commit. To turn off only
+that automatic push for one commit or a shell session, set `PM_NO_AUTOPUSH=1`:
+
+```bash
+PM_NO_AUTOPUSH=1 git commit -m "work locally"
+
+# Or keep it off for this shell; unset PM_NO_AUTOPUSH to restore automatic pushes.
+export PM_NO_AUTOPUSH=1
+```
+
+The pre-commit hook and CI both route through the same docs/icon validation path, so a connector
+cannot ship without icon metadata, a local SVG asset, generated docs, and safe SVG content.
 
 Open a PR — and thank you. 🙌

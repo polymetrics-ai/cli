@@ -1,0 +1,91 @@
+#!/usr/bin/env sh
+# Keep committed feature work recoverable without making commits wait for a
+# network round trip. Every refusal and error path exits successfully.
+
+if [ -n "${PM_NO_AUTOPUSH:-}" ]; then
+  exit 0
+fi
+
+# Rebase (and git am) can replay a long series of commits. Check Git's own
+# state paths rather than assuming that .git is a directory in this worktree.
+for operation_path in \
+  rebase-merge \
+  rebase-apply \
+  MERGE_HEAD \
+  CHERRY_PICK_HEAD \
+  REVERT_HEAD \
+  BISECT_LOG; do
+  resolved_operation_path="$(git rev-parse --git-path "$operation_path" 2>/dev/null)" || exit 0
+  if [ -f "$resolved_operation_path" ] || [ -d "$resolved_operation_path" ]; then
+    exit 0
+  fi
+done
+
+branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" || exit 0
+[ "$branch" = "main" ] && exit 0
+
+remote="$(git config --get "branch.$branch.remote" 2>/dev/null || :)"
+case "$remote" in
+  ""|".")
+    remote="$(git config --get remote.pushDefault 2>/dev/null || :)"
+    ;;
+esac
+if [ -z "$remote" ]; then
+  if git remote get-url origin >/dev/null 2>&1; then
+    remote="origin"
+  else
+    exit 0
+  fi
+fi
+
+# `main` is the hard repository default. Honor an already-known alternate
+# remote default too, without issuing a network request from the hook.
+remote_head="$(git symbolic-ref --quiet --short "refs/remotes/$remote/HEAD" 2>/dev/null || :)"
+case "$remote_head" in
+  "$remote"/*)
+    remote_default_branch="${remote_head#"$remote/"}"
+    [ "$branch" = "$remote_default_branch" ] && exit 0
+    ;;
+esac
+
+# Resolve state against Git's common directory, not the configured hook path:
+# `core.hooksPath` can itself be a worktree path. Using `--git-path` with the
+# common Git directory keeps this git-ignored state shared by linked worktrees.
+common_git_dir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || exit 0
+state_file="$(GIT_DIR="$common_git_dir" git rev-parse --git-path "pm-autopush/$branch.last-push" 2>/dev/null)" || exit 0
+status_file="$(GIT_DIR="$common_git_dir" git rev-parse --git-path "pm-autopush/$branch.log" 2>/dev/null)" || exit 0
+state_dir="$(dirname "$state_file")" || exit 0
+umask 077
+mkdir -p "$state_dir" 2>/dev/null || exit 0
+
+now="$(date +%s 2>/dev/null)" || exit 0
+case "$now" in
+  ""|*[!0-9]*) exit 0 ;;
+esac
+
+last_push="$(sed -n '1p' "$state_file" 2>/dev/null || :)"
+case "$last_push" in
+  ""|*[!0-9]*) ;;
+  *)
+    if [ "$last_push" -gt "$now" ] || [ $((now - last_push)) -lt 600 ]; then
+      exit 0
+    fi
+    ;;
+esac
+
+# Record the attempt before forking so a burst of commits cannot enqueue one
+# push per commit. A rejected attempt is still rate-limited deliberately.
+printf '%s\n' "$now" > "$state_file" 2>/dev/null || exit 0
+
+# Never wait for, force, or otherwise make the commit depend on this push.
+# The child records one short local line on any rejected/failed push and the
+# hook returns successfully even if nohup itself cannot be started.
+# shellcheck disable=SC2016 # The child receives its remote, branch, and log path as positional arguments.
+nohup sh -c '
+  if git push -- "$1" "refs/heads/$2:refs/heads/$2" >/dev/null 2>&1; then
+    exit 0
+  fi
+  printf "%s\n" "pm autopush: push failed for $2 (ignored)" >> "$3"
+' pm-autopush "$remote" "$branch" "$status_file" </dev/null >/dev/null 2>&1 &
+
+exit 0

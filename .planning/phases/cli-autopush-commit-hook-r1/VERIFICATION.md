@@ -1,0 +1,20 @@
+# Verification checklist — Time-boxed rebase-safe post-commit push
+
+## Required behavioral checks
+
+- [x] Real two-commit rebase invokes the hook for replayed commits and records no push.
+- [x] `main` and detached HEAD record no push.
+- [x] A feature branch pushes once, skips a second commit inside 600 seconds, and catches up after expiry.
+- [x] A linked worktree resolves the same per-branch timestamp path.
+- [x] A real non-fast-forward push is rejected without a force option, is logged once, and leaves the commit successful.
+- [x] A deliberately delayed push does not delay the commit.
+- [x] `PM_NO_AUTOPUSH=1` skips the hook.
+- [x] `docs/GUIDE.md` documents manual enablement and opt-out; no repository config, installer, CI, or server hook changes exist.
+
+## Local command checklist
+
+- [x] `shellcheck -s sh .githooks/post-commit scripts/tests/post-commit-autopush.sh`
+- [x] `sh scripts/tests/post-commit-autopush.sh`
+- [x] `make docs-check`
+- [x] `git diff --check`
+- [x] Focused manual code/security review of the hook, test harness, and documentation.
