@@ -76,6 +76,24 @@ the batch listing responses. No command-specific `page`, `per_page`, `limit`, `p
 `next_page_token` flag will be hand-authored; any allowable navigation comes from declared paging
 and its shared runtime flags.
 
+### Continuation re-fetch — 2026-08-09
+
+The paused phase was independently re-fetched before any continuation work. This confirms that the
+same official provider artifact—not the 426-sweep generated surface—is still the source of the
+next implementation decision.
+
+| Item | Evidence |
+| --- | --- |
+| API URL | `https://developers.zoom.us/docs/api/ai-services.md` |
+| Retrieval | `2026-08-09T20:57:31Z` |
+| HTTP / bytes | `200` / `87,750` |
+| SHA-256 | `154631ef97c292468c81a79dc50cd51ea142d18f1f9fab060622215ddf3ba367` |
+| Result | byte-for-byte identical to the 2026-08-08 audited artifact above |
+
+The current branch still has exactly 22 `provider_module=ai-services` rows. The continuation does
+not import the 426-sweep surface: that branch's 1,913 rows remain a checklist only because it has
+only three implemented operations.
+
 ## Locked implementation decisions
 
 1. The twelve ordinary HTTP reads become bounded `rest_read` operations with fixed paths,
@@ -89,11 +107,12 @@ and its shared runtime flags.
    PCM16 file input, fixed client frame sequence, finite output and input bounds, normal connector
    authentication/rate-limit admission, and redacted result framing. It has no caller-selected
    origin, protocol, header, arbitrary initial frame, arbitrary frame type, or raw HTTP escape.
-4. The WebSocket runtime/schema/CLI route is a reusable foundation, developed in its own
-   red/green commits before the AI Services bundle declaration. It must use the Go standard
-   library and add no dependency. The resulting primitive is intentionally closed enough to make
-   the documented Zoom operation executable, and will be documented in the PR as a foundation
-   which future fixed WebSocket connector operations can reuse.
+4. The WebSocket runtime/schema/CLI route is reusable shared runtime work. The connector-lane
+   ownership contract therefore requires foundation [#3963](https://github.com/polymetrics-ai/cli/issues/3963)
+   and its stacked PR before this AI Services bundle declaration proceeds. It must use the Go standard library and add no
+   dependency. This slice remains at its committed foundation RED checkpoint until that PR lands;
+   the foundation must stay closed enough to make the documented Zoom operation executable without
+   exposing caller-selected transport, origin, protocol, header, or frame controls.
 5. `surface-sync`, `surface-reconcile`, documentation/manual, and website catalogs are generated
    normally. The recorded mechanical retention trace may restore non-Zoom aggregate catalog rows;
    generated Zoom data is never hand-merged.
