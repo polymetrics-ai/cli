@@ -142,6 +142,52 @@ func TestPGOutputDecoderErrors(t *testing.T) {
 	}
 }
 
+func TestPGOutputDecoderFiltersUnselectedRelation(t *testing.T) {
+	const otherRelationID uint32 = 43
+	decoder := newPGOutputDecoderForRelation("public.users")
+	if _, err := decoder.decode(relationMessage(testRelationID, "public", "users", testColumn{name: "id", typeID: 23}), ""); err != nil {
+		t.Fatalf("decode selected relation: %v", err)
+	}
+	if _, err := decoder.decode(relationMessage(otherRelationID, "public", "noise", testColumn{name: "id", typeID: 23}), ""); err != nil {
+		t.Fatalf("decode unselected relation: %v", err)
+	}
+
+	events, err := decoder.decode(insertMessage(otherRelationID, textField("99")), "0/20")
+	if err != nil {
+		t.Fatalf("decode unselected DML: %v", err)
+	}
+	if len(events) != 0 {
+		t.Fatalf("unselected relation emitted %d event(s), want 0", len(events))
+	}
+
+	events, err = decoder.decode(insertMessage(testRelationID, textField("7")), "0/21")
+	if err != nil {
+		t.Fatalf("decode selected DML: %v", err)
+	}
+	if len(events) != 1 || events[0].Record["id"] != 7 {
+		t.Fatalf("selected relation events = %#v, want only the selected record", events)
+	}
+}
+
+func TestPGOutputDecoderTruncateMapsOnlyTheSelectedRelation(t *testing.T) {
+	const otherRelationID uint32 = 43
+	decoder := newPGOutputDecoderForRelation("public.users")
+	if _, err := decoder.decode(relationMessage(testRelationID, "public", "users", testColumn{name: "id", typeID: 23}), ""); err != nil {
+		t.Fatalf("decode selected relation: %v", err)
+	}
+	if _, err := decoder.decode(relationMessage(otherRelationID, "public", "noise", testColumn{name: "id", typeID: 23}), ""); err != nil {
+		t.Fatalf("decode unselected relation: %v", err)
+	}
+
+	events, err := decoder.truncate([]uint32{otherRelationID, testRelationID}, "0/30")
+	if err != nil {
+		t.Fatalf("decode truncate: %v", err)
+	}
+	if len(events) != 1 || events[0].Operation != "truncate" || len(events[0].Record) != 0 || events[0].State["lsn"] != "0/30" {
+		t.Fatalf("truncate events = %#v, want one selected empty-record truncate", events)
+	}
+}
+
 func relationMessage(id uint32, schema, table string, columns ...testColumn) []byte {
 	var b []byte
 	b = append(b, 'R')

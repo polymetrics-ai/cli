@@ -42,13 +42,21 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 
 	suffix := strconv.FormatInt(time.Now().UnixNano(), 36)
 	table := "pm_cdc_it_" + suffix
+	noiseTable := table + "_noise"
 	publication := "pm_cdc_pub_" + suffix
+	missingPublication := publication + "_missing"
 	stream := "public." + table
 	if err := validateIdentifier(table); err != nil {
 		t.Fatal("generated CDC integration table name is invalid")
 	}
+	if err := validateIdentifier(noiseTable); err != nil {
+		t.Fatal("generated PostgreSQL CDC integration noise table name is invalid")
+	}
 	if err := validateIdentifier(publication); err != nil {
 		t.Fatal("generated CDC integration publication name is invalid")
+	}
+	if err := validateIdentifier(missingPublication); err != nil {
+		t.Fatal("generated PostgreSQL CDC integration missing publication name is invalid")
 	}
 	cfg.Config["cdc_publication"] = publication
 
@@ -58,18 +66,43 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 	defer func() {
 		_, _ = data.Exec(context.Background(), "DROP TABLE IF EXISTS "+quoteIdentifier(table))
 	}()
-	if _, err := data.Exec(ctx, "CREATE PUBLICATION "+quoteIdentifier(publication)+" FOR TABLE "+quoteIdentifier(table)); err != nil {
+	if _, err := data.Exec(ctx, "CREATE TABLE "+quoteIdentifier(noiseTable)+" (id integer PRIMARY KEY, value text NOT NULL)"); err != nil {
+		t.Fatal("could not create PostgreSQL CDC integration noise table")
+	}
+	defer func() {
+		_, _ = data.Exec(context.Background(), "DROP TABLE IF EXISTS "+quoteIdentifier(noiseTable))
+	}()
+	if _, err := data.Exec(ctx, "CREATE PUBLICATION "+quoteIdentifier(publication)+" FOR TABLE "+quoteIdentifier(table)+", "+quoteIdentifier(noiseTable)); err != nil {
 		t.Fatal("could not create PostgreSQL CDC integration publication")
 	}
 	defer func() {
 		_, _ = data.Exec(context.Background(), "DROP PUBLICATION IF EXISTS "+quoteIdentifier(publication))
 	}()
+	if _, err := data.Exec(ctx, "CREATE PUBLICATION "+quoteIdentifier(missingPublication)+" FOR TABLE "+quoteIdentifier(noiseTable)); err != nil {
+		t.Fatal("could not create PostgreSQL CDC integration missing-stream publication")
+	}
+	defer func() {
+		_, _ = data.Exec(context.Background(), "DROP PUBLICATION IF EXISTS "+quoteIdentifier(missingPublication))
+	}()
 
 	c := New()
+	missingCfg := cloneCDCIntegrationConfig(cfg)
+	missingCfg.Config["cdc_publication"] = missingPublication
+	missingCtx, stopMissing := context.WithTimeout(ctx, 5*time.Second)
+	missingErr := c.ReadCDC(missingCtx, connectors.CDCReadRequest{
+		Stream:                     stream,
+		Config:                     missingCfg,
+		DurableCheckpointCommitter: newIntegrationCheckpointCommitter(),
+	}, func(connectors.CDCEvent) error { return nil })
+	stopMissing()
+	if missingErr == nil || !strings.Contains(missingErr.Error(), "does not include the requested stream") {
+		t.Fatal("PostgreSQL CDC accepted a publication that omits the requested stream")
+	}
 	slot, err := c.CDCSlotName(ctx, cfg, stream)
 	if err != nil {
 		t.Fatal("could not derive PostgreSQL CDC slot name")
 	}
+	assertCDCSlotRemoved(t, ctx, data, slot)
 	defer func() {
 		teardownCtx, teardownCancel := context.WithTimeout(context.Background(), cdcSlotCleanupTimeout)
 		defer teardownCancel()
@@ -85,10 +118,16 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 		DurableCheckpointCommitter: firstCommitter,
 	}, firstEvents)
 	waitForCDCSlot(t, ctx, data, slot, true)
+	if err := c.TeardownCDC(ctx, cfg, stream); err == nil || !strings.Contains(err.Error(), "already active") {
+		t.Fatal("PostgreSQL CDC teardown did not refuse the active replication slot")
+	}
 
 	tx, err := data.Begin(ctx)
 	if err != nil {
 		t.Fatal("could not start PostgreSQL CDC integration transaction")
+	}
+	if _, err := tx.Exec(ctx, "INSERT INTO "+quoteIdentifier(noiseTable)+" (id, value) VALUES (99, 'noise')"); err != nil {
+		t.Fatal("could not insert PostgreSQL CDC integration noise record")
 	}
 	if _, err := tx.Exec(ctx, "INSERT INTO "+quoteIdentifier(table)+" (id, value) VALUES (1, 'first')"); err != nil {
 		t.Fatal("could not insert PostgreSQL CDC integration record")
@@ -99,17 +138,31 @@ func TestLogicalReplicationResumesAndCleansSlot(t *testing.T) {
 	if _, err := tx.Exec(ctx, "DELETE FROM "+quoteIdentifier(table)+" WHERE id = 1"); err != nil {
 		t.Fatal("could not delete PostgreSQL CDC integration record")
 	}
+	if _, err := tx.Exec(ctx, "INSERT INTO "+quoteIdentifier(table)+" (id, value) VALUES (3, 'truncate')"); err != nil {
+		t.Fatal("could not insert PostgreSQL CDC truncation record")
+	}
+	if _, err := tx.Exec(ctx, "TRUNCATE TABLE "+quoteIdentifier(table)); err != nil {
+		t.Fatal("could not truncate PostgreSQL CDC integration table")
+	}
 	if err := tx.Commit(ctx); err != nil {
 		t.Fatal("could not commit PostgreSQL CDC integration transaction")
 	}
 
-	assertCDCOperations(t, ctx, firstEvents, []string{"insert", "update", "delete"})
+	assertCDCOperations(t, ctx, firstEvents, []string{"insert", "update", "delete", "insert", "truncate"})
 	checkpoint := firstCommitter.wait(t, ctx)
 	if err := checkpoint.Validate(); err != nil || checkpoint.CommittedAt == nil {
 		t.Fatal("first PostgreSQL CDC checkpoint was not durably committed")
 	}
 	stopFirst()
 	assertCDCStopped(t, firstDone)
+	waitForCDCSlot(t, ctx, data, slot, false)
+
+	uncheckpointedDone := startCDCRead(c, ctx, connectors.CDCReadRequest{
+		Stream:                     stream,
+		Config:                     cfg,
+		DurableCheckpointCommitter: newIntegrationCheckpointCommitter(),
+	}, make(chan connectors.CDCEvent, 1))
+	assertCDCRebootstrap(t, uncheckpointedDone)
 	waitForCDCSlot(t, ctx, data, slot, false)
 
 	secondCommitter := newIntegrationCheckpointCommitter()
@@ -168,6 +221,15 @@ func postgresCDCIntegrationConfig(t *testing.T) connectors.RuntimeConfig {
 	}
 }
 
+func cloneCDCIntegrationConfig(cfg connectors.RuntimeConfig) connectors.RuntimeConfig {
+	clone := cfg
+	clone.Config = make(map[string]string, len(cfg.Config))
+	for key, value := range cfg.Config {
+		clone.Config[key] = value
+	}
+	return clone
+}
+
 func startCDCRead(c Connector, ctx context.Context, req connectors.CDCReadRequest, events chan<- connectors.CDCEvent) <-chan error {
 	done := make(chan error, 1)
 	go func() {
@@ -213,6 +275,22 @@ func assertCDCStopped(t *testing.T, done <-chan error) {
 		}
 	case <-time.After(5 * time.Second):
 		t.Fatal("PostgreSQL CDC reader did not stop promptly")
+	}
+}
+
+func assertCDCRebootstrap(t *testing.T, done <-chan error) {
+	t.Helper()
+	select {
+	case err := <-done:
+		if !errors.Is(err, synccontract.ErrRebootstrapRequired) {
+			t.Fatalf("uncheckpointed PostgreSQL CDC resume = %v, want rebootstrap error", err)
+		}
+		var recovery *synccontract.RebootstrapRequiredError
+		if !errors.As(err, &recovery) || recovery.Outcome != synccontract.RecoveryOutcomeInvalidCheckpoint {
+			t.Fatalf("uncheckpointed PostgreSQL CDC recovery = %#v, want invalid checkpoint", recovery)
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("uncheckpointed PostgreSQL CDC resume did not fail promptly")
 	}
 }
 

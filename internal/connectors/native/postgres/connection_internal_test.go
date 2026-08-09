@@ -92,4 +92,23 @@ func TestPostgresPoolConfigUsesSharedTransportSecurityOptions(t *testing.T) {
 	if got := conn.tls.Mode; got != sqltls.ModeVerifyIdentity {
 		t.Fatalf("resolved TLS mode = %q, want verify-identity", got)
 	}
+
+	replicationConfig, err := conn.replicationConfig()
+	if err != nil {
+		t.Fatalf("replicationConfig() error = %v", err)
+	}
+	if replicationConfig.TLSConfig == nil || replicationConfig.TLSConfig.ServerName != "database.example" {
+		t.Fatalf("replication TLS server name = %#v, want configured shared sslservername", replicationConfig.TLSConfig)
+	}
+	if got := len(replicationConfig.Fallbacks); got != 0 {
+		t.Fatalf("strict TLS replication fallbacks = %d, want no plaintext fallback", got)
+	}
+
+	dataConfig, err := conn.dataConfig()
+	if err != nil {
+		t.Fatalf("dataConfig() error = %v", err)
+	}
+	if dataConfig.TLSConfig == nil || dataConfig.TLSConfig.ServerName != "database.example" {
+		t.Fatalf("slot-inspection TLS server name = %#v, want configured shared sslservername", dataConfig.TLSConfig)
+	}
 }

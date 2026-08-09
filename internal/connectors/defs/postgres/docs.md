@@ -2,8 +2,9 @@
 
 Reads PostgreSQL tables: discovers schemas/columns from information_schema, snapshots tables, and
 supports cursor-incremental reads on a configurable cursor column, and consumes change events
-through PostgreSQL logical replication. CDC uses a connector-owned, source-bound replication slot
-and commits an LSN only after downstream acknowledgement, so restart delivery is at-least-once.
+through PostgreSQL logical replication. CDC maps insert, update, delete, and full-table truncate
+events for the selected stream. It uses a connector-owned, source-bound replication slot and
+commits an LSN only after downstream acknowledgement, so restart delivery is at-least-once.
 
 This connector discovers available streams and schemas from the configured service at runtime.
 
@@ -75,5 +76,6 @@ This connector is read-only. Read behavior: low.
 - CDC requires a real PostgreSQL source with `wal_level=logical`, a role permitted to use logical
   replication, and an existing `cdc_publication` that contains the selected table.
 - CDC slots are derived from the PostgreSQL system identity, database, and fully qualified stream;
-  teardown drops only that inactive connector-owned slot. Do not delete a slot while another CDC
-  reader is active.
+  restart requires the matching durable checkpoint. An existing slot without that checkpoint is
+  refused until it is explicitly torn down and re-snapshotted. Teardown drops only that inactive
+  connector-owned slot. Do not delete a slot while another CDC reader is active.

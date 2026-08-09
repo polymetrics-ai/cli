@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"polymetrics.ai/internal/connectors"
@@ -87,6 +89,52 @@ func (c connConfig) dsn() string {
 	return strings.Join(parts, " ")
 }
 
+// applyTLSServerName applies the shared verify-identity override after pgx
+// has parsed the libpq-compatible connection fields. It is deliberately used
+// by normal SQL, replication, and slot-inspection connections so CDC cannot
+// silently use a different transport policy from the rest of the connector.
+func (c connConfig) applyTLSServerName(config *pgconn.Config) error {
+	if c.tls.Mode != sqltls.ModeVerifyIdentity || c.tls.ServerName == "" {
+		return nil
+	}
+	if config.TLSConfig == nil {
+		return errors.New("postgres verify-identity did not configure TLS")
+	}
+	config.TLSConfig.ServerName = c.tls.ServerName
+	for _, fallback := range config.Fallbacks {
+		if fallback != nil && fallback.TLSConfig != nil {
+			fallback.TLSConfig.ServerName = c.tls.ServerName
+		}
+	}
+	return nil
+}
+
+// replicationConfig returns a parsed protocol connection configuration without
+// ever returning a parser error that could embed a connection string.
+func (c connConfig) replicationConfig() (*pgconn.Config, error) {
+	config, err := pgconn.ParseConfig(c.dsn())
+	if err != nil {
+		return nil, errors.New("postgres replication configuration is invalid")
+	}
+	if err := c.applyTLSServerName(config); err != nil {
+		return nil, err
+	}
+	return config, nil
+}
+
+// dataConfig returns the ordinary pgx configuration used to inspect a slot.
+// It shares the same TLS and secret-safe parse path as replicationConfig.
+func (c connConfig) dataConfig() (*pgx.ConnConfig, error) {
+	config, err := pgx.ParseConfig(c.dsn())
+	if err != nil {
+		return nil, errors.New("postgres connection configuration is invalid")
+	}
+	if err := c.applyTLSServerName(&config.Config); err != nil {
+		return nil, err
+	}
+	return config, nil
+}
+
 // poolConfig converts the validated connector config into pgx's pool
 // configuration. sslrootcert is rendered through libpq's supported keyword;
 // sslservername is deliberately applied after parsing because pgx uses the
@@ -100,17 +148,8 @@ func (c connConfig) poolConfig() (*pgxpool.Config, error) {
 		// it to a command surface because it may include authentication data.
 		return nil, errors.New("postgres configuration could not create a connection pool")
 	}
-	if c.tls.Mode != sqltls.ModeVerifyIdentity || c.tls.ServerName == "" {
-		return poolConfig, nil
-	}
-	if poolConfig.ConnConfig.TLSConfig == nil {
-		return nil, errors.New("postgres verify-identity did not configure TLS")
-	}
-	poolConfig.ConnConfig.TLSConfig.ServerName = c.tls.ServerName
-	for _, fallback := range poolConfig.ConnConfig.Fallbacks {
-		if fallback != nil && fallback.TLSConfig != nil {
-			fallback.TLSConfig.ServerName = c.tls.ServerName
-		}
+	if err := c.applyTLSServerName(&poolConfig.ConnConfig.Config); err != nil {
+		return nil, err
 	}
 	return poolConfig, nil
 }
