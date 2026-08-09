@@ -8,29 +8,17 @@
       "commands": [
         "api get discovery v2 attractions",
         "api get discovery v2 attractions id",
-        "api get discovery v2 attractions k8vz9175bhv-json",
-        "api get discovery v2 attractions-json",
         "api get discovery v2 classifications",
         "api get discovery v2 classifications genres id",
-        "api get discovery v2 classifications genres knvzfz7va71-json",
         "api get discovery v2 classifications id",
-        "api get discovery v2 classifications kzfzniwnsyzfz7v7ne",
         "api get discovery v2 classifications segments id",
-        "api get discovery v2 classifications segments kzazbeonsmnzfz7vfta-json",
         "api get discovery v2 classifications subgenres id",
-        "api get discovery v2 classifications subgenres kzazbeonsmnzfz7vfta-json",
-        "api get discovery v2 classifications-json",
         "api get discovery v2 events",
-        "api get discovery v2 events 0b004f0401bd55e5 images-json",
-        "api get discovery v2 events g5dizfkn0b-bh-json",
         "api get discovery v2 events id",
         "api get discovery v2 events id images",
-        "api get discovery v2 events-json",
         "api get discovery v2 suggest",
         "api get discovery v2 venues",
         "api get discovery v2 venues id",
-        "api get discovery v2 venues kovzpzafniea-json",
-        "api get discovery v2 venues-json",
         "api get events id json",
         "api get suggest",
         "attractions list",
@@ -82,46 +70,6 @@
       "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "api get discovery v2 attractions k8vz9175bhv-json",
-      "summary": "Documented GET /discovery/v2/attractions/K8vZ9175BhV.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 attractions k8vz9175bhv-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/attractions/K8vZ9175BhV.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-attractions-k8vz9175bhv-json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
-      "path": "api get discovery v2 attractions-json",
-      "summary": "Documented GET /discovery/v2/attractions.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 attractions-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/attractions.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-attractions-json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
       "path": "api get discovery v2 classifications",
       "summary": "Documented GET /discovery/v2/classifications (not implemented)",
       "intent": "direct_read",
@@ -162,26 +110,6 @@
       "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "api get discovery v2 classifications genres knvzfz7va71-json",
-      "summary": "Documented GET /discovery/v2/classifications/genres/KnvZfZ7vA71.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 classifications genres knvzfz7va71-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/classifications/genres/KnvZfZ7vA71.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-classifications-genres-knvzfz7va71-json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
       "path": "api get discovery v2 classifications id",
       "summary": "Documented GET /discovery/v2/classifications/{id} (not implemented)",
       "intent": "direct_read",
@@ -197,26 +125,6 @@
         }
       ],
       "operation": "ticketmaster.get.discovery-v2-classifications-id",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
-      "path": "api get discovery v2 classifications kzfzniwnsyzfz7v7ne",
-      "summary": "Documented GET /discovery/v2/classifications/KZFzniwnSyZfZ7v7nE (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 classifications kzfzniwnsyzfz7v7ne --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/classifications/KZFzniwnSyZfZ7v7nE"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-classifications-kzfzniwnsyzfz7v7ne",
       "risk": "low",
       "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
       "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
@@ -242,26 +150,6 @@
       "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "api get discovery v2 classifications segments kzazbeonsmnzfz7vfta-json",
-      "summary": "Documented GET /discovery/v2/classifications/segments/KZazBEonSMnZfZ7vFta.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 classifications segments kzazbeonsmnzfz7vfta-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/classifications/segments/KZazBEonSMnZfZ7vFta.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-classifications-segments-kzazbeonsmnzfz7vfta-json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
       "path": "api get discovery v2 classifications subgenres id",
       "summary": "Documented GET /discovery/v2/classifications/subgenres/{id} (not implemented)",
       "intent": "direct_read",
@@ -282,46 +170,6 @@
       "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "api get discovery v2 classifications subgenres kzazbeonsmnzfz7vfta-json",
-      "summary": "Documented GET /discovery/v2/classifications/subgenres/KZazBEonSMnZfZ7vFta.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 classifications subgenres kzazbeonsmnzfz7vfta-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/classifications/subgenres/KZazBEonSMnZfZ7vFta.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-classifications-subgenres-kzazbeonsmnzfz7vfta-json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
-      "path": "api get discovery v2 classifications-json",
-      "summary": "Documented GET /discovery/v2/classifications.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 classifications-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/classifications.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-classifications-json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
       "path": "api get discovery v2 events",
       "summary": "Documented GET /discovery/v2/events (not implemented)",
       "intent": "direct_read",
@@ -337,46 +185,6 @@
         }
       ],
       "operation": "ticketmaster.get.discovery-v2-events",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
-      "path": "api get discovery v2 events 0b004f0401bd55e5 images-json",
-      "summary": "Documented GET /discovery/v2/events/0B004F0401BD55E5/images.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 events 0b004f0401bd55e5 images-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/events/0B004F0401BD55E5/images.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-events-0b004f0401bd55e5-images-json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
-      "path": "api get discovery v2 events g5dizfkn0b-bh-json",
-      "summary": "Documented GET /discovery/v2/events/G5diZfkn0B-bh.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 events g5dizfkn0b-bh-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/events/G5diZfkn0B-bh.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-events-g5dizfkn0b-bh-json",
       "risk": "low",
       "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
       "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
@@ -417,26 +225,6 @@
         }
       ],
       "operation": "ticketmaster.get.discovery-v2-events-id-images",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
-      "path": "api get discovery v2 events-json",
-      "summary": "Documented GET /discovery/v2/events.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 events-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/events.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-events-json",
       "risk": "low",
       "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
       "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
@@ -497,46 +285,6 @@
         }
       ],
       "operation": "ticketmaster.get.discovery-v2-venues-id",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
-      "path": "api get discovery v2 venues kovzpzafniea-json",
-      "summary": "Documented GET /discovery/v2/venues/KovZpZAFnIEA.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 venues kovzpzafniea-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/venues/KovZpZAFnIEA.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-venues-kovzpzafniea-json",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
-    },
-    {
-      "path": "api get discovery v2 venues-json",
-      "summary": "Documented GET /discovery/v2/venues.json (not implemented)",
-      "intent": "direct_read",
-      "availability": "not_implemented",
-      "source_url": "https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/",
-      "examples": [
-        "pm ticketmaster api get discovery v2 venues-json --help"
-      ],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/discovery/v2/venues.json"
-        }
-      ],
-      "operation": "ticketmaster.get.discovery-v2-venues-json",
       "risk": "low",
       "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
       "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
