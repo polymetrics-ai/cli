@@ -1037,6 +1037,25 @@ make lint
 0 issues.
 ```
 
+## Review repair — direct authentication routing and response history (2026-08-10)
+
+Red: the Docker Hub custom PAT hook used the dedicated auth_url, but the three approved direct
+authentication writes still resolved their POST targets from base_url. A foreign data API base
+could receive a supplied password or PAT. Successful session-token responses were also appended to
+plaintext reverse-run state and exposed through reverse-run history.
+
+Green: declared REST operations can now select an independent base URL, and all three Docker Hub
+credential exchanges select auth_url; the runtime uses that same resolved base for the actual
+dispatch. Response-sensitive direct-write results still return unchanged from the approved run, but
+their bodies are stripped before reverse-run persistence and history listing. The focused regression
+uses synthetic fixture values and proves a foreign base receives no direct authentication request.
+Docker Hub manuals, skill, and website connector artifacts were regenerated from the bundle.
+
+This gate-owned review uses golang-how-to, golang-security, golang-safety, golang-error-handling,
+golang-lint, and golang-testing; the outer executor retains GSD lifecycle ownership.
+
+    go test -timeout 20m ./internal/app ./internal/connectors/engine ./internal/connectors/defs/dockerhub ./internal/cli -run '^(TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken|TestDockerhubPATExchangeUsesDedicatedAuthURL|TestDocsGenerateAndValidateConnectorDocs)$' -count=1
+
 ## Review repair — opaque interpolated path segments (2026-08-10)
 
 Red: the direct-read validator rejected a standalone `.`, but stream and write paths use

@@ -33,6 +33,7 @@ const (
 type preparedOperationDirectWrite struct {
 	op              OperationSpec
 	cfg             connectors.RuntimeConfig
+	baseURL         string
 	method          string
 	path            string
 	requestPath     string
@@ -96,6 +97,7 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 		defer cancel()
 
 		runtimeBundle := b
+		runtimeBundle.HTTP.URL = prepared.baseURL
 		if prepared.authMode == "none" {
 			runtimeBundle.HTTP.Auth = nil
 		}
@@ -171,13 +173,14 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 				return bodyErr
 			}
 			result = connectors.OperationDirectWriteResult{
-				Connector: b.Name,
-				Operation: prepared.op.ID,
-				Method:    prepared.method,
-				Path:      prepared.path,
-				Status:    response.Status,
-				Body:      body,
-				GraphQL:   metadata,
+				Connector:         b.Name,
+				Operation:         prepared.op.ID,
+				Method:            prepared.method,
+				Path:              prepared.path,
+				Status:            response.Status,
+				Body:              body,
+				GraphQL:           metadata,
+				ResponseSensitive: prepared.op.ResponseSensitive,
 			}
 			return nil
 		}
@@ -186,12 +189,13 @@ func OperationDirectWrite(ctx context.Context, b Bundle, req connectors.Operatio
 			return err
 		}
 		result = connectors.OperationDirectWriteResult{
-			Connector: b.Name,
-			Operation: prepared.op.ID,
-			Method:    prepared.method,
-			Path:      prepared.path,
-			Status:    response.Status,
-			Body:      body,
+			Connector:         b.Name,
+			Operation:         prepared.op.ID,
+			Method:            prepared.method,
+			Path:              prepared.path,
+			Status:            response.Status,
+			Body:              body,
+			ResponseSensitive: prepared.op.ResponseSensitive,
 		}
 		return nil
 	})
@@ -404,7 +408,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 			return preparedOperationDirectWrite{}, err
 		}
 	}
-	baseURL, err := operationDirectWriteBaseURL(b, cfg)
+	baseURL, err := operationDirectWriteBaseURL(b, op, cfg)
 	if err != nil {
 		return preparedOperationDirectWrite{}, err
 	}
@@ -453,6 +457,7 @@ func prepareOperationDirectWrite(ctx context.Context, b Bundle, req connectors.O
 	return preparedOperationDirectWrite{
 		op:              op,
 		cfg:             cfg,
+		baseURL:         baseURL,
 		method:          method,
 		path:            resolvedPath,
 		requestPath:     requestPath,
@@ -538,6 +543,7 @@ func prepareOperationGraphQLDirectWrite(b Bundle, op OperationSpec, method strin
 	return preparedOperationDirectWrite{
 		op:              op,
 		cfg:             cfg,
+		baseURL:         baseURL,
 		method:          method,
 		path:            op.GraphQL.Path,
 		requestPath:     requestPath,
@@ -733,8 +739,12 @@ func clampOperationDirectWriteMaxBytes(declared int) int {
 	return declared
 }
 
-func operationDirectWriteBaseURL(b Bundle, cfg connectors.RuntimeConfig) (string, error) {
-	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
+func operationDirectWriteBaseURL(b Bundle, op OperationSpec, cfg connectors.RuntimeConfig) (string, error) {
+	template := b.HTTP.URL
+	if op.REST != nil && strings.TrimSpace(op.REST.BaseURL) != "" {
+		template = op.REST.BaseURL
+	}
+	baseURL, err := Interpolate(template, requestVars(cfg, nil, ""))
 	if err != nil {
 		return "", fmt.Errorf("operation direct write resolve base URL: %w", err)
 	}

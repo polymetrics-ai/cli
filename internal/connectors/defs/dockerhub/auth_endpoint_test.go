@@ -74,11 +74,23 @@ func TestDockerhubPATExchangeUsesDedicatedAuthURL(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load Docker Hub bundle: %v", err)
 	}
-	if got := bundle.Spec.Defaults()["auth_url"]; got != "https://hub.docker.com/v2/users/login" {
-		t.Fatalf("auth_url default = %q, want Docker Hub login endpoint", got)
+	if got := bundle.Spec.Defaults()["auth_url"]; got != "https://hub.docker.com/v2" {
+		t.Fatalf("auth_url default = %q, want Docker Hub authentication API base", got)
 	}
-	if got := bundle.HTTP.Auth[0].TokenURL; got != "{{ config.auth_url }}" {
-		t.Fatalf("Docker Hub PAT token URL template = %q, want config.auth_url", got)
+	if got := bundle.HTTP.Auth[0].TokenURL; got != "{{ config.auth_url }}/users/login" {
+		t.Fatalf("Docker Hub PAT token URL template = %q, want config.auth_url/users/login", got)
+	}
+	for _, operation := range []string{"dockerhub.create_auth_token", "dockerhub.create_login", "dockerhub.create_2fa_login"} {
+		var found *engine.OperationSpec
+		for i := range bundle.Operations {
+			if bundle.Operations[i].ID == operation {
+				found = &bundle.Operations[i]
+				break
+			}
+		}
+		if found == nil || found.REST == nil || found.REST.BaseURL != "{{ config.auth_url }}" || !found.ResponseSensitive {
+			t.Fatalf("%s must use the dedicated response-sensitive authentication base", operation)
+		}
 	}
 
 	hooks := dockerhubhooks.New().(*dockerhubhooks.Hooks)
@@ -86,7 +98,7 @@ func TestDockerhubPATExchangeUsesDedicatedAuthURL(t *testing.T) {
 	runtime, err := engine.NewRuntime(context.Background(), bundle, connectors.RuntimeConfig{
 		Config: map[string]string{
 			"base_url":        foreign.URL + "/v2",
-			"auth_url":        authServer.URL + "/v2/users/login",
+			"auth_url":        authServer.URL + "/v2",
 			"docker_username": "fixture-user",
 			"namespace":       "fixture",
 		},

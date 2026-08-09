@@ -2447,20 +2447,27 @@ func approvalConsumptionUncertainError(plan ReversePlan, cause error) error {
 func (a *App) finishReverseWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
 	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
 		return safety.RedactErrorText(err.Error())
-	})
+	}, nil)
 }
 
-// finishOperationDirectWrite preserves the direct-write error text in its
-// persisted report. The generic reverse-ETL path deliberately retains its
-// existing rendering behavior; only rest_write has the captain's complete
-// runtime-content policy.
 func (a *App) finishOperationDirectWrite(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error) (ReverseRun, error) {
 	return a.finishReverseWriteWithErrorText(planID, run, result, staged, writeErr, func(err error) string {
 		return err.Error()
-	})
+	}, stripSensitiveOperationDirectWriteResponse)
 }
 
-func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error, errorText func(error) string) (ReverseRun, error) {
+func stripSensitiveOperationDirectWriteResponse(run ReverseRun) ReverseRun {
+	if run.OperationDirectWrite == nil || !run.OperationDirectWrite.ResponseSensitive {
+		return run
+	}
+	result := *run.OperationDirectWrite
+	result.Body = nil
+	result.ResponseSensitive = false
+	run.OperationDirectWrite = &result
+	return run
+}
+
+func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, result connectors.WriteResult, staged int, writeErr error, errorText func(error) string, persist func(ReverseRun) ReverseRun) (ReverseRun, error) {
 	run.RecordsSucceeded = result.RecordsWritten
 	run.RecordsFailed = result.RecordsFailed
 	run.CompletedAt = time.Now().UTC()
@@ -2475,8 +2482,12 @@ func (a *App) finishReverseWriteWithErrorText(planID string, run ReverseRun, res
 	} else {
 		run.Status = "completed"
 	}
+	persistedRun := run
+	if persist != nil {
+		persistedRun = persist(run)
+	}
 	updated, persistErr := a.updateState(func(current state) (state, error) {
-		current.ReverseRuns = append(current.ReverseRuns, run)
+		current.ReverseRuns = append(current.ReverseRuns, persistedRun)
 		for i := range current.ReversePlans {
 			if current.ReversePlans[i].ID == planID && (current.ReversePlans[i].Status == "executing" || current.ReversePlans[i].Status == reversePlanStatusApprovalConsumptionUncertain) {
 				current.ReversePlans[i].Status = planStatus

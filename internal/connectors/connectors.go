@@ -485,13 +485,14 @@ type OperationDirectWriteRequest struct {
 // fixed-document GraphQL mutation. Body is nil only for an output policy that
 // intentionally discards response content.
 type OperationDirectWriteResult struct {
-	Connector string                   `json:"connector"`
-	Operation string                   `json:"operation"`
-	Method    string                   `json:"method"`
-	Path      string                   `json:"path"`
-	Status    int                      `json:"status"`
-	Body      any                      `json:"body,omitempty"`
-	GraphQL   *GraphQLResponseMetadata `json:"graphql,omitempty"`
+	Connector         string                   `json:"connector"`
+	Operation         string                   `json:"operation"`
+	Method            string                   `json:"method"`
+	Path              string                   `json:"path"`
+	Status            int                      `json:"status"`
+	Body              any                      `json:"body,omitempty"`
+	GraphQL           *GraphQLResponseMetadata `json:"graphql,omitempty"`
+	ResponseSensitive bool                     `json:"-"`
 }
 
 // OperationDirectWriteMetadata is the no-network operation metadata needed by

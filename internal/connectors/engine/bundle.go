@@ -756,19 +756,20 @@ type OperationSpec struct {
 	// It is a pointer because false is restrictive while the omitted default is
 	// permissive; see WriteAction.Batchable for the matching write-action
 	// contract. Read it through IsBatchable, never directly.
-	Batchable       *bool                   `json:"batchable,omitempty"`
-	SecretSensitive bool                    `json:"secret_sensitive,omitempty"`
-	SensitivePolicy *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
-	AuditEvent      string                  `json:"audit_event,omitempty"`
-	REST            *RESTOperationSpec      `json:"rest,omitempty"`
-	GraphQL         *GraphQLOperationSpec   `json:"graphql,omitempty"`
-	XML             *XMLOperationSpec       `json:"xml,omitempty"`
-	Binary          *BinaryOperationSpec    `json:"binary,omitempty"`
-	File            *FileOperationSpec      `json:"file,omitempty"`
-	LocalGit        *LocalGitOperationSpec  `json:"local_git,omitempty"`
-	LocalFile       *LocalFileOperationSpec `json:"local_file,omitempty"`
-	Browser         *BrowserOperationSpec   `json:"browser,omitempty"`
-	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
+	Batchable         *bool                   `json:"batchable,omitempty"`
+	SecretSensitive   bool                    `json:"secret_sensitive,omitempty"`
+	ResponseSensitive bool                    `json:"response_sensitive,omitempty"`
+	SensitivePolicy   *SensitivePolicySpec    `json:"sensitive_policy,omitempty"`
+	AuditEvent        string                  `json:"audit_event,omitempty"`
+	REST              *RESTOperationSpec      `json:"rest,omitempty"`
+	GraphQL           *GraphQLOperationSpec   `json:"graphql,omitempty"`
+	XML               *XMLOperationSpec       `json:"xml,omitempty"`
+	Binary            *BinaryOperationSpec    `json:"binary,omitempty"`
+	File              *FileOperationSpec      `json:"file,omitempty"`
+	LocalGit          *LocalGitOperationSpec  `json:"local_git,omitempty"`
+	LocalFile         *LocalFileOperationSpec `json:"local_file,omitempty"`
+	Browser           *BrowserOperationSpec   `json:"browser,omitempty"`
+	Composite         *CompositeOperationSpec `json:"composite,omitempty"`
 }
 
 // IsBatchable reports whether the operation may be placed in a bulk plan.
@@ -792,6 +793,7 @@ type OperationParameter struct {
 type RESTOperationSpec struct {
 	Method      string `json:"method"`
 	Path        string `json:"path"`
+	BaseURL     string `json:"base_url,omitempty"`
 	ContentType string `json:"content_type,omitempty"`
 	AuthMode    string `json:"auth_mode,omitempty"`
 	MaxBytes    int    `json:"max_bytes,omitempty"`

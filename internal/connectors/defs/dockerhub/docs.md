@@ -23,10 +23,10 @@ Connection fields:
 
 - `base_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`; Docker Hub
   registry API base URL override for tests or self-hosted proxies.
-- `auth_url` (optional, string); default `https://hub.docker.com/v2/users/login`; format `uri`;
-  Docker Hub PAT session-exchange endpoint. It is intentionally independent of `base_url` so a
-  data API proxy cannot receive `docker_pat`; override it only for a trusted HTTPS test or
-  self-hosted authentication proxy.
+- `auth_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`;
+  Docker Hub authentication API base URL. It is intentionally independent of `base_url` so a
+  data API proxy cannot receive Docker Hub credential-exchange requests; override it only for a
+  trusted HTTPS test or self-hosted authentication proxy.
 - `docker_username` (required, string); Docker Hub username used to authenticate `docker_pat`.
   Lowercase alphanumerics, underscores, and hyphens only.
 - `namespace` (required, string); Docker Hub user or organization namespace whose repositories and
@@ -63,7 +63,7 @@ Connection fields:
   'latest'). Required only when reading the 'tag_detail' stream.
 
 Default configuration values: `base_url=https://hub.docker.com/v2`,
-`auth_url=https://hub.docker.com/v2/users/login`, `page_size=100`, `tier=free`,
+`auth_url=https://hub.docker.com/v2`, `page_size=100`, `tier=free`,
 `auth_type=unauthenticated`.
 
 Authentication behavior:
@@ -72,7 +72,8 @@ Authentication behavior:
   writes) — only the 4 public-read streams and the 3 status-only existence checks are usable.
 - `docker_pat` configured: every non-SCIM request authenticates via a `dockerhub` AuthHook
   (`internal/connectors/hooks/dockerhub`) that exchanges `docker_username`/`docker_pat` for a
-  short-lived session bearer JWT through Docker Hub's own `POST /v2/users/login` at `auth_url`,
+  short-lived session bearer JWT through Docker Hub's own `POST /v2/users/login` at
+  `auth_url/users/login`,
   caches it until 60s before the JWT's own `exp` claim (a conservative 4-minute cache is used if
   `exp` cannot be parsed), and sends it as `Authorization: Bearer <jwt>` on every subsequent
   request. The long-lived PAT itself is never sent as a static bearer token and never logged.
@@ -147,9 +148,10 @@ removal) additionally require typed destructive confirmation.
   because argv can be observed by other local processes and shell history. The operator-visible
   plan sample redacts `secret`, `password`, `login_2fa_token`, and `code` as appropriate, while
   the execution record is retained after the warning so the approved request can run. The provider
-  response, including a resulting token, is returned unchanged and must be handled as secret
-  material. The internal `dockerhub` AuthHook continues to perform its separate session-login
-  exchange when `docker_pat` is configured.
+  response, including a resulting token, is returned unchanged immediately and must be handled as
+  secret material; session-token response bodies are not retained in reverse-run history. The
+  internal `dockerhub` AuthHook continues to perform its separate session-login exchange when
+  `docker_pat` is configured.
 - Groups (teams): `groups list`/`get` (direct read), `groups create`, `groups replace` (PUT, full
   update), `groups update` (PATCH, partial update), `groups delete` (destructive), `groups members
   list` (direct read), `groups members add`, `groups members remove` (destructive).

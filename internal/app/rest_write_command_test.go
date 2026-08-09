@@ -292,9 +292,16 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 	ctx := context.Background()
 	const suppliedPassword = "fixture-password"
 	const returnedToken = "fixture-session-token"
-	calls := 0
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		calls++
+	foreignCalls := 0
+	foreign := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		foreignCalls++
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	t.Cleanup(foreign.Close)
+
+	authCalls := 0
+	authServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authCalls++
 		if r.Method != http.MethodPost || r.URL.Path != "/v2/users/login" {
 			t.Fatalf("request = %s %s, want POST /v2/users/login", r.Method, r.URL.Path)
 		}
@@ -306,12 +313,12 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 			t.Fatalf("decode request body: %v", err)
 		}
 		if body["username"] != "fixture-user" || body["password"] != suppliedPassword {
-			t.Fatalf("request body = %#v, want supplied login fields", body)
+			t.Fatal("login request did not contain the supplied fields")
 		}
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"token":"` + returnedToken + `"}`))
 	}))
-	t.Cleanup(server.Close)
+	t.Cleanup(authServer.Close)
 
 	root := t.TempDir()
 	if err := app.InitProject(root); err != nil {
@@ -324,7 +331,11 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
 		Name:      "dockerhub-auth-local",
 		Connector: "dockerhub",
-		Config:    map[string]string{"namespace": "fixture", "base_url": server.URL},
+		Config: map[string]string{
+			"namespace": "fixture",
+			"base_url":  foreign.URL + "/v2",
+			"auth_url":  authServer.URL + "/v2",
+		},
 	}); err != nil {
 		t.Fatalf("AddCredential: %v", err)
 	}
@@ -343,19 +354,19 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 		t.Fatalf("PlanConnectorCommand: %v", err)
 	}
 	if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
-		t.Fatalf("plan/preview = %#v/%#v, want preview-bound approval", plan, preview)
+		t.Fatal("plan did not produce a preview-bound approval")
 	}
-	if calls != 0 {
-		t.Fatalf("planning reached the network; calls = %d", calls)
+	if authCalls != 0 || foreignCalls != 0 {
+		t.Fatal("planning reached a network endpoint")
 	}
 	if got := plan.ConnectorCommandRecord["password"]; got != suppliedPassword {
-		t.Fatalf("execution record password = %#v, want retained supplied value", got)
+		t.Fatal("execution record did not retain the supplied password")
 	}
 	if len(plan.Sample) != 1 || plan.Sample[0]["password"] != "redacted" {
-		t.Fatalf("plan sample = %#v, want redacted password", plan.Sample)
+		t.Fatal("plan sample did not redact the password")
 	}
 	if len(plan.RedactFields) != 1 || plan.RedactFields[0] != "password" {
-		t.Fatalf("plan redact fields = %#v, want password", plan.RedactFields)
+		t.Fatal("plan did not retain the password redaction field")
 	}
 
 	reopened, err := app.Open(root)
@@ -367,19 +378,45 @@ func TestDockerHubAuthLoginPlanRedactsCredentialInputAndReturnsProviderToken(t *
 		t.Fatalf("GetReversePlan: %v", err)
 	}
 	if stored.ConnectorCommandRecord["password"] != suppliedPassword || len(stored.Sample) != 1 || stored.Sample[0]["password"] != "redacted" {
-		t.Fatalf("stored plan = %#v, want retained execution record and redacted sample", stored)
+		t.Fatal("stored plan did not retain the execution record and redacted sample")
 	}
 
 	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken})
 	if err != nil {
 		t.Fatalf("RunReverseETL: %v", err)
 	}
-	if calls != 1 || run.OperationDirectWrite == nil {
-		t.Fatalf("run/calls = %#v/%d, want one direct write", run, calls)
+	if authCalls != 1 || run.OperationDirectWrite == nil {
+		t.Fatal("approved direct auth write did not reach the dedicated authentication endpoint")
+	}
+	if foreignCalls != 0 {
+		t.Fatal("foreign base URL received a direct authentication request")
 	}
 	body, ok := run.OperationDirectWrite.Body.(map[string]any)
 	if !ok || body["token"] != returnedToken {
-		t.Fatalf("operation response = %#v, want unredacted provider token", run.OperationDirectWrite.Body)
+		t.Fatal("immediate operation response did not retain the provider token")
+	}
+
+	persisted, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("reopen after direct auth: %v", err)
+	}
+	history, err := persisted.GetReverseRun(run.ID)
+	if err != nil {
+		t.Fatalf("GetReverseRun: %v", err)
+	}
+	if history.OperationDirectWrite == nil || history.OperationDirectWrite.Body != nil {
+		t.Fatal("reverse-run history retained a direct authentication response body")
+	}
+	listed := persisted.ListReverseRuns()
+	if len(listed) != 1 || listed[0].OperationDirectWrite == nil || listed[0].OperationDirectWrite.Body != nil {
+		t.Fatal("reverse-run listing retained a direct authentication response body")
+	}
+	stateBytes, err := os.ReadFile(filepath.Join(a.ProjectDir(), "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read reverse-run state: %v", err)
+	}
+	if strings.Contains(string(stateBytes), returnedToken) {
+		t.Fatal("state retained the session token")
 	}
 }
 

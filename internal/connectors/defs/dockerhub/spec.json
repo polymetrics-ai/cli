@@ -31,8 +31,8 @@
     "auth_url": {
       "type": "string",
       "format": "uri",
-      "default": "https://hub.docker.com/v2/users/login",
-      "description": "Docker Hub PAT session-exchange endpoint. It is intentionally independent of base_url so a data API proxy cannot receive docker_pat; override only for a trusted HTTPS test or self-hosted authentication proxy."
+      "default": "https://hub.docker.com/v2",
+      "description": "Docker Hub authentication API base URL. It is intentionally independent of base_url so a data API proxy cannot receive Docker Hub credential-exchange requests; override only for a trusted HTTPS test or self-hosted authentication proxy."
     },
     "page_size": {
       "type": "integer",

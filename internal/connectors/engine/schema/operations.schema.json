@@ -63,6 +63,7 @@
             }
           },
           "secret_sensitive": { "type": "boolean" },
+          "response_sensitive": { "type": "boolean" },
           "sensitive_policy": {
             "type": "object",
             "additionalProperties": false,
@@ -94,6 +95,7 @@
             "properties": {
               "method": { "type": "string" },
               "path": { "type": "string" },
+              "base_url": { "type": "string" },
               "content_type": { "type": "string" },
               "auth_mode": { "type": "string", "enum": ["none"] },
               "max_bytes": { "type": "integer" },
