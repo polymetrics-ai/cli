@@ -863,9 +863,52 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceValidationDeclarations(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceEnvOnlyFlags(b, i, cmd, operations)...)
 		findings = append(findings, checkCLISurfaceStructuredJSONFlags(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
+	}
+	return findings
+}
+
+// checkCLISurfaceEnvOnlyFlags keeps --from-env a narrow secret-delivery
+// channel rather than a second, untyped source of arbitrary command values.
+// An env_only declaration is permitted only for the complete JSON input of a
+// sensitive fixed GraphQL mutation, where the operation itself declares the
+// corresponding redaction and typed-confirmation contract.
+func checkCLISurfaceEnvOnlyFlags(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	operations map[string]engine.OperationSpec,
+) []Finding {
+	var findings []Finding
+	for _, flag := range cmd.Flags {
+		if !flag.EnvOnly {
+			continue
+		}
+		op, found := operations[cmd.Operation]
+		variable, mapsToBody := strings.CutPrefix(strings.TrimSpace(flag.MapsTo), "body.")
+		valid := cmd.Availability == "implemented" &&
+			cmd.Intent == "direct_write" &&
+			flag.Type == "json" &&
+			flag.Required &&
+			mapsToBody && variable != "" && !strings.Contains(variable, ".") &&
+			found && op.Kind == "graphql_mutation" &&
+			strings.EqualFold(op.MutationClass, "secret") &&
+			op.SensitivePolicy != nil &&
+			strings.EqualFold(op.SensitivePolicy.InputMode, "env") &&
+			strings.EqualFold(op.SensitivePolicy.ApprovalMode, "typed_confirmation") &&
+			slices.Contains(op.SensitivePolicy.RedactFields, "body."+variable)
+		if valid {
+			continue
+		}
+		findings = append(findings, Finding{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("command %d (%q) env_only flag --%s must be a required top-level JSON input for an implemented secret GraphQL mutation with env redaction and typed confirmation", i, cmd.Path, flag.Name),
+		})
 	}
 	return findings
 }

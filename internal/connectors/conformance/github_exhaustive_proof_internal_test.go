@@ -3,6 +3,7 @@ package conformance
 import (
 	"context"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -450,6 +451,12 @@ func syntheticSchemaValue(raw json.RawMessage, field string) any {
 	case "boolean":
 		return true
 	case "string":
+		// GitHub secret-set actions accept a caller-sealed ciphertext, not a
+		// plaintext value. The provider-double must exercise that declared
+		// encrypted_value schema without inventing or retaining secret material.
+		if strings.Contains(strings.ToLower(field), "encrypted_value") {
+			return base64.StdEncoding.EncodeToString([]byte("provider-double"))
+		}
 		if format == "uri" {
 			return "https://provider-double.invalid/resource"
 		}
@@ -646,12 +653,6 @@ func runGitHubOperationProviderDouble(t *testing.T, b engine.Bundle, operation e
 		row.Reason = "no declared GraphQL stream binds operation " + operation.ID
 		return row
 	case "graphql_mutation":
-		if isGitHubIssueDeleteOperation(operation) {
-			row.State = "blocked"
-			row.Route = "PM command safety policy"
-			row.Reason = "issue delete remains explicitly non-executable under the recorded provider/product decision"
-			return row
-		}
 		if strings.HasPrefix(operation.ID, "github.graphql.mutation.") {
 			return runGitHubGraphQLMutationProviderDouble(t, b, operation)
 		}
@@ -683,10 +684,6 @@ func runGitHubOperationProviderDouble(t *testing.T, b engine.Bundle, operation e
 		row.Reason = "operation kind has no declared provider-double executor"
 		return row
 	}
-}
-
-func isGitHubIssueDeleteOperation(operation engine.OperationSpec) bool {
-	return operation.ID == "github.issue.delete" || operation.ID == "github.graphql.mutation.delete-issue"
 }
 
 func githubGraphQLProviderDoubleResponse(operation engine.OperationSpec) ([]byte, error) {

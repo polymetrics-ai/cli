@@ -85,25 +85,6 @@
       }
     },
     {
-      "id": "github.issue.delete",
-      "kind": "graphql_mutation",
-      "summary": "Delete an issue using a fixed GraphQL mutation.",
-      "source_url": "https://cli.github.com/manual/gh_issue_delete",
-      "risk": "critical",
-      "approval": "destructive reverse ETL writes require plan, preview, approval, execute",
-      "output_policy": "json",
-      "auth_scopes": [
-        "repo",
-        "public_repo"
-      ],
-      "mutation_class": "delete",
-      "destructive": true,
-      "graphql": {
-        "operation_name": "DeleteIssue",
-        "document": "mutation DeleteIssue($issueId: ID!) { deleteIssue(input: { issueId: $issueId }) { clientMutationId } }"
-      }
-    },
-    {
       "id": "github.release.download_assets",
       "kind": "binary_download",
       "summary": "Download release assets with a bounded file-transfer policy.",
@@ -7417,6 +7398,1263 @@
       }
     },
     {
+      "id": "github.app_installations_installation_id_access_tokens",
+      "kind": "rest_write",
+      "summary": "POST /app/installations/{installation_id}/access_tokens",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/app/installations/{installation_id}/access_tokens"
+      }
+    },
+    {
+      "id": "github.actions_artifacts_artifact_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.actions_artifacts_artifact_id2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_artifacts",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_force_cancel",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel"
+      }
+    },
+    {
+      "id": "github.actions_runs_run_id_rerun_failed_jobs",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs"
+      }
+    },
+    {
+      "id": "github.actions_workflows_workflow_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.actions_workflows_workflow_id_runs",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.activity",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/activity",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/activity",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.agents_organization_secrets",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/agents/organization-secrets",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/agents/organization-secrets",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.agents_organization_variables",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/agents/organization-variables",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/agents/organization-variables",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.agents_secrets",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/agents/secrets",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/agents/secrets",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.agents_secrets_public_key",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/agents/secrets/public-key",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/agents/secrets/public-key",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.agents_secrets_secret_name",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.agents_secrets_secret_name2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.agents_secrets_secret_name3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/agents/secrets/{secret_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "github_secret_encryption",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.agents_variables",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/agents/variables",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/agents/variables",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.agents_variables2",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/agents/variables",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/agents/variables"
+      }
+    },
+    {
+      "id": "github.agents_variables_name",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/agents/variables/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/agents/variables/{name}"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.agents_variables_name2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/agents/variables/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/agents/variables/{name}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.agents_variables_name3",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/agents/variables/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/agents/variables/{name}"
+      }
+    },
+    {
+      "id": "github.assignees",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/assignees",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/assignees",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.autolinks_autolink_id2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/autolinks/{autolink_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.branches_branch",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/branches/{branch}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/branches/{branch}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.code_scanning_alerts_alert_number",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.collaborators_username",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/collaborators/{username}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/collaborators/{username}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.collaborators_username_permission",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/collaborators/{username}/permission",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/collaborators/{username}/permission",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.comments_comment_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/comments/{comment_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/comments/{comment_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.commits_commit_sha_comments",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/comments",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/commits/{commit_sha}/comments",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.commits_ref",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/commits/{ref}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/commits/{ref}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.dependabot_alerts_alert_number",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.deployments_deployment_id2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.deployments_deployment_id_statuses_status_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.environments_environment_name",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.events",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/events",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/events",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.git_commits_commit_sha",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/git/commits/{commit_sha}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.git_matching_refs_ref",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/git/matching-refs/{ref}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.git_tags",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/git/tags",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/git/tags"
+      }
+    },
+    {
+      "id": "github.hooks_hook_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.hooks_hook_id_config",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/config",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.hooks_hook_id_config2",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config"
+      }
+    },
+    {
+      "id": "github.issues_comments_comment_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/comments/{comment_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.issues_events_event_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/events/{event_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/events/{event_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.issues_issue_number",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.issues_issue_number_comments",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/comments",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.issues_issue_number_events",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/events",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/events",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.issues_issue_number_labels",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.issues_issue_number_labels2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/labels",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.issues_issue_number_timeline",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/timeline",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/timeline",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.keys_key_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/keys/{key_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/keys/{key_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.labels_name",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/labels/{name}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/labels/{name}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.milestones_milestone_number",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/milestones/{milestone_number}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/milestones/{milestone_number}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.pulls_comments_comment_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/comments/{comment_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.pulls_pull_number",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_comments",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/comments",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_comments_comment_id_replies",
+      "kind": "rest_write",
+      "summary": "POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies"
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_requested_reviewers2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_reviews_review_id",
+      "kind": "rest_write",
+      "summary": "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.pulls_pull_number_reviews_review_id2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.pulls_pull_number_reviews_review_id3",
+      "kind": "rest_write",
+      "summary": "PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+      }
+    },
+    {
+      "id": "github.releases_latest",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/releases/latest",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/releases/latest",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.releases_tags_tag",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/releases/tags/{tag}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/releases/tags/{tag}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.releases_release_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/releases/{release_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/releases/{release_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.rules_branches_branch",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/rules/branches/{branch}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/rules/branches/{branch}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.rulesets_ruleset_id",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.secret_scanning_alerts_alert_number",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.security_advisories_ghsa_id2",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.topics",
+      "kind": "rest_read",
+      "summary": "Read /repos/{owner}/{repo}/topics",
+      "source_url": "https://docs.github.com/en/rest",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/repos/{owner}/{repo}/topics",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "github.applications_client_id_grant",
+      "kind": "rest_write",
+      "summary": "DELETE /applications/{client_id}/grant",
+      "source_url": "https://docs.github.com/rest/apps/oauth-applications#delete-an-app-authorization",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/applications/{client_id}/grant"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.applications_client_id_token",
+      "kind": "rest_write",
+      "summary": "POST /applications/{client_id}/token",
+      "source_url": "https://docs.github.com/rest/apps/oauth-applications#check-a-token",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "POST",
+        "path": "/applications/{client_id}/token"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.applications_client_id_token2",
+      "kind": "rest_write",
+      "summary": "PATCH /applications/{client_id}/token",
+      "source_url": "https://docs.github.com/rest/apps/oauth-applications#reset-a-token",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "secret",
+      "rest": {
+        "method": "PATCH",
+        "path": "/applications/{client_id}/token"
+      },
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "value",
+          "encrypted_value"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
+    },
+    {
+      "id": "github.applications_client_id_token3",
+      "kind": "rest_write",
+      "summary": "DELETE /applications/{client_id}/token",
+      "source_url": "https://docs.github.com/rest/apps/oauth-applications#delete-an-app-token",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (typed confirmation)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "rest": {
+        "method": "DELETE",
+        "path": "/applications/{client_id}/token"
+      },
+      "destructive": true
+    },
+    {
+      "id": "github.org_custom_pattern_update_pattern",
+      "kind": "rest_write",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_pattern)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.org_custom_pattern_update_start_delimiter",
+      "kind": "rest_write",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_start_delimiter)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.org_custom_pattern_update_end_delimiter",
+      "kind": "rest_write",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_end_delimiter)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.org_custom_pattern_update_must_match",
+      "kind": "rest_write",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_must_match)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.org_custom_pattern_update_must_not_match",
+      "kind": "rest_write",
+      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_must_not_match)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.repo_custom_pattern_update_pattern",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_pattern)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.repo_custom_pattern_update_start_delimiter",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_start_delimiter)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.repo_custom_pattern_update_end_delimiter",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_end_delimiter)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.repo_custom_pattern_update_must_match",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_must_match)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.repo_custom_pattern_update_must_not_match",
+      "kind": "rest_write",
+      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_must_not_match)",
+      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
+      }
+    },
+    {
+      "id": "github.user_emails_add_object",
+      "kind": "rest_write",
+      "summary": "POST /user/emails (user_emails_add_object)",
+      "source_url": "https://docs.github.com/rest/users/emails#add-an-email-address-for-the-authenticated-user",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/user/emails"
+      }
+    },
+    {
+      "id": "github.user_emails_add_array",
+      "kind": "rest_write",
+      "summary": "POST /user/emails (user_emails_add_array)",
+      "source_url": "https://docs.github.com/rest/users/emails#add-an-email-address-for-the-authenticated-user",
+      "risk": "low",
+      "approval": "plan, approval, execute",
+      "output_policy": "json",
+      "mutation_class": "admin",
+      "rest": {
+        "method": "POST",
+        "path": "/user/emails"
+      }
+    },
+    {
+      "id": "github.user_emails_delete_object",
+      "kind": "rest_write",
+      "summary": "DELETE /user/emails (user_emails_delete_object)",
+      "source_url": "https://docs.github.com/rest/users/emails#delete-an-email-address-for-the-authenticated-user",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (caller-supplied intent acknowledgement)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/user/emails"
+      }
+    },
+    {
+      "id": "github.user_emails_delete_array",
+      "kind": "rest_write",
+      "summary": "DELETE /user/emails (user_emails_delete_array)",
+      "source_url": "https://docs.github.com/rest/users/emails#delete-an-email-address-for-the-authenticated-user",
+      "risk": "low",
+      "approval": "plan, preview, approval, execute (caller-supplied intent acknowledgement)",
+      "output_policy": "json",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "rest": {
+        "method": "DELETE",
+        "path": "/user/emails"
+      }
+    },
+    {
       "id": "github.graphql.query.code-of-conduct",
       "kind": "graphql_query",
       "summary": "Query GitHub GraphQL root codeOfConduct using a fixed typed document.",
@@ -12463,7 +13701,7 @@
       "summary": "Mutate GitHub GraphQL root createMigrationSource using a fixed typed document.",
       "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
       "risk": "high",
-      "approval": "blocked pending an env-only typed GraphQL secret input channel",
+      "approval": "plan, preview, approval, execute (typed destructive confirmation; input via --from-env)",
       "output_policy": "json_redacted",
       "graphql": {
         "operation_name": "GitHubMutationCreateMigrationSource",
@@ -12518,8 +13756,16 @@
           ]
         }
       },
-      "mutation_class": "admin",
-      "destructive": true
+      "mutation_class": "secret",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "body.input"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
     },
     {
       "id": "github.graphql.mutation.create-project",
@@ -15150,7 +16396,7 @@
       "summary": "Mutate GitHub GraphQL root deleteIssue using a fixed typed document.",
       "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
       "risk": "critical",
-      "approval": "blocked by recorded GitHub provider/product decision",
+      "approval": "plan, preview, approval, execute (typed destructive confirmation)",
       "output_policy": "json_redacted",
       "graphql": {
         "operation_name": "GitHubMutationDeleteIssue",
@@ -15182,7 +16428,7 @@
           ]
         }
       },
-      "mutation_class": "delete",
+      "mutation_class": "destructive",
       "destructive": true
     },
     {
@@ -17652,8 +18898,8 @@
       "kind": "graphql_mutation",
       "summary": "Mutate GitHub GraphQL root regenerateVerifiableDomainToken using a fixed typed document.",
       "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-      "risk": "high",
-      "approval": "blocked pending an env-only typed GraphQL secret input channel",
+      "risk": "critical",
+      "approval": "plan, preview, approval, execute (typed destructive confirmation)",
       "output_policy": "json_redacted",
       "graphql": {
         "operation_name": "GitHubMutationRegenerateVerifiableDomainToken",
@@ -17685,7 +18931,7 @@
           ]
         }
       },
-      "mutation_class": "admin",
+      "mutation_class": "destructive",
       "destructive": true
     },
     {
@@ -19595,7 +20841,7 @@
       "summary": "Mutate GitHub GraphQL root startOrganizationMigration using a fixed typed document.",
       "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
       "risk": "high",
-      "approval": "blocked pending an env-only typed GraphQL secret input channel",
+      "approval": "plan, preview, approval, execute (typed destructive confirmation; input via --from-env)",
       "output_policy": "json_redacted",
       "graphql": {
         "operation_name": "GitHubMutationStartOrganizationMigration",
@@ -19639,8 +20885,16 @@
           ]
         }
       },
-      "mutation_class": "admin",
-      "destructive": true
+      "mutation_class": "secret",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "body.input"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
     },
     {
       "id": "github.graphql.mutation.start-repository-migration",
@@ -19648,7 +20902,7 @@
       "summary": "Mutate GitHub GraphQL root startRepositoryMigration using a fixed typed document.",
       "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
       "risk": "high",
-      "approval": "blocked pending an env-only typed GraphQL secret input channel",
+      "approval": "plan, preview, approval, execute (typed destructive confirmation; input via --from-env)",
       "output_policy": "json_redacted",
       "graphql": {
         "operation_name": "GitHubMutationStartRepositoryMigration",
@@ -19716,8 +20970,16 @@
           ]
         }
       },
-      "mutation_class": "admin",
-      "destructive": true
+      "mutation_class": "secret",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "env",
+        "redact_fields": [
+          "body.input"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      }
     },
     {
       "id": "github.graphql.mutation.submit-pull-request-review",
@@ -19824,8 +21086,8 @@
       "kind": "graphql_mutation",
       "summary": "Mutate GitHub GraphQL root transferIssue using a fixed typed document.",
       "source_url": "https://docs.github.com/public/ghec/schema.docs.graphql",
-      "risk": "high",
-      "approval": "plan, preview, approval, execute",
+      "risk": "critical",
+      "approval": "plan, preview, approval, execute (typed destructive confirmation)",
       "output_policy": "json_redacted",
       "graphql": {
         "operation_name": "GitHubMutationTransferIssue",
@@ -19864,7 +21126,8 @@
           ]
         }
       },
-      "mutation_class": "admin"
+      "mutation_class": "destructive",
+      "destructive": true
     },
     {
       "id": "github.graphql.mutation.unarchive-project-v2-item",
@@ -25580,1263 +26843,6 @@
       },
       "mutation_class": "destructive",
       "destructive": true
-    },
-    {
-      "id": "github.app_installations_installation_id_access_tokens",
-      "kind": "rest_write",
-      "summary": "POST /app/installations/{installation_id}/access_tokens",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "POST",
-        "path": "/app/installations/{installation_id}/access_tokens"
-      }
-    },
-    {
-      "id": "github.actions_artifacts_artifact_id",
-      "kind": "rest_write",
-      "summary": "DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "destructive",
-      "rest": {
-        "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}"
-      },
-      "destructive": true
-    },
-    {
-      "id": "github.actions_artifacts_artifact_id2",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/artifacts/{artifact_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.actions_runs_run_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.actions_runs_run_id_artifacts",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.actions_runs_run_id_force_cancel",
-      "kind": "rest_write",
-      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/force-cancel"
-      }
-    },
-    {
-      "id": "github.actions_runs_run_id_rerun_failed_jobs",
-      "kind": "rest_write",
-      "summary": "POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "POST",
-        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs"
-      }
-    },
-    {
-      "id": "github.actions_workflows_workflow_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.actions_workflows_workflow_id_runs",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.activity",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/activity",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/activity",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.agents_organization_secrets",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/agents/organization-secrets",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/agents/organization-secrets",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.agents_organization_variables",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/agents/organization-variables",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/agents/organization-variables",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.agents_secrets",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/agents/secrets",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/agents/secrets",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.agents_secrets_public_key",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/agents/secrets/public-key",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/agents/secrets/public-key",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.agents_secrets_secret_name",
-      "kind": "rest_write",
-      "summary": "DELETE /repos/{owner}/{repo}/agents/secrets/{secret_name}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "destructive",
-      "rest": {
-        "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
-      },
-      "destructive": true
-    },
-    {
-      "id": "github.agents_secrets_secret_name2",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/agents/secrets/{secret_name}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.agents_secrets_secret_name3",
-      "kind": "rest_write",
-      "summary": "PUT /repos/{owner}/{repo}/agents/secrets/{secret_name}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "secret",
-      "rest": {
-        "method": "PUT",
-        "path": "/repos/{owner}/{repo}/agents/secrets/{secret_name}"
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env",
-        "redact_fields": [
-          "value",
-          "encrypted_value"
-        ],
-        "transform": "github_secret_encryption",
-        "approval_mode": "typed_confirmation"
-      }
-    },
-    {
-      "id": "github.agents_variables",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/agents/variables",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/agents/variables",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.agents_variables2",
-      "kind": "rest_write",
-      "summary": "POST /repos/{owner}/{repo}/agents/variables",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "POST",
-        "path": "/repos/{owner}/{repo}/agents/variables"
-      }
-    },
-    {
-      "id": "github.agents_variables_name",
-      "kind": "rest_write",
-      "summary": "DELETE /repos/{owner}/{repo}/agents/variables/{name}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "destructive",
-      "rest": {
-        "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/agents/variables/{name}"
-      },
-      "destructive": true
-    },
-    {
-      "id": "github.agents_variables_name2",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/agents/variables/{name}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/agents/variables/{name}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.agents_variables_name3",
-      "kind": "rest_write",
-      "summary": "PATCH /repos/{owner}/{repo}/agents/variables/{name}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/agents/variables/{name}"
-      }
-    },
-    {
-      "id": "github.assignees",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/assignees",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/assignees",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.autolinks_autolink_id2",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/autolinks/{autolink_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.branches_branch",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/branches/{branch}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/branches/{branch}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.code_scanning_alerts_alert_number",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.collaborators_username",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/collaborators/{username}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/collaborators/{username}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.collaborators_username_permission",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/collaborators/{username}/permission",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/collaborators/{username}/permission",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.comments_comment_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/comments/{comment_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/comments/{comment_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.commits_commit_sha_comments",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/commits/{commit_sha}/comments",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/commits/{commit_sha}/comments",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.commits_ref",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/commits/{ref}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/commits/{ref}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.dependabot_alerts_alert_number",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/dependabot/alerts/{alert_number}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.deployments_deployment_id2",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.deployments_deployment_id_statuses_status_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.environments_environment_name",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/environments/{environment_name}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/environments/{environment_name}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.events",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/events",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/events",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.git_commits_commit_sha",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/git/commits/{commit_sha}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/git/commits/{commit_sha}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.git_matching_refs_ref",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/git/matching-refs/{ref}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/git/matching-refs/{ref}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.git_tags",
-      "kind": "rest_write",
-      "summary": "POST /repos/{owner}/{repo}/git/tags",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "POST",
-        "path": "/repos/{owner}/{repo}/git/tags"
-      }
-    },
-    {
-      "id": "github.hooks_hook_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/hooks/{hook_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.hooks_hook_id_config",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/hooks/{hook_id}/config",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.hooks_hook_id_config2",
-      "kind": "rest_write",
-      "summary": "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/config"
-      }
-    },
-    {
-      "id": "github.issues_comments_comment_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/issues/comments/{comment_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.issues_events_event_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/issues/events/{event_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/events/{event_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.issues_issue_number",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.issues_issue_number_comments",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/comments",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/comments",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.issues_issue_number_events",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/events",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/events",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.issues_issue_number_labels",
-      "kind": "rest_write",
-      "summary": "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "destructive",
-      "rest": {
-        "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels"
-      },
-      "destructive": true
-    },
-    {
-      "id": "github.issues_issue_number_labels2",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/labels",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/labels",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.issues_issue_number_timeline",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/issues/{issue_number}/timeline",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/issues/{issue_number}/timeline",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.keys_key_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/keys/{key_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/keys/{key_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.labels_name",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/labels/{name}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/labels/{name}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.milestones_milestone_number",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/milestones/{milestone_number}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/milestones/{milestone_number}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.pulls_comments_comment_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/pulls/comments/{comment_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.pulls_pull_number",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.pulls_pull_number_comments",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/comments",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.pulls_pull_number_comments_comment_id_replies",
-      "kind": "rest_write",
-      "summary": "POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "POST",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies"
-      }
-    },
-    {
-      "id": "github.pulls_pull_number_requested_reviewers2",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.pulls_pull_number_reviews_review_id",
-      "kind": "rest_write",
-      "summary": "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "destructive",
-      "rest": {
-        "method": "DELETE",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
-      },
-      "destructive": true
-    },
-    {
-      "id": "github.pulls_pull_number_reviews_review_id2",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.pulls_pull_number_reviews_review_id3",
-      "kind": "rest_write",
-      "summary": "PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PUT",
-        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
-      }
-    },
-    {
-      "id": "github.releases_latest",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/releases/latest",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/releases/latest",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.releases_tags_tag",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/releases/tags/{tag}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/releases/tags/{tag}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.releases_release_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/releases/{release_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/releases/{release_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.rules_branches_branch",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/rules/branches/{branch}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/rules/branches/{branch}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.rulesets_ruleset_id",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/rulesets/{ruleset_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/rulesets/{ruleset_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.secret_scanning_alerts_alert_number",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.security_advisories_ghsa_id2",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/security-advisories/{ghsa_id}",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.topics",
-      "kind": "rest_read",
-      "summary": "Read /repos/{owner}/{repo}/topics",
-      "source_url": "https://docs.github.com/en/rest",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repos/{owner}/{repo}/topics",
-        "max_bytes": 1048576
-      }
-    },
-    {
-      "id": "github.applications_client_id_grant",
-      "kind": "rest_write",
-      "summary": "DELETE /applications/{client_id}/grant",
-      "source_url": "https://docs.github.com/rest/apps/oauth-applications#delete-an-app-authorization",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "destructive",
-      "rest": {
-        "method": "DELETE",
-        "path": "/applications/{client_id}/grant"
-      },
-      "destructive": true
-    },
-    {
-      "id": "github.applications_client_id_token",
-      "kind": "rest_write",
-      "summary": "POST /applications/{client_id}/token",
-      "source_url": "https://docs.github.com/rest/apps/oauth-applications#check-a-token",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "secret",
-      "rest": {
-        "method": "POST",
-        "path": "/applications/{client_id}/token"
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env",
-        "redact_fields": [
-          "value",
-          "encrypted_value"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      }
-    },
-    {
-      "id": "github.applications_client_id_token2",
-      "kind": "rest_write",
-      "summary": "PATCH /applications/{client_id}/token",
-      "source_url": "https://docs.github.com/rest/apps/oauth-applications#reset-a-token",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "secret",
-      "rest": {
-        "method": "PATCH",
-        "path": "/applications/{client_id}/token"
-      },
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env",
-        "redact_fields": [
-          "value",
-          "encrypted_value"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      }
-    },
-    {
-      "id": "github.applications_client_id_token3",
-      "kind": "rest_write",
-      "summary": "DELETE /applications/{client_id}/token",
-      "source_url": "https://docs.github.com/rest/apps/oauth-applications#delete-an-app-token",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (typed confirmation)",
-      "output_policy": "json",
-      "mutation_class": "destructive",
-      "rest": {
-        "method": "DELETE",
-        "path": "/applications/{client_id}/token"
-      },
-      "destructive": true
-    },
-    {
-      "id": "github.org_custom_pattern_update_pattern",
-      "kind": "rest_write",
-      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_pattern)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.org_custom_pattern_update_start_delimiter",
-      "kind": "rest_write",
-      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_start_delimiter)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.org_custom_pattern_update_end_delimiter",
-      "kind": "rest_write",
-      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_end_delimiter)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.org_custom_pattern_update_must_match",
-      "kind": "rest_write",
-      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_must_match)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.org_custom_pattern_update_must_not_match",
-      "kind": "rest_write",
-      "summary": "PATCH /orgs/{org}/secret-scanning/custom-patterns/{pattern_id} (org_custom_pattern_update_must_not_match)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-an-organization-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/orgs/{org}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.repo_custom_pattern_update_pattern",
-      "kind": "rest_write",
-      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_pattern)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.repo_custom_pattern_update_start_delimiter",
-      "kind": "rest_write",
-      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_start_delimiter)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.repo_custom_pattern_update_end_delimiter",
-      "kind": "rest_write",
-      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_end_delimiter)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.repo_custom_pattern_update_must_match",
-      "kind": "rest_write",
-      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_must_match)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.repo_custom_pattern_update_must_not_match",
-      "kind": "rest_write",
-      "summary": "PATCH /repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id} (repo_custom_pattern_update_must_not_match)",
-      "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#update-a-repository-custom-pattern",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "PATCH",
-        "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns/{pattern_id}"
-      }
-    },
-    {
-      "id": "github.user_emails_add_object",
-      "kind": "rest_write",
-      "summary": "POST /user/emails (user_emails_add_object)",
-      "source_url": "https://docs.github.com/rest/users/emails#add-an-email-address-for-the-authenticated-user",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "POST",
-        "path": "/user/emails"
-      }
-    },
-    {
-      "id": "github.user_emails_add_array",
-      "kind": "rest_write",
-      "summary": "POST /user/emails (user_emails_add_array)",
-      "source_url": "https://docs.github.com/rest/users/emails#add-an-email-address-for-the-authenticated-user",
-      "risk": "low",
-      "approval": "plan, approval, execute",
-      "output_policy": "json",
-      "mutation_class": "admin",
-      "rest": {
-        "method": "POST",
-        "path": "/user/emails"
-      }
-    },
-    {
-      "id": "github.user_emails_delete_object",
-      "kind": "rest_write",
-      "summary": "DELETE /user/emails (user_emails_delete_object)",
-      "source_url": "https://docs.github.com/rest/users/emails#delete-an-email-address-for-the-authenticated-user",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (caller-supplied intent acknowledgement)",
-      "output_policy": "json",
-      "mutation_class": "destructive",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/user/emails"
-      }
-    },
-    {
-      "id": "github.user_emails_delete_array",
-      "kind": "rest_write",
-      "summary": "DELETE /user/emails (user_emails_delete_array)",
-      "source_url": "https://docs.github.com/rest/users/emails#delete-an-email-address-for-the-authenticated-user",
-      "risk": "low",
-      "approval": "plan, preview, approval, execute (caller-supplied intent acknowledgement)",
-      "output_policy": "json",
-      "mutation_class": "destructive",
-      "destructive": true,
-      "rest": {
-        "method": "DELETE",
-        "path": "/user/emails"
-      }
     }
   ]
 }

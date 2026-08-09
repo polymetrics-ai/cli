@@ -5,7 +5,7 @@ import {
   buildProofModel,
   validateProofModel,
 } from "../github-parity-proof.mjs";
-import { classifyHelpResult } from "../github-command-reachability.mjs";
+import { classifyHelpResult, classifyInvocationResult } from "../github-command-reachability.mjs";
 
 function currentBundle() {
   return {
@@ -30,6 +30,20 @@ test("proof model accounts every declared GitHub surface and generic-only route"
   assert.equal(model.endpointLedger.length, model.counts.endpoints);
   assert.equal(model.commandLedger.length, model.counts.commands);
   assert.equal(validateProofModel(model), true);
+});
+
+test("proof model binds the shared GraphQL transport to every declared fixed operation", async () => {
+  const model = await buildProofModel();
+  const transport = model.endpointLedger.find((row) => row.method === "POST" && row.path === "/graphql");
+  assert.ok(transport, "generated GraphQL transport must be present in the endpoint ledger");
+  assert.equal(transport.coverage?.kind, "operation");
+  const expected = model.bundle.operations.operations
+    .filter((operation) => /^github\.graphql\.(?:query|mutation)\./u.test(operation.id))
+    .map((operation) => operation.id)
+    .sort();
+  assert.deepEqual(transport.coverage?.targets, expected);
+  assert.deepEqual(transport.links.operations, expected);
+  assert.ok(transport.links.commands.length > 0, "transport operations must retain their command routes");
 });
 
 test("proof validator rejects an omitted endpoint instead of accepting a summary", async () => {
@@ -90,5 +104,25 @@ test("binary reachability requires the exact rendered command name", () => {
       stderr: "",
     }),
     { state: "unreachable", reason: "rendered namespace help instead of the declared command" },
+  );
+});
+
+test("binary reachability requires implemented commands to hit the no-credential runtime boundary", () => {
+  const implemented = { path: "issue list", availability: "implemented" };
+  assert.deepEqual(
+    classifyInvocationResult(implemented, { code: 1, stdout: "", stderr: "error: missing --credential" }),
+    { state: "reachable", runtime_state: "missing_credential" },
+  );
+  assert.deepEqual(
+    classifyInvocationResult(implemented, { code: 1, stdout: "", stderr: "error: unknown command \"issue list\"" }),
+    { state: "unreachable", reason: "binary returned unknown command" },
+  );
+  assert.deepEqual(
+    classifyInvocationResult(implemented, { code: 1, stdout: "", stderr: "missing --input" }),
+    { state: "unreachable", reason: "implemented command did not reach the missing-credential boundary" },
+  );
+  assert.deepEqual(
+    classifyInvocationResult({ path: "auth token", availability: "unsupported_local" }, { code: 1, stdout: "", stderr: "blocked" }),
+    { state: "reachable", runtime_state: "declared_non_executable" },
   );
 });

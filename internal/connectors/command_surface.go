@@ -36,6 +36,10 @@ type CommandSurfaceFlag struct {
 	AllowEmpty *bool
 	Minimum    *float64
 	Required   bool
+	// EnvOnly requires the CLI to receive this command value through the
+	// declared --from-env field=ENV channel. The resolved value is still
+	// validated by the ordinary typed flag path, but it never appears in argv.
+	EnvOnly bool
 	// MaxItems/MinItems bound a string_array flag's item count. This is a second,
 	// independent bound alongside the body schema's maxItems: the schema bound
 	// only fires after the flag has been expanded into a body, whereas this one

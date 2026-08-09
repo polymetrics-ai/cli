@@ -975,6 +975,7 @@ type CLIFlag struct {
 	AllowEmpty *bool    `json:"allow_empty,omitempty"`
 	Minimum    *float64 `json:"minimum,omitempty"`
 	Required   bool     `json:"required,omitempty"`
+	EnvOnly    bool     `json:"env_only,omitempty"`
 	// MaxItems/MinItems bound a string_array flag's item count so a bounded
 	// provider-search list can be enforced against the flag the user typed, not
 	// only against the assembled body.

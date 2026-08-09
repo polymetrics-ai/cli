@@ -600,6 +600,7 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
 		Minimum:    cloneFloat64Ptr(flag.Minimum),
 		Required:   flag.Required,
+		EnvOnly:    flag.EnvOnly,
 		MaxItems:   flag.MaxItems,
 		MinItems:   flag.MinItems,
 	}

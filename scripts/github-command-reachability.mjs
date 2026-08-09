@@ -73,6 +73,12 @@ function renderedName(stdout) {
 export function classifyHelpResult(command, result) {
   const expected = `pm github ${command}`;
   const actual = renderedName(result.stdout || "");
+  if (result.code !== 0) {
+    return {
+      state: "unreachable",
+      reason: result.overflow ? "help output exceeded the bounded capture limit" : "binary command help failed",
+    };
+  }
   if (actual === expected) return { state: "reachable", rendered_name: actual };
   if (actual.startsWith("pm github ")) {
     return { state: "unreachable", reason: "rendered namespace help instead of the declared command" };
@@ -85,6 +91,38 @@ export function classifyHelpResult(command, result) {
     state: "unreachable",
     reason: result.code === 0 ? "binary did not render the declared command name" : "binary command help failed",
   };
+}
+
+// Help is necessary to prove that a path resolves to its own declared command,
+// but it is not sufficient reachability evidence: an old connector fallback
+// rendered namespace help at exit 0. Every row therefore also runs the real
+// command against an initialized project with no credential. An implemented
+// command reaches the runtime only when it stops at the common credential
+// boundary; declared non-executable commands must still reject without being
+// mistaken for an unknown path. No provider request can occur in either case.
+export function classifyInvocationResult(command, result) {
+  const output = `${result.stdout || ""}\n${result.stderr || ""}`;
+  if (/unknown command/i.test(output)) {
+    return { state: "unreachable", reason: "binary returned unknown command" };
+  }
+  if (result.overflow) {
+    return { state: "unreachable", reason: "command output exceeded the bounded capture limit" };
+  }
+  if (command.availability === "implemented") {
+    if (result.code !== 0 && /missing --credential/i.test(output)) {
+      return { state: "reachable", runtime_state: "missing_credential" };
+    }
+    return {
+      state: "unreachable",
+      reason: result.code === 0
+        ? "implemented command completed without the required no-credential boundary"
+        : "implemented command did not reach the missing-credential boundary",
+    };
+  }
+  if (result.code === 0) {
+    return { state: "unreachable", reason: "declared non-executable command completed successfully" };
+  }
+  return { state: "reachable", runtime_state: "declared_non_executable" };
 }
 
 function summarize(records) {
@@ -125,13 +163,24 @@ async function sweep(options) {
             ["github", ...String(command.path).split(" "), "--help", "--root", workerRoot],
             ROOT,
           );
+          const invocation = await runProcess(
+            pm,
+            ["github", ...String(command.path).split(" "), "--root", workerRoot, "--json"],
+            ROOT,
+          );
+          const help = classifyHelpResult(command.path, result);
+          const runtime = classifyInvocationResult(command, invocation);
           records[index] = {
             command: command.path,
             availability: command.availability,
             intent: command.intent,
-            ...classifyHelpResult(command.path, result),
-            exit_code: result.code,
-            evidence: "built binary rendered command help NAME line",
+            ...help,
+            runtime,
+            state: help.state === "reachable" && runtime.state === "reachable" ? "reachable" : "unreachable",
+            reason: help.state === "unreachable" ? help.reason : runtime.reason,
+            help_exit_code: result.code,
+            invocation_exit_code: invocation.code,
+            evidence: "built binary rendered its exact command help NAME line and executed the no-credential runtime path",
           };
         }
       }),

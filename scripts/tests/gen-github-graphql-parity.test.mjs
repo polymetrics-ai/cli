@@ -87,3 +87,35 @@ test("fails closed for a missing canary, duplicate root command, unbounded list,
   delete nodes.graphql.variables_schema.properties.ids.maxItems;
   assert.throws(() => validateGitHubGraphQLParityArtifacts({ lock, generated: unbounded }), /maxItems/u);
 });
+
+test("uses the declared environment-only secret contract only for source fields that carry secret values", async () => {
+	const projectRoot = path.resolve(scriptsDir, "..");
+	const lock = JSON.parse(await readFile(path.join(projectRoot, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json"), "utf8"));
+	const generated = buildGitHubGraphQLParityArtifacts({ lock, bundle: emptyBundle() });
+
+	for (const name of ["createMigrationSource", "startOrganizationMigration", "startRepositoryMigration"]) {
+		const suffix = name.replace(/([a-z0-9])([A-Z])/gu, "$1-$2").toLowerCase();
+		const operation = generated.operations.find((candidate) => candidate.id === `github.graphql.mutation.${suffix}`);
+		const command = generated.commands.find((candidate) => candidate.path === `graphql mutation ${suffix}`);
+		assert.equal(operation?.mutation_class, "secret", `${name} is classified by its declared secret field`);
+		assert.deepEqual(operation?.sensitive_policy, {
+			input_mode: "env",
+			redact_fields: ["body.input"],
+			transform: "none",
+			approval_mode: "typed_confirmation",
+		});
+		assert.equal(command?.availability, "implemented");
+		assert.ok(command?.flags.some((flag) => flag.name === "input" && flag.type === "json" && flag.required === true && flag.env_only === true));
+	}
+
+	const regenerate = generated.operations.find((candidate) => candidate.id === "github.graphql.mutation.regenerate-verifiable-domain-token");
+	assert.equal(regenerate?.mutation_class, "destructive", "a token-generation result is not an input secret");
+	assert.equal(regenerate?.sensitive_policy, undefined);
+
+	const deleteIssue = generated.commands.find((candidate) => candidate.path === "graphql mutation delete-issue");
+	assert.equal(deleteIssue?.availability, "implemented");
+	assert.equal(deleteIssue?.approval, "plan, preview, approval, execute (typed destructive confirmation)");
+	const transferIssue = generated.commands.find((candidate) => candidate.path === "graphql mutation transfer-issue");
+	assert.equal(transferIssue?.availability, "implemented");
+	assert.equal(transferIssue?.approval, "plan, preview, approval, execute (typed destructive confirmation)");
+});

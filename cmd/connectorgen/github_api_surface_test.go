@@ -101,11 +101,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if generatedGraphQLTransports != 1 {
 		t.Fatalf("generated GraphQL transports = %d, want one shared POST /graphql binding", generatedGraphQLTransports)
 	}
-	if covered != 1147 {
-		t.Fatalf("covered endpoints = %d, want 1147", covered)
+	if covered != restEndpoints+graphQLBindings-generatedGraphQLTransports {
+		t.Fatalf("covered endpoints = %d, want every REST endpoint plus fixed GraphQL bindings (%d)", covered, restEndpoints+graphQLBindings-generatedGraphQLTransports)
 	}
-	if operations != 77 {
-		t.Fatalf("operation endpoints = %d, want 77 (duplicate/deprecated, plus the operations no runtime component can execute)", operations)
+	if operations != 0 {
+		t.Fatalf("operation endpoints = %d, want 0 after complete source-pinned closure", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
@@ -113,31 +113,11 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	delete(totalByMethod, "GRAPHQL")
 	assertStringIntMap(t, "totalByMethod", totalByMethod, githubRESTMethodSplit(lock))
 	delete(coveredByMethod, "GRAPHQL")
-	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"DELETE": 179,
-		"GET":    582,
-		"PATCH":  65,
-		"POST":   185,
-		"PUT":    132,
-	})
-	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"DELETE": 8,
-		"GET":    54,
-		"PATCH":  5,
-		"POST":   8,
-		"PUT":    2,
-	})
-	assertStringIntMap(t, "models", models, map[string]int{
-		"disallowed": 9,
-		"duplicate":  67,
-		"deprecated": 1,
-	})
-	assertStringIntMap(t, "risks", risks, map[string]int{
-		"low": 77,
-	})
-	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 77,
-	})
+	assertStringIntMap(t, "coveredByMethod", coveredByMethod, githubRESTMethodSplit(lock))
+	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{})
+	assertStringIntMap(t, "models", models, map[string]int{})
+	assertStringIntMap(t, "risks", risks, map[string]int{})
+	assertStringIntMap(t, "statuses", statuses, map[string]int{})
 }
 
 // TestGitHubStatusAndTextOperationContracts pins the classified endpoints

@@ -20,6 +20,11 @@ const DEFAULT_SURFACE = path.join(GITHUB_DEFS, "api_surface.json");
 
 const GRAPHQL_TRANSPORT = { method: "POST", path: "/graphql" };
 const MAX_GRAPHQL_BYTES = 1024 * 1024;
+// This pre-generator metadata-only operation used to back the blocked
+// `issue delete` alias. The source-pinned DeleteIssue mutation now owns that
+// alias with an executable, typed contract, so retaining the old unbound
+// operation would create a second, non-executable capability record.
+const OBSOLETE_GRAPHQL_OPERATION_IDS = new Set(["github.issue.delete"]);
 const MAX_GRAPHQL_ARRAY_ITEMS = 100;
 const MAX_INPUT_DEPTH = 8;
 const BUILTIN_SCALARS = new Set(["Boolean", "Float", "ID", "Int", "String"]);
@@ -27,8 +32,9 @@ const SENSITIVE_NAME = /(?:secret|token|password|private(?:_|-)?key|encrypted(?:
 
 // These reviewed verb families receive the ordinary plan/preview/approval
 // write lifecycle without a destructive typed acknowledgement. Every other
-// GraphQL mutation fails closed as destructive. The explicit deleteIssue
-// provider/product decision is stricter: it is generated but non-executable.
+// GraphQL mutation fails closed as destructive. Secret-bearing mutations use
+// the separately declared environment-only input channel and still require
+// typed confirmation at the shared write gate.
 const APPROVAL_ONLY_MUTATION_PREFIXES = [
   "accept",
   "add",
@@ -53,6 +59,11 @@ const APPROVAL_ONLY_MUTATION_PREFIXES = [
   "unpin",
   "update",
 ];
+
+// A repository-to-repository issue transfer changes the target resource even
+// though its root name starts with an otherwise approval-only verb. Keep this
+// concrete high-impact mutation behind the typed destructive acknowledgement.
+const TYPED_CONFIRMATION_MUTATION_NAMES = new Set(["transferIssue"]);
 
 function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -255,44 +266,46 @@ function documentFor(field, indexes, { paginated }) {
 }
 
 function containsSensitiveInput(ref, indexes, seen = new Set()) {
-  const node = requireObject(ref, "GraphQL input type reference");
-  if (node.kind === "list") return containsSensitiveInput(node.of_type, indexes, seen);
-  if (node.kind !== "named") return false;
-  const name = requireString(node.name, "GraphQL input named type");
-  if (SENSITIVE_NAME.test(name)) return true;
-  const input = indexes.inputObjects.get(name);
-  if (!input || seen.has(name)) return false;
-  seen.add(name);
-  return requireArray(input.fields || [], "GraphQL input object fields").some((field) =>
-    SENSITIVE_NAME.test(String(field.name || "")) || containsSensitiveInput(field.type, indexes, seen),
-  );
+	const node = requireObject(ref, "GraphQL input type reference");
+	if (node.kind === "list") return containsSensitiveInput(node.of_type, indexes, seen);
+	if (node.kind !== "named") return false;
+	const name = requireString(node.name, "GraphQL input named type");
+	const input = indexes.inputObjects.get(name);
+	// A GraphQL input *type* called RegenerateVerifiableDomainTokenInput is not
+	// itself a secret input. Classify the actual recursively declared field
+	// names instead, so generated tokens retain their ordinary destructive
+	// write contract while access-token-bearing inputs get the env-only path.
+	if (!input || seen.has(name)) return false;
+	seen.add(name);
+	return requireArray(input.fields || [], "GraphQL input object fields").some((field) =>
+		SENSITIVE_NAME.test(String(field.name || "")) || containsSensitiveInput(field.type, indexes, seen),
+	);
 }
 
 function mutationPolicy(field, indexes) {
-  if (field.name === "deleteIssue") {
-    return {
-      availability: "unsafe_or_disallowed",
-      mutationClass: "delete",
-      destructive: true,
-      risk: "critical",
-      approval: "blocked by recorded GitHub provider/product decision",
-      notes: "Blocked by the recorded provider/product decision: GitHub issue deletion remains unavailable through pm.",
-    };
-  }
-  if (requireArray(field.arguments, "GraphQL mutation arguments").some((argument) => containsSensitiveInput(argument.type, indexes))) {
-    return {
-      availability: "unsafe_or_disallowed",
-      // The fixed runtime has no environment-only GraphQL variable channel.
-      // Keep the operation administratively destructive rather than claiming
-      // that an inline JSON variable is a safe secret transport.
-      mutationClass: "admin",
-      destructive: true,
-      risk: "high",
-      approval: "blocked pending an env-only typed GraphQL secret input channel",
-      notes: "Blocked: the source-derived input includes a sensitive field and pm has no env-only typed GraphQL variable channel.",
-    };
-  }
-  const approvalOnly = APPROVAL_ONLY_MUTATION_PREFIXES.some((prefix) => field.name.startsWith(prefix));
+	const sensitiveArguments = requireArray(field.arguments, "GraphQL mutation arguments")
+		.filter((argument) => containsSensitiveInput(argument.type, indexes));
+	if (sensitiveArguments.length > 0) {
+		return {
+			availability: "implemented",
+			mutationClass: "secret",
+			secretSensitive: true,
+			sensitiveArguments: sensitiveArguments.map((argument) => requireString(argument.name, "GraphQL sensitive argument name")),
+			risk: "high",
+			approval: "plan, preview, approval, execute (typed destructive confirmation; input via --from-env)",
+			notes: "The source-derived input contains a secret field. Supply its complete typed JSON value only through --from-env input=ENV; it is withheld from persisted plans.",
+		};
+	}
+	if (TYPED_CONFIRMATION_MUTATION_NAMES.has(field.name)) {
+		return {
+			availability: "implemented",
+			mutationClass: "destructive",
+			destructive: true,
+			risk: "critical",
+			approval: "plan, preview, approval, execute (typed destructive confirmation)",
+		};
+	}
+	const approvalOnly = APPROVAL_ONLY_MUTATION_PREFIXES.some((prefix) => field.name.startsWith(prefix));
   return approvalOnly
     ? {
         availability: "implemented",
@@ -363,11 +376,20 @@ function generatedOperation(field, indexes) {
       max_page_size: MAX_GRAPHQL_ARRAY_ITEMS,
     };
   }
-  if (!isQuery) {
-    const policy = mutationPolicy(field, indexes);
-    operation.mutation_class = policy.mutationClass;
-    if (policy.destructive) operation.destructive = true;
-  }
+	if (!isQuery) {
+		const policy = mutationPolicy(field, indexes);
+		operation.mutation_class = policy.mutationClass;
+		if (policy.secretSensitive) {
+			operation.secret_sensitive = true;
+			operation.sensitive_policy = {
+				input_mode: "env",
+				redact_fields: policy.sensitiveArguments.map((argument) => "body." + argument),
+				transform: "none",
+				approval_mode: "typed_confirmation",
+			};
+		}
+		if (policy.destructive) operation.destructive = true;
+	}
   return operation;
 }
 
@@ -375,8 +397,12 @@ function generatedCommand(field, indexes, operation) {
   const isQuery = field.root === "Query";
   const paginated = isConnectionRoot(field, indexes);
   const policy = isQuery ? { availability: "implemented" } : mutationPolicy(field, indexes);
-  const flags = requireArray(field.arguments, "GraphQL root arguments")
-    .map((argument) => commandFlagForArgument(argument, indexes, { paginated }))
+	const flags = requireArray(field.arguments, "GraphQL root arguments")
+		.map((argument) => {
+			const flag = commandFlagForArgument(argument, indexes, { paginated });
+			if (flag && policy.secretSensitive && policy.sensitiveArguments.includes(argument.name)) flag.env_only = true;
+			return flag;
+		})
     .filter(Boolean);
   const command = {
     path: "graphql " + (isQuery ? "query " : "mutation ") + kebabCase(field.name),
@@ -545,13 +571,30 @@ export function validateGitHubGraphQLParityArtifacts({ lock, generated }) {
   if (!isPlainObject(canaryInput) || canary.graphql?.variables_schema?.required?.includes("input") !== true) {
     throw new Error("createEnterpriseOrganization canary has no required typed input");
   }
-  const deleteIssue = source.fields.find((field) => field.root === "Mutation" && field.name === "deleteIssue");
-  if (deleteIssue) {
-    const command = commands.find((candidate) => candidate.path === "graphql mutation delete-issue");
-    if (command?.availability !== "unsafe_or_disallowed") {
-      throw new Error("deleteIssue must remain explicitly unsafe_or_disallowed");
-    }
-  }
+	const deleteIssue = source.fields.find((field) => field.root === "Mutation" && field.name === "deleteIssue");
+	if (deleteIssue) {
+		const command = commands.find((candidate) => candidate.path === "graphql mutation delete-issue");
+		if (command?.availability !== "implemented" || command?.approval !== "plan, preview, approval, execute (typed destructive confirmation)") {
+			throw new Error("deleteIssue must remain an implemented typed-confirmation destructive mutation");
+		}
+	}
+	for (const field of source.fields.filter((candidate) => candidate.root === "Mutation" && candidate.name !== "deleteIssue")) {
+		const policy = mutationPolicy(field, source.indexes);
+		if (!policy.secretSensitive) continue;
+		const command = commands.find((candidate) => candidate.path === "graphql mutation " + kebabCase(field.name));
+		const operation = operations.find((candidate) => candidate.id === "github.graphql.mutation." + kebabCase(field.name));
+		if (!command || !operation || command.availability !== "implemented") {
+			throw new Error(field.name + " secret mutation must generate an implemented command and operation");
+		}
+		for (const argument of policy.sensitiveArguments) {
+			if (!command.flags.some((flag) => flag.maps_to === "body." + argument && flag.type === "json" && flag.required === true && flag.env_only === true)) {
+				throw new Error(field.name + " secret mutation must expose required env_only JSON flag for " + argument);
+			}
+			if (!operation.sensitive_policy?.redact_fields?.includes("body." + argument)) {
+				throw new Error(field.name + " secret mutation must redact body." + argument);
+			}
+		}
+	}
 }
 
 function mergeArtifacts(bundle, generated) {
@@ -565,7 +608,15 @@ function mergeArtifacts(bundle, generated) {
     endpoint?.path === GRAPHQL_TRANSPORT.path &&
     Array.isArray(endpoint?.covered_by?.operations);
   return {
-    operations: { ...operations, operations: [...requireArray(operations.operations, "GitHub operations").filter((operation) => !generatedOperation(operation)), ...generated.operations] },
+    operations: {
+      ...operations,
+      operations: [
+        ...requireArray(operations.operations, "GitHub operations").filter(
+          (operation) => !generatedOperation(operation) && !OBSOLETE_GRAPHQL_OPERATION_IDS.has(operation?.id),
+        ),
+        ...generated.operations,
+      ],
+    },
     cli: { ...cli, commands: [...requireArray(cli.commands, "GitHub CLI commands").filter((command) => !generatedCommand(command)), ...generated.commands] },
     surface: { ...surface, endpoints: [...requireArray(surface.endpoints, "GitHub API endpoints").filter((endpoint) => !generatedTransport(endpoint)), generated.transport] },
   };

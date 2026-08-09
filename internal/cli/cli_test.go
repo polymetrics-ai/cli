@@ -974,27 +974,27 @@ func TestGitHubCommandSurfacePlansReverseETLCommand(t *testing.T) {
 	}
 }
 
-func TestGitHubCommandSurfaceBlocksOperationBeforeCredentialResolution(t *testing.T) {
+func TestGitHubCommandSurfaceIssueDeleteReachesCredentialResolution(t *testing.T) {
 	root := t.TempDir()
 	runCLI(t, []string{"init", "--root", root, "--json"})
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{
 		"github", "issue", "delete",
-		"--issue-number", "40",
+		"--input", `{"issueId":"I_kwDOA"}`,
 		"--root", root,
 		"--json",
 	}, &stdout, &stderr)
 	if code == 0 {
-		t.Fatalf("issue delete code = 0, want policy error; stdout=%s", stdout.String())
+		t.Fatalf("issue delete code = 0, want missing credential; stdout=%s", stdout.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{`"category": "policy"`, `"code": "connector_command_blocked"`, "issue delete", "operation github.issue.delete"} {
+	for _, want := range []string{`"category": "internal"`, `"code": "internal_error"`, "missing --credential"} {
 		if !strings.Contains(out, want) {
-			t.Fatalf("blocked operation output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
+			t.Fatalf("reachable operation output missing %q:\nstdout=%s\nstderr=%s", want, out, stderr.String())
 		}
 	}
-	if strings.Contains(out, "missing --credential") || strings.Contains(stderr.String(), "missing --credential") {
-		t.Fatalf("operation-backed command attempted credential resolution before blocking:\nstdout=%s\nstderr=%s", out, stderr.String())
+	if strings.Contains(out, "connector_command_blocked") || strings.Contains(stderr.String(), "connector_command_blocked") {
+		t.Fatalf("issue delete stayed blocked instead of reaching its typed declared operation:\nstdout=%s\nstderr=%s", out, stderr.String())
 	}
 }
 

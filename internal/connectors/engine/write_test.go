@@ -372,6 +372,25 @@ func TestRestWriteDestructiveFlagCannotBeOverriddenByMutationClass(t *testing.T)
 	}
 }
 
+func TestSecretOperationTypedConfirmationPolicyReachesSharedWriteGate(t *testing.T) {
+	target := DestructiveTargetForOperation("acme", OperationSpec{
+		ID:            "acme.organization.migration",
+		Kind:          "graphql_mutation",
+		MutationClass: "secret",
+		SensitivePolicy: &SensitivePolicySpec{
+			InputMode:    "env",
+			ApprovalMode: "typed_confirmation",
+		},
+		GraphQL: &GraphQLOperationSpec{Path: "/graphql"},
+	})
+	if target.Confirmation != connectors.ConfirmationKindDestructive {
+		t.Fatalf("secret operation confirmation = %q, want typed destructive confirmation", target.Confirmation)
+	}
+	if !target.RequiresApproval() {
+		t.Fatal("secret operation typed-confirmation policy did not require approval")
+	}
+}
+
 func TestPreparedWriteRejectsRequestMethodOutsideTargetPolicy(t *testing.T) {
 	prepared := PreparedWrite{
 		Target: DestructiveTarget{Connector: "acme", Operation: "delete_widget", Method: http.MethodPost},

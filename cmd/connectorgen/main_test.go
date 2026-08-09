@@ -601,6 +601,45 @@ func TestValidate_CLISurfaceFixedGraphQLCommandRequiresDeclaredTopLevelJSONVaria
 	}
 }
 
+func TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract(t *testing.T) {
+	op := engine.OperationSpec{
+		ID:            "cli-surface.organization.migration",
+		Kind:          "graphql_mutation",
+		MutationClass: "secret",
+		SensitivePolicy: &engine.SensitivePolicySpec{
+			InputMode:    "env",
+			RedactFields: []string{"body.input"},
+			ApprovalMode: "typed_confirmation",
+		},
+	}
+	command := engine.CLICommand{
+		Path:         "graphql mutation start-organization-migration",
+		Intent:       "direct_write",
+		Availability: "implemented",
+		Operation:    op.ID,
+		Flags: []engine.CLIFlag{{
+			Name: "input", Type: "json", Required: true, MapsTo: "body.input", EnvOnly: true,
+		}},
+	}
+	operations := map[string]engine.OperationSpec{op.ID: op}
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations); len(findings) != 0 {
+		t.Fatalf("declared secret GraphQL env_only contract findings = %+v, want none", findings)
+	}
+
+	command.Flags[0].EnvOnly = false
+	if findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations); len(findings) != 0 {
+		t.Fatalf("ordinary typed input should not require env_only findings = %+v", findings)
+	}
+
+	command.Flags[0].EnvOnly = true
+	op.SensitivePolicy.InputMode = "inline"
+	operations[op.ID] = op
+	findings := checkCLISurfaceEnvOnlyFlags(engine.Bundle{Name: "cli-surface"}, 0, command, operations)
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "secret GraphQL mutation") {
+		t.Fatalf("env_only without environment redaction contract findings = %+v, want one closed-surface rejection", findings)
+	}
+}
+
 func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
 	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "etl"`, `"intent": "raw_api"`, 1)
 	report, err := validateDir(cliSurfaceBundleFS(cliSurface))

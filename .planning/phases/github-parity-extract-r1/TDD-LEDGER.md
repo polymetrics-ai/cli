@@ -2671,6 +2671,81 @@ $ go test -timeout 20m ./internal/connectors/commandrunner \
 ok   polymetrics.ai/internal/connectors/commandrunner
 ```
 
+---
+
+### Cycle 33 continuation — secret-safe GraphQL closure and zero unsafe aliases
+
+**Scope:** close the remaining generated GraphQL and legacy-alias terminal states without adding a
+generic secret or raw-request channel. This continuation records the final source-classification
+work in Cycle 33; the older live evidence and prior policy records remain historical evidence.
+
+**Red 34a — a generated sensitive GraphQL mutation had no safe way to receive its required JSON
+input.** Before the declaration and CLI changes, the focused test did not compile because
+`CommandSurfaceFlag.EnvOnly` and `resolveConnectorCommandEnvironmentOnlyFlags` did not exist. A
+secret value could only have been passed on argv, which violates the at-rest/preview/transcript
+boundary.
+
+**Green 34a — declaration-bound environment-only input.** `env_only` is accepted only for a
+required top-level JSON field on an implemented `graphql_mutation` whose operation is explicitly
+`mutation_class: secret`, declares `input_mode: env`, typed confirmation, and an exact redaction
+path. The CLI accepts only `--from-env field=ENV` for such a declared flag; it rejects direct argv
+values, undeclared fields, duplicate fields, malformed identifiers, and empty environment values
+without formatting the value. It resolves the value in memory immediately before the existing typed
+coercion and passes the resolved flags through the existing plan withholding path. There is no
+generic `--from-env` body mechanism.
+
+```
+$ go test -timeout 20m ./internal/cli \\
+    -run '^TestResolveConnectorCommandEnvironmentOnlyFlags$' -count=1
+ok   polymetrics.ai/internal/cli
+
+$ go test -timeout 20m ./cmd/connectorgen ./internal/connectors/engine ./internal/cli \\
+    -run 'TestValidate_CLISurfaceEnvOnlyFlagRequiresDeclaredSecretGraphQLContract|TestSecretOperationTypedConfirmationPolicyReachesSharedWriteGate|TestResolveConnectorCommandEnvironmentOnlyFlags' -count=1
+ok   polymetrics.ai/cmd/connectorgen
+ok   polymetrics.ai/internal/connectors/engine
+ok   polymetrics.ai/internal/cli
+```
+
+**Red/Green 34b — source semantics, not a type-name heuristic, identify secret mutations.** The
+first generator rule matched any input type containing `Token`, falsely treating
+`RegenerateVerifiableDomainTokenInput` as secret. The generator now examines recursively declared
+input *field names*. The current pinned schema produces exactly three sensitive mutations:
+`createMigrationSource`, `startOrganizationMigration`, and `startRepositoryMigration`. Each has
+the environment-only JSON input, `body.input` redaction, and the shared typed confirmation gate.
+`deleteIssue`, `transferIssue`, and `revertPullRequest` are ordinary implemented destructive
+mutations and receive typed confirmations, not an unsafe classification.
+
+```
+$ node --test scripts/tests/gen-github-graphql-parity.test.mjs
+✔ generated secret GraphQL mutations are exact field-name matches
+✔ destructive GraphQL mutations remain implemented and typed-confirmed
+```
+
+**Green 34c — legacy aliases are fixed bindings, not duplicate capability paths.** The generator
+now derives `issue`, `pr`, `release`, `workflow`, `run`, `ruleset`, `discussion`, `project`,
+`search`, and `status` compatibility paths by cloning an exact existing declared operation or
+write action. REST direct-read aliases share the same API-surface endpoint coverage; GraphQL write
+aliases use the same plan/preview/approval/execute contract. `auth token` and `api` are
+`unsupported_local` safety boundaries with no operation/write/API-surface binding, so the surface
+has **zero** `unsafe_or_disallowed`, `partial`, or `planned` rows and neither alias accidentally
+becomes executable.
+
+```
+$ go run ./cmd/connectorgen validate internal/connectors/defs/github
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync internal/connectors/defs --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+
+$ go test -timeout 20m ./cmd/connectorgen \\
+    -run '^TestGitHubCompleteParityHasNoNonterminalCommandRows$' -count=1
+ok   polymetrics.ai/cmd/connectorgen
+
+$ go test -timeout 20m ./internal/connectors/commandrunner \\
+    -run '^TestGitHub(RestoredCommandsAreExecutable|CapabilityEscapesStayNonExecutableWithoutUnsafeClassification|LegacyAliasesPassRuntimePreflight|GraphQLDestructiveAliasesRequireTypedConfirmation)$' -count=1
+ok   polymetrics.ai/internal/connectors/commandrunner
+```
+
 **Green 33c(1) — 31 partial reverse-ETL aliases now have exact record forms.**
 `gen-github-parity.py` derives each missing required top-level field from the action's concrete
 `record_schema`: scalars retain scalar flags, declared objects/non-string arrays become required

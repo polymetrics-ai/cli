@@ -73,6 +73,9 @@ function coverageOf(endpoint) {
   if (Array.isArray(covered.direct_reads)) {
     bindings.push({ kind: "direct_read", targets: covered.direct_reads });
   }
+  if (Array.isArray(covered.operations)) {
+    bindings.push({ kind: "operation", targets: covered.operations });
+  }
   if (bindings.length !== 1) {
     throw new Error(
       `endpoint ${endpointKey(endpoint.method, endpoint.path)} has ${bindings.length} covered_by bindings; expected one kind`,
@@ -112,6 +115,10 @@ function commandLinksForEndpoint(endpoint, coverage, commandsByPath, operationsB
   const endpointKeyValue = endpointKey(endpoint.method, endpoint.path);
   const paths = new Set();
   const operations = new Set(operationsByEndpoint.get(endpointKeyValue) || []);
+
+  if (coverage?.kind === "operation") {
+    for (const operationID of coverage.targets) operations.add(operationID);
+  }
 
   if (coverage) {
     for (const target of coverage.targets) {
@@ -172,7 +179,10 @@ function makeEndpointLedger(bundle, indexes) {
   return bundle.surface.endpoints.map((endpoint, index) => {
     const coverage = coverageOf(endpoint);
     const blocked = endpoint.operation;
-    const operationIDs = sortedUnique(indexes.operationsByEndpoint.get(endpointKey(endpoint.method, endpoint.path)) || []);
+    const operationIDs = sortedUnique([
+      ...(indexes.operationsByEndpoint.get(endpointKey(endpoint.method, endpoint.path)) || []),
+      ...(coverage?.kind === "operation" ? coverage.targets : []),
+    ]);
     const commands = commandLinksForEndpoint(
       endpoint,
       coverage,

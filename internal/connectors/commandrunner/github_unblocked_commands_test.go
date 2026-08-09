@@ -114,19 +114,13 @@ func TestGitHubRestoredCommandsAreExecutable(t *testing.T) {
 	}
 }
 
-// The captain held some commands back explicitly. This test is the durable
-// record of that hold: `auth token` prints a credential, which contradicts a
-// standing rule, and `api` is the arbitrary-request escape hatch that bypasses
-// every declared surface. Neither may drift to `implemented` without the
-// captain's own decision.
-//
-// `issue delete`, `issue transfer` and `pr revert` are held for a different
-// reason, and it is the stronger gate: GitHub documents no REST endpoint for
-// any of them. deleteIssue and transferIssue are GraphQL-only, and revert is a
-// web-UI workflow. Marking one `implemented` would mean inventing an
-// api_surface endpoint, so they stay unreachable rather than confirmable.
-func TestGitHubHeldCommandsStayBlocked(t *testing.T) {
-	held := []string{"auth token", "api", "issue delete", "issue transfer", "pr revert"}
+// `auth token` and `api` are not provider operations: one would print a
+// stored credential and the other would be a generic authenticated transport
+// escape hatch. They must remain non-executable, but they are classified as
+// unsupported_local rather than unsafe_or_disallowed so the GitHub documented
+// surface has no safety-label loophole.
+func TestGitHubCapabilityEscapesStayNonExecutableWithoutUnsafeClassification(t *testing.T) {
+	held := []string{"auth token", "api"}
 
 	registry := bundleregistry.New()
 	connector, ok := registry.Get("github")
@@ -148,21 +142,82 @@ func TestGitHubHeldCommandsStayBlocked(t *testing.T) {
 		if !ok {
 			t.Fatalf("github command %q is not declared", path)
 		}
-		if cmd.Availability != "unsafe_or_disallowed" {
-			t.Fatalf("github %q availability = %q, want unsafe_or_disallowed until the captain decides",
+		if cmd.Availability != "unsupported_local" {
+			t.Fatalf("github %q availability = %q, want unsupported_local for a deliberately absent local capability",
 				path, cmd.Availability)
 		}
 		if strings.TrimSpace(cmd.Write) != "" {
 			t.Fatalf("github %q binds write action %q; a held command must reach no write executor",
 				path, cmd.Write)
 		}
-		// `issue delete` does bind an operation — github.issue.delete, declared
-		// as a graphql_mutation the direct-write executor refuses. Declaring an
-		// operation is honest; reaching it is what must stay impossible, so the
-		// assertion is on the real preflight rather than on the binding.
 		if err := Preflight(connector, strings.Fields(path)); err == nil {
 			t.Fatalf("github %q passes runtime preflight; a held command must be refused", path)
 		}
+	}
+}
+
+// The historical gh-style aliases below now reuse exact declared REST or
+// fixed-document GraphQL contracts. Preflight is the runtime-owned admission
+// seam: it proves the aliases are not help-only strings and cannot drift from
+// the same command dispatch the binary invokes.
+func TestGitHubLegacyAliasesPassRuntimePreflight(t *testing.T) {
+	aliases := []string{
+		"issue view", "pr view", "release view", "ruleset view", "run view", "workflow view",
+		"discussion create", "issue status", "pr checks", "pr status", "project create", "ruleset check", "search prs", "status",
+		"issue delete", "issue transfer", "pr revert",
+	}
+
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("github")
+	if !ok {
+		t.Fatal("github connector is not registered")
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		t.Fatal("github connector exposes no command surface")
+	}
+	commands := map[string]connectors.CommandSurfaceCommand{}
+	for _, cmd := range provider.CommandSurface().Commands {
+		commands[cmd.Path] = cmd
+	}
+	for _, path := range aliases {
+		t.Run(path, func(t *testing.T) {
+			cmd, found := commands[path]
+			if !found {
+				t.Fatalf("github command %q is not declared", path)
+			}
+			if cmd.Availability != "implemented" {
+				t.Fatalf("github %q availability = %q, want implemented", path, cmd.Availability)
+			}
+			if err := Preflight(connector, strings.Fields(path)); err != nil {
+				t.Fatalf("github %q does not pass runtime preflight: %v", path, err)
+			}
+		})
+	}
+}
+
+func TestGitHubGraphQLDestructiveAliasesRequireTypedConfirmation(t *testing.T) {
+	aliases := []string{"issue delete", "issue transfer", "pr revert"}
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("github")
+	if !ok {
+		t.Fatal("github connector is not registered")
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		t.Fatal("github connector exposes no command surface")
+	}
+	commands := map[string]connectors.CommandSurfaceCommand{}
+	for _, cmd := range provider.CommandSurface().Commands {
+		commands[cmd.Path] = cmd
+	}
+	for _, path := range aliases {
+		t.Run(path, func(t *testing.T) {
+			cmd := commands[path]
+			if got := ConfirmationChallengeForCommand(connector, cmd); got != string(connectors.ConfirmationKindDestructive) {
+				t.Fatalf("github %q confirmation challenge = %q, want typed destructive confirmation", path, got)
+			}
+		})
 	}
 }
 

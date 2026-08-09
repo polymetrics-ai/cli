@@ -8,12 +8,12 @@ import (
 	"testing"
 )
 
-// TestGitHubCompleteParityLeavesOnlyCaptainHeldRawAliases records the captain's
+// TestGitHubCompleteParityHasNoNonterminalCommandRows records the captain's
 // completion contract at the source boundary. It intentionally reads the
 // generated GitHub bundle rather than duplicating commandrunner's admission
 // logic: engine/runtime tests prove execution; this test makes an unresolved
 // source classification impossible to hide behind an old parity summary.
-func TestGitHubCompleteParityLeavesOnlyCaptainHeldRawAliases(t *testing.T) {
+func TestGitHubCompleteParityHasNoNonterminalCommandRows(t *testing.T) {
 	t.Helper()
 
 	cliRaw, err := os.ReadFile("../../internal/connectors/defs/github/cli_surface.json")
@@ -30,21 +30,11 @@ func TestGitHubCompleteParityLeavesOnlyCaptainHeldRawAliases(t *testing.T) {
 		t.Fatalf("unmarshal github cli surface: %v", err)
 	}
 
-	// The captain explicitly held only these two aliases: one would print a
-	// credential and the other would be a generic authenticated API bypass.
-	heldUnsafe := map[string]struct{}{
-		"auth token": {},
-		"api":        {},
-	}
 	var unresolvedCommands []string
 	for _, command := range cli.Commands {
 		switch command.Availability {
-		case "partial", "planned":
+		case "partial", "planned", "unsafe_or_disallowed":
 			unresolvedCommands = append(unresolvedCommands, command.Availability+":"+command.Path)
-		case "unsafe_or_disallowed":
-			if _, held := heldUnsafe[command.Path]; !held {
-				unresolvedCommands = append(unresolvedCommands, command.Availability+":"+command.Path)
-			}
 		}
 	}
 	sort.Strings(unresolvedCommands)

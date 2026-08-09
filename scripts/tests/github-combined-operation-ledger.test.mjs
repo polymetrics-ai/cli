@@ -271,9 +271,10 @@ test("records source-wide fixed typename node projections and GraphQL mutation s
   assert.equal(node?.state, "fixed_typename_projection");
   assert.equal(nodes?.state, "fixed_typename_projection");
   const deleteIssue = ledger.rows.find((row) => row.id === "github.graphql.mutation.deleteIssue");
-  assert.equal(deleteIssue?.implementation.state, "declared_not_executable");
-  assert.equal(deleteIssue?.blocker?.category, "mapped_command_not_executable");
-  assert.match(deleteIssue?.blocker?.reason || "", /issue delete \(unsafe_or_disallowed\)/i);
+  assert.equal(deleteIssue?.implementation.state, "implemented");
+  assert.equal(deleteIssue?.blocker, undefined);
+  assert.equal(deleteIssue?.safety?.mutability, "write");
+  assert.ok(deleteIssue?.pm?.commands?.includes("issue delete"));
   assert.equal(ledger.rows.find((row) => row.id === "github.graphql.mutation.createEnterpriseOrganization")?.implementation.state, "implemented");
 });
 

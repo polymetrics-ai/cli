@@ -23,10 +23,11 @@ files_modified:
 ## Captain outcome
 
 Make every declared GitHub REST and generated GraphQL operation executable through a fixed,
-typed PM command, with no `unsafe_or_disallowed` rows for documented operations.  The only
-standing command exceptions are `auth token` and `api`; they remain explicitly held until the
-captain gives separate authority because one prints a credential and the other is an unrestricted
-authenticated-request escape hatch.  No raw API, user-supplied GraphQL document, or weakened
+typed PM command, with no `unsafe_or_disallowed` rows for documented operations.  `auth token`
+and `api` are instead explicit `unsupported_local` safety boundaries: one would disclose a
+credential and the other would create an unrestricted authenticated-request escape hatch.  They
+have no operation, write, or API-surface binding and therefore remain non-executable until
+separately authorized.  No raw API, user-supplied GraphQL document, or weakened
 approval/confirmation flow is permitted.
 
 This continuation also completes the target-bound PM-only live cohort for immutable repository
@@ -63,7 +64,8 @@ test locks this reconciliation and fails on any unresolved current classificatio
 - A source operation that cannot become executable must have a schema-validated named dependency
   that names the exact missing capability.  The captain's build-inline rule means ordinary
   foundations are implemented here, not silently deferred.  Credential-minting/token-printing and
-  raw-API exceptions remain held for the captain and are never mislabelled `implemented`.
+  raw-API safety boundaries remain `unsupported_local`, never `unsafe_or_disallowed` or
+  mislabelled `implemented`.
 - All generic ETL/reverse-ETL routes remain valid proof routes.  A direct connector command is
   added only for an actual documented or existing PM alias contract.
 
@@ -73,7 +75,7 @@ test locks this reconciliation and fails on any unresolved current classificatio
 
 Add a source-derived test that fails while any documented REST/GraphQL operation lacks an exact
 command or a schema-valid named dependency, while any documented command remains `partial`,
-`planned`, or `unsafe_or_disallowed` outside the two captain-held aliases.  Add the generic
+`planned`, or `unsafe_or_disallowed`.  Add the generic
 schema/validator representation for a named dependency and test that an unnamed or unresolved
 dependency cannot pass the inventory.  Regenerate operation/command proof ledgers from the same
 source facts.
@@ -94,8 +96,8 @@ preflight, not a generic request body.  Bind legacy aliases (`issue/pr/release/w
 view`, project/discussion creation, issue transfer/delete, PR revert, and supported status/search
 operations) to exact REST or fixed GraphQL contracts.  Implement an environment-only typed GraphQL
 secret-input channel if required by generated sensitive mutations; it must never put secret JSON
-in argv, plans, previews, transcripts, or evidence.  Keep `auth token` and `api` as the two
-captain-held exceptions.
+in argv, plans, previews, transcripts, or evidence.  Retain `auth token` and `api` only as
+non-executable `unsupported_local` safety boundaries.
 
 ### Green 33d — generation, reachability, and live evidence
 

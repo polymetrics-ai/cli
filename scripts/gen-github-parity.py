@@ -925,6 +925,97 @@ def promote_partial_structured_write_commands():
         promoted.append(command["path"])
     return promoted
 
+# These gh-familiar paths are compatibility aliases, never hand-authored
+# transports. Each is cloned from the exact already-generated typed command it
+# represents, so the alias inherits the provider endpoint, fixed GraphQL
+# document, approval lifecycle, and typed confirmation (where applicable).
+# This keeps legacy discoverability from becoming a second execution surface.
+LEGACY_ALIAS_SOURCE_COMMANDS = {
+    "issue view": "issues view",
+    "pr view": "pulls view",
+    "release view": "releases view",
+    "ruleset view": "rulesets view",
+    "run view": "actions runs view",
+    "workflow view": "actions workflows view",
+    "discussion create": "graphql mutation create-discussion",
+    "issue status": "issues list-for-authenticated-user",
+    "pr checks": "commits check-runs view",
+    "pr status": "pr list",
+    "project create": "graphql mutation create-project-v2",
+    "ruleset check": "rules branches view",
+    "search prs": "search issues",
+    "status": "graphql query viewer",
+    "issue delete": "graphql mutation delete-issue",
+    "issue transfer": "graphql mutation transfer-issue",
+    "pr revert": "graphql mutation revert-pull-request",
+}
+
+# These two legacy commands deliberately remain non-executable: printing a
+# stored credential and accepting a caller-controlled authenticated request
+# are both incompatible with the connector boundary. `unsupported_local`
+# documents that no provider endpoint is omitted while ensuring the command
+# can neither acquire a credential value nor bypass declared operations.
+NONEXECUTABLE_SAFETY_ALIASES = {
+    "auth token": "Named dependency: a credential-export policy would violate pm's no-secret-disclosure boundary.",
+    "api": "Named dependency: a constrained declared-operation catalog; generic authenticated API dispatch is intentionally absent.",
+}
+
+def restore_legacy_command_aliases():
+    commands_by_path = {command.get("path"): command for command in cli_doc["commands"]}
+    endpoints_by_key = {
+        (endpoint.get("method"), endpoint.get("path")): endpoint
+        for endpoint in api.get("endpoints", [])
+    }
+    restored = []
+    for alias_path, source_path in LEGACY_ALIAS_SOURCE_COMMANDS.items():
+        target = commands_by_path.get(alias_path)
+        source = commands_by_path.get(source_path)
+        if target is None:
+            raise ValueError(f"legacy GitHub alias {alias_path!r} is missing from cli_surface.json")
+        if source is None:
+            raise ValueError(f"legacy GitHub alias {alias_path!r} has no generated source command {source_path!r}")
+        # JSON round-trip makes a deep copy without adding another dependency
+        # to the deterministic generator. It also preserves only artifact data.
+        restored_command = json.loads(json.dumps(source))
+        restored_command["path"] = alias_path
+        restored_command["summary"] = target.get("summary", source.get("summary", alias_path))
+        restored_command["source_cli_path"] = "gh " + alias_path
+        restored_command["notes"] = f"Compatibility alias of {source_path}; uses that declaration-owned provider contract."
+        restored_command.pop("examples", None)
+        target.clear()
+        target.update(restored_command)
+        # REST direct-read coverage is command-path based rather than
+        # operation-ID based. Name the alias beside its canonical generated
+        # command in the single endpoint row so validation proves both paths
+        # reach the same declared request; the documented endpoint count stays
+        # unchanged.
+        if restored_command.get("intent") == "direct_read" and not str(restored_command.get("operation", "")).startswith("github.graphql."):
+            for endpoint_ref in restored_command.get("api_surface", []):
+                key = (endpoint_ref.get("method"), endpoint_ref.get("path"))
+                endpoint = endpoints_by_key.get(key)
+                if endpoint is None:
+                    raise ValueError(f"legacy GitHub alias {alias_path!r} references missing endpoint {key!r}")
+                covered = endpoint.setdefault("covered_by", {})
+                existing_reads = []
+                if covered.get("direct_read"):
+                    existing_reads.append(covered.pop("direct_read"))
+                existing_reads.extend(covered.get("direct_reads", []))
+                if alias_path not in existing_reads:
+                    existing_reads.append(alias_path)
+                covered["direct_reads"] = sorted(set(existing_reads))
+        restored.append(alias_path)
+
+    for alias_path, reason in NONEXECUTABLE_SAFETY_ALIASES.items():
+        target = commands_by_path.get(alias_path)
+        if target is None:
+            raise ValueError(f"non-executable GitHub safety alias {alias_path!r} is missing from cli_surface.json")
+        target["availability"] = "unsupported_local"
+        target["notes"] = reason
+        target.pop("operation", None)
+        target.pop("write", None)
+        target.pop("api_surface", None)
+    return restored
+
 def append_explicit_one_of_write_contract(endpoint, operation, contract):
     """Append all concrete write contracts for one documented oneOf endpoint."""
     method = endpoint["method"]
@@ -1207,6 +1298,7 @@ writes_doc["actions"].extend(new_writes)
 cli_doc["commands"].extend(new_cmds)
 
 normalized_reverse_etl_path_flags = normalize_reverse_etl_path_flags()
+restored_legacy_aliases = restore_legacy_command_aliases()
 
 def write_generated_json(path, value):
     # Keep generated artifacts byte-stable when their semantic content did not
@@ -1233,3 +1325,4 @@ print(f"  new write actions: {len(new_writes)} (total {len(writes_doc['actions']
 print(f"  new cli commands: {len(new_cmds)} (total {len(cli_doc['commands'])})")
 print(f"  promoted partial structured writes: {len(promoted_partial_write_commands)}")
 print(f"  normalized reverse-ETL path flags: {normalized_reverse_etl_path_flags}")
+print(f"  restored legacy aliases: {len(restored_legacy_aliases)}")
