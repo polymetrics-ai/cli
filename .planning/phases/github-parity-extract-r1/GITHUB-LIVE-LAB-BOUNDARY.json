@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "run_id": "github-live-lab-20260809-8ccd8dd6",
+  "default_deny": true,
+  "protected_owners": [
+    "polymetrics-ai"
+  ],
+  "protected_repositories": [
+    {
+      "owner_slug": "polymetrics-ai",
+      "repo_slug": "cli"
+    }
+  ],
+  "working_repositories": [
+    {
+      "owner_slug": "polymetrics-ai",
+      "repo_slug": "cli"
+    }
+  ],
+  "allowed_targets": [
+    {
+      "key": "personal_repo",
+      "resource_type": "repository",
+      "owner_slug": "karthik-sivadas",
+      "owner_id": "6113982",
+      "repo_slug": "pm-live-lab-20260809-8ccd8dd6",
+      "repo_id": "1328795968",
+      "run_owned": true
+    }
+  ]
+}

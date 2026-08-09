@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "run_id": "github-live-lab-20260809-8ccd8dd6",
+  "source": {
+    "preserved_control": "scripts/github-live-proof-sweep.mjs:shellSafeInvocation",
+    "historical_record": ".planning/phases/github-parity-extract-r1/LIVE-PROOF-REPORT.json: repo view"
+  },
+  "records": [
+    {
+      "id": "repo-view-owner-repo-flags-rejected",
+      "command": "repo view",
+      "phase": "bootstrap target resolution before immutable-ID binding",
+      "state": "harness_regression_observed",
+      "malformed_invocation_shape": "pm github repo view --credential <profile> --owner <owner> --repo <repo> --root <isolated-project> --json",
+      "outcome": "flag_parse_rejected",
+      "provider_request_started": false,
+      "control_invocation_shape": "pm github repo view --credential <profile> --root <isolated-project> --json",
+      "control_result": "ConnectorCommandRead count=1; the stored profile scope did not match the fresh generated lab slug",
+      "resolution": "Use pm github repos list-for-authenticated-user as the independent bootstrap discovery read, filter only in memory for one exact private slug under the authenticated immutable user, then bind that immutable repository ID."
+    },
+    {
+      "id": "org-bootstrap-create-command-absent",
+      "command": "orgs create",
+      "phase": "sandbox organization bootstrap",
+      "state": "pm_surface_missing",
+      "provider_request_started": false,
+      "outcome": "no registered PM command maps to POST /user/orgs or POST /organizations",
+      "resolution": "Do not create or delete an organization until a PM-only creation path can bind one run-owned immutable organization target."
+    },
+    {
+      "id": "app-manifest-code-issuer-absent",
+      "command": "apps create-from-manifest",
+      "phase": "GitHub App fixture bootstrap",
+      "state": "pm_surface_missing",
+      "provider_request_started": false,
+      "outcome": "the PM command requires --code, and no registered PM command issues a manifest conversion code",
+      "resolution": "Do not create an App until a PM-only manifest-code issuance path can supply a code and bind a run-owned App identity."
+    },
+    {
+      "id": "app-authentication-user-credential-401",
+      "command": "apps get-authenticated",
+      "phase": "GitHub App credential probe",
+      "state": "credential_or_entitlement_rejected",
+      "provider_request_started": true,
+      "http_status": 401,
+      "resolution": "A dedicated App JWT or installation credential is required before App-authenticated fixture work can begin."
+    },
+    {
+      "id": "marketplace-user-read-no-fixture-bootstrap",
+      "command": "apps list-subscriptions-for-authenticated-user",
+      "phase": "GitHub Marketplace credential probe",
+      "state": "proven_read",
+      "provider_request_started": true,
+      "http_status": 200,
+      "resolution": "This read proves the user route is reachable but does not create a Marketplace listing, App, plan, or installation fixture."
+    },
+    {
+      "id": "issue-list-read-after-write-visibility-delay",
+      "command": "issue list",
+      "phase": "personal repository editable issue lifecycle",
+      "state": "provider_visibility_delay_observed",
+      "provider_request_started": true,
+      "outcome": "the immediate independent PM list after a completed PM issue create did not yet satisfy the exact generated-record assertion; a later PM-only list did",
+      "resolution": "Retry only a successful PM issue-list assertion for at most six attempts; propagate PM credential, entitlement, scope, and provider errors immediately, and retain no provider payload."
+    }
+  ]
+}

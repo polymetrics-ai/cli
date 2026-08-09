@@ -1160,12 +1160,6 @@
           }
         }
       },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
       "risk": "revokes an SSH deploy key's access to the repository"
     },
     {

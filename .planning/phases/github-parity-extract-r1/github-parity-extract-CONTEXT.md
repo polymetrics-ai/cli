@@ -107,6 +107,85 @@ does, and keeps destructive-write safety intact.
   action schema before a plan exists. This is not a generic request body,
   path/query/header input, or raw HTTP escape hatch.
 
+### Captain-authorized 957-case live-proof expansion
+
+- **D-18:** The 957 historical `untestable_reason` rows are planning input,
+  not terminal proof. Generate a source-derived, machine-readable lab manifest
+  with exactly one row for each of those cases. Each row records the command,
+  API target, credential class, plan/feature, PM-only setup/test/read-back/
+  cleanup templates, required target-allowlist entry, destructive acknowledgement,
+  residual-state check, cohort, and the earliest divergence from an existing
+  proven path. The generator must prove the row count and command set against
+  `LIVE-PROOF-CASES.json`; no hand-maintained count is acceptable.
+- **D-19:** The factual cohorts are mutually exclusive: retained personal lab
+  repository, GitHub Free sandbox organization, GitHub App or draft Marketplace
+  listing, and unavailable Team/Enterprise/Codespaces/Advanced Security (or
+  other named entitlement). A missing entitlement is recorded as an exact
+  external prerequisite, never as an implementation failure or a blanket skip.
+- **D-20:** The live-lab boundary is fail closed. It defaults to deny, explicitly
+  denies `polymetrics-ai` and the worktree repositories, and permits writes only
+  when both a run-owned slug and immutable GitHub ID match one exact allowlist
+  entry. Ambiguous target resolution, missing IDs after resolution, an owner-only
+  match, or a protected target is a pre-dispatch failure. Prefix matching alone
+  is never enough.
+- **D-21:** Every provider fixture lifecycle uses the built `pm github` connector
+  only: creation, plan, preview, approval, execute, independent read-back,
+  neutralization, and cleanup. `gh`, `gh-axi`, raw REST/GraphQL, browser controls,
+  SDKs, and the GitHub UI are forbidden for proof fixtures. A missing `pm` surface
+  is an explicit bootstrap impossibility with its affected command count and
+  least-privilege prerequisite; it is never bypassed.
+- **D-22:** The retained `karthik-sivadas/pm-live-test-direct-read-20260808081515`
+  repository is not eligible for a mutation until the plan demonstrates its
+  proof-program provenance and records it in the append-only cleanup ledger.
+  If that cannot be established, create a fresh private lab repository through
+  `pm github repo create` after the boundary tests are green. Organization creation
+  and, last, deletion are real connector tests; organization deletion requires an
+  exact ID, a typed destructive acknowledgement, and a ledger proof that no
+  non-lab resource is referenced.
+- **D-23:** Provider writes retain the existing plan → preview → approval →
+  execute flow, typed destructive acknowledgement where declared, independent
+  non-secret read-back, idempotent cleanup, and one terminal record per command.
+  Dummy secret values remain process-only and are redacted before any report,
+  manifest, ledger, argument rendering, or commit.
+- **D-24:** Inline/manual GSD remains the required fallback for this session:
+  the repository adapter is healthy, but isolated GSD-role delegation is not
+  authorized. The planning and red/green evidence are recorded in this phase
+  directory before a provider write; no new no-mistakes run starts until the
+  framework and next coherent live-proof increment are committed.
+- **D-25:** `repo view` remains the preserved credential-pinned PM control and
+  has no command-specific target flags. Keep the rejected owner/repo form only
+  as sanitized harness-regression evidence; do not invent a new `repo view`
+  argument form or rewrite stored credential scope. A fresh bootstrap target is
+  resolved solely through `pm github repos list-for-authenticated-user`, filtered
+  in memory for exactly one private generated slug under authenticated user ID
+  `6113982`, then bound by its immutable repository ID before normal fixture use.
+- **D-26:** External bootstrap remains PM-only and default-deny. Current GitHub
+  artifacts expose typed-confirmed `orgs delete` but no PM organization-create
+  command, so no organization can be created or deleted until a PM-only creator
+  can bind its immutable run-owned target. `apps create-from-manifest` consumes
+  a required conversion code but PM exposes no command to issue it; no App is
+  created. The only targetless probes are fixed PM direct reads: App
+  authentication returned sanitized HTTP 401 with the user credential, whereas
+  Marketplace-user subscriptions returned HTTP 200. The latter is a proven read,
+  not evidence that a Marketplace fixture exists.
+- **D-27:** The next personal-repository family is a generated label lifecycle:
+  baseline PM `label list` absence; PM create; immutable-ID/color read-back; PM
+  edit with same-ID edited-color assertion; and typed-confirmed PM delete followed
+  by absence read-back. The resolver keeps the provider record in memory and
+  records only the generated label ID and sanitized lifecycle events. This family
+  is complete and establishes the reusable pattern for further reversible
+  repository resources.
+- **D-28:** Editable-issue proof uses a fresh generated issue, never a retained
+  prior fixture. The PM lab runner must re-supply its already-validated record
+  flags to both preview and execution, because the runtime may withhold declared
+  fields from persisted plans. Independent PM issue-list read-back retries only a
+  successful stale assertion, at most six attempts with five one-second waits;
+  credential, entitlement, scope, and provider errors propagate immediately.
+  The proven edit/comment lifecycle retained the same immutable issue identity,
+  observed exactly one comment, and PM-closed/retained the run-owned issue under
+  the existing `issue delete` safety decision. No generated title/body/comment
+  content or provider payload is persisted in evidence.
+
 ### the agent's Discretion
 
 - Select the smallest existing harness and test seams that prove returned data and
@@ -137,6 +216,8 @@ does, and keeps destructive-write safety intact.
 
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-parity-extract-r1/CAPTAIN-ORDER-prove-every-operation.md` — live-proof definition of done.
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-parity-extract-r1/CAPTAIN-ORDER-github-rate-limits.md` — existing-limiter configuration and proof requirements.
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-parity-extract-r1/CAPTAIN-ORDER-exhaustive-ops-proof-and-boundary-20260809.md` — frozen inventory, provider-boundary, and live-proof rules.
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-github-parity-extract-r1/brief.md` — captain-authorized 957-case expansion and final PM-only provider-lab constraint.
 
 ### Architecture and connector contract
 
@@ -180,6 +261,10 @@ does, and keeps destructive-write safety intact.
   loader and must be embedded with the connector definition.
 - Live proof must run the built `pm` binary and use the real connector path, so it
   exercises credentials, command dispatch, runtime requesters, and rate limits.
+- `scripts/github-live-cases.mjs` is the current historical pre-skip classifier;
+  `scripts/github-live-proof-sweep.mjs` is the current terminal-record runner.
+  The new lab generator and boundary wrapper extend these GitHub-only seams rather
+  than changing shared runtime behavior.
 
 </code_context>
 

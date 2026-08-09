@@ -16,6 +16,7 @@ import (
 )
 
 func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
+	lock := loadGitHubSourceLock(t)
 	raw, err := os.ReadFile("../../internal/connectors/defs/github/api_surface.json")
 	if err != nil {
 		t.Fatalf("read github api_surface.json: %v", err)
@@ -44,9 +45,14 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	models := map[string]int{}
 	risks := map[string]int{}
 	statuses := map[string]int{}
-	covered, excluded, operations := 0, 0, 0
+	covered, excluded, operations, restEndpoints, legacyGraphQLBindings := 0, 0, 0, 0, 0
 
 	for i, ep := range surface.Endpoints {
+		if ep.Method == "GRAPHQL" {
+			legacyGraphQLBindings++
+		} else {
+			restEndpoints++
+		}
 		totalByMethod[ep.Method]++
 		if len(ep.CoveredBy) > 0 {
 			covered++
@@ -76,14 +82,14 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		}
 	}
 
-	// These are a snapshot of derived truth, not a budget. They moved when the
-	// bundle stopped enumerating only /repos/{owner}/{repo}/… and recorded the
-	// whole documented surface: 1220 REST operations plus the 4 fixed GraphQL
-	// rows, which are counted separately and never folded into the REST total.
-	// Every structural assertion below is unchanged; only the counts the surface
-	// now actually holds were re-derived.
-	if len(surface.Endpoints) != 1224 {
-		t.Fatalf("endpoints = %d, want 1224", len(surface.Endpoints))
+	// api_surface is the bundle's binding layer. Its REST population must match
+	// the pinned source lock; its small GraphQL population consists only of
+	// fixed-document bindings, never the GraphQL completeness denominator.
+	if restEndpoints != lock.Counts.REST {
+		t.Fatalf("REST endpoint bindings = %d, want %d from source lock", restEndpoints, lock.Counts.REST)
+	}
+	if legacyGraphQLBindings == 0 {
+		t.Fatal("legacy fixed GraphQL bindings = 0, want at least one bundle binding")
 	}
 	if covered != 1147 {
 		t.Fatalf("covered endpoints = %d, want 1147", covered)
@@ -94,21 +100,15 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
 	}
-	assertStringIntMap(t, "totalByMethod", totalByMethod, map[string]int{
-		"DELETE":  187,
-		"GET":     636,
-		"GRAPHQL": 4,
-		"PATCH":   70,
-		"POST":    193,
-		"PUT":     134,
-	})
+	delete(totalByMethod, "GRAPHQL")
+	assertStringIntMap(t, "totalByMethod", totalByMethod, githubRESTMethodSplit(lock))
+	delete(coveredByMethod, "GRAPHQL")
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
-		"DELETE":  179,
-		"GET":     582,
-		"GRAPHQL": 4,
-		"PATCH":   65,
-		"POST":    185,
-		"PUT":     132,
+		"DELETE": 179,
+		"GET":    582,
+		"PATCH":  65,
+		"POST":   185,
+		"PUT":    132,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
 		"DELETE": 8,

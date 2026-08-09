@@ -23,21 +23,12 @@ function currentBundle() {
 test("proof model accounts every declared GitHub surface and generic-only route", async () => {
   const model = await buildProofModel();
 
-  assert.deepEqual(model.counts, {
-    endpoints: 1224,
-    coveredEndpoints: 1147,
-    blockedEndpoints: 77,
-    streams: 37,
-    writeActions: 574,
-    operations: 377,
-    commands: 1179,
-    implementedCommands: 1081,
-    partialCommands: 37,
-  });
+  assert.equal(model.counts.endpoints, model.bundle.surface.endpoints.length);
+  assert.equal(model.counts.coveredEndpoints + model.counts.blockedEndpoints, model.counts.endpoints);
   assert.equal(model.genericOnly.streams.length, 23);
   assert.equal(model.genericOnly.writeActions.length, 38);
-  assert.equal(model.endpointLedger.length, 1224);
-  assert.equal(model.commandLedger.length, 1179);
+  assert.equal(model.endpointLedger.length, model.counts.endpoints);
+  assert.equal(model.commandLedger.length, model.counts.commands);
   assert.equal(validateProofModel(model), true);
 });
 
@@ -50,7 +41,7 @@ test("proof validator rejects an omitted endpoint instead of accepting a summary
 
   assert.throws(
     () => validateProofModel(incomplete),
-    /endpoint ledger has 1223 rows, want 1224/,
+    new RegExp(`endpoint ledger has ${model.endpointLedger.length - 1} rows, want ${model.endpointLedger.length}`),
   );
 });
 

@@ -1,0 +1,23 @@
+directive @preview(toggledBy: String!) on FIELD_DEFINITION
+directive @deprecated(reason: String) on FIELD_DEFINITION
+
+type Mutation {
+  createEnterpriseOrganization(
+    input: CreateEnterpriseOrganizationInput!
+  ): CreateEnterpriseOrganizationPayload @preview(toggledBy: "enterprise-admin")
+
+  closeWidget(input: CloseWidgetInput!): CloseWidgetPayload
+}
+
+type Query {
+  viewer: User!
+
+  node(id: ID!): Node
+
+  nodes(ids: [ID!]!): [Node]!
+
+  widget(
+    owner: String!
+    name: String!
+  ): Widget @deprecated(reason: "use node")
+}

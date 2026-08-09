@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -122,6 +123,161 @@ func TestDestructiveCanonicalCommandPreviewProducesApprovablePlan(t *testing.T) 
 	}
 	if plan.Status != "previewed" || plan.ApprovalToken == "" || plan.PreviewDigest == "" {
 		t.Fatalf("previewed canonical plan = %+v, want persisted digest and approval token", plan)
+	}
+}
+
+// A GitHub deploy-key DELETE can return 404 for a request that reached the
+// exact scoped target. The lab found that the current declaration treats that
+// status as a completed idempotent delete, even when an independent list still
+// exposes the same generated key. Keep the reproduction local: its purpose is
+// to distinguish route/record mapping from the false-success masking rule
+// before another provider mutation is allowed.
+func TestGitHubDeployKeyDeleteDoesNotMaskNotFoundForAVisibleBoundFixture(t *testing.T) {
+	ctx := context.Background()
+	const (
+		owner = "lab-owner"
+		repo  = "lab-repository"
+		keyID = "4242"
+		title = "pm-live-lab-generated-deploy-key"
+	)
+	var deletePath, listPath string
+	deleteCalls := 0
+	listCalls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodDelete:
+			deleteCalls++
+			deletePath = r.URL.Path
+			w.WriteHeader(http.StatusNotFound)
+		case http.MethodGet:
+			listCalls++
+			listPath = r.URL.Path
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = fmt.Fprintf(w, `[{"id":%s,"title":%q,"read_only":true}]`, keyID, title)
+		default:
+			t.Errorf("request method = %s, want DELETE or GET", r.Method)
+			w.WriteHeader(http.StatusMethodNotAllowed)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	a, _ := setupGitHubApp(t, ctx, server.URL)
+	targetConfig := map[string]string{"owner": owner, "repo": repo}
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Name:       "deploy_key_not_found_must_fail",
+		Connector:  "github",
+		Credential: "github-local",
+		Config:     targetConfig,
+		Path:       []string{"repo", "deploy-key", "delete"},
+		Flags:      map[string][]string{"key-id": {keyID}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand(repo deploy-key delete): %v", err)
+	}
+	if preview == nil || plan.ApprovalToken == "" {
+		t.Fatalf("previewed destructive plan = %#v/%#v, want preview and approval", plan, preview)
+	}
+
+	run, runErr := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if deleteCalls != 1 {
+		t.Fatalf("deploy-key delete calls = %d, want 1", deleteCalls)
+	}
+	if want := "/repos/" + owner + "/" + repo + "/keys/" + keyID; deletePath != want {
+		t.Fatalf("deploy-key delete path = %q, want %q", deletePath, want)
+	}
+
+	connector, runtime, err := a.ResolveConnectorCredential(ctx, "github", "github-local", targetConfig)
+	if err != nil {
+		t.Fatalf("ResolveConnectorCredential(read-back): %v", err)
+	}
+	var rows []connectors.Record
+	if err := connector.Read(ctx, connectors.ReadRequest{Stream: "deploy_keys", Config: runtime}, func(record connectors.Record) error {
+		rows = append(rows, record)
+		return nil
+	}); err != nil {
+		t.Fatalf("independent deploy-key list read-back: %v", err)
+	}
+	if listCalls != 1 {
+		t.Fatalf("deploy-key list calls = %d, want 1", listCalls)
+	}
+	if want := "/repos/" + owner + "/" + repo + "/keys"; listPath != want {
+		t.Fatalf("deploy-key list path = %q, want %q", listPath, want)
+	}
+	if len(rows) != 1 || fmt.Sprint(rows[0]["id"]) != keyID || rows[0]["title"] != title || rows[0]["read_only"] != true {
+		t.Fatalf("independent deploy-key list did not retain the exact local fixture: %#v", rows)
+	}
+	if runErr == nil {
+		t.Fatalf("RunReverseETL() unexpectedly completed after provider 404: status=%q succeeded=%d failed=%d", run.Status, run.RecordsSucceeded, run.RecordsFailed)
+	}
+	if run.Status != "failed" || run.RecordsSucceeded != 0 || run.RecordsFailed != 1 {
+		t.Fatalf("deploy-key 404 run = %#v, want one failed write", run)
+	}
+}
+
+// The label deletion action is the nearby, proven 404 control: it follows the
+// identical plan/preview/confirmation/write route, but it does not declare a
+// missing status as success. A not-found response must remain visible to the
+// caller. Together with the deploy-key reproduction above, this separates the
+// failure from credential/config binding or the generic destructive-write path.
+func TestGitHubLabelDeleteKeepsNotFoundVisibleForTheSameScopedWritePath(t *testing.T) {
+	ctx := context.Background()
+	const (
+		owner = "lab-owner"
+		repo  = "lab-repository"
+		name  = "pm-live-lab-control-label"
+	)
+	deleteCalls := 0
+	deletePath := ""
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodDelete {
+			t.Errorf("request method = %s, want DELETE", r.Method)
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		deleteCalls++
+		deletePath = r.URL.Path
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	t.Cleanup(server.Close)
+
+	a, _ := setupGitHubApp(t, ctx, server.URL)
+	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
+		Name:       "label_not_found_must_fail",
+		Connector:  "github",
+		Credential: "github-local",
+		Config:     map[string]string{"owner": owner, "repo": repo},
+		Path:       []string{"label", "delete"},
+		Flags:      map[string][]string{"name": {name}},
+		Preview:    true,
+	})
+	if err != nil {
+		t.Fatalf("PlanConnectorCommand(label delete): %v", err)
+	}
+	if preview == nil || plan.ApprovalToken == "" {
+		t.Fatal("label delete did not produce an approvable destructive plan")
+	}
+
+	run, runErr := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+		Confirmation:  connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+	})
+	if deleteCalls != 1 {
+		t.Fatalf("label delete calls = %d, want 1", deleteCalls)
+	}
+	if want := "/repos/" + owner + "/" + repo + "/labels/" + name; deletePath != want {
+		t.Fatalf("label delete path = %q, want %q", deletePath, want)
+	}
+	if runErr == nil {
+		t.Fatalf("RunReverseETL() unexpectedly completed after label provider 404: status=%q succeeded=%d failed=%d", run.Status, run.RecordsSucceeded, run.RecordsFailed)
+	}
+	if run.Status != "failed" || run.RecordsSucceeded != 0 || run.RecordsFailed != 1 {
+		t.Fatalf("label 404 run = status=%q succeeded=%d failed=%d, want one failed write", run.Status, run.RecordsSucceeded, run.RecordsFailed)
 	}
 }
 

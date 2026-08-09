@@ -105,3 +105,73 @@ acknowledgements; campaign, ProjectsV2, and Codespaces contracts remain approval
 The body-field audit found an existing but unimplemented `json` CLI flag type. It is used only as
 a parsed, schema-validated value for declared `record.*` object/array fields; accepting it as a
 literal body, path, query, or header would create a generic API escape hatch and is not selected.
+
+---
+
+## Captain-authorized live lab (2026-08-09)
+
+| Option | Description | Selected |
+|---|---|---|
+| Reuse historical single-repo skips | Keep the 957 rows unattempted and use a non-PM bootstrap path. | |
+| Parameterized PM-only lab | Derive every historical skip into a fail-closed, cohort-scoped PM-only fixture plan. | ✓ |
+
+**Choice:** Parameterized PM-only lab.
+**Notes:** The captain explicitly authorized disposable lab resources, but not a bypass around
+the connector. The manifest must partition every historical case into retained personal lab,
+Free sandbox organization, App/Marketplace, or entitlement cohort. The default-deny boundary must
+bind both slug and immutable ID, deny `polymetrics-ai`, and reject ambiguity before `pm` starts.
+The retained personal repository stays mutation-ineligible until its proof-program provenance is
+recorded in the append-only cleanup ledger. No new no-mistakes run begins before the framework and
+the next coherent live-proof increment are committed.
+
+---
+
+## External bootstrap probes (2026-08-09)
+
+| Option | Description | Selected |
+|---|---|---|
+| Substitute a provider/UI path | Create an organization or App through an untracked path, then point PM at it. | |
+| Fixed PM-only probes | Derive the available PM bootstrap surface, probe only safe account reads, and record exact missing surface/credential prerequisites. | ✓ |
+
+**Choice:** Fixed PM-only probes.
+**Notes:** The current PM surface has `orgs delete` but no organization-create command; deletion
+is not attempted without a run-owned immutable organization. `apps create-from-manifest` requires
+a conversion code but no PM command issues one, so no App fixture is attempted. The fixed
+`apps get-authenticated` PM read returned a sanitized 401 under the user credential, while the
+Marketplace-user subscription read returned a sanitized 200. The successful read proves only that
+route; it does not establish an App, listing, plan, or installation fixture.
+
+---
+
+## First reusable personal resource family (2026-08-09)
+
+| Option | Description | Selected |
+|---|---|---|
+| Exit-status-only label mutation | Treat a successful write command as sufficient evidence. | |
+| Read-back asserted label lifecycle | Bind list reads to the lab repository, assert generated ID/color, and delete through the PM confirmation path. | ✓ |
+
+**Choice:** Read-back asserted label lifecycle.
+**Notes:** The generated label was absent at baseline, created through PM, read back by immutable
+ID, edited with its returned canonical color asserted, then deleted through PM's typed confirmation
+and confirmed absent. This is a reusable reversible-resource pattern; no provider output or
+credential profile was retained.
+
+---
+
+## Editable issue and comment proof (2026-08-09)
+
+| Option | Description | Selected |
+|---|---|---|
+| Treat write exit status as proof | Skip the returned-data assertions after issue edit/comment. | |
+| Bounded PM-only read-back | Re-supply safe write flags, bind the generated issue by immutable ID, and retry only stale successful PM list observations. | ✓ |
+
+**Choice:** Bounded PM-only read-back.
+**Notes:** The first immediate PM list after an accepted generated issue create exposed a
+read-after-write visibility delay. It was independently PM-read, PM-closed, and retained before
+any edit/comment attempt. The final fresh issue was created, edited, and commented only through
+PM plan → preview → approval → execute. Its bounded PM list assertions retained one immutable ID,
+matched the caller-declared edit properties in memory, and observed exactly one comment before PM
+close and retained-state verification. Record re-supply is required at preview and execution so
+the runtime's withheld-field contract remains valid; PM read/provider errors are not retried or
+reclassified as visibility delay. No provider payload, comment text, or credential detail is
+persisted.

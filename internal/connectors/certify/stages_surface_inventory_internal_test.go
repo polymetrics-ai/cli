@@ -16,8 +16,9 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.Result != "pass" {
 		t.Fatalf("Result = %q reason=%q", result.Result, result.Reason)
 	}
-	if result.Endpoints != 1224 {
-		t.Fatalf("Endpoints = %d, want 1224", result.Endpoints)
+	wantEndpoints := githubSourceLockedRESTCount(t) + githubLegacyGraphQLBindingCount(t)
+	if result.Endpoints != wantEndpoints {
+		t.Fatalf("Endpoints = %d, want source-derived REST plus legacy fixed GraphQL bindings %d", result.Endpoints, wantEndpoints)
 	}
 	if result.Covered != 1147 {
 		t.Fatalf("Covered = %d, want 1147", result.Covered)

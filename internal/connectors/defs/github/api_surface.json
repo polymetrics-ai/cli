@@ -1,8 +1,8 @@
 {
-  "api": "GitHub REST API (https://api.github.com) plus selected GitHub GraphQL API operations",
+  "api": "GitHub REST API (https://api.github.com) plus declared GitHub GraphQL document bindings",
   "docs": "https://docs.github.com/en/rest; https://docs.github.com/en/graphql",
-  "reviewed_at": "2026-07-03",
-  "scope": "Full documented-surface expansion against GitHub's own OpenAPI description (openapi 3.0.3, info.version 1.1.4, 12,920,264 bytes): every documented REST operation is enumerated below with exactly one disposition, plus the four fixed GitHub GraphQL operations that back the Projects and Discussions streams and are counted separately from REST. Webhook EVENT payloads (270, under the x-webhooks vendor extension) are excluded from the operation surface by counting policy; the 28 webhook MANAGEMENT operations are ordinary paths entries and are included. GitHub's GraphQL schema beyond those four fixed operations is a NAMED scope gap, not a coverage claim.",
+  "reviewed_at": "2026-08-09",
+  "scope": "Full REST binding expansion against GitHub's pinned OpenAPI description: every documented REST operation is enumerated below with exactly one disposition. The authoritative combined REST plus GraphQL root inventory is generated from internal/connectors/defs/github/sources/github-operation-source-lock.json into .planning/phases/github-parity-extract-r1/GITHUB-COMBINED-OPERATION-LEDGER.json. This binding layer retains REST endpoints and legacy fixed GraphQL documents that back existing streams; it is not the GraphQL completeness denominator. Webhook EVENT payloads (270, under the x-webhooks vendor extension) are excluded from the operation surface by counting policy; the 28 webhook MANAGEMENT operations are ordinary paths entries and are included.",
   "endpoints": [
     {
       "method": "POST",

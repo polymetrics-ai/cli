@@ -787,6 +787,733 @@ $ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 ```
 
+---
+
+## Cycle 18 — PM-only 957-case live-lab boundary
+
+**Red 18a — the captain-required lab manifest and fail-closed fixture boundary did not exist.**
+The new deterministic test imports the GitHub-only lab module and manifest generator, then requires
+all 957 preserved pre-skipped cases to be represented exactly once in one of four factual cohorts.
+It also requires PM-only commands, immutable slug-and-ID matching, explicit production/worktree
+denial, pre-dispatch rejection, append-only/idempotent cleanup, redaction, and one terminal result
+per command. No credential or provider request is involved in this red test.
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module
+'.../scripts/github-live-lab.mjs' imported from
+'.../scripts/tests/github-live-lab.test.mjs'
+✖ scripts/tests/github-live-lab.test.mjs
+```
+
+The green implementation must stay in GitHub-specific scripts/evidence, must not introduce a raw
+GitHub escape hatch, and must validate the boundary before credential inspection or a PM subprocess.
+
+**Red 18b — a fresh private-lab bootstrap had no account-identity constraint.**
+The retained repository is recorded as retained after validation but has no preserved evidence that
+this proof program created it through PM. The follow-up test therefore defines the only permitted
+bootstrap exception: one exact authenticated-user immutable ID may invoke only `pm github repo
+create` for one exact lab-prefixed private, auto-initialized repository. Before the implementation,
+the test could not import `authorizeBootstrapRepoCreate` or the pre-dispatch executor:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'authorizeBootstrapRepoCreate'
+```
+
+The green path must reject a different command, user ID, name, or public repository before PM starts.
+
+**Red 18c — no reusable PM plan/preview/approval/execute runner existed for the bootstrap.**
+The deterministic lifecycle test supplies a fake PM process and expects exactly three invocations:
+plan with the named credential, preview with the created plan, then JSON execution with the transient
+approval grant. It asserts the returned summary has only command/status/count fields and cannot
+contain the process-only grant. Before implementation the import failed:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'runPMPlannedWrite'
+```
+
+The real runner must keep stdout/stderr, plan IDs, approval grants, and confirmation challenges in
+memory, redact all failure output, and execute only after the bootstrap boundary accepts the exact
+private repository request.
+
+---
+
+## Cycle 19 — credential-pinned repo-view control and PM-only bootstrap discovery
+
+**Red 19a — the malformed `repo view` target override needed a durable regression boundary.**
+The preserved 124-case runner's proven `repo view` invocation is exactly `pm github repo view
+--credential <profile> --root <isolated-project> --json`; it has no `--owner`, `--repo`,
+`--config`, or `--connection` override. During this recovery, the malformed owner/repo form exited
+nonzero and the output sanitizer classified it as `flag_parse_rejected`; the failed invocation did
+not produce a provider assertion and no raw output was retained. Reproducing the preserved control
+returned `ConnectorCommandRead` with one record, but its stored credential scope was a different
+repository, so it cannot bind the new fixture. The regression record must preserve both facts
+without persisting the old repository, a credential name, or response data.
+
+**Red 19b — no ID-safe PM-only bootstrap discovery existed.**
+The captain selected the implemented `pm github repos list-for-authenticated-user` command as the
+independent discovery read. The new test requires an exact private result whose `name`, owner login,
+and owner immutable ID all match the bootstrap principal, then returns only the repository immutable
+ID and the known slugs. It rejects public, wrong-user, duplicate, and `--config`-overridden results
+before PM starts. Before implementation the test failed at the missing exports:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'authorizeBootstrapRepoDiscovery'
+```
+
+The green path must run the authenticated-repository list with the existing credential-pinned PM
+argument shape, filter the response only in memory, bind one exact immutable ID, and remove the
+one-time bootstrap exception before any normal cohort fixture action.
+
+**Green 18/19 — source-derived 957-row boundary, control regression, and first PM-only cohort result.**
+`scripts/github-live-lab.mjs` now validates the default-deny boundary before a PM subprocess,
+permits one exact private bootstrap create, and then permits one exact PM
+`repos list-for-authenticated-user` discovery read only until it binds the generated private target
+by both slug and immutable ID. `repo view` remains the historical credential-pinned control; the
+owner/repo-flag failure is retained in `GITHUB-LIVE-LAB-DIVERGENCES.json` without raw output,
+credential material, or a provider response.
+
+The deterministic manifest remains exactly 957 rows in four exclusive cohorts. The first historical
+pre-skip, `repo create`, has a new incremental `proven` terminal record only after its PM
+plan/preview/approval/execute lifecycle completed and the independent PM authenticated-repository
+listing found exactly one private generated slug under authenticated user immutable ID `6113982`.
+The boundary now contains that one exact run-owned repository ID, its one-time bootstrap exception
+is removed, and the append-only cleanup ledger carries `created` then `read_back` events for it.
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+11 passed
+
+$ node scripts/github-live-lab-manifest.mjs --check
+github live lab manifest: rows=957 personal_repo=427 sandbox_org_free=291 github_app_or_marketplace=33 unavailable_entitlement=206
+
+$ node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+github live lab boundary: ok allowed_targets=1
+
+$ node --input-type=module  # validate append-only ledger and incremental terminal record
+github_live_lab_increment=ok fixtures=1 terminal_records=1
+
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+7 passed
+```
+
+No test was weakened, skipped, or deleted. The PM-only bootstrap write and discovery response were
+held in process memory; evidence records only the terminal assertion, generated target identity, and
+sanitized control divergence.
+
+---
+
+## Cycle 20 — ID-bound normal PM reads and writes
+
+**Red 20 — a normal write could still reach PM after a boundary was supplied.**
+`runPMPlannedWrite` originally guarded only the special bootstrap request. The new deterministic
+test supplies the protected `polymetrics-ai/cli` identity, then a mismatched `--config repo`, and
+asserts the injected PM runner has not started. Before the guard, the test observed `started=true`:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+✖ normal planned writes bind the exact repository target before any PM process starts
+AssertionError: true !== false
+```
+
+**Red 20b — the independent read path could similarly bypass ID binding.**
+The next test imports `runPMScopedRead`, supplies the protected target, and requires pre-dispatch
+denial. Before implementation the import failed with no `runPMScopedRead` export.
+
+**Green 20 — one target contract for every normal PM subprocess.**
+Both normal writes and reads now call `authorizeLabTarget` before credential-name validation or a
+subprocess. Repository operations require exactly one `--config owner` and `--config repo` matching
+the allowed immutable target; duplicate or mismatched config and explicit owner/repo selectors are
+rejected. These are existing PM connector config overlays, held only in the invocation/plan, not a
+rewrite of the stored credential scope. Bootstrap remains the only exception and cannot be combined
+with a normal target.
+
+## Cycle 21 — issue-create neutralization rather than unsafe deletion
+
+**Red 21a — the generated `issue create` recipe chose the wrong cleanup resource.**
+The generic cleanup picker fell back to `repo delete` when it could not use `issue delete`, even
+though issue deletion is `unsafe_or_disallowed`. The new manifest test requires every row to name a
+cleanup strategy and specifically requires `issue create` to use `issue close` with
+`neutralize_and_retain`; before the generator change `cleanup_strategy` was absent.
+
+**Green 21 — the first reusable personal-repository fixture family is live and neutralized.**
+The generator now prefers an implemented same-namespace delete and otherwise requires explicit
+retention; `issue create` is explicitly paired with PM `issue close` and retained-state evidence.
+After an ID-bound PM baseline read returned zero open issues and PM's `rate-limit get` preflight
+succeeded, the lab ran `issue create` through plan/preview/approval/execute. An independent PM
+issue-list read found exactly one generated issue; PM `issue close` then ran through the same
+lifecycle, and an independent PM read confirmed it closed. The append-only ledger records
+`created`, `read_back`, `neutralized`, and `retained`; the retention reason is the recorded
+`unsafe_or_disallowed` issue-delete decision. `GITHUB-LIVE-LAB-REPORT.json` now has two `proven`
+historical pre-skips: `repo create` and `issue create`.
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+13 passed
+
+$ node scripts/github-live-lab-manifest.mjs --check
+github live lab manifest: rows=957 personal_repo=427 sandbox_org_free=291 github_app_or_marketplace=33 unavailable_entitlement=206
+
+$ node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+github live lab boundary: ok allowed_targets=1
+
+$ node --input-type=module  # validates ledger + incremental report
+github_live_lab_increment=ok fixtures=2 terminal_records=2
+
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+7 passed
+```
+
+## Cycle 22 — PM-only organization and App/Marketplace bootstrap probes
+
+**Red 22 — no closed account-level PM probe or source-derived external bootstrap map existed.**
+Before any organization/App provider request, the plan was extended with a dedicated bootstrap
+sub-slice. The new deterministic test requires a fixed allowlist of account-level PM direct reads,
+rejects `apps create-from-manifest` and repository selectors before its injected runner starts, and
+requires a source-derived inventory for the organization and App/Marketplace cohorts. The initial
+red run failed because neither the inventory module nor the account-probe exports existed:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module
+'.../scripts/github-live-bootstrap-probes.mjs' imported from
+'.../scripts/tests/github-live-lab.test.mjs'
+```
+
+The green implementation must never turn this into a generic account command executor. It may run
+only the two named PM reads with the existing user credential, must keep response bodies and
+credential material process-local, and must prove an organization delete cannot begin without a
+run-owned immutable organization plus cleanup provenance. The inventory must count the current
+manifest's 291 organization and 33 App/Marketplace cases from preserved source artifacts and
+record an exact PM-surface or GitHub entitlement divergence rather than calling a UI, `gh`, or raw
+API.
+
+**Red 22b — the live report did not yet account for the two safe account-probe outcomes.**
+After the fixed PM reads completed, the report test was strengthened to require a terminal
+credential blocker for `apps get-authenticated`, a terminal proof for the successful Marketplace
+user read, and response-body-free source/guard evidence for the organization and App bootstrap
+gaps. It failed against the prior two-record report:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+✖ records personal-repository cohort results only after immutable target binding, read-back, and neutralization
+AssertionError: Expected values to be strictly deep-equal:
+  actual:   { terminal_records: 2 }
+  expected: { terminal_records: 4 }
+```
+
+The green record must add only sanitized command/outcome/status facts. It must not serialize the
+credential profile, response body, stdout/stderr, provider URLs, or a fabricated organization/App
+fixture.
+
+**Red 22c — the existing divergence ledger did not name the new external-boundary facts.**
+The follow-up test requires four compact records: the missing PM organization-create command, the
+missing PM App-manifest code issuer, the observed App-authentication 401, and the reachable
+Marketplace-user read that still cannot bootstrap a fixture. Before those records were added, the
+first lookup was absent:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+✖ records exact PM-surface and GitHub credential divergences without a provider fallback or retained account data
+AssertionError: actual undefined; expected org-bootstrap-create-command-absent
+```
+
+The green ledger must preserve only the exact command, phase, classified outcome/status, and next
+PM-only prerequisite. No raw help/provider output or account data belongs in the divergence ledger.
+
+**Green 22 — external bootstrap boundary is proved before personal-cohort expansion resumes.**
+`scripts/github-live-bootstrap-probes.mjs` now derives a checked-in, response-body-free inventory
+from the current GitHub CLI/API surfaces and the 957-row manifest. It accounts for exactly 291
+`sandbox_org_free` rows and 33 `github_app_or_marketplace` rows. The inventory proves that current
+PM exposes implemented `orgs delete` for `DELETE /orgs/{org}`, but no registered command for either
+`POST /user/orgs` or `POST /organizations`; deletion was therefore never planned or dispatched.
+It also proves `apps create-from-manifest` consumes a required `--code` at
+`POST /app-manifests/{code}/conversions`, while no PM command issues that conversion code. Both are
+PM command-surface blockers, not a claim about whether GitHub would permit the action through a
+forbidden fallback.
+
+The lab runner now admits only two targetless account probes: PM
+`apps get-authenticated` and PM `apps list-subscriptions-for-authenticated-user`. It forbids every
+repository selector, `--config`, connection override, unlisted command, and write before the
+subprocess starts. The user-credential App probe returned sanitized HTTP 401, producing one
+terminal `credential_blocker` for the historical App-authentication row. The Marketplace-user read
+returned sanitized HTTP 200, producing one terminal `proven` record for its historical direct-read
+row; it did not create or inspect a listing/App/plan/installation fixture. The report now has four
+terminal records total (three proven, one credential blocker), while the organization/App bootstrap
+gaps remain explicitly non-dispatched.
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+16 passed
+
+$ node scripts/github-live-bootstrap-probes.mjs --check
+github live bootstrap probes: organization_cases=291 app_marketplace_cases=33
+
+$ node scripts/github-live-lab-manifest.mjs --check
+github live lab manifest: rows=957 personal_repo=427 sandbox_org_free=291 github_app_or_marketplace=33 unavailable_entitlement=206
+
+$ node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+github live lab boundary: ok allowed_targets=1
+
+$ node --input-type=module  # validates boundary, append-only cleanup, terminal records, and source inventory
+{"boundary_targets":1,"fixtures":2,"terminal_records":4,"organization_cases":291,"app_marketplace_cases":33}
+
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+7 passed
+
+$ git diff --check
+```
+
+## Cycle 23 — reversible personal-repository labels
+
+**Red 23a — a label fixture had no closed PM read-back resolver.**
+After the external-bootstrap audit completed, the next planned resource family is
+`label create` → `label edit` → typed-confirmed `label delete` in the already
+ID-bound private lab repository. The deterministic test requires a PM `label list`
+envelope with exactly one generated label name and immutable label ID; it rejects a
+wrong command, an absent label, a duplicate label, or an attempted create when the
+name already exists. Before adding the resolver, the test failed at import time:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'assertBoundLabLabelAbsent'
+```
+
+The green resolver must consume a PM response only in memory and return only the generated label
+name plus immutable ID. The live slice must use the existing exact owner/repository config guard,
+must not create a label if the baseline has one, and must record final absence after cleanup.
+
+**Red 23b — the incremental report did not yet contain a complete label lifecycle.**
+The report/ledger test was extended before any label mutation to require the three historical label
+rows, a created/read-back/edit-read-back/cleanup-completed ledger sequence, and final terminal
+accounting of seven records (six proven and one credential blocker). It failed against the prior
+four-record report:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+✖ records personal-repository cohort results only after immutable target binding, read-back, and neutralization
+AssertionError: actual { terminal_records: 4 }; expected { terminal_records: 7 }
+```
+
+The green report must be written only after the baseline/list/create/edit/delete/list sequence has
+completed through PM. It may record the immutable generated label ID and sanitized lifecycle facts,
+but never a credential profile or provider response body.
+
+**Red 23c — label edit had existence proof but not a returned-data assertion.**
+The resolver test was strengthened to require the PM list record's canonical label color after an
+edit, while continuing to return only the generated name/immutable ID. Before the narrow assertion
+existed, the import failed:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'assertBoundLabLabelProperties'
+```
+
+The green assertion must compare only caller-provided non-secret expected properties and must never
+return the provider record or serialize it to evidence. This makes the live edit proof a returned
+data assertion rather than an exit-status claim.
+
+**Green 23 — one fully reversible label family is live, asserted, and removed.**
+The new label resolver accepts only a PM `ConnectorCommandRead` for `label list`, matches the
+generated name in memory, and returns only that known name plus immutable provider ID. It refuses
+an existing baseline, malformed/wrong-command input, zero/duplicate matches, or a non-matching
+canonical color. The edit assertion therefore verifies returned PM data instead of inferring
+success from process exit.
+
+After a PM baseline established that the generated label name was absent in the immutable-bound
+private lab repository, the lab ran `label create`, `label edit`, and typed-confirmed `label delete`
+through PM plan → preview → approval → execute. PM list read-back found one immutable label ID after
+create, then the same ID with the edited canonical color, and finally no generated label after
+delete. The append-only ledger records `created`, two `read_back` events, and `cleanup_completed`;
+no label/provider response body or credential profile was written. The three historical label rows
+are terminally proven, taking the incremental report to seven records (six proven, one credential
+blocker).
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+17 passed
+
+$ node scripts/github-live-lab-manifest.mjs --check
+github live lab manifest: rows=957 personal_repo=427 sandbox_org_free=291 github_app_or_marketplace=33 unavailable_entitlement=206
+
+$ node scripts/github-live-bootstrap-probes.mjs --check
+github live bootstrap probes: organization_cases=291 app_marketplace_cases=33
+
+$ node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+github live lab boundary: ok allowed_targets=1
+
+$ node --input-type=module  # validates boundary, append-only cleanup, terminal records, and source inventory
+{"boundary_targets":1,"fixtures":3,"terminal_records":7,"organization_cases":291,"app_marketplace_cases":33}
+
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+7 passed
+
+$ git diff --check
+```
+
+## Cycle 24 — editable issue and comment lifecycle
+
+**Red 24a — no closed PM issue read-back resolver could prove edit/comment behavior.**
+The next planned private-repository slice creates a fresh generated issue rather than reusing the
+retained closed issue. Its new test requires a PM `issue list` envelope with exactly one generated
+title, immutable node ID and issue number, expected returned body/state, and a minimum returned
+comment count. It rejects wrong-command, absent, duplicate, or pre-existing generated issue
+results. Before implementation the imports were absent:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'assertBoundLabIssueAbsent'
+```
+
+The green resolver must retain no provider issue record. It may return only the known immutable ID
+and issue number, so the edit/comment proof stays a returned-data assertion and the final close can
+use the exact generated issue only.
+
+**Red 24b — the report/cleanup ledger did not yet require the editable issue's full lifecycle.**
+Before the provider write, the test was strengthened to require terminal records for `issue edit`
+and `issue comment`, and a second issue fixture with create/read-back/edit-read-back/comment-read-back/
+neutralize/retain events. It failed against the seven-record report:
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+✖ records personal-repository cohort results only after immutable target binding, read-back, and neutralization
+AssertionError: actual { terminal_records: 7 }; expected { terminal_records: 9 }
+```
+
+The green evidence must only follow PM create/edit/comment/close plus returned data assertions;
+the comment body must remain process-local and the closed issue must be retained with the existing
+issue-delete safety decision.
+
+**Red 24c — a minimum comment count did not prove increase from a fresh issue baseline.**
+The resolver test now demands an exact zero returned count after create and a minimum one after the
+comment. Before supporting `expectedComments`, the mismatch was silently ignored:
+
+```
+$ node --test --test-name-pattern='issue read-back' scripts/tests/github-live-lab.test.mjs
+AssertionError: Missing expected exception.
+```
+
+The green resolver must validate a caller-declared non-negative exact count without returning the
+record, so the live comment proof establishes a strictly increased returned count.
+
+**Red 24d — the PM-only lab runner dropped record flags after planning.**
+`runPMPlannedWrite` sent generated `--config`, identity, and record flags only to the initial plan,
+then invoked both preview and approval execution with just `--plan`. That cannot support the
+runtime's deliberate withheld-field contract: `PreviewConnectorCommandPlan` and
+`RunReverseETL` each reconstitute a field withheld from the persisted plan from the caller's flags.
+The new deterministic issue-edit lifecycle test requires the exact safe record-argument sequence
+on plan, preview, and execution, while keeping the credential on the initial plan only and the
+approval grant process-local. It failed before the runner change:
+
+```
+$ node --test --test-name-pattern='planned write re-supplies' scripts/tests/github-live-lab.test.mjs
+✖ planned write re-supplies the exact record flags for withheld-field preview and execution
+AssertionError: actual [ '--root', '/tmp/github-live-lab-root' ]; expected [ '--config', 'owner=lab-owner', ... ]
+```
+
+The actual GitHub issue attempt stopped before edit/comment provider execution and was PM-closed
+and retained under the existing issue-delete safety rule. This is a lab-harness precondition gap,
+not evidence of provider behavior. The green step must preserve the same immutable target guard,
+re-supply only `validateRecordArgs`-accepted values, and never serialize the temporary approval
+grant, plan ID, or response body.
+
+**Red 24e — immediate PM list read-back can race GitHub's accepted write visibility.**
+The repaired PM-only `issue create` lifecycle returned one completed provider mutation, but the
+first independent PM `issue list --state all` did not yet meet the exact generated title/body/open/
+zero-comment assertion. A later PM-only read found exactly one record with those properties and a
+stable immutable ID; the fixture was then PM-closed and retained before any edit or comment was
+attempted. The evidence is therefore a read-after-write visibility race, not a credential,
+repository-scope, implementation, or provider-write failure.
+
+The new deterministic test requires a bounded six-attempt helper to retry *only* a successful PM
+`issue list` envelope that fails the generated-record assertion; it must immediately propagate a
+PM read/provider error rather than turning an authentication or entitlement failure into a delay.
+It returns only immutable ID, issue number, and attempt count. Before implementation its import
+failed:
+
+```
+$ node --test --test-name-pattern='PM issue read-back retries' scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'waitForBoundLabIssue'
+```
+
+The green helper uses no provider tool except the caller's `runPMScopedRead`, holds all envelopes
+in memory, caps the visibility wait at five one-second intervals, and leaves provider/credential
+errors un-retried for exact classification.
+
+**Red 24f — recovered safety fixtures must remain visible to the final proof.**
+The two interrupted generated-issue attempts were each independently PM-read, PM-closed, and
+retained, so the append-only ledger now has three short create/read-back/neutralize/retain issue
+lifecycles: the original `issue create` proof plus the two recovered safety fixtures. The final
+edit/comment proof must add a fourth issue fixture with the longer six-event lifecycle; the test
+now requires exactly that partition instead of silently assuming only two issue fixtures. Before
+the final fresh lifecycle, the terminal report remains deliberately red:
+
+```
+$ node --test --test-name-pattern='records personal-repository cohort results' scripts/tests/github-live-lab.test.mjs
+AssertionError: actual { terminal_records: 7 }; expected { terminal_records: 9 }
+```
+
+This is an evidence gate, not a request to fabricate result rows. The next provider mutation uses
+a new generated title, the immutable-bound repository, the repaired record re-supply lifecycle,
+and the bounded PM-only read-back helper; all prior generated issues are closed and retained.
+
+**Green 24 — PM-only issue edit/comment proof with fail-closed visibility handling.**
+`runPMPlannedWrite` now sends the same `validateRecordArgs`-accepted argument sequence to plan,
+preview, and execution while keeping the credential on the initial plan and all approval material
+process-local. `waitForBoundLabIssue` replays only successful PM `issue list` envelopes that have
+not yet met the exact generated-record assertion; it returns no provider record, caps retries at
+six, and immediately propagates a PM read failure. The deterministic regression coverage verifies
+both the re-supply sequence and that a synthetic provider-status failure is never retried.
+
+The final fresh, immutable-bound lab issue completed PM create, edit, comment, and close. Bounded
+PM list read-back established the same immutable issue identity after edit, an exact returned
+comment count of one after comment, and closed state after cleanup. The append-only ledger now has
+three short retained issue lifecycles for prior safe fixtures plus one six-event edit/comment
+lifecycle; no open generated issue remains. The report records both historical command rows as
+proven only after that evidence.
+
+```
+$ node --test scripts/tests/github-live-lab.test.mjs
+20 passed
+
+$ node scripts/github-live-lab-manifest.mjs --check
+github live lab manifest: rows=957 personal_repo=427 sandbox_org_free=291 github_app_or_marketplace=33 unavailable_entitlement=206
+
+$ node scripts/github-live-bootstrap-probes.mjs --check
+github live bootstrap probes: organization_cases=291 app_marketplace_cases=33
+
+$ node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+github live lab boundary: ok allowed_targets=1
+
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+7 passed
+
+$ git diff --check
+```
+
+---
+
+## Cycle 25 — disposable read-only deploy-key lifecycle
+
+**Red 25a — a deploy-key list could not prove a safe, generated, read-only fixture.**
+The next personal-repository family is the two historical rows `repo deploy-key add` and
+`repo deploy-key delete`. A PM-only preflight proved `repo deploy-key list` returns a scoped
+`ConnectorCommandRead` envelope in the immutable-bound private repository, but the lab had no
+resolver that could bind a generated title to one immutable deploy-key ID while refusing to retain
+the public key material. The new test requires that resolver plus a baseline-absence guard,
+rejects wrong command/absent/duplicate/non-integer/non-read-only records, and asserts the returned
+value contains no `key` field. Before implementation its import failed:
+
+```
+$ node --test --test-name-pattern='deploy-key read-back' scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'assertBoundLabDeployKeyAbsent'
+```
+
+The report/cleanup gate is deliberately strengthened before any provider write from nine to eleven
+terminal records and requires a `deploy_key:<immutable-id>` lifecycle of `created`, `read_back`,
+and `cleanup_completed`. The green path must generate the Ed25519 pair only in process memory,
+pass only its public line to PM, set `--read-only`, redact/no-persist all key material, and use the
+existing typed-confirmed delete contract before writing either terminal result.
+
+**Red 25b — deploy-key visibility must not strand a credential fixture after an accepted write.**
+The issue family already demonstrated that a successful GitHub write can briefly precede its PM
+list visibility. The new deploy-key retry test applies the same narrow rule: retry a successful
+PM `repo deploy-key list` envelope that does not yet contain the generated title, return only
+immutable ID/title/attempt count, and never retry a PM provider-status failure. Before the helper
+exists, the import is absent:
+
+```
+$ node --test --test-name-pattern='PM deploy-key read-back retries' scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'waitForBoundLabDeployKey'
+```
+
+The green helper is capped at six PM-only reads with five one-second visibility waits and retains
+no public-key string from any envelope.
+
+**Red 25c — typed-confirmed deletion needs the same final-absence visibility guard.**
+The cleanup contract cannot treat a successful PM delete exit as proof that the public deploy key
+is absent. A second deterministic test requires a bounded PM-only list retry until the generated
+title is absent and returns only the attempt count; it likewise propagates a PM provider-status
+failure immediately. Before implementation the absence helper import is absent:
+
+```
+$ node --test --test-name-pattern='PM deploy-key absence read-back' scripts/tests/github-live-lab.test.mjs
+SyntaxError: The requested module '../github-live-lab.mjs' does not provide an export named
+'waitForBoundLabDeployKeyAbsent'
+```
+
+The green path records `cleanup_completed` only after this assertion, never after exit status alone.
+
+---
+
+## Cycle 26 — deploy-key `404` false-success diagnosis gate
+
+**Red 26 — a correctly addressed deploy-key delete can complete after an HTTP `404`.**
+The preserved PM-only lab observed two typed-confirmed delete executions reported as completed,
+then an independent scoped PM list returned the same generated immutable deploy key. Before any
+third provider attempt, the regression reproduces the observable failure locally: a fake GitHub
+server receives the expected `DELETE /repos/<owner>/<repo>/keys/<integer-id>` route for the
+persisted scoped plan, replies `404`, and still exposes that key from a separate local list
+fixture. The caller must receive a failed reverse run rather than a completed one.
+
+This keeps trigger, masking condition, and symptom separate:
+
+- **trigger under test:** the provider returns `404` to the exact typed-confirmed delete;
+- **masking condition:** `delete_deploy_key.delete.missing_ok_status` contains `404`, so
+  `executeApprovedWrite` increments `RecordsWritten` and suppresses the error;
+- **visible symptom:** PM emits a completed reverse run while a later independent list can still
+  find the same immutable fixture.
+
+The paired label-delete control uses the same plan/preview/confirmation machinery and a correctly
+scoped local path, but its `404` remains a failure. That disconfirms lost `--config` state,
+`--key-id` mapping, and typed-confirmation bypass as explanations for the false completion.
+
+Expected initial failure:
+
+```text
+--- FAIL: TestGitHubDeployKeyDeleteDoesNotMaskNotFoundForAVisibleBoundFixture
+    ... RunReverseETL() unexpectedly completed after provider 404
+```
+
+No provider request, key material, credential value, repository slug, or provider body is used in
+this red test. The green change must be source-owned/regenerated and preserve both the independent
+absence read-back and generic delete semantics outside the demonstrated GitHub declaration.
+
+**Green 26:** `internal/connectors/defs/github/writes.json` is the owned action declaration (the
+migration conventions define `writes.json` as the declarative write source). The focused removal of
+`delete_deploy_key.delete.missing_ok_status: [404]` restores the same provider-error visibility as
+the label control without changing the generic engine. The historical comparison found the semantic
+already removed by `48dac5782a` on a non-ancestor line; the full-surface import rooted at
+`5bc7465b9` carried the older declaration, so this is a narrow source correction rather than a
+runtime-wide counterfactual. `surface-sync --check` found zero derived-field drift.
+
+```text
+$ go test -timeout 20m ./internal/app -run 'TestGitHubDeployKeyDelete' -count=1
+ok   polymetrics.ai/internal/app
+$ go test -timeout 20m ./internal/connectors/engine -run 'TestWriteDelete' -count=1
+ok   polymetrics.ai/internal/connectors/engine
+```
+
+## Cycle 27 — truthful deploy-key cleanup-failure accounting
+
+**Red 27 — a false-success cleanup cannot be represented as a completed lifecycle.**
+The existing report deliberately had nine terminal records because the deploy-key create/delete pair
+was withheld until final absence. After the local diagnosis, that omission would hide a real command
+result: creation plus immutable-ID read-back succeeded, while deletion is a factual failed operation
+because two typed-confirmed PM executions reported completion and independent PM list read-back kept
+the same generated key visible. The boundary/read-back test was strengthened to require eleven
+terminal records with the add marked proven, the delete marked failed, and an append-only
+`cleanup_failed` observation that does **not** terminalize the live fixture.
+
+Expected initial failure:
+
+```text
+$ node --test scripts/tests/github-live-lab.test.mjs
+... terminal_records: 9
+... terminal_records: 11
+```
+
+**Green 27:** add `cleanup_failed` as a sanitized, nonterminal ledger observation; append the exact
+historical failure fact without a third provider call; and make the report tally 11 = 9 proven + 1
+failed + 1 credential blocker. The test continues to require final absence before a later delete can
+be promoted to proven, so this records failure rather than weakening the cleanup gate.
+
+```text
+$ node --test scripts/tests/github-live-lab.test.mjs
+23 passed
+$ node --test scripts/tests/github-live-proof-sweep.test.mjs
+7 passed
+$ node scripts/github-live-lab-manifest.mjs --check
+github live lab manifest: rows=957 personal_repo=427 sandbox_org_free=291 github_app_or_marketplace=33 unavailable_entitlement=206
+$ node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+github live lab boundary: ok allowed_targets=1
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+## Cycle 28 — combined pinned REST + GraphQL operation ledger
+
+**Red 28a — no importer or source-derived GraphQL root inventory existed.** The preserved parity
+surface counted only four fixed GraphQL documents while GitHub's official public schema exposes the
+actual `Query` and `Mutation` roots. A new fixture-only test requires a source lock with REST
+method/path rows, multiline SDL root-field parsing, schema hash/provenance, explicit
+`createEnterpriseOrganization` canary, and one combined row per source operation. Before any
+implementation it failed at module resolution:
+
+```text
+$ node --test scripts/tests/github-combined-operation-ledger.test.mjs
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '.../scripts/github-combined-operation-ledger.mjs'
+```
+
+The official source snapshot used for the following green work is read-only and non-credentialed:
+the pinned REST artifact at `github/rest-api-description` commit
+`b26c240ded1c8b79cb0fb09dee4a21239061fa23` is 12,920,264 bytes with SHA-256
+`80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d` and 1,220 method/path
+operations. GitHub Docs' public `schema.docs.graphql` snapshot is 1,546,421 bytes with SHA-256
+`c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d`; it contains 31 `Query`
+and 274 `Mutation` root fields, including exactly one `createEnterpriseOrganization` mutation. A
+naive indentation-only probe initially counted a `https` token inside a description as a Query
+field; the SDL parser disconfirmed that false positive before the lock was accepted. No GitHub
+provider operation or PM fixture call occurred.
+
+**Red 28b — fixed GraphQL bindings were still being mistaken for the complete GraphQL source
+denominator.** The new permanent test scans each active source-surface/proof gate and rejects the
+legacy `GRAPHQL: 4` / `1224` denominator. It also derives the REST method split from the lock, so a
+future source refresh cannot preserve a stale static count. The initial gate was red because the
+four fixed-document bindings were the only GraphQL rows the old tests knew how to count.
+
+**Red 28c — a disabled fixed mutation was classified as partially implemented.** The fixture adds
+an `unsafe_or_disallowed` command bound to a GraphQL mutation and expects
+`declared_not_executable`, an exact mapped-command blocker, and no claim that a GraphQL executor
+exists. Before the classifier change it failed with:
+
+```text
+actual: 'partially_implemented'
+expected: 'declared_not_executable'
+```
+
+**Green 28 — the generated source lock and combined ledger are hermetic, complete, and explicit.**
+`scripts/github-combined-operation-ledger.mjs` parses the official artifacts only in `--write`
+mode; `--check` rebuilds the ledger solely from checked-in lock/bundle data. It emits all 1,525
+source operations, rejects duplicate/missing IDs, stale source hashes, the `UNTESTABLE` label, an
+absent `createEnterpriseOrganization` canary, or a stale generated ledger. It distinguishes the
+four existing fixed GraphQL documents from the complete root inventory, records `node` and `nodes`
+as a fixed-projection matrix, and labels `deleteIssue` as
+`mapped_command_not_executable` rather than a partial runtime implementation. No provider request
+or fixture action occurred in this green step.
+
+```text
+$ node --test scripts/tests/github-combined-operation-ledger.test.mjs
+5 passed
+$ node scripts/github-combined-operation-ledger.mjs --check
+github combined operation ledger: ok rest=1220 graphql_query=31 graphql_mutation=274 total=1525
+$ go test -timeout 20m ./cmd/connectorgen -run 'TestGitHub(DocumentedRESTSurfaceIsComplete|APISurfaceOperationLedgerMetrics)$' -count=1
+ok   polymetrics.ai/cmd/connectorgen
+$ go test -timeout 20m ./internal/connectors/certify -run '^TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints$' -count=1
+ok   polymetrics.ai/internal/connectors/certify
+$ node --test scripts/tests/github-parity-proof.test.mjs
+6 passed
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+$ git diff --check
+```
+
 ## Cycle 17e — final generated-artifact, lint, and provider-boundary repair
 
 **Red 17e — post-repair gates caught stale owned output and an out-of-scope proof file.** The

@@ -9,37 +9,6 @@ import (
 	"testing"
 )
 
-// githubRESTOperations is GitHub's documented REST operation count, re-derived 2026-08-07 from
-// GitHub's own OpenAPI description at
-// https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json
-// (HTTP 200, 12,920,264 bytes, `openapi: 3.0.3`, `info.version: 1.1.4`) — byte-identical to the
-// sweep derivation, so the extraction is reproduced rather than trusted.
-//
-// 808 paths carry 1220 method entries, all unique, reconciling exactly with the provider-artifact
-// ledger. 37 are marked `deprecated: true`; deprecated operations still count.
-//
-// The shipped bundle records 509 rows against this, because it enumerated only the
-// repository-scoped surface (`/repos/{owner}/{repo}/…`). Org-, user-, enterprise-, app- and
-// admin-level operations were never recorded at all.
-const githubRESTOperations = 1220
-
-// githubGraphQLRows are the four fixed GraphQL operations the bundle already ships to back its
-// Projects and Discussions streams. They are NOT part of the 1220 REST operations and are counted
-// separately, never folded in.
-//
-// GitHub's GraphQL schema exposes far more than four top-level fields, and this sweep does not
-// enumerate it. That is a NAMED scope gap, recorded here so it cannot be mistaken for completeness.
-const githubGraphQLRows = 4
-
-// githubRESTMethodSplit is the distribution of the 1220 documented REST operations.
-var githubRESTMethodSplit = map[string]int{
-	"GET":    636,
-	"POST":   193,
-	"PUT":    134,
-	"DELETE": 187,
-	"PATCH":  70,
-}
-
 // githubWebhookEvents is the count of event payloads GitHub documents under the `x-webhooks`
 // VENDOR EXTENSION. Because this spec declares `openapi: 3.0.3` it has no native top-level
 // `webhooks` object, so tooling that checks only a literal `webhooks` key records zero events for
@@ -48,6 +17,7 @@ var githubRESTMethodSplit = map[string]int{
 const githubWebhookEvents = 270
 
 func TestGitHubDocumentedRESTSurfaceIsComplete(t *testing.T) {
+	lock := loadGitHubSourceLock(t)
 	raw, err := os.ReadFile("../../internal/connectors/defs/github/api_surface.json")
 	if err != nil {
 		t.Fatalf("read github api_surface.json: %v", err)
@@ -82,7 +52,8 @@ func TestGitHubDocumentedRESTSurfaceIsComplete(t *testing.T) {
 	restByMethod := map[string]int{}
 	seen := map[string]bool{}
 	var blank, synthetic []string
-	rest, graphql, covered, blocked, legacyExcluded := 0, 0, 0, 0, 0
+	rest, legacyGraphQLBindings, covered, blocked, legacyExcluded := 0, 0, 0, 0, 0
+	lockedREST := githubRESTOperationKeys(lock)
 
 	for _, ep := range surface.Endpoints {
 		key := ep.Method + " " + ep.Path
@@ -93,7 +64,9 @@ func TestGitHubDocumentedRESTSurfaceIsComplete(t *testing.T) {
 
 		switch ep.Method {
 		case "GRAPHQL":
-			graphql++
+			// api_surface retains only legacy fixed-document bindings. The authoritative
+			// GraphQL denominator is the source lock's Query/Mutation root inventory.
+			legacyGraphQLBindings++
 		case "WEBHOOK":
 			// Webhook EVENTS are excluded from the operation surface by the counting policy.
 			// GitHub documents githubWebhookEvents of them under `x-webhooks`; its 28 webhook
@@ -103,6 +76,9 @@ func TestGitHubDocumentedRESTSurfaceIsComplete(t *testing.T) {
 		default:
 			rest++
 			restByMethod[ep.Method]++
+			if !lockedREST[key] {
+				t.Errorf("%s is not present in the pinned REST source lock", key)
+			}
 		}
 
 		// A behaviour variant is not an endpoint. The shipped bundle encoded write-action reuse
@@ -164,17 +140,17 @@ func TestGitHubDocumentedRESTSurfaceIsComplete(t *testing.T) {
 	if legacyExcluded != 0 {
 		t.Errorf("%d legacy excluded row(s) remain, want 0", legacyExcluded)
 	}
-	if rest != githubRESTOperations {
-		t.Errorf("REST endpoints = %d, want %d documented operations", rest, githubRESTOperations)
+	if rest != lock.Counts.REST {
+		t.Errorf("REST endpoints = %d, want %d documented operations from source lock", rest, lock.Counts.REST)
 	}
-	if graphql != githubGraphQLRows {
-		t.Errorf("GRAPHQL rows = %d, want %d", graphql, githubGraphQLRows)
+	if legacyGraphQLBindings == 0 {
+		t.Error("api_surface has no legacy fixed GraphQL bindings; root inventory lives in the source lock")
 	}
-	if covered+blocked != rest+graphql {
-		t.Errorf("covered(%d)+blocked(%d) = %d, want %d", covered, blocked, covered+blocked, rest+graphql)
+	if covered+blocked != len(surface.Endpoints) {
+		t.Errorf("covered(%d)+blocked(%d) = %d, want %d declared bundle bindings", covered, blocked, covered+blocked, len(surface.Endpoints))
 	}
-	if !reflect.DeepEqual(restByMethod, githubRESTMethodSplit) {
-		t.Errorf("restByMethod = %+v, want %+v", restByMethod, githubRESTMethodSplit)
+	if !reflect.DeepEqual(restByMethod, githubRESTMethodSplit(lock)) {
+		t.Errorf("restByMethod = %+v, want %+v from source lock", restByMethod, githubRESTMethodSplit(lock))
 	}
 
 	// Spot-pins across the surfaces the shipped bundle never enumerated, one per scope, so a
