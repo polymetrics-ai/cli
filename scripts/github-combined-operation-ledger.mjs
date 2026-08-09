@@ -190,6 +190,7 @@ function findBalanced(tokens, start, open, close) {
 function parseTypeReference(tokens, start) {
   let index = start;
   const output = [];
+  let type;
   if (tokens[index]?.value === "[") {
     output.push(tokens[index]);
     const nested = parseTypeReference(tokens, index + 1);
@@ -198,17 +199,20 @@ function parseTypeReference(tokens, start) {
     if (tokens[index]?.value !== "]") throw new Error("GraphQL type reference is missing ]");
     output.push(tokens[index]);
     index += 1;
+    type = { kind: "list", of_type: nested.type, non_null: false };
   } else if (tokens[index]?.kind === "name") {
     output.push(tokens[index]);
+    type = { kind: "named", name: tokens[index].value, non_null: false };
     index += 1;
   } else {
     throw new Error("GraphQL field is missing its return type");
   }
   if (tokens[index]?.value === "!") {
     output.push(tokens[index]);
+    type.non_null = true;
     index += 1;
   }
-  return { tokens: output, next: index };
+  return { tokens: output, type, next: index };
 }
 
 function formatTokens(tokens) {
@@ -246,6 +250,116 @@ function formatTokens(tokens) {
   return output.trim();
 }
 
+function skipDirective(tokens, start) {
+  if (tokens[start]?.value !== "@") return start;
+  if (tokens[start + 1]?.kind !== "name") throw new Error("GraphQL directive is missing its name");
+  let index = start + 2;
+  if (tokens[index]?.value === "(") index = findBalanced(tokens, index, "(", ")").next;
+  return index;
+}
+
+function skipDefaultValue(tokens, start, end, equalsLine) {
+  if (start >= end || tokens[start]?.line > equalsLine || tokens[start]?.value === "@") return start;
+  if (tokens[start]?.value === "[") return findBalanced(tokens, start, "[", "]").next;
+  if (tokens[start]?.value === "{") return findBalanced(tokens, start, "{", "}").next;
+  if (tokens[start]?.value === "$") return Math.min(start + 2, end);
+  return start + 1;
+}
+
+function skipFieldSuffix(tokens, start, end) {
+  let index = start;
+  while (index < end) {
+    if (tokens[index]?.value === "=") {
+      const equalsLine = tokens[index].line;
+      index = skipDefaultValue(tokens, index + 1, end, equalsLine);
+      continue;
+    }
+    if (tokens[index]?.value === "@") {
+      index = skipDirective(tokens, index);
+      continue;
+    }
+    break;
+  }
+  return index;
+}
+
+function parseArgumentDefinitions(tokens, label) {
+  const argumentsList = [];
+  let index = 0;
+  while (index < tokens.length) {
+    if (tokens[index]?.value === "@") {
+      index = skipDirective(tokens, index);
+      continue;
+    }
+    const argument = tokens[index];
+    if (argument?.kind !== "name") {
+      index += 1;
+      continue;
+    }
+    const name = argument.value;
+    index += 1;
+    if (tokens[index]?.value !== ":") throw new Error(`GraphQL ${label}.${name} is missing : before its type`);
+    const parsedType = parseTypeReference(tokens, index + 1);
+    index = skipFieldSuffix(tokens, parsedType.next, tokens.length);
+    if (argumentsList.some((entry) => entry.name === name)) throw new Error(`GraphQL ${label} has duplicate argument ${name}`);
+    argumentsList.push({ name, type: parsedType.type });
+  }
+  return argumentsList;
+}
+
+function parseFieldDefinitions(tokens, start, end, { label, allowArguments }) {
+  const fields = [];
+  let index = start;
+  while (index < end) {
+    if (tokens[index]?.value === "@") {
+      index = skipDirective(tokens, index);
+      continue;
+    }
+    const field = tokens[index];
+    if (field?.kind !== "name") {
+      index += 1;
+      continue;
+    }
+    const name = field.value;
+    index += 1;
+    let argumentsList = [];
+    if (tokens[index]?.value === "(") {
+      if (!allowArguments) throw new Error(`GraphQL ${label}.${name} unexpectedly declares arguments`);
+      const argumentsBlock = findBalanced(tokens, index, "(", ")");
+      argumentsList = parseArgumentDefinitions(argumentsBlock.inner, `${label}.${name}`);
+      index = argumentsBlock.next;
+    }
+    if (tokens[index]?.value !== ":") throw new Error(`GraphQL ${label}.${name} is missing : before its return type`);
+    const parsedType = parseTypeReference(tokens, index + 1);
+    index = skipFieldSuffix(tokens, parsedType.next, end);
+    if (fields.some((entry) => entry.name === name)) throw new Error(`GraphQL ${label} has duplicate field ${name}`);
+    const entry = { name, type: parsedType.type };
+    if (argumentsList.length > 0) entry.arguments = argumentsList;
+    fields.push(entry);
+  }
+  return fields;
+}
+
+function parseEnumValues(tokens, start, end, label) {
+  const values = [];
+  let index = start;
+  while (index < end) {
+    if (tokens[index]?.value === "@") {
+      index = skipDirective(tokens, index);
+      continue;
+    }
+    const token = tokens[index];
+    if (token?.kind !== "name") {
+      index += 1;
+      continue;
+    }
+    if (values.includes(token.value)) throw new Error(`GraphQL ${label} has duplicate enum value ${token.value}`);
+    values.push(token.value);
+    index = skipFieldSuffix(tokens, index + 1, end);
+  }
+  return values;
+}
+
 function findRootType(tokens, root) {
   for (let index = 0; index + 1 < tokens.length; index += 1) {
     if (tokens[index].value !== "type" || tokens[index + 1].value !== root) continue;
@@ -271,9 +385,11 @@ function parseRootFields(tokens, root) {
     const name = field.value;
     index += 1;
     let argumentsTokens = [];
+    let argumentsList = [];
     if (tokens[index]?.value === "(") {
       const argumentsBlock = findBalanced(tokens, index, "(", ")");
       argumentsTokens = argumentsBlock.inner;
+      argumentsList = parseArgumentDefinitions(argumentsTokens, `${root}.${name}`);
       index = argumentsBlock.next;
     }
     if (tokens[index]?.value !== ":") throw new Error(`GraphQL ${root}.${name} is missing : before its return type`);
@@ -295,11 +411,333 @@ function parseRootFields(tokens, root) {
       name,
       line: field.line,
       signature: `${name}${argumentsTokens.length > 0 ? `(${argumentsText})` : ""}: ${returnText}`,
+      arguments: argumentsList,
+      return_type: returnType.type,
       deprecated: directives.includes("deprecated"),
       preview: directives.includes("preview"),
     });
   }
   return fields;
+}
+
+function mergeDefinition(map, entry, { category, extended, merge }) {
+  const existing = map.get(entry.name);
+  if (!existing) {
+    map.set(entry.name, entry);
+    return;
+  }
+  if (!extended) throw new Error(`GraphQL schema has duplicate ${category} ${entry.name}`);
+  map.set(entry.name, merge(existing, entry));
+}
+
+function mergeUniqueNames(left, right, label) {
+  const seen = new Set(left.map((entry) => entry.name));
+  for (const entry of right) {
+    if (seen.has(entry.name)) throw new Error(`GraphQL ${label} has duplicate field ${entry.name}`);
+    seen.add(entry.name);
+  }
+  return [...left, ...right];
+}
+
+function mergeObjectLike(existing, entry, category) {
+  return {
+    name: existing.name,
+    fields: mergeUniqueNames(existing.fields, entry.fields, `${category} ${existing.name}`),
+    ...(category === "object" ? { interfaces: uniqueSorted([...(existing.interfaces || []), ...(entry.interfaces || [])]) } : {}),
+  };
+}
+
+function parseImplementsClause(tokens, start, end) {
+  const interfaces = [];
+  let index = start;
+  if (tokens[index]?.value !== "implements") return { interfaces, next: index };
+  index += 1;
+  if (tokens[index]?.value === "&") index += 1;
+  while (index < end && tokens[index]?.kind === "name") {
+    interfaces.push(tokens[index].value);
+    index += 1;
+    if (tokens[index]?.value !== "&") break;
+    index += 1;
+  }
+  return { interfaces: uniqueSorted(interfaces), next: index };
+}
+
+function findDefinitionBody(tokens, start, label) {
+  for (let index = start; index < tokens.length; index += 1) {
+    if (tokens[index]?.value === "@") {
+      index = skipDirective(tokens, index) - 1;
+      continue;
+    }
+    if (tokens[index]?.value === "{") {
+      const body = findBalanced(tokens, index, "{", "}");
+      return { start: index, end: body.next - 1, next: body.next };
+    }
+    if (["type", "interface", "input", "enum", "union", "scalar", "schema", "directive", "extend"].includes(tokens[index]?.value)) break;
+  }
+  throw new Error(`GraphQL ${label} is missing its definition body`);
+}
+
+function parseGraphQLTypeSystem(tokens) {
+  const state = {
+    inputObjects: new Map(),
+    enums: new Map(),
+    objects: new Map(),
+    interfaces: new Map(),
+    unions: new Map(),
+    scalars: new Set(),
+  };
+  const knownCategories = new Map();
+  const register = (category, name) => {
+    const previous = knownCategories.get(name);
+    if (previous && previous !== category) throw new Error(`GraphQL schema declares ${name} as both ${previous} and ${category}`);
+    knownCategories.set(name, category);
+  };
+
+  for (let index = 0; index < tokens.length; index += 1) {
+    let extended = false;
+    if (tokens[index]?.value === "extend") {
+      extended = true;
+      index += 1;
+    }
+    const kind = tokens[index]?.value;
+    if (!["type", "interface", "input", "enum", "union", "scalar"].includes(kind)) continue;
+    const nameToken = tokens[index + 1];
+    if (nameToken?.kind !== "name") throw new Error(`GraphQL ${kind} definition is missing its name`);
+    const name = nameToken.value;
+    const category = kind === "type" ? "object" : kind === "input" ? "input_object" : kind;
+    register(category, name);
+
+    if (kind === "scalar") {
+      if (state.scalars.has(name) && !extended) throw new Error(`GraphQL schema has duplicate scalar ${name}`);
+      state.scalars.add(name);
+      continue;
+    }
+
+    if (kind === "union") {
+      let cursor = index + 2;
+      while (cursor < tokens.length && tokens[cursor]?.value !== "=") {
+        if (tokens[cursor]?.value === "@") cursor = skipDirective(tokens, cursor);
+        else cursor += 1;
+      }
+      if (tokens[cursor]?.value !== "=") throw new Error(`GraphQL union ${name} is missing =`);
+      cursor += 1;
+      const possibleTypes = [];
+      while (cursor < tokens.length) {
+        if (tokens[cursor]?.value === "|") {
+          cursor += 1;
+          continue;
+        }
+        if (tokens[cursor]?.kind !== "name" || ["type", "interface", "input", "enum", "union", "scalar", "schema", "directive", "extend"].includes(tokens[cursor].value)) break;
+        possibleTypes.push(tokens[cursor].value);
+        cursor += 1;
+      }
+      if (possibleTypes.length === 0) throw new Error(`GraphQL union ${name} has no possible object types`);
+      mergeDefinition(state.unions, { name, possible_types: uniqueSorted(possibleTypes) }, {
+        category: "union",
+        extended,
+        merge: (existing, entry) => ({ name, possible_types: uniqueSorted([...existing.possible_types, ...entry.possible_types]) }),
+      });
+      index = cursor - 1;
+      continue;
+    }
+
+    let cursor = index + 2;
+    let interfaces = [];
+    while (cursor < tokens.length && tokens[cursor]?.value !== "{") {
+      if (tokens[cursor]?.value === "implements") {
+        const parsed = parseImplementsClause(tokens, cursor, tokens.length);
+        interfaces = uniqueSorted([...interfaces, ...parsed.interfaces]);
+        cursor = parsed.next;
+        continue;
+      }
+      if (tokens[cursor]?.value === "@") {
+        cursor = skipDirective(tokens, cursor);
+        continue;
+      }
+      cursor += 1;
+    }
+    const body = findDefinitionBody(tokens, cursor, `${kind} ${name}`);
+    if (kind === "enum") {
+      mergeDefinition(state.enums, { name, values: parseEnumValues(tokens, body.start + 1, body.end, `enum ${name}`) }, {
+        category: "enum",
+        extended,
+        merge: (existing, entry) => ({ name, values: uniqueSorted([...existing.values, ...entry.values]) }),
+      });
+    } else if (kind === "input") {
+      mergeDefinition(state.inputObjects, { name, fields: parseFieldDefinitions(tokens, body.start + 1, body.end, { label: `input ${name}`, allowArguments: false }) }, {
+        category: "input object",
+        extended,
+        merge: (existing, entry) => ({ name, fields: mergeUniqueNames(existing.fields, entry.fields, `input object ${name}`) }),
+      });
+    } else {
+      const target = kind === "type" ? state.objects : state.interfaces;
+      const categoryLabel = kind === "type" ? "object" : "interface";
+      mergeDefinition(target, {
+        name,
+        fields: parseFieldDefinitions(tokens, body.start + 1, body.end, { label: `${kind} ${name}`, allowArguments: true }),
+        ...(kind === "type" ? { interfaces } : {}),
+      }, {
+        category: categoryLabel,
+        extended,
+        merge: (existing, entry) => mergeObjectLike(existing, entry, categoryLabel),
+      });
+    }
+    index = body.next - 1;
+  }
+
+  const objectEntries = [...state.objects.values()].sort((left, right) => left.name.localeCompare(right.name));
+  const interfaceEntries = [...state.interfaces.values()].sort((left, right) => left.name.localeCompare(right.name));
+  const implementsInterface = (object, target, visited = new Set()) => {
+    for (const implemented of object.interfaces || []) {
+      if (implemented === target) return true;
+      if (visited.has(implemented)) continue;
+      visited.add(implemented);
+      const inherited = state.interfaces.get(implemented);
+      if (inherited && implementsInterface({ interfaces: inherited.interfaces || [] }, target, visited)) return true;
+    }
+    return false;
+  };
+  return {
+    input_objects: [...state.inputObjects.values()].sort((left, right) => left.name.localeCompare(right.name)),
+    enums: [...state.enums.values()].sort((left, right) => left.name.localeCompare(right.name)),
+    objects: objectEntries,
+    interfaces: interfaceEntries.map((entry) => ({
+      ...entry,
+      possible_types: objectEntries.filter((object) => implementsInterface(object, entry.name)).map((object) => object.name),
+    })),
+    unions: [...state.unions.values()].sort((left, right) => left.name.localeCompare(right.name)),
+    scalars: [...state.scalars].sort((left, right) => left.localeCompare(right)),
+  };
+}
+
+function namedTypeName(typeReference) {
+  if (!isPlainObject(typeReference)) return "";
+  return typeReference.kind === "named" ? typeReference.name : namedTypeName(typeReference.of_type);
+}
+
+function typeReferenceIsNamedNonNull(typeReference, name) {
+  return typeReference?.kind === "named" && typeReference.name === name && typeReference.non_null === true;
+}
+
+function validateTypeReference(typeReference, knownTypeNames, label) {
+  const reference = requireObject(typeReference, `${label} type`);
+  if (typeof reference.non_null !== "boolean") throw new Error(`${label} type is missing non_null`);
+  if (reference.kind === "named") {
+    const name = requireString(reference.name, `${label} named type`);
+    if (!knownTypeNames.has(name)) throw new Error(`${label} references unknown GraphQL type ${name}`);
+    return;
+  }
+  if (reference.kind === "list") {
+    validateTypeReference(reference.of_type, knownTypeNames, `${label} list item`);
+    return;
+  }
+  throw new Error(`${label} has invalid GraphQL type kind`);
+}
+
+function validateTypeFields(fields, knownTypeNames, label) {
+  if (!Array.isArray(fields)) throw new Error(`GraphQL ${label} fields must be an array`);
+  const names = new Set();
+  for (const field of fields) {
+    const name = requireString(field?.name, `GraphQL ${label} field name`);
+    if (names.has(name)) throw new Error(`GraphQL ${label} has duplicate field ${name}`);
+    names.add(name);
+    validateTypeReference(field.type, knownTypeNames, `GraphQL ${label}.${name}`);
+    if (field.arguments === undefined) continue;
+    if (!Array.isArray(field.arguments)) throw new Error(`GraphQL ${label}.${name} arguments must be an array`);
+    const argumentNames = new Set();
+    for (const argument of field.arguments) {
+      const argumentName = requireString(argument?.name, `GraphQL ${label}.${name} argument name`);
+      if (argumentNames.has(argumentName)) throw new Error(`GraphQL ${label}.${name} has duplicate argument ${argumentName}`);
+      argumentNames.add(argumentName);
+      validateTypeReference(argument.type, knownTypeNames, `GraphQL ${label}.${name} argument ${argumentName}`);
+    }
+  }
+}
+
+function validateGraphQLTypeSystem(typeSystemCandidate, rootFields) {
+  const typeSystem = requireObject(typeSystemCandidate, "GitHub GraphQL type system");
+  const categories = [
+    ["input_objects", "input object"],
+    ["enums", "enum"],
+    ["objects", "object"],
+    ["interfaces", "interface"],
+    ["unions", "union"],
+  ];
+  const definitions = new Map();
+  for (const [property, label] of categories) {
+    if (!Array.isArray(typeSystem[property])) throw new Error(`GitHub GraphQL type system is missing ${property}`);
+    for (const entry of typeSystem[property]) {
+      const name = requireString(entry?.name, `GraphQL ${label} name`);
+      if (definitions.has(name)) throw new Error(`GraphQL schema has duplicate type ${name}`);
+      definitions.set(name, { label, entry });
+    }
+  }
+  if (!Array.isArray(typeSystem.scalars)) throw new Error("GitHub GraphQL type system is missing scalars");
+  for (const scalar of typeSystem.scalars) {
+    const name = requireString(scalar, "GraphQL scalar name");
+    if (definitions.has(name)) throw new Error(`GraphQL schema has duplicate type ${name}`);
+    definitions.set(name, { label: "scalar", entry: { name } });
+  }
+  const knownTypeNames = new Set(["Boolean", "Float", "ID", "Int", "String", ...definitions.keys()]);
+  for (const [name, { label, entry }] of definitions) {
+    if (label === "input object" || label === "object" || label === "interface") {
+      validateTypeFields(entry.fields, knownTypeNames, `${label} ${name}`);
+    }
+    if (label === "enum") {
+      if (!Array.isArray(entry.values) || entry.values.length === 0) throw new Error(`GraphQL enum ${name} has no values`);
+      if (new Set(entry.values).size !== entry.values.length) throw new Error(`GraphQL enum ${name} has duplicate values`);
+    }
+    if (label === "union") {
+      if (!Array.isArray(entry.possible_types) || entry.possible_types.length === 0) throw new Error(`GraphQL union ${name} has no possible object types`);
+      for (const possibleType of entry.possible_types) {
+        if (definitions.get(possibleType)?.label !== "object") throw new Error(`GraphQL union ${name} references non-object type ${possibleType}`);
+      }
+    }
+    if (label === "interface") {
+      if (!Array.isArray(entry.possible_types)) throw new Error(`GraphQL interface ${name} is missing possible object types`);
+      for (const possibleType of entry.possible_types) {
+        if (definitions.get(possibleType)?.label !== "object") throw new Error(`GraphQL interface ${name} references non-object type ${possibleType}`);
+      }
+    }
+  }
+  for (const field of rootFields) {
+    const root = requireString(field?.root, "GraphQL root field root");
+    if (root !== "Query" && root !== "Mutation") throw new Error(`GraphQL root field ${field?.name || "<unknown>"} has invalid root ${root}`);
+    const name = requireString(field?.name, "GraphQL root field name");
+    if (!Array.isArray(field.arguments)) throw new Error(`GraphQL ${root}.${name} arguments must be an array`);
+    validateTypeReference(field.return_type, knownTypeNames, `GraphQL ${field.root}.${field.name}`);
+    const argumentNames = new Set();
+    for (const argument of field.arguments) {
+      const argumentName = requireString(argument?.name, `GraphQL ${root}.${name} argument name`);
+      if (argumentNames.has(argumentName)) throw new Error(`GraphQL ${root}.${name} has duplicate argument ${argumentName}`);
+      argumentNames.add(argumentName);
+      validateTypeReference(argument.type, knownTypeNames, `GraphQL ${field.root}.${field.name} argument ${argument.name}`);
+    }
+  }
+  const canary = rootFields.find((field) => field.root === "Mutation" && field.name === "createEnterpriseOrganization");
+  if (!canary) throw new Error("GitHub GraphQL schema source is missing mandatory createEnterpriseOrganization mutation canary");
+  const canaryInput = canary.arguments?.find((argument) => argument.name === "input");
+  if (!typeReferenceIsNamedNonNull(canaryInput?.type, "CreateEnterpriseOrganizationInput")) {
+    throw new Error("GitHub GraphQL createEnterpriseOrganization must declare input: CreateEnterpriseOrganizationInput!");
+  }
+  if (definitions.get("CreateEnterpriseOrganizationInput")?.label !== "input object") {
+    throw new Error("GitHub GraphQL schema is missing CreateEnterpriseOrganizationInput input object");
+  }
+  return { typeSystem, definitions };
+}
+
+function parseGraphQLSchema(graphqlSchema) {
+  const tokens = tokenizeGraphQL(graphqlSchema);
+  const rootFields = [...parseRootFields(tokens, "Mutation"), ...parseRootFields(tokens, "Query")];
+  const seen = new Set();
+  for (const field of rootFields) {
+    const key = `${field.root}.${field.name}`;
+    if (seen.has(key)) throw new Error(`GraphQL schema has duplicate root field ${key}`);
+    seen.add(key);
+  }
+  const typeSystem = parseGraphQLTypeSystem(tokens);
+  validateGraphQLTypeSystem(typeSystem, rootFields);
+  return { rootFields, typeSystem };
 }
 
 /** Parse just the schema root fields, treating nested types as projections rather than operations. */
@@ -325,10 +763,8 @@ function countLock(restOperations, rootFields) {
 export function buildSourceLock({ restDocument, restText, graphqlSchema, capturedAt, restSource, graphqlSource }) {
   const document = requireObject(restDocument, "REST OpenAPI document");
   const rest = enumerateRESTOperations(document);
-  const graphql = parseGraphQLRootOperations(graphqlSchema);
-  if (!graphql.some((field) => field.root === "Mutation" && field.name === "createEnterpriseOrganization")) {
-    throw new Error("GitHub GraphQL schema source is missing mandatory createEnterpriseOrganization mutation canary");
-  }
+  const parsedGraphQL = parseGraphQLSchema(graphqlSchema);
+  const graphql = parsedGraphQL.rootFields;
   const restMetadata = requireObject(restSource, "REST source metadata");
   const graphqlMetadata = requireObject(graphqlSource, "GraphQL source metadata");
   const restRaw = typeof restText === "string" ? restText : JSON.stringify(document);
@@ -339,7 +775,7 @@ export function buildSourceLock({ restDocument, restText, graphqlSchema, capture
   // surrounding whitespace, but a source hash must include the final newline.
   const graphqlRaw = graphqlSchema;
   return {
-    schema_version: 1,
+    schema_version: 2,
     connector: "github",
     captured_at: requireDate(capturedAt, "source capture date"),
     rest: {
@@ -357,6 +793,7 @@ export function buildSourceLock({ restDocument, restText, graphqlSchema, capture
       bytes: byteLength(graphqlRaw),
       query_fields: graphql.filter((field) => field.root === "Query"),
       mutation_fields: graphql.filter((field) => field.root === "Mutation"),
+      type_system: parsedGraphQL.typeSystem,
     },
     counts: countLock(rest, graphql),
   };
@@ -364,7 +801,7 @@ export function buildSourceLock({ restDocument, restText, graphqlSchema, capture
 
 function validateSourceLock(lockCandidate) {
   const lock = requireObject(lockCandidate, "GitHub source lock");
-  if (lock.schema_version !== 1 || lock.connector !== "github") throw new Error("GitHub source lock has unsupported schema or connector");
+  if (lock.schema_version !== 2 || lock.connector !== "github") throw new Error("GitHub source lock has unsupported schema or connector");
   requireDate(lock.captured_at, "GitHub source lock captured_at");
   const rest = requireObject(lock.rest, "GitHub source lock rest");
   const graphql = requireObject(lock.graphql, "GitHub source lock graphql");
@@ -375,9 +812,7 @@ function validateSourceLock(lockCandidate) {
     throw new Error("GitHub source lock is missing source operation arrays");
   }
   const rootFields = [...graphql.query_fields, ...graphql.mutation_fields];
-  if (!rootFields.some((field) => field.root === "Mutation" && field.name === "createEnterpriseOrganization")) {
-    throw new Error("GitHub source lock is missing createEnterpriseOrganization mutation canary");
-  }
+  validateGraphQLTypeSystem(graphql.type_system, rootFields);
   const counts = countLock(rest.operations, rootFields);
   if (JSON.stringify(counts) !== JSON.stringify(lock.counts)) {
     throw new Error(`GitHub source lock counts ${JSON.stringify(lock.counts)} do not match derived ${JSON.stringify(counts)}`);
@@ -536,6 +971,15 @@ function blockerFor({ state, endpoint, protocol, commands = [] }) {
   };
 }
 
+function possibleObjectTypesForGraphQLRoot(field, typeSystem) {
+  const namedReturnType = namedTypeName(field.return_type);
+  const interfaceEntry = (typeSystem.interfaces || []).find((entry) => entry.name === namedReturnType);
+  if (interfaceEntry) return uniqueSorted(interfaceEntry.possible_types || []);
+  const unionEntry = (typeSystem.unions || []).find((entry) => entry.name === namedReturnType);
+  if (unionEntry) return uniqueSorted(unionEntry.possible_types || []);
+  return [];
+}
+
 function graphQLRow(field, lock, indexes) {
   const protocol = field.root === "Mutation" ? "graphql_mutation" : "graphql_query";
   const key = `${field.root}.${field.name}`;
@@ -551,6 +995,8 @@ function graphQLRow(field, lock, indexes) {
       sha256: lock.graphql.sha256,
       location: `type ${field.root}:${field.line}`,
       signature: field.signature,
+      arguments: field.arguments,
+      return_type: field.return_type,
       deprecated: field.deprecated,
       preview: field.preview,
     },
@@ -571,6 +1017,7 @@ function graphQLRow(field, lock, indexes) {
     row.projection_matrix = {
       root_field: field.name,
       policy: "fixed declared documents only; no caller-supplied GraphQL selection",
+      possible_object_types: possibleObjectTypesForGraphQLRoot(field, lock.graphql.type_system),
       supported_object_types: supportedObjectTypes,
       state: supportedObjectTypes.length > 0 ? "fixed_projection_only" : "no_supported_projection",
     };

@@ -2289,3 +2289,82 @@ connectorgen validate: 551 connector(s) checked, 0 findings
 $ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 ```
+## Cycle 30 — typed GraphQL source import for all-root generation
+
+**Scope:** GitHub-only source tooling and generated GitHub/planning artifacts.  No credential,
+`pm`, browser, fixture, or provider request occurs in this cycle.  The public official SDL hash
+was independently verified in memory before this cycle; the test suite itself remains hermetic.
+
+**Red 30a — root signatures alone cannot generate a safe typed operation.**
+The existing source lock records `Query`/`Mutation` names and formatted signatures only.  Add
+fixture coverage that requires a parsed root argument type, return type, nested input-field model,
+enum values, and interface/union possible-object facts.  The current v1 parser/lock is expected to
+fail this test because those facts are absent.
+
+**Red 30b — type drift must fail before ledger output.**
+Add negative fixtures/tests for an undeclared referenced input type, duplicate type/field identity,
+and a `createEnterpriseOrganization` canary whose typed `input` contract is missing.  A command
+document regex is not evidence of a `node`/`nodes` projection: require the ledger to use the parsed
+type graph instead.
+
+```
+$ node --test scripts/tests/github-combined-operation-ledger.test.mjs
+✖ imports typed GraphQL root contracts and source-derived projection possibilities
+  AssertionError: 1 !== 2
+✖ fails closed when GraphQL root types or the enterprise typed input contract drift
+  AssertionError: Missing expected exception.
+✖ records generic node projections and the disabled deleteIssue mutation from the real GitHub bundle
+  AssertionError: projection_matrix has no possible_object_types
+```
+
+The red result proves three independent absences in the v1/root-signature-only importer: no typed
+source graph, no source-type drift rejection, and generic projections inferred only from existing
+documents.  It made no network or provider request.
+
+**Green 30 — a dependency-free parser now writes a compact v2 typed source lock.**
+`parseGraphQLSchema` retains structured root argument/return type references plus compact input,
+enum, object, interface, union, and scalar facts.  It checks unknown references, duplicate
+identities, the `createEnterpriseOrganization(input: CreateEnterpriseOrganizationInput!)` canary,
+and source-derived interface/union possibilities.  Generic `node`/`nodes` ledger rows now carry
+the source possible-object matrix separately from the fixed documents' supported-object list.
+The review regression also proves that a v2 lock cannot omit an explicit empty `arguments` array
+for a no-argument root; every source root has a typed argument contract as well as a return type.
+
+The checked-in lock and combined ledger were mechanically regenerated from the same official public
+SDL provenance already pinned in the lock.  The source bytes/hash remain
+`1,546,421` / `c09aba9911b08d2aa8a022578edaf256aa040f38d7fb7196656356ea236c249d`;
+the denominator remains `1,220 REST + 31 GraphQL Query + 274 GraphQL Mutation = 1,525`.
+The type graph contains 415 input objects, 254 enums, 1,025 objects, 50 interfaces, 49 unions,
+and 13 scalars; `Node` has 282 source-declared possible object types.  No raw SDL, secret, or
+provider response body is checked in.
+
+```
+$ node --test scripts/tests/github-combined-operation-ledger.test.mjs
+✔ 8 tests passed
+
+$ node scripts/github-combined-operation-ledger.mjs --check
+github combined operation ledger: ok rest=1220 graphql_query=31 graphql_mutation=274 total=1525
+
+$ node --test scripts/tests/github-live-lab.test.mjs
+✔ 23 tests passed
+
+$ node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
+github live lab boundary: ok allowed_targets=1
+
+$ go test -timeout 20m ./internal/connectors/engine -count=1
+ok  polymetrics.ai/internal/connectors/engine
+
+$ go test -timeout 20m ./internal/connectors/commandrunner -count=1
+ok  polymetrics.ai/internal/connectors/commandrunner
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 551 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+**GSD/manual fallback:** all required adapter prompts and command-source resolutions were generated
+and read inline in this single-worker lane; no GSD role may be spawned.  Skills: `golang-how-to`,
+`golang-cli`, `golang-graphql`, `golang-testing`, `golang-error-handling`, `golang-security`,
+`golang-safety`, `golang-design-patterns`, and `golang-structs-interfaces`.

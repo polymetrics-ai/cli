@@ -137,12 +137,14 @@ test("builds a source-locked combined ledger with the enterprise-organization ca
   assert.deepEqual(ledger.rows.find((row) => row.id === "github.graphql.query.node")?.projection_matrix, {
     root_field: "node",
     policy: "fixed declared documents only; no caller-supplied GraphQL selection",
+    possible_object_types: ["User", "Widget"],
     supported_object_types: ["Widget"],
     state: "fixed_projection_only",
   });
   assert.deepEqual(ledger.rows.find((row) => row.id === "github.graphql.query.nodes")?.projection_matrix, {
     root_field: "nodes",
     policy: "fixed declared documents only; no caller-supplied GraphQL selection",
+    possible_object_types: ["User", "Widget"],
     supported_object_types: [],
     state: "no_supported_projection",
   });
@@ -155,6 +157,89 @@ test("builds a source-locked combined ledger with the enterprise-organization ca
     }
   }
   assert.doesNotThrow(() => validateCombinedOperationLedger({ lock, ledger }));
+});
+
+test("imports typed GraphQL root contracts and source-derived projection possibilities", async () => {
+  const { restDocument, graphqlSchema } = await fixtures();
+  const lock = buildSourceLock({
+    restDocument,
+    graphqlSchema,
+    capturedAt: "2026-08-09",
+    restSource: { url: "https://example.test/rest.json", commit: "abcdef0123456789" },
+    graphqlSource: { url: "https://example.test/schema.graphql" },
+  });
+
+  assert.equal(lock.schema_version, 2);
+  const createEnterpriseOrganization = lock.graphql.mutation_fields.find((field) => field.name === "createEnterpriseOrganization");
+  assert.deepEqual(createEnterpriseOrganization?.arguments, [
+    { name: "input", type: { kind: "named", name: "CreateEnterpriseOrganizationInput", non_null: true } },
+  ]);
+  assert.deepEqual(createEnterpriseOrganization?.return_type, {
+    kind: "named",
+    name: "CreateEnterpriseOrganizationPayload",
+    non_null: false,
+  });
+  assert.deepEqual(lock.graphql.type_system.input_objects.find((input) => input.name === "CreateEnterpriseOrganizationInput"), {
+    name: "CreateEnterpriseOrganizationInput",
+    fields: [
+      { name: "enterpriseAdmin", type: { kind: "named", name: "String", non_null: true } },
+      { name: "login", type: { kind: "named", name: "String", non_null: true } },
+      { name: "profileName", type: { kind: "named", name: "String", non_null: true } },
+    ],
+  });
+  assert.deepEqual(lock.graphql.type_system.enums.find((entry) => entry.name === "WidgetCloseReason"), {
+    name: "WidgetCloseReason",
+    values: ["DONE", "STALE"],
+  });
+  assert.deepEqual(lock.graphql.type_system.interfaces.find((entry) => entry.name === "Node"), {
+    name: "Node",
+    fields: [{ name: "id", type: { kind: "named", name: "ID", non_null: true } }],
+    possible_types: ["User", "Widget"],
+  });
+  assert.deepEqual(lock.graphql.type_system.unions.find((entry) => entry.name === "SearchResult"), {
+    name: "SearchResult",
+    possible_types: ["User", "Widget"],
+  });
+});
+
+test("fails closed when GraphQL root types or the enterprise typed input contract drift", async () => {
+  const { restDocument, graphqlSchema } = await fixtures();
+  const sources = {
+    restSource: { url: "https://example.test/rest.json", commit: "abcdef0123456789" },
+    graphqlSource: { url: "https://example.test/schema.graphql" },
+    capturedAt: "2026-08-09",
+  };
+  assert.throws(
+    () => buildSourceLock({ ...sources, restDocument, graphqlSchema: graphqlSchema.replace("CreateEnterpriseOrganizationInput!", "MissingInput!") }),
+    /MissingInput|unknown GraphQL type/i,
+  );
+  assert.throws(
+    () => buildSourceLock({ ...sources, restDocument, graphqlSchema: graphqlSchema.replace("input: CreateEnterpriseOrganizationInput!", "enterpriseSlug: String!") }),
+    /createEnterpriseOrganization.*input.*CreateEnterpriseOrganizationInput/i,
+  );
+  assert.throws(
+    () => buildSourceLock({ ...sources, restDocument, graphqlSchema: `${graphqlSchema}\n type User { id: ID! }\n` }),
+    /duplicate (GraphQL )?(type|object) User/i,
+  );
+});
+
+test("rejects a v2 lock that loses an explicit typed root argument contract", async () => {
+  const { restDocument, graphqlSchema } = await fixtures();
+  const lock = buildSourceLock({
+    restDocument,
+    graphqlSchema,
+    capturedAt: "2026-08-09",
+    restSource: { url: "https://example.test/rest.json", commit: "abcdef0123456789" },
+    graphqlSource: { url: "https://example.test/schema.graphql" },
+  });
+  delete lock.graphql.query_fields.find((field) => field.name === "viewer").arguments;
+  assert.throws(
+    () => buildCombinedOperationLedger({
+      lock,
+      bundle: { surface: { endpoints: [] }, operations: { operations: [] }, cli: { commands: [] } },
+    }),
+    /viewer.*arguments/i,
+  );
 });
 
 test("rejects a GraphQL source lock without createEnterpriseOrganization", async () => {
@@ -174,18 +259,20 @@ test("rejects a GraphQL source lock without createEnterpriseOrganization", async
 test("records generic node projections and the disabled deleteIssue mutation from the real GitHub bundle", async () => {
   const ledger = await currentGitHubLedger();
   assert.deepEqual(ledger.counts, { rest: 1220, graphql_query: 31, graphql_mutation: 274, total: 1525 });
-  assert.deepEqual(ledger.rows.find((row) => row.id === "github.graphql.query.node")?.projection_matrix, {
-    root_field: "node",
-    policy: "fixed declared documents only; no caller-supplied GraphQL selection",
-    supported_object_types: ["DraftIssue", "Issue", "ProjectV2", "PullRequest"],
-    state: "fixed_projection_only",
-  });
-  assert.deepEqual(ledger.rows.find((row) => row.id === "github.graphql.query.nodes")?.projection_matrix, {
-    root_field: "nodes",
-    policy: "fixed declared documents only; no caller-supplied GraphQL selection",
-    supported_object_types: [],
-    state: "no_supported_projection",
-  });
+  const node = ledger.rows.find((row) => row.id === "github.graphql.query.node")?.projection_matrix;
+  const nodes = ledger.rows.find((row) => row.id === "github.graphql.query.nodes")?.projection_matrix;
+  assert.deepEqual(node?.supported_object_types, ["DraftIssue", "Issue", "ProjectV2", "PullRequest"]);
+  assert.deepEqual(nodes?.supported_object_types, []);
+  assert.ok(Array.isArray(node?.possible_object_types) && node.possible_object_types.length > 0);
+  assert.ok(Array.isArray(nodes?.possible_object_types) && nodes.possible_object_types.length > 0);
+  for (const typeName of node.supported_object_types) {
+    assert.ok(node.possible_object_types.includes(typeName), `node support ${typeName} is not in the source-derived possible types`);
+  }
+  assert.deepEqual(nodes.possible_object_types, node.possible_object_types);
+  assert.equal(node?.policy, "fixed declared documents only; no caller-supplied GraphQL selection");
+  assert.equal(nodes?.policy, "fixed declared documents only; no caller-supplied GraphQL selection");
+  assert.equal(node?.state, "fixed_projection_only");
+  assert.equal(nodes?.state, "no_supported_projection");
   const deleteIssue = ledger.rows.find((row) => row.id === "github.graphql.mutation.deleteIssue");
   assert.equal(deleteIssue?.implementation.state, "declared_not_executable");
   assert.equal(deleteIssue?.blocker?.category, "mapped_command_not_executable");
