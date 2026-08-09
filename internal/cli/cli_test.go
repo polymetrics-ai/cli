@@ -81,6 +81,51 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 	}
 }
 
+func TestPromotedNativeConnectorCommandSurfacesRemainReachable(t *testing.T) {
+	tests := []struct {
+		name    string
+		command string
+	}{
+		{name: "apify-dataset", command: "dataset list"},
+		{name: "basecamp", command: "projects list"},
+		{name: "copper", command: "people list"},
+		{name: "google-classroom", command: "courses list"},
+		{name: "google-pagespeed-insights", command: "pagespeed reports list"},
+		{name: "metabase", command: "cards list"},
+		{name: "rootly", command: "incidents list"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run([]string{tt.name}, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%q) code = %d, want 0; stdout=%s stderr=%s", tt.name, code, stdout.String(), stderr.String())
+			}
+			for _, want := range []string{"pm " + tt.name + " -", "COMMAND GROUPS"} {
+				if !strings.Contains(stdout.String(), want) {
+					t.Fatalf("Run(%q) manual missing %q:\n%s", tt.name, want, stdout.String())
+				}
+			}
+
+			stdout.Reset()
+			stderr.Reset()
+			args := append([]string{tt.name}, strings.Fields(tt.command)...)
+			args = append(args, "--help")
+			code = cli.Run(args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%q) code = %d, want 0; stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{"pm " + tt.name + " " + tt.command, "INTENT", "etl"} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("Run(%q) manual missing %q:\n%s", args, want, out)
+				}
+			}
+		})
+	}
+}
+
 func TestGongCallsListHelpDocumentsDateFlagsAndLimitOutputCap(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"gong", "calls", "list", "--help"}, &stdout, &stderr)

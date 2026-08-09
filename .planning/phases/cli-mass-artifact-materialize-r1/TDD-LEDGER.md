@@ -175,3 +175,8 @@
 
 - Red: `TestGorgiasAPISurfaceOperationLedger` and `TestNotionAPISurfaceOperationLedger` failed after the completed source pass because they required `operation_ledger_version: 1` and looked for a blocked operation's citation in the removed v1 `operation.source_url` field. Notion's prior row arithmetic also omitted the generic blocked `POST /v1/search` contract alongside its two qualified stream bindings.
 - Green: both tests require version 2 and validate `endpoint.provenance.source_url` for blocked rows. Notion now explicitly asserts 51 unique documented operations in 55 rows (four qualified-binding views); the targeted pair and complete `go test -timeout 20m -count=1 ./cmd/connectorgen` suite pass.
+
+## Promoted-native command surfaces remain CLI-reachable
+
+- Red: the real binary returns `unknown command` with exit 2 for the seven materialized hook-backed connectors `apify-dataset`, `basecamp`, `copper`, `google-classroom`, `google-pagespeed-insights`, `metabase`, and `rootly`, despite their `cli_surface.json` declarations containing 3, 3, 5, 5, 1, 5, and 3 implemented ETL commands respectively (25 total). The promoted-native registry overlay is the only shared path for all seven.
+- Green: `TestPromotedNativeConnectorCommandSurfacesRemainReachable` in `internal/cli/cli_test.go` runs each bare namespace and one implemented command-help route without credentials or provider I/O, requiring exit 0 plus the expected command-surface/manual details. The implementation forwards the bundle-owned `CommandSurface` from `internal/connectors/native/nativeset/promoted.go`; it leaves the native `Check`/`Read` delegation and every materialized JSON declaration unchanged.
