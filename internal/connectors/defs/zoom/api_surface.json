@@ -873,287 +873,155 @@
     {
       "method": "GET",
       "path": "/v2/aiservices/scribe/jobs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=List Batch Jobs; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/scribe/jobs; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services scribe jobs list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/aiservices/scribe/jobs",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Submit Batch Scribe Job; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/scribe/jobs; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "ai-services scribe jobs submit"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/scribe/jobs/{jobId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Get Batch Job Status; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/scribe/jobs/{jobId}; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services scribe jobs get"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/aiservices/scribe/jobs/{jobId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Cancel Batch Job; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/scribe/jobs/{jobId}; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "ai-services scribe jobs cancel"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/scribe/jobs/{jobId}/files",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=List Batch Job Files; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/scribe/jobs/{jobId}/files; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services scribe jobs files list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/scribe/jobs/{jobId}/files/{fileId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Get Batch Scribe Job File; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/scribe/jobs/{jobId}/files/{fileId}; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services scribe jobs files get"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/scribe/live",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Live Scribe WebSocket; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/scribe/live; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "websocket_session": "zoom.live_ai_services_scribe"
       }
     },
     {
       "method": "POST",
       "path": "/v2/aiservices/scribe/transcribe",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Scribe (Synchronous); provider_server=https://api.zoom.us/v2; provider_path=/aiservices/scribe/transcribe; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "ai-services scribe transcribe"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/summarizer/jobs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=List Batch Summarizer Jobs; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/summarizer/jobs; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services summarizer jobs list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/aiservices/summarizer/jobs",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Submit Batch Summarizer Job; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/summarizer/jobs; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "ai-services summarizer jobs submit"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/summarizer/jobs/{jobId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Get Batch Summarizer Job; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/summarizer/jobs/{jobId}; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services summarizer jobs get"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/aiservices/summarizer/jobs/{jobId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Cancel Batch Summarizer Job; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/summarizer/jobs/{jobId}; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "ai-services summarizer jobs cancel"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/summarizer/jobs/{jobId}/files",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=List Batch Summarizer Job Files; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/summarizer/jobs/{jobId}/files; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services summarizer jobs files list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/summarizer/jobs/{jobId}/files/{fileId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Get Batch Summarizer Job File; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/summarizer/jobs/{jobId}/files/{fileId}; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services summarizer jobs files get"
       }
     },
     {
       "method": "POST",
       "path": "/v2/aiservices/summarizer/summarize",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Summarize (Synchronous); provider_server=https://api.zoom.us/v2; provider_path=/aiservices/summarizer/summarize; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "ai-services summarizer summarize"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/translator/jobs",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=List Batch Translator Jobs; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/translator/jobs; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services translator jobs list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/aiservices/translator/jobs",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Submit Batch Translator Job; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/translator/jobs; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "ai-services translator jobs submit"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/translator/jobs/{jobId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Get Batch Translator Job; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/translator/jobs/{jobId}; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services translator jobs get"
       }
     },
     {
       "method": "DELETE",
       "path": "/v2/aiservices/translator/jobs/{jobId}",
-      "operation": {
-        "model": "destructive_action",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed destructive write contract, confirmation, plan/preview/approval/execute evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Cancel Batch Translator Job; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/translator/jobs/{jobId}; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "ai-services translator jobs cancel"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/translator/jobs/{jobId}/files",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=List Batch Translator Job Files; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/translator/jobs/{jobId}/files; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services translator jobs files list"
       }
     },
     {
       "method": "GET",
       "path": "/v2/aiservices/translator/jobs/{jobId}/files/{fileId}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Implementable with current read capabilities, but blocked until a Zoom-local bounded stream or direct-read contract, schema, pagination/fan-out review, output policy, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Get Batch Translator Job File; provider_server=https://api.zoom.us/v2; provider_path=/aiservices/translator/jobs/{jobId}/files/{fileId}; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_read": "ai-services translator jobs files get"
       }
     },
     {
       "method": "POST",
       "path": "/v2/aiservices/translator/translate",
-      "operation": {
-        "model": "sensitive_reverse_etl",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Implementable with current write capabilities, but blocked until a Zoom-local typed record schema, path/query/body contract, risk and approval evidence, and fixtures are declared.",
-        "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
-        "notes": "classification=implementable_now; provider_module=ai-services; operation_title=Translate (Synchronous); provider_server=https://api.zoom.us/v2; provider_path=/aiservices/translator/translate; artifact=https://developers.zoom.us/docs/api/ai-services.md; openapi_version=3.1.1; docs_static_build=2026-08-03T14-58-19-06-00; retrieval_date=2026-08-05"
+      "covered_by": {
+        "direct_write": "ai-services translator translate"
       }
     },
     {

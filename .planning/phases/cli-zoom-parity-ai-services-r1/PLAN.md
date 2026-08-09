@@ -103,6 +103,26 @@ It returned HTTP `200`, exactly `87,750` bytes, and SHA-256
 identical to both earlier audited retrievals. The consumer continues from the same 22 source
 operations; it does not import the 426-sweep generated Zoom surface.
 
+### Machine-readable OpenAPI continuation — 2026-08-10 (IST)
+
+The documented Markdown artifact's response advertised the provider's actual endpoint document
+through its `Link` header. That machine-readable OpenAPI 3.1.1 source was fetched independently
+before importing parameter metadata:
+
+| Item | Evidence |
+| --- | --- |
+| API URL | `https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json` |
+| Retrieval | `2026-08-09T23:11:54Z` (2026-08-10 IST) |
+| HTTP / bytes | `200` / `97,885` |
+| SHA-256 | `d2ba7fbde74f929aa97ee48bb6fded2428685985064896020cb3287cdf62ab65` |
+| Source interpretation | The source server is `https://api.zoom.us/v2`, while its path keys omit `/v2`. The importer received an in-memory copy with only that server-owned `/v2` prefix applied to path keys; no generated file was hand-merged. |
+| Import result | `params-import zoom`: 82 source operations scanned, 12 matching GET operations updated. It retained only documented `state`, `jobId`, and `fileId` inputs and dropped raw `page_size` / `next_page_token` paging controls. |
+| Ledger comparison | Exactly the same 22 AI Services method/path operations as the audited Markdown source and local provider-owned ledger; delta `0`. |
+
+`surface-sync` then derived command endpoint/output metadata, flags, `rest.max_bytes`, and the
+runtime endpoint ledger. `surface-reconcile --notes-contains provider_module=ai-services` changed
+only the 22 matching Zoom rows from source-ledger operations to executable coverage.
+
 ## Locked implementation decisions
 
 1. The twelve ordinary HTTP reads become bounded `rest_read` operations with fixed paths,
@@ -126,6 +146,13 @@ operations; it does not import the 426-sweep generated Zoom surface.
 5. `surface-sync`, `surface-reconcile`, documentation/manual, and website catalogs are generated
    normally. The recorded mechanical retention trace may restore non-Zoom aggregate catalog rows;
    generated Zoom data is never hand-merged.
+6. The first reconciliation pass found a real shared-foundation bootstrap cycle: a newly declared
+   `websocket_session` could not pass runtime preflight until `surface-reconcile` had already
+   written the coverage marker that preflight required. The engine now accepts only a matching
+   source-ledger `operation.model=websocket_session` as that temporary bootstrap state, after which
+   deterministic reconciliation replaces it with `covered_by.websocket_session`. The fix is kept in
+   its own engine commits and unblocks any future closed WebSocket connector operation; it does not
+   expose a caller-selected transport control.
 
 ## TDD execution
 

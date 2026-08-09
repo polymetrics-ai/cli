@@ -132,3 +132,70 @@ FAIL  polymetrics.ai/internal/connectors/defs/zoom
 The current artifact was also re-fetched immediately before this continuation: HTTP `200`, `87,750`
 bytes, SHA-256 `154631ef97c292468c81a79dc50cd51ea142d18f1f9fab060622215ddf3ba367`, retrieved
 2026-08-09T23:06:39Z / 2026-08-10 IST. No source or ledger delta exists.
+
+## WebSocket reconciliation bootstrap RED — captured 2026-08-10
+
+After the closed schema property was accepted, the first AI Services reconciliation exposed a
+separate foundation defect: preflight required the generated `covered_by.websocket_session` marker
+before `surface-reconcile` could derive it. The regression test was added and committed as
+`2b79911aa` before the engine change:
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestRunSurfaceReconcileCoversWebSocketSessionWithRuntimePreflight$'
+--- FAIL: TestRunSurfaceReconcileCoversWebSocketSessionWithRuntimePreflight (0.87s)
+    surfacereconcile_test.go:85: stats = {Scanned:1 Covered:0 Blocked:1 Unchanged:0 Refused:0}, want one runtime-covered websocket session
+FAIL
+FAIL    polymetrics.ai/cmd/connectorgen    1.688s
+FAIL
+```
+
+No credential, request payload, provider token, signed URL, or transcript appears in this failure.
+
+## GREEN — captured 2026-08-10
+
+The separate engine commit `29e4e64c1` permits only an exact source-ledger
+`operation.model=websocket_session` row as the bootstrap state. It does not weaken the fixed
+endpoint/subprotocol/schema checks; reconciliation immediately replaces the row with generated
+coverage. The lint-only loopback test cleanup is `8518509c3`.
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestRunSurfaceReconcileCoversWebSocketSessionWithRuntimePreflight$'
+ok      polymetrics.ai/cmd/connectorgen    0.851s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestBundleLoadAcceptsClosedWebSocketSessionContract$'
+ok      polymetrics.ai/internal/connectors/engine    0.715s
+
+$ go run ./cmd/connectorgen surface-reconcile internal/connectors/defs/zoom --notes-contains provider_module=ai-services --json
+{
+  "total": {"scanned": 1, "covered": 1, "blocked": 0, "unchanged": 0, "refused": 0}
+}
+```
+
+## AI Services GREEN — captured 2026-08-10
+
+The 22 command declarations, imported parameter metadata, generated surface metadata, and exactly
+22 reconciled provider rows now pass the real command runner and the category's loopback tests.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run '^(TestAIServicesOperationCommandsAreReachable|TestProviderInventoryLedgerIsComplete|TestCoveredStreamsHaveReachableCommands)$'
+ok      polymetrics.ai/internal/connectors/defs/zoom    1.057s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom -run '^TestAIServices(DirectRead|DirectWrite)CommandsExecuteWithFixtures$'
+ok      polymetrics.ai/internal/connectors/defs/zoom    3.404s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/defs/zoom
+ok      polymetrics.ai/internal/connectors/defs/zoom    22.824s
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/zoom --json
+{"findings":null,"warnings":null,"connectors_checked":1}
+
+$ go run ./cmd/connectorgen surface-sync internal/connectors/defs --check
+connectorgen surface-sync: 552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+The loopback read test covers the twelve GETs and asserts that only imported `state`, `jobId`, and
+`fileId` inputs reach the fixed request. It refuses raw `page_size`, `next_page_token`, `page`,
+`per_page`, and `limit`. The write test covers six JSON submissions/synchronous actions and all
+three `DELETE` cancellations through plan → preview → single-use approval → execute; each delete
+requires destructive confirmation and returns HTTP 204 with no invented body. All test values are
+synthetic, and response token fields are asserted redacted.

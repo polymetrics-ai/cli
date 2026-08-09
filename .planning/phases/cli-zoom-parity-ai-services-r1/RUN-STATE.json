@@ -2,7 +2,7 @@
   "phase": "cli-zoom-parity-ai-services-r1",
   "issue": 3935,
   "parent_issue": 3915,
-  "status": "foundation-green-consumer-authoring",
+  "status": "verification-green-review-complete",
   "lifecycle": {
     "mode": "inline-manual-gsd-fallback",
     "reason": "This provider-category phase is not registered by the official runtime and the parent delivery contract forbids role spawning.",
@@ -13,7 +13,7 @@
       "verify-work",
       "code-review"
     ],
-    "sources_resolved_at": "2026-08-08"
+    "sources_resolved_at": "2026-08-10"
   },
   "source_artifact": {
     "url": "https://developers.zoom.us/docs/api/ai-services.md",
@@ -25,6 +25,15 @@
     "server": "https://api.zoom.us/v2",
     "ledger_delta": 0,
     "continuation_refetch": "2026-08-10 IST: byte-for-byte identical to 2026-08-08 and 2026-08-09 audits"
+  },
+  "machine_readable_artifact": {
+    "url": "https://developers.zoom.us/api-hub/ai-services/methods/endpoints.json",
+    "retrieved_at": "2026-08-09T23:11:54Z",
+    "http_status": 200,
+    "bytes": 97885,
+    "sha256": "d2ba7fbde74f929aa97ee48bb6fded2428685985064896020cb3287cdf62ab65",
+    "import_transform": "prepend only the provider server's /v2 base path to path keys in-memory",
+    "params_import": "82 source operations scanned; 12 matching operations updated; raw page_size and next_page_token omitted"
   },
   "operations": 22,
   "target": {
@@ -42,7 +51,7 @@
   "foundation_issue": 3963,
   "foundation_pr_base": "fm/cli-zoom-full-parity-r1",
   "websocket_schema_green": "2026-08-10: TestBundleLoadAcceptsClosedWebSocketSessionContract passes on the consumer base",
-  "green": "pending: 22 AI Services command paths remain the active consumer RED",
-  "verification": "pending",
-  "review": "pending"
+  "green": "22 commands declared and runtime-preflight reachable: 12 rest reads, 9 plan/preview/approval-gated rest writes, and 1 fixed Live Scribe websocket session; all 22 matching api_surface rows reconciled to coverage",
+  "verification": "pass: Zoom bundle/engine/connectorgen scoped suites, full connector validation, generated surface checks, freshly built binary 22/22 route sweep, docs/site generators and typecheck, vet/build/tidy/docs/smoke/lint/contract/boundary/release gates",
+  "review": "manual inline code-review completed; no unresolved critical, warning, security, source-parity, generated-file, or endpoint-ledger-locality finding"
 }

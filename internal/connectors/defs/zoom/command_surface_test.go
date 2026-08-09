@@ -129,8 +129,8 @@ func TestProviderInventoryLedgerIsComplete(t *testing.T) {
 				t.Errorf("executable %s carries another disposition", key)
 			}
 			covering := endpoint.CoveredBy
-			if covering.Stream == "" && covering.Write == "" && covering.DirectRead == "" && len(covering.DirectReads) == 0 && covering.DirectWrite == "" && len(covering.DirectWrites) == 0 {
-				t.Errorf("executable %s is not bound to a stream, write, direct_read, or direct_write command", key)
+			if covering.Stream == "" && covering.Write == "" && covering.DirectRead == "" && len(covering.DirectReads) == 0 && covering.DirectWrite == "" && len(covering.DirectWrites) == 0 && covering.WebSocketSession == "" {
+				t.Errorf("executable %s is not bound to a stream, write, direct_read, direct_write, or websocket_session command", key)
 			}
 			covered++
 		case endpoint.Operation != nil:
@@ -844,6 +844,271 @@ func TestAIServicesOperationCommandsAreReachable(t *testing.T) {
 		if operation == nil || operation.Confirmation == nil || operation.Confirmation.Kind != connectors.ConfirmationKindDestructive {
 			t.Errorf("AI Services command %q does not retain typed destructive confirmation", want.path)
 		}
+	}
+}
+
+// TestAIServicesDirectReadCommandsExecuteWithFixtures runs every documented
+// AI Services REST GET through the command runner. It proves the imported
+// provider parameters, fixed path binding, ordinary Zoom bearer transport,
+// bounded response handling, and redacted token output without contacting
+// Zoom.
+func TestAIServicesDirectReadCommandsExecuteWithFixtures(t *testing.T) {
+	const accessToken = "fixture-ai-services-read-access-token"
+	type readAction struct {
+		name          string
+		path          []string
+		flags         map[string][]string
+		requestPath   string
+		expectedQuery map[string]string
+	}
+	actions := []readAction{
+		{name: "list Scribe jobs", path: []string{"ai-services", "scribe", "jobs", "list"}, flags: map[string][]string{"state": {"SUCCEEDED"}}, requestPath: "/v2/aiservices/scribe/jobs", expectedQuery: map[string]string{"state": "SUCCEEDED"}},
+		{name: "get Scribe job", path: []string{"ai-services", "scribe", "jobs", "get"}, flags: map[string][]string{"jobId": {"fixture-scribe-job"}}, requestPath: "/v2/aiservices/scribe/jobs/fixture-scribe-job"},
+		{name: "list Scribe job files", path: []string{"ai-services", "scribe", "jobs", "files", "list"}, flags: map[string][]string{"jobId": {"fixture-scribe-job"}}, requestPath: "/v2/aiservices/scribe/jobs/fixture-scribe-job/files"},
+		{name: "get Scribe job file", path: []string{"ai-services", "scribe", "jobs", "files", "get"}, flags: map[string][]string{"jobId": {"fixture-scribe-job"}, "fileId": {"fixture-scribe-file"}}, requestPath: "/v2/aiservices/scribe/jobs/fixture-scribe-job/files/fixture-scribe-file"},
+		{name: "list Summarizer jobs", path: []string{"ai-services", "summarizer", "jobs", "list"}, flags: map[string][]string{"state": {"SUCCEEDED"}}, requestPath: "/v2/aiservices/summarizer/jobs", expectedQuery: map[string]string{"state": "SUCCEEDED"}},
+		{name: "get Summarizer job", path: []string{"ai-services", "summarizer", "jobs", "get"}, flags: map[string][]string{"jobId": {"fixture-summarizer-job"}}, requestPath: "/v2/aiservices/summarizer/jobs/fixture-summarizer-job"},
+		{name: "list Summarizer job files", path: []string{"ai-services", "summarizer", "jobs", "files", "list"}, flags: map[string][]string{"jobId": {"fixture-summarizer-job"}, "state": {"FILE_SUCCEEDED"}}, requestPath: "/v2/aiservices/summarizer/jobs/fixture-summarizer-job/files", expectedQuery: map[string]string{"state": "FILE_SUCCEEDED"}},
+		{name: "get Summarizer job file", path: []string{"ai-services", "summarizer", "jobs", "files", "get"}, flags: map[string][]string{"jobId": {"fixture-summarizer-job"}, "fileId": {"fixture-summarizer-file"}}, requestPath: "/v2/aiservices/summarizer/jobs/fixture-summarizer-job/files/fixture-summarizer-file"},
+		{name: "list Translator jobs", path: []string{"ai-services", "translator", "jobs", "list"}, flags: map[string][]string{"state": {"SUCCEEDED"}}, requestPath: "/v2/aiservices/translator/jobs", expectedQuery: map[string]string{"state": "SUCCEEDED"}},
+		{name: "get Translator job", path: []string{"ai-services", "translator", "jobs", "get"}, flags: map[string][]string{"jobId": {"fixture-translator-job"}}, requestPath: "/v2/aiservices/translator/jobs/fixture-translator-job"},
+		{name: "list Translator job files", path: []string{"ai-services", "translator", "jobs", "files", "list"}, flags: map[string][]string{"jobId": {"fixture-translator-job"}, "state": {"FILE_SUCCEEDED"}}, requestPath: "/v2/aiservices/translator/jobs/fixture-translator-job/files", expectedQuery: map[string]string{"state": "FILE_SUCCEEDED"}},
+		{name: "get Translator job file", path: []string{"ai-services", "translator", "jobs", "files", "get"}, flags: map[string][]string{"jobId": {"fixture-translator-job"}, "fileId": {"fixture-translator-file"}}, requestPath: "/v2/aiservices/translator/jobs/fixture-translator-job/files/fixture-translator-file"},
+	}
+	byRequest := make(map[string]*readAction, len(actions))
+	for i := range actions {
+		byRequest[http.MethodGet+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("AI Services read fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("AI Services read fixture did not receive the Zoom bearer credential")
+		}
+		query := request.URL.Query()
+		if len(query) != len(action.expectedQuery) {
+			t.Fatalf("AI Services read query = %v, want %v", query, action.expectedQuery)
+		}
+		for name, want := range action.expectedQuery {
+			if got := query.Get(name); got != want {
+				t.Fatalf("AI Services read query %s = %q, want %q", name, got, want)
+			}
+		}
+		for _, forbidden := range []string{"page_size", "next_page_token", "page", "per_page", "limit"} {
+			if got := query.Get(forbidden); got != "" {
+				t.Fatalf("AI Services read sent raw paging parameter %s=%q", forbidden, got)
+			}
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(`{"state":"SUCCEEDED","next_page_token":"fixture-ai-services-read-token"}`))
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	config := connectors.RuntimeConfig{
+		Config:  map[string]string{"base_url": server.URL + "/v2"},
+		Secrets: map[string]string{"access_token": accessToken},
+	}
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			result, err := commandrunner.Run(context.Background(), connector, commandrunner.Request{
+				Path:   action.path,
+				Flags:  action.flags,
+				Config: config,
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for an AI Services direct_read command")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run(%q): %v", strings.Join(action.path, " "), err)
+			}
+			if result.DirectRead == nil || result.DirectRead.Status != http.StatusOK {
+				t.Fatalf("Run(%q) direct read = %#v, want HTTP %d", strings.Join(action.path, " "), result.DirectRead, http.StatusOK)
+			}
+			encoded, err := json.Marshal(result.DirectRead.Body)
+			if err != nil {
+				t.Fatalf("marshal AI Services read response: %v", err)
+			}
+			if strings.Contains(string(encoded), "fixture-ai-services-read-token") || !strings.Contains(string(encoded), `"next_page_token_redacted":true`) {
+				t.Fatal("AI Services read response did not redact the provider token field")
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("AI Services read fixtures received %d requests, want %d", requests, len(actions))
+	}
+}
+
+// TestAIServicesDirectWriteCommandsExecuteWithFixtures exercises all nine
+// documented JSON mutations through plan, no-network preview, single-use
+// approval, typed destructive confirmation for cancellation, and execution.
+// The three 204 cancellation responses remain completed status-only actions.
+func TestAIServicesDirectWriteCommandsExecuteWithFixtures(t *testing.T) {
+	const (
+		credentialName = "zoom-ai-services-write-fixture"
+		accessToken    = "fixture-ai-services-write-access-token"
+	)
+	type writeAction struct {
+		name         string
+		path         []string
+		flags        map[string][]string
+		method       string
+		requestPath  string
+		expectedBody json.RawMessage
+		status       int
+		destructive  bool
+	}
+	batchBody := func() json.RawMessage {
+		return json.RawMessage(`{"input":{"source":"S3","uri":"s3://fixture-ai-services/input"},"output":{"destination":"S3","uri":"s3://fixture-ai-services/output"}}`)
+	}
+	actions := []writeAction{
+		{name: "submit Scribe job", path: []string{"ai-services", "scribe", "jobs", "submit"}, flags: map[string][]string{"scribe-job": {`{"config":{"language":"en-US"},"input":{"source":"S3","uri":"s3://fixture-ai-services/input"},"output":{"destination":"S3","uri":"s3://fixture-ai-services/output"}}`}}, method: http.MethodPost, requestPath: "/v2/aiservices/scribe/jobs", expectedBody: json.RawMessage(`{"config":{"language":"en-US"},"input":{"source":"S3","uri":"s3://fixture-ai-services/input"},"output":{"destination":"S3","uri":"s3://fixture-ai-services/output"}}`), status: http.StatusOK},
+		{name: "cancel Scribe job", path: []string{"ai-services", "scribe", "jobs", "cancel"}, flags: map[string][]string{"job-id": {"fixture-scribe-job"}}, method: http.MethodDelete, requestPath: "/v2/aiservices/scribe/jobs/fixture-scribe-job", status: http.StatusNoContent, destructive: true},
+		{name: "scribe synchronous", path: []string{"ai-services", "scribe", "transcribe"}, flags: map[string][]string{"transcription-request": {`{"config":{"language":"en-US"},"file":"ZmFrZS1hdWRpby1ieXRlcw=="}`}}, method: http.MethodPost, requestPath: "/v2/aiservices/scribe/transcribe", expectedBody: json.RawMessage(`{"config":{"language":"en-US"},"file":"ZmFrZS1hdWRpby1ieXRlcw=="}`), status: http.StatusOK},
+		{name: "submit Summarizer job", path: []string{"ai-services", "summarizer", "jobs", "submit"}, flags: map[string][]string{"summarizer-job": {string(batchBody())}}, method: http.MethodPost, requestPath: "/v2/aiservices/summarizer/jobs", expectedBody: batchBody(), status: http.StatusOK},
+		{name: "cancel Summarizer job", path: []string{"ai-services", "summarizer", "jobs", "cancel"}, flags: map[string][]string{"job-id": {"fixture-summarizer-job"}}, method: http.MethodDelete, requestPath: "/v2/aiservices/summarizer/jobs/fixture-summarizer-job", status: http.StatusNoContent, destructive: true},
+		{name: "summarize synchronous", path: []string{"ai-services", "summarizer", "summarize"}, flags: map[string][]string{"summary-request": {`{"input":{"text":"Synthetic AI Services test input."},"config":{"task":"summary"}}`}}, method: http.MethodPost, requestPath: "/v2/aiservices/summarizer/summarize", expectedBody: json.RawMessage(`{"input":{"text":"Synthetic AI Services test input."},"config":{"task":"summary"}}`), status: http.StatusOK},
+		{name: "submit Translator job", path: []string{"ai-services", "translator", "jobs", "submit"}, flags: map[string][]string{"translator-job": {string(batchBody())}}, method: http.MethodPost, requestPath: "/v2/aiservices/translator/jobs", expectedBody: batchBody(), status: http.StatusOK},
+		{name: "cancel Translator job", path: []string{"ai-services", "translator", "jobs", "cancel"}, flags: map[string][]string{"job-id": {"fixture-translator-job"}}, method: http.MethodDelete, requestPath: "/v2/aiservices/translator/jobs/fixture-translator-job", status: http.StatusNoContent, destructive: true},
+		{name: "translate synchronous", path: []string{"ai-services", "translator", "translate"}, flags: map[string][]string{"translation-request": {`{"text":"Synthetic AI Services test input.","config":{"source_language":"en-US","target_languages":["es-ES"]}}`}}, method: http.MethodPost, requestPath: "/v2/aiservices/translator/translate", expectedBody: json.RawMessage(`{"text":"Synthetic AI Services test input.","config":{"source_language":"en-US","target_languages":["es-ES"]}}`), status: http.StatusOK},
+	}
+	byRequest := make(map[string]*writeAction, len(actions))
+	for i := range actions {
+		byRequest[actions[i].method+" "+actions[i].requestPath] = &actions[i]
+	}
+
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		requests++
+		action := byRequest[request.Method+" "+request.URL.Path]
+		if action == nil {
+			t.Fatal("AI Services write fixture received an undeclared method/path")
+		}
+		if request.Header.Get("Authorization") != "Bearer "+accessToken {
+			t.Fatal("AI Services write fixture did not receive the Zoom bearer credential")
+		}
+		if len(request.URL.Query()) != 0 {
+			t.Fatal("AI Services write fixture received undeclared query or paging input")
+		}
+		if len(action.expectedBody) == 0 {
+			body, err := io.ReadAll(request.Body)
+			if err != nil {
+				t.Fatalf("read AI Services status-only request: %v", err)
+			}
+			if len(body) != 0 {
+				t.Fatal("AI Services status-only action sent an undeclared request body")
+			}
+		} else {
+			if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/json") {
+				t.Fatal("AI Services JSON action did not declare JSON content")
+			}
+			var got, want any
+			if err := json.NewDecoder(request.Body).Decode(&got); err != nil {
+				t.Fatalf("decode AI Services request body: %v", err)
+			}
+			if err := json.Unmarshal(action.expectedBody, &want); err != nil {
+				t.Fatalf("decode expected AI Services request body: %v", err)
+			}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatal("AI Services request body did not contain exactly the declared documented object")
+			}
+		}
+		if action.status != http.StatusNoContent {
+			w.Header().Set("Content-Type", "application/json")
+		}
+		w.WriteHeader(action.status)
+		if action.status != http.StatusNoContent {
+			_, _ = w.Write([]byte(`{"token":"fixture-ai-services-write-response-token"}`))
+		}
+	}))
+	defer server.Close()
+
+	bundle := loadZoomBundle(t)
+	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	for _, action := range actions {
+		if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: action.path, Flags: action.flags}); err != nil {
+			t.Fatalf("BuildWriteCommand(%s): %v", action.name, err)
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := application.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      credentialName,
+		Connector: zoomBundleName,
+		Config:    map[string]string{"base_url": server.URL + "/v2"},
+		Secrets:   map[string]string{"access_token": accessToken},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+
+	for _, action := range actions {
+		t.Run(action.name, func(t *testing.T) {
+			beforeRequests := requests
+			plan, preview, err := application.PlanConnectorCommand(context.Background(), app.PlanConnectorCommandRequest{
+				Connector:  zoomBundleName,
+				Credential: credentialName,
+				Path:       action.path,
+				Flags:      action.flags,
+				Preview:    true,
+			})
+			if err != nil {
+				t.Fatalf("PlanConnectorCommand(%s): %v", action.name, err)
+			}
+			if preview == nil || preview.Digest == "" || plan.ApprovalToken == "" {
+				t.Fatal("AI Services write plan did not produce a no-network preview and single-use approval")
+			}
+			if requests != beforeRequests {
+				t.Fatal("AI Services write plan or preview reached the fixture endpoint")
+			}
+
+			runRequest := app.RunReverseETLRequest{PlanID: plan.ID, ApprovalToken: plan.ApprovalToken}
+			if action.destructive {
+				if _, err := application.RunReverseETL(context.Background(), runRequest); err == nil {
+					t.Fatal("AI Services destructive action bypassed its typed confirmation gate")
+				}
+				if requests != beforeRequests {
+					t.Fatal("unconfirmed AI Services destructive action reached the fixture endpoint")
+				}
+				runRequest.Confirmation = connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+			}
+			run, err := application.RunReverseETL(context.Background(), runRequest)
+			if err != nil {
+				t.Fatalf("RunReverseETL(%s): %v", action.name, err)
+			}
+			if run.Status != "completed" || run.OperationDirectWrite == nil || run.OperationDirectWrite.Status != action.status {
+				t.Fatalf("AI Services write run = %#v, want completed declared action status %d", run, action.status)
+			}
+			if action.status == http.StatusNoContent {
+				if run.OperationDirectWrite.Body != nil {
+					t.Fatal("AI Services status-only action returned an invented response body")
+				}
+				return
+			}
+			encoded, err := json.Marshal(run.OperationDirectWrite.Body)
+			if err != nil {
+				t.Fatalf("marshal AI Services write response: %v", err)
+			}
+			if strings.Contains(string(encoded), "fixture-ai-services-write-response-token") || !strings.Contains(string(encoded), `"token_redacted":true`) {
+				t.Fatal("AI Services write response did not redact the provider token field")
+			}
+		})
+	}
+	if requests != len(actions) {
+		t.Fatalf("AI Services write fixtures received %d requests, want %d", requests, len(actions))
 	}
 }
 
