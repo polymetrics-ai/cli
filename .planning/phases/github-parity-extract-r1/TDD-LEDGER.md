@@ -2589,3 +2589,36 @@ node --test scripts/tests/github-live-lab.test.mjs
 node scripts/github-live-lab.mjs --check-boundary --boundary .planning/phases/github-parity-extract-r1/GITHUB-LIVE-LAB-BOUNDARY.json
 git diff --check
 ```
+
+---
+
+## Cycle 33 — captain-ordered complete REST + GraphQL closure
+
+**Scope:** replace the legacy REST-only completion denominator with source-derived terminal
+accounting, close every ordinary documented REST/GraphQL command route, and retain only the
+captain-held `auth token` and `api` aliases.  The current PM-only lab remains target-bound and no
+provider write is authorized by this local classification cycle.
+
+**Red 33a — the source bundle still records nonterminal operation and command rows.**
+`TestGitHubCompleteParityLeavesOnlyCaptainHeldRawAliases` was added before changing a source
+classification.  It reads the generated GitHub `cli_surface.json` and `api_surface.json`, excludes
+only the captain-held token-printing/raw-API aliases, and requires every REST endpoint to have a
+fixed executable `covered_by` contract or a machine-checkable named dependency.  The first red run
+is the exact reconciliation point for the captain's historical 1,224/1,179/1,081 figures versus
+the current generated GraphQL source:
+
+```
+$ go test -timeout 20m ./cmd/connectorgen \
+  -run '^TestGitHubCompleteParityLeavesOnlyCaptainHeldRawAliases$' -count=1
+--- FAIL: TestGitHubCompleteParityLeavesOnlyCaptainHeldRawAliases
+    GitHub completion still has 53 nonterminal command rows
+    GitHub completion still has 77 REST endpoints without a fixed executable contract or named dependency
+FAIL
+```
+
+The 53 command rows are exactly 37 `partial`, 8 `planned`, and 8 unsafe rows other than the two
+held aliases; the 77 REST rows are 67 former `duplicate`, 9 former `disallowed`, and one former
+`deprecated` endpoint.  The test reports all exact paths rather than accepting the contradictory
+historical phrase “45 no-command endpoints”.  The planned green state may not hide a source row by
+changing the test: it must supply a concrete operation/command contract, or use the forthcoming
+schema-validated named-dependency model for a genuine captain-held capability boundary.
