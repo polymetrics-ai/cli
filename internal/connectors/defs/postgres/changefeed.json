@@ -4,7 +4,7 @@
   "source": {
     "artifact_url": "https://www.postgresql.org/docs/current/logicaldecoding-explanation.html",
     "artifact_version": "18",
-    "retrieved_at": "2026-08-06"
+    "retrieved_at": "2026-08-10"
   },
   "executor": { "kind": "native", "id": "postgres_logical_replication" },
   "checkpoint": {

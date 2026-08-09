@@ -1,8 +1,9 @@
 {
   "branch": "fm/cli-postgres-cdc-logical-replication-r1",
   "base": "origin/main",
-  "base_head": "cb1d3c45f",
+  "base_head": "f96a47e80",
   "lifecycle": "inline-manual-gsd-fallback",
-  "status": "green",
-  "tdd": "PCDC-1 through PCDC-6 green; PostgreSQL 12.22 live conformance recorded"
+  "status": "validated",
+  "tdd": "PCDC-1 through PCDC-7 green; PostgreSQL 12.22 live conformance recorded",
+  "validation": "post-rebase generated catalog, dependency evidence, binary delta, focused CLI exit-code suite, native PostgreSQL live conformance, scoped tests/vet/build, and non-suite make gates all pass"
 }
