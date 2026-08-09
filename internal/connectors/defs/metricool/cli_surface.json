@@ -9669,7 +9669,7 @@
     {
       "path": "api head v2 settings users",
       "summary": "Documented HEAD /v2/settings/users (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://app.metricool.com/api/swagger.json",
       "examples": [

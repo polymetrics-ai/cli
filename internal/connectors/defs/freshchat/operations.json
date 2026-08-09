@@ -34,18 +34,17 @@
     },
     {
       "id": "freshchat.post.users-fetch",
-      "kind": "rest_write",
+      "kind": "composite",
       "summary": "POST /users/fetch",
       "description": "Freshchat subset user fetch is a fixed POST-body provider-search operation with ids[] bounded by the provider to 100 users, but executable provider_search/provider_query support is blocked on shared foundation #2985; no raw request body/query escape hatch is exposed.",
       "source_url": "https://developers.freshchat.com/api/",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
       "output_policy": "json",
-      "mutation_class": "create",
-      "rest": {
-        "method": "POST",
-        "path": "/users/fetch",
-        "max_bytes": 16777216
+      "composite": {
+        "steps": [
+          "POST /users/fetch"
+        ]
       }
     }
   ]

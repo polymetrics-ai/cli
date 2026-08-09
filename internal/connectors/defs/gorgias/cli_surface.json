@@ -9,6 +9,9 @@
         "account get",
         "account settings list",
         "api get api tickets ticket-id messages",
+        "api post api reporting stats",
+        "api post api stats name download",
+        "api put api views view-id items",
         "custom-fields get",
         "custom-fields list",
         "customers custom-fields list",
@@ -62,11 +65,8 @@
       "commands": [
         "account settings create",
         "account settings update",
-        "api post api reporting stats",
-        "api post api stats name download",
         "api put api customers customer-id custom-fields id",
         "api put api tickets ticket-id custom-fields id",
-        "api put api views view-id items",
         "custom-fields bulk-update",
         "custom-fields create",
         "custom-fields update",
@@ -262,7 +262,7 @@
     {
       "path": "api post api reporting stats",
       "summary": "Documented POST /api/reporting/stats (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developers.gorgias.com/reference",
       "examples": [
@@ -276,13 +276,13 @@
       ],
       "operation": "gorgias.post.api-reporting-stats",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post api stats name download",
       "summary": "Documented POST /api/stats/{name}/download (not implemented)",
-      "intent": "direct_write",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developers.gorgias.com/reference",
       "examples": [
@@ -296,8 +296,8 @@
       ],
       "operation": "gorgias.post.api-stats-name-download",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api put api customers customer-id custom-fields id",
@@ -342,7 +342,7 @@
     {
       "path": "api put api views view-id items",
       "summary": "Documented PUT /api/views/{view_id}/items (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developers.gorgias.com/reference",
       "examples": [
@@ -356,8 +356,8 @@
       ],
       "operation": "gorgias.put.api-views-view-id-items",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "custom-fields bulk-update",

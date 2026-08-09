@@ -8412,7 +8412,7 @@
     {
       "path": "api get clips clipid download",
       "summary": "Documented GET /clips/{clipId}/download (not implemented)",
-      "intent": "direct_read",
+      "intent": "binary_download",
       "availability": "not_implemented",
       "source_url": "https://developers.zoom.us/docs/api/",
       "examples": [
@@ -8426,8 +8426,8 @@
       ],
       "operation": "zoom.get.clips-clipid-download",
       "risk": "high",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "notes": "named_dependency=engine.binary_download_operation_contract: the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
     },
     {
       "path": "api get clips transfers taskid",

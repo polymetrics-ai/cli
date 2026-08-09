@@ -240,3 +240,26 @@ func TestSurfaceInventoryFromRawReportsProvenanceEvidence(t *testing.T) {
 		})
 	}
 }
+
+func TestSurfaceInventoryFromRawCountsPluralCoverageTargets(t *testing.T) {
+	result, err := surfaceInventoryFromRaw([]byte(`{
+		"api": "test API",
+		"endpoints": [{
+			"method": "PUT",
+			"path": "/announcement-banner",
+			"covered_by": {
+				"streams": ["current_banner", "banner_history"],
+				"writes": ["set_banner", "clear_banner"]
+			}
+		}]
+	}`))
+	if err != nil {
+		t.Fatalf("surfaceInventoryFromRaw: %v", err)
+	}
+	if result.Result != "pass" || result.Covered != 1 {
+		t.Fatalf("result = %+v, want one covered endpoint", result)
+	}
+	if result.CoveredBy["stream"] != 2 || result.CoveredBy["write"] != 2 {
+		t.Fatalf("CoveredBy = %+v, want two stream and write targets", result.CoveredBy)
+	}
+}

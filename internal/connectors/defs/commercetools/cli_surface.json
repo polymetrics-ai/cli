@@ -7929,7 +7929,7 @@
     {
       "path": "api head projectkey",
       "summary": "Documented HEAD /{projectKey} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -7949,7 +7949,7 @@
     {
       "path": "api head projectkey api-clients",
       "summary": "Documented HEAD /{projectKey}/api-clients (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -7969,7 +7969,7 @@
     {
       "path": "api head projectkey api-clients id",
       "summary": "Documented HEAD /{projectKey}/api-clients/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -7989,7 +7989,7 @@
     {
       "path": "api head projectkey as-associate associateid business-units",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/business-units (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8009,7 +8009,7 @@
     {
       "path": "api head projectkey as-associate associateid business-units id",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/business-units/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8029,7 +8029,7 @@
     {
       "path": "api head projectkey as-associate associateid business-units key key",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/business-units/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8049,7 +8049,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey carts",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8069,7 +8069,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey carts id",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8089,7 +8089,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey carts key key",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8109,7 +8109,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey orders",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8129,7 +8129,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey orders id",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8149,7 +8149,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey orders order-number ordernumber",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders/order-number={orderNumber} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8169,7 +8169,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey quote-requests",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/quote-requests (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8189,7 +8189,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey quote-requests id",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/quote-requests/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8209,7 +8209,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey quote-requests key key",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/quote-requests/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8229,7 +8229,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey quotes",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/quotes (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8249,7 +8249,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey quotes id",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/quotes/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8269,7 +8269,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey quotes key key",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/quotes/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8289,7 +8289,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey shopping-lists",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/shopping-lists (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8309,7 +8309,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey shopping-lists id",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/shopping-lists/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8329,7 +8329,7 @@
     {
       "path": "api head projectkey as-associate associateid in-business-unit key businessunitkey shopping-lists key key",
       "summary": "Documented HEAD /{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/shopping-lists/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8349,7 +8349,7 @@
     {
       "path": "api head projectkey associate-roles",
       "summary": "Documented HEAD /{projectKey}/associate-roles (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8369,7 +8369,7 @@
     {
       "path": "api head projectkey associate-roles id",
       "summary": "Documented HEAD /{projectKey}/associate-roles/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8389,7 +8389,7 @@
     {
       "path": "api head projectkey associate-roles key key",
       "summary": "Documented HEAD /{projectKey}/associate-roles/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8409,7 +8409,7 @@
     {
       "path": "api head projectkey attribute-groups",
       "summary": "Documented HEAD /{projectKey}/attribute-groups (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8429,7 +8429,7 @@
     {
       "path": "api head projectkey attribute-groups id",
       "summary": "Documented HEAD /{projectKey}/attribute-groups/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8449,7 +8449,7 @@
     {
       "path": "api head projectkey attribute-groups key key",
       "summary": "Documented HEAD /{projectKey}/attribute-groups/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8469,7 +8469,7 @@
     {
       "path": "api head projectkey business-units",
       "summary": "Documented HEAD /{projectKey}/business-units (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8489,7 +8489,7 @@
     {
       "path": "api head projectkey business-units id",
       "summary": "Documented HEAD /{projectKey}/business-units/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8509,7 +8509,7 @@
     {
       "path": "api head projectkey business-units key key",
       "summary": "Documented HEAD /{projectKey}/business-units/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8529,7 +8529,7 @@
     {
       "path": "api head projectkey business-units search",
       "summary": "Documented HEAD /{projectKey}/business-units/search (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8549,7 +8549,7 @@
     {
       "path": "api head projectkey cart-discounts",
       "summary": "Documented HEAD /{projectKey}/cart-discounts (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8569,7 +8569,7 @@
     {
       "path": "api head projectkey cart-discounts id",
       "summary": "Documented HEAD /{projectKey}/cart-discounts/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8589,7 +8589,7 @@
     {
       "path": "api head projectkey cart-discounts key key",
       "summary": "Documented HEAD /{projectKey}/cart-discounts/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8609,7 +8609,7 @@
     {
       "path": "api head projectkey carts",
       "summary": "Documented HEAD /{projectKey}/carts (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8629,7 +8629,7 @@
     {
       "path": "api head projectkey carts customer-id customerid",
       "summary": "Documented HEAD /{projectKey}/carts/customer-id={customerId} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8649,7 +8649,7 @@
     {
       "path": "api head projectkey carts id",
       "summary": "Documented HEAD /{projectKey}/carts/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8669,7 +8669,7 @@
     {
       "path": "api head projectkey carts key key",
       "summary": "Documented HEAD /{projectKey}/carts/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8689,7 +8689,7 @@
     {
       "path": "api head projectkey categories",
       "summary": "Documented HEAD /{projectKey}/categories (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8709,7 +8709,7 @@
     {
       "path": "api head projectkey categories id",
       "summary": "Documented HEAD /{projectKey}/categories/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8729,7 +8729,7 @@
     {
       "path": "api head projectkey categories key key",
       "summary": "Documented HEAD /{projectKey}/categories/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8749,7 +8749,7 @@
     {
       "path": "api head projectkey channels",
       "summary": "Documented HEAD /{projectKey}/channels (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8769,7 +8769,7 @@
     {
       "path": "api head projectkey channels id",
       "summary": "Documented HEAD /{projectKey}/channels/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8789,7 +8789,7 @@
     {
       "path": "api head projectkey channels key key",
       "summary": "Documented HEAD /{projectKey}/channels/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8809,7 +8809,7 @@
     {
       "path": "api head projectkey custom-objects",
       "summary": "Documented HEAD /{projectKey}/custom-objects (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8829,7 +8829,7 @@
     {
       "path": "api head projectkey customer-groups",
       "summary": "Documented HEAD /{projectKey}/customer-groups (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8849,7 +8849,7 @@
     {
       "path": "api head projectkey customer-groups id",
       "summary": "Documented HEAD /{projectKey}/customer-groups/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8869,7 +8869,7 @@
     {
       "path": "api head projectkey customer-groups key key",
       "summary": "Documented HEAD /{projectKey}/customer-groups/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8889,7 +8889,7 @@
     {
       "path": "api head projectkey customers",
       "summary": "Documented HEAD /{projectKey}/customers (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8909,7 +8909,7 @@
     {
       "path": "api head projectkey customers id",
       "summary": "Documented HEAD /{projectKey}/customers/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8929,7 +8929,7 @@
     {
       "path": "api head projectkey customers key key",
       "summary": "Documented HEAD /{projectKey}/customers/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8949,7 +8949,7 @@
     {
       "path": "api head projectkey customers search",
       "summary": "Documented HEAD /{projectKey}/customers/search (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8969,7 +8969,7 @@
     {
       "path": "api head projectkey discount-codes",
       "summary": "Documented HEAD /{projectKey}/discount-codes (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -8989,7 +8989,7 @@
     {
       "path": "api head projectkey discount-codes id",
       "summary": "Documented HEAD /{projectKey}/discount-codes/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9009,7 +9009,7 @@
     {
       "path": "api head projectkey discount-codes key key",
       "summary": "Documented HEAD /{projectKey}/discount-codes/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9029,7 +9029,7 @@
     {
       "path": "api head projectkey discount-groups",
       "summary": "Documented HEAD /{projectKey}/discount-groups (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9049,7 +9049,7 @@
     {
       "path": "api head projectkey discount-groups id",
       "summary": "Documented HEAD /{projectKey}/discount-groups/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9069,7 +9069,7 @@
     {
       "path": "api head projectkey discount-groups key key",
       "summary": "Documented HEAD /{projectKey}/discount-groups/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9089,7 +9089,7 @@
     {
       "path": "api head projectkey extensions",
       "summary": "Documented HEAD /{projectKey}/extensions (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9109,7 +9109,7 @@
     {
       "path": "api head projectkey extensions id",
       "summary": "Documented HEAD /{projectKey}/extensions/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9129,7 +9129,7 @@
     {
       "path": "api head projectkey extensions key key",
       "summary": "Documented HEAD /{projectKey}/extensions/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9149,7 +9149,7 @@
     {
       "path": "api head projectkey in-store key storekey business-units",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/business-units (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9169,7 +9169,7 @@
     {
       "path": "api head projectkey in-store key storekey business-units id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/business-units/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9189,7 +9189,7 @@
     {
       "path": "api head projectkey in-store key storekey business-units key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/business-units/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9209,7 +9209,7 @@
     {
       "path": "api head projectkey in-store key storekey cart-discounts",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/cart-discounts (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9229,7 +9229,7 @@
     {
       "path": "api head projectkey in-store key storekey cart-discounts id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/cart-discounts/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9249,7 +9249,7 @@
     {
       "path": "api head projectkey in-store key storekey cart-discounts key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/cart-discounts/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9269,7 +9269,7 @@
     {
       "path": "api head projectkey in-store key storekey carts",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/carts (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9289,7 +9289,7 @@
     {
       "path": "api head projectkey in-store key storekey carts customer-id customerid",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/carts/customer-id={customerId} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9309,7 +9309,7 @@
     {
       "path": "api head projectkey in-store key storekey carts id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/carts/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9329,7 +9329,7 @@
     {
       "path": "api head projectkey in-store key storekey carts key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/carts/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9349,7 +9349,7 @@
     {
       "path": "api head projectkey in-store key storekey customers",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/customers (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9369,7 +9369,7 @@
     {
       "path": "api head projectkey in-store key storekey customers id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/customers/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9389,7 +9389,7 @@
     {
       "path": "api head projectkey in-store key storekey customers key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/customers/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9409,7 +9409,7 @@
     {
       "path": "api head projectkey in-store key storekey discount-codes",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/discount-codes (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9429,7 +9429,7 @@
     {
       "path": "api head projectkey in-store key storekey discount-codes id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/discount-codes/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9449,7 +9449,7 @@
     {
       "path": "api head projectkey in-store key storekey discount-codes key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/discount-codes/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9469,7 +9469,7 @@
     {
       "path": "api head projectkey in-store key storekey me active-cart",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/me/active-cart (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9489,7 +9489,7 @@
     {
       "path": "api head projectkey in-store key storekey me carts",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/me/carts (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9509,7 +9509,7 @@
     {
       "path": "api head projectkey in-store key storekey me carts id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/me/carts/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9529,7 +9529,7 @@
     {
       "path": "api head projectkey in-store key storekey me orders",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/me/orders (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9549,7 +9549,7 @@
     {
       "path": "api head projectkey in-store key storekey me orders id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/me/orders/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9569,7 +9569,7 @@
     {
       "path": "api head projectkey in-store key storekey me shopping-lists",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/me/shopping-lists (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9589,7 +9589,7 @@
     {
       "path": "api head projectkey in-store key storekey me shopping-lists id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/me/shopping-lists/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9609,7 +9609,7 @@
     {
       "path": "api head projectkey in-store key storekey me shopping-lists key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/me/shopping-lists/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9629,7 +9629,7 @@
     {
       "path": "api head projectkey in-store key storekey orders",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/orders (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9649,7 +9649,7 @@
     {
       "path": "api head projectkey in-store key storekey orders id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/orders/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9669,7 +9669,7 @@
     {
       "path": "api head projectkey in-store key storekey orders order-number ordernumber",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/orders/order-number={orderNumber} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9689,7 +9689,7 @@
     {
       "path": "api head projectkey in-store key storekey product-projections id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/product-projections/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9709,7 +9709,7 @@
     {
       "path": "api head projectkey in-store key storekey product-projections key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/product-projections/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9729,7 +9729,7 @@
     {
       "path": "api head projectkey in-store key storekey quote-requests",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/quote-requests (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9749,7 +9749,7 @@
     {
       "path": "api head projectkey in-store key storekey quote-requests id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/quote-requests/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9769,7 +9769,7 @@
     {
       "path": "api head projectkey in-store key storekey quote-requests key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/quote-requests/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9789,7 +9789,7 @@
     {
       "path": "api head projectkey in-store key storekey quotes",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/quotes (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9809,7 +9809,7 @@
     {
       "path": "api head projectkey in-store key storekey quotes id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/quotes/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9829,7 +9829,7 @@
     {
       "path": "api head projectkey in-store key storekey quotes key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/quotes/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9849,7 +9849,7 @@
     {
       "path": "api head projectkey in-store key storekey shipping-methods matching-cart",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/shipping-methods/matching-cart (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9869,7 +9869,7 @@
     {
       "path": "api head projectkey in-store key storekey shopping-lists",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/shopping-lists (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9889,7 +9889,7 @@
     {
       "path": "api head projectkey in-store key storekey shopping-lists id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/shopping-lists/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9909,7 +9909,7 @@
     {
       "path": "api head projectkey in-store key storekey shopping-lists key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/shopping-lists/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9929,7 +9929,7 @@
     {
       "path": "api head projectkey in-store key storekey staged-quotes",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/staged-quotes (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9949,7 +9949,7 @@
     {
       "path": "api head projectkey in-store key storekey staged-quotes id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/staged-quotes/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9969,7 +9969,7 @@
     {
       "path": "api head projectkey in-store key storekey staged-quotes key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/staged-quotes/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -9989,7 +9989,7 @@
     {
       "path": "api head projectkey in-store key storekey variant-projections",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/variant-projections (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10009,7 +10009,7 @@
     {
       "path": "api head projectkey in-store key storekey variant-projections id",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/variant-projections/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10029,7 +10029,7 @@
     {
       "path": "api head projectkey in-store key storekey variant-projections key key",
       "summary": "Documented HEAD /{projectKey}/in-store/key={storeKey}/variant-projections/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10049,7 +10049,7 @@
     {
       "path": "api head projectkey inventory",
       "summary": "Documented HEAD /{projectKey}/inventory (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10069,7 +10069,7 @@
     {
       "path": "api head projectkey inventory id",
       "summary": "Documented HEAD /{projectKey}/inventory/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10089,7 +10089,7 @@
     {
       "path": "api head projectkey inventory key key",
       "summary": "Documented HEAD /{projectKey}/inventory/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10109,7 +10109,7 @@
     {
       "path": "api head projectkey me active-cart",
       "summary": "Documented HEAD /{projectKey}/me/active-cart (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10129,7 +10129,7 @@
     {
       "path": "api head projectkey me business-units",
       "summary": "Documented HEAD /{projectKey}/me/business-units (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10149,7 +10149,7 @@
     {
       "path": "api head projectkey me business-units id",
       "summary": "Documented HEAD /{projectKey}/me/business-units/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10169,7 +10169,7 @@
     {
       "path": "api head projectkey me business-units key key",
       "summary": "Documented HEAD /{projectKey}/me/business-units/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10189,7 +10189,7 @@
     {
       "path": "api head projectkey me carts",
       "summary": "Documented HEAD /{projectKey}/me/carts (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10209,7 +10209,7 @@
     {
       "path": "api head projectkey me carts id",
       "summary": "Documented HEAD /{projectKey}/me/carts/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10229,7 +10229,7 @@
     {
       "path": "api head projectkey me orders",
       "summary": "Documented HEAD /{projectKey}/me/orders (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10249,7 +10249,7 @@
     {
       "path": "api head projectkey me orders id",
       "summary": "Documented HEAD /{projectKey}/me/orders/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10269,7 +10269,7 @@
     {
       "path": "api head projectkey me payments",
       "summary": "Documented HEAD /{projectKey}/me/payments (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10289,7 +10289,7 @@
     {
       "path": "api head projectkey me payments id",
       "summary": "Documented HEAD /{projectKey}/me/payments/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10309,7 +10309,7 @@
     {
       "path": "api head projectkey me quote-requests",
       "summary": "Documented HEAD /{projectKey}/me/quote-requests (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10329,7 +10329,7 @@
     {
       "path": "api head projectkey me quote-requests id",
       "summary": "Documented HEAD /{projectKey}/me/quote-requests/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10349,7 +10349,7 @@
     {
       "path": "api head projectkey me quote-requests key key",
       "summary": "Documented HEAD /{projectKey}/me/quote-requests/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10369,7 +10369,7 @@
     {
       "path": "api head projectkey me quotes",
       "summary": "Documented HEAD /{projectKey}/me/quotes (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10389,7 +10389,7 @@
     {
       "path": "api head projectkey me quotes id",
       "summary": "Documented HEAD /{projectKey}/me/quotes/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10409,7 +10409,7 @@
     {
       "path": "api head projectkey me quotes key key",
       "summary": "Documented HEAD /{projectKey}/me/quotes/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10429,7 +10429,7 @@
     {
       "path": "api head projectkey me shopping-lists",
       "summary": "Documented HEAD /{projectKey}/me/shopping-lists (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10449,7 +10449,7 @@
     {
       "path": "api head projectkey me shopping-lists id",
       "summary": "Documented HEAD /{projectKey}/me/shopping-lists/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10469,7 +10469,7 @@
     {
       "path": "api head projectkey me shopping-lists key key",
       "summary": "Documented HEAD /{projectKey}/me/shopping-lists/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10489,7 +10489,7 @@
     {
       "path": "api head projectkey messages",
       "summary": "Documented HEAD /{projectKey}/messages (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10509,7 +10509,7 @@
     {
       "path": "api head projectkey messages id",
       "summary": "Documented HEAD /{projectKey}/messages/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10529,7 +10529,7 @@
     {
       "path": "api head projectkey orders",
       "summary": "Documented HEAD /{projectKey}/orders (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10549,7 +10549,7 @@
     {
       "path": "api head projectkey orders edits",
       "summary": "Documented HEAD /{projectKey}/orders/edits (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10569,7 +10569,7 @@
     {
       "path": "api head projectkey orders edits id",
       "summary": "Documented HEAD /{projectKey}/orders/edits/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10589,7 +10589,7 @@
     {
       "path": "api head projectkey orders edits key key",
       "summary": "Documented HEAD /{projectKey}/orders/edits/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10609,7 +10609,7 @@
     {
       "path": "api head projectkey orders id",
       "summary": "Documented HEAD /{projectKey}/orders/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10629,7 +10629,7 @@
     {
       "path": "api head projectkey orders order-number ordernumber",
       "summary": "Documented HEAD /{projectKey}/orders/order-number={orderNumber} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10649,7 +10649,7 @@
     {
       "path": "api head projectkey orders search",
       "summary": "Documented HEAD /{projectKey}/orders/search (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10669,7 +10669,7 @@
     {
       "path": "api head projectkey payment-methods",
       "summary": "Documented HEAD /{projectKey}/payment-methods (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10689,7 +10689,7 @@
     {
       "path": "api head projectkey payment-methods id",
       "summary": "Documented HEAD /{projectKey}/payment-methods/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10709,7 +10709,7 @@
     {
       "path": "api head projectkey payment-methods key key",
       "summary": "Documented HEAD /{projectKey}/payment-methods/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10729,7 +10729,7 @@
     {
       "path": "api head projectkey payments",
       "summary": "Documented HEAD /{projectKey}/payments (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10749,7 +10749,7 @@
     {
       "path": "api head projectkey payments id",
       "summary": "Documented HEAD /{projectKey}/payments/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10769,7 +10769,7 @@
     {
       "path": "api head projectkey payments key key",
       "summary": "Documented HEAD /{projectKey}/payments/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10789,7 +10789,7 @@
     {
       "path": "api head projectkey product-discounts",
       "summary": "Documented HEAD /{projectKey}/product-discounts (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10809,7 +10809,7 @@
     {
       "path": "api head projectkey product-discounts id",
       "summary": "Documented HEAD /{projectKey}/product-discounts/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10829,7 +10829,7 @@
     {
       "path": "api head projectkey product-discounts key key",
       "summary": "Documented HEAD /{projectKey}/product-discounts/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10849,7 +10849,7 @@
     {
       "path": "api head projectkey product-projections",
       "summary": "Documented HEAD /{projectKey}/product-projections (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10869,7 +10869,7 @@
     {
       "path": "api head projectkey product-projections id",
       "summary": "Documented HEAD /{projectKey}/product-projections/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10889,7 +10889,7 @@
     {
       "path": "api head projectkey product-projections key key",
       "summary": "Documented HEAD /{projectKey}/product-projections/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10909,7 +10909,7 @@
     {
       "path": "api head projectkey product-selections",
       "summary": "Documented HEAD /{projectKey}/product-selections (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10929,7 +10929,7 @@
     {
       "path": "api head projectkey product-selections id",
       "summary": "Documented HEAD /{projectKey}/product-selections/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10949,7 +10949,7 @@
     {
       "path": "api head projectkey product-selections key key",
       "summary": "Documented HEAD /{projectKey}/product-selections/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10969,7 +10969,7 @@
     {
       "path": "api head projectkey product-tailoring",
       "summary": "Documented HEAD /{projectKey}/product-tailoring (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -10989,7 +10989,7 @@
     {
       "path": "api head projectkey product-types",
       "summary": "Documented HEAD /{projectKey}/product-types (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11009,7 +11009,7 @@
     {
       "path": "api head projectkey product-types id",
       "summary": "Documented HEAD /{projectKey}/product-types/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11029,7 +11029,7 @@
     {
       "path": "api head projectkey product-types key key",
       "summary": "Documented HEAD /{projectKey}/product-types/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11049,7 +11049,7 @@
     {
       "path": "api head projectkey products",
       "summary": "Documented HEAD /{projectKey}/products (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11069,7 +11069,7 @@
     {
       "path": "api head projectkey products id",
       "summary": "Documented HEAD /{projectKey}/products/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11089,7 +11089,7 @@
     {
       "path": "api head projectkey products key key",
       "summary": "Documented HEAD /{projectKey}/products/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11109,7 +11109,7 @@
     {
       "path": "api head projectkey quote-requests",
       "summary": "Documented HEAD /{projectKey}/quote-requests (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11129,7 +11129,7 @@
     {
       "path": "api head projectkey quote-requests id",
       "summary": "Documented HEAD /{projectKey}/quote-requests/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11149,7 +11149,7 @@
     {
       "path": "api head projectkey quote-requests key key",
       "summary": "Documented HEAD /{projectKey}/quote-requests/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11169,7 +11169,7 @@
     {
       "path": "api head projectkey quotes",
       "summary": "Documented HEAD /{projectKey}/quotes (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11189,7 +11189,7 @@
     {
       "path": "api head projectkey quotes id",
       "summary": "Documented HEAD /{projectKey}/quotes/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11209,7 +11209,7 @@
     {
       "path": "api head projectkey quotes key key",
       "summary": "Documented HEAD /{projectKey}/quotes/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11229,7 +11229,7 @@
     {
       "path": "api head projectkey recurrence-policies",
       "summary": "Documented HEAD /{projectKey}/recurrence-policies (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11249,7 +11249,7 @@
     {
       "path": "api head projectkey recurrence-policies id",
       "summary": "Documented HEAD /{projectKey}/recurrence-policies/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11269,7 +11269,7 @@
     {
       "path": "api head projectkey recurrence-policies key key",
       "summary": "Documented HEAD /{projectKey}/recurrence-policies/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11289,7 +11289,7 @@
     {
       "path": "api head projectkey recurring-orders",
       "summary": "Documented HEAD /{projectKey}/recurring-orders (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11309,7 +11309,7 @@
     {
       "path": "api head projectkey recurring-orders id",
       "summary": "Documented HEAD /{projectKey}/recurring-orders/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11329,7 +11329,7 @@
     {
       "path": "api head projectkey recurring-orders key key",
       "summary": "Documented HEAD /{projectKey}/recurring-orders/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11349,7 +11349,7 @@
     {
       "path": "api head projectkey reviews",
       "summary": "Documented HEAD /{projectKey}/reviews (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11369,7 +11369,7 @@
     {
       "path": "api head projectkey reviews id",
       "summary": "Documented HEAD /{projectKey}/reviews/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11389,7 +11389,7 @@
     {
       "path": "api head projectkey reviews key key",
       "summary": "Documented HEAD /{projectKey}/reviews/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11409,7 +11409,7 @@
     {
       "path": "api head projectkey shipping-methods",
       "summary": "Documented HEAD /{projectKey}/shipping-methods (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11429,7 +11429,7 @@
     {
       "path": "api head projectkey shipping-methods id",
       "summary": "Documented HEAD /{projectKey}/shipping-methods/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11449,7 +11449,7 @@
     {
       "path": "api head projectkey shipping-methods key key",
       "summary": "Documented HEAD /{projectKey}/shipping-methods/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11469,7 +11469,7 @@
     {
       "path": "api head projectkey shipping-methods matching-cart",
       "summary": "Documented HEAD /{projectKey}/shipping-methods/matching-cart (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11489,7 +11489,7 @@
     {
       "path": "api head projectkey shipping-methods matching-cart-location",
       "summary": "Documented HEAD /{projectKey}/shipping-methods/matching-cart-location (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11509,7 +11509,7 @@
     {
       "path": "api head projectkey shipping-methods matching-location",
       "summary": "Documented HEAD /{projectKey}/shipping-methods/matching-location (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11529,7 +11529,7 @@
     {
       "path": "api head projectkey shipping-methods matching-orderedit",
       "summary": "Documented HEAD /{projectKey}/shipping-methods/matching-orderedit (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11549,7 +11549,7 @@
     {
       "path": "api head projectkey shopping-lists",
       "summary": "Documented HEAD /{projectKey}/shopping-lists (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11569,7 +11569,7 @@
     {
       "path": "api head projectkey shopping-lists id",
       "summary": "Documented HEAD /{projectKey}/shopping-lists/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11589,7 +11589,7 @@
     {
       "path": "api head projectkey shopping-lists key key",
       "summary": "Documented HEAD /{projectKey}/shopping-lists/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11609,7 +11609,7 @@
     {
       "path": "api head projectkey staged-quotes",
       "summary": "Documented HEAD /{projectKey}/staged-quotes (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11629,7 +11629,7 @@
     {
       "path": "api head projectkey staged-quotes id",
       "summary": "Documented HEAD /{projectKey}/staged-quotes/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11649,7 +11649,7 @@
     {
       "path": "api head projectkey staged-quotes key key",
       "summary": "Documented HEAD /{projectKey}/staged-quotes/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11669,7 +11669,7 @@
     {
       "path": "api head projectkey standalone-prices",
       "summary": "Documented HEAD /{projectKey}/standalone-prices (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11689,7 +11689,7 @@
     {
       "path": "api head projectkey standalone-prices id",
       "summary": "Documented HEAD /{projectKey}/standalone-prices/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11709,7 +11709,7 @@
     {
       "path": "api head projectkey standalone-prices key key",
       "summary": "Documented HEAD /{projectKey}/standalone-prices/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11729,7 +11729,7 @@
     {
       "path": "api head projectkey states",
       "summary": "Documented HEAD /{projectKey}/states (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11749,7 +11749,7 @@
     {
       "path": "api head projectkey states id",
       "summary": "Documented HEAD /{projectKey}/states/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11769,7 +11769,7 @@
     {
       "path": "api head projectkey states key key",
       "summary": "Documented HEAD /{projectKey}/states/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11789,7 +11789,7 @@
     {
       "path": "api head projectkey stores",
       "summary": "Documented HEAD /{projectKey}/stores (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11809,7 +11809,7 @@
     {
       "path": "api head projectkey stores id",
       "summary": "Documented HEAD /{projectKey}/stores/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11829,7 +11829,7 @@
     {
       "path": "api head projectkey stores key key",
       "summary": "Documented HEAD /{projectKey}/stores/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11849,7 +11849,7 @@
     {
       "path": "api head projectkey subscriptions",
       "summary": "Documented HEAD /{projectKey}/subscriptions (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11869,7 +11869,7 @@
     {
       "path": "api head projectkey subscriptions id",
       "summary": "Documented HEAD /{projectKey}/subscriptions/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11889,7 +11889,7 @@
     {
       "path": "api head projectkey subscriptions key key",
       "summary": "Documented HEAD /{projectKey}/subscriptions/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11909,7 +11909,7 @@
     {
       "path": "api head projectkey tax-categories",
       "summary": "Documented HEAD /{projectKey}/tax-categories (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11929,7 +11929,7 @@
     {
       "path": "api head projectkey tax-categories id",
       "summary": "Documented HEAD /{projectKey}/tax-categories/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11949,7 +11949,7 @@
     {
       "path": "api head projectkey tax-categories key key",
       "summary": "Documented HEAD /{projectKey}/tax-categories/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11969,7 +11969,7 @@
     {
       "path": "api head projectkey types",
       "summary": "Documented HEAD /{projectKey}/types (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -11989,7 +11989,7 @@
     {
       "path": "api head projectkey types id",
       "summary": "Documented HEAD /{projectKey}/types/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12009,7 +12009,7 @@
     {
       "path": "api head projectkey types key key",
       "summary": "Documented HEAD /{projectKey}/types/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12029,7 +12029,7 @@
     {
       "path": "api head projectkey variant-projections",
       "summary": "Documented HEAD /{projectKey}/variant-projections (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12049,7 +12049,7 @@
     {
       "path": "api head projectkey variant-projections id",
       "summary": "Documented HEAD /{projectKey}/variant-projections/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12069,7 +12069,7 @@
     {
       "path": "api head projectkey variant-projections key key",
       "summary": "Documented HEAD /{projectKey}/variant-projections/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12089,7 +12089,7 @@
     {
       "path": "api head projectkey variants",
       "summary": "Documented HEAD /{projectKey}/variants (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12109,7 +12109,7 @@
     {
       "path": "api head projectkey variants id",
       "summary": "Documented HEAD /{projectKey}/variants/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12129,7 +12129,7 @@
     {
       "path": "api head projectkey variants key key",
       "summary": "Documented HEAD /{projectKey}/variants/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12149,7 +12149,7 @@
     {
       "path": "api head projectkey zones",
       "summary": "Documented HEAD /{projectKey}/zones (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12169,7 +12169,7 @@
     {
       "path": "api head projectkey zones id",
       "summary": "Documented HEAD /{projectKey}/zones/{ID} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [
@@ -12189,7 +12189,7 @@
     {
       "path": "api head projectkey zones key key",
       "summary": "Documented HEAD /{projectKey}/zones/key={key} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://raw.githubusercontent.com/commercetools/commercetools-api-reference/main/oas/api/openapi.yaml",
       "examples": [

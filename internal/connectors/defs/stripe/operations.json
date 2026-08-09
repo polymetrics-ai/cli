@@ -2932,21 +2932,6 @@
       }
     },
     {
-      "id": "stripe.get.v1-file-links",
-      "kind": "rest_read",
-      "summary": "GET /v1/file_links",
-      "description": "official Stripe file/file-link read is in scope but blocked/planned until a bounded binary/download surface with size limits, redaction, and fixture evidence is authored",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/v1/file_links",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "stripe.post.v1-file-links",
       "kind": "rest_write",
       "summary": "POST /v1/file_links",
@@ -2959,21 +2944,6 @@
       "rest": {
         "method": "POST",
         "path": "/v1/file_links",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "stripe.get.v1-file-links-link",
-      "kind": "rest_read",
-      "summary": "GET /v1/file_links/{link}",
-      "description": "official Stripe file/file-link read is in scope but blocked/planned until a bounded binary/download surface with size limits, redaction, and fixture evidence is authored",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/v1/file_links/{link}",
         "max_bytes": 16777216
       }
     },
@@ -2994,21 +2964,6 @@
       }
     },
     {
-      "id": "stripe.get.v1-files",
-      "kind": "rest_read",
-      "summary": "GET /v1/files",
-      "description": "official Stripe file/file-link read is in scope but blocked/planned until a bounded binary/download surface with size limits, redaction, and fixture evidence is authored",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/v1/files",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "stripe.post.v1-files",
       "kind": "rest_write",
       "summary": "POST /v1/files",
@@ -3021,21 +2976,6 @@
       "rest": {
         "method": "POST",
         "path": "/v1/files",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "stripe.get.v1-files-file",
-      "kind": "rest_read",
-      "summary": "GET /v1/files/{file}",
-      "description": "official Stripe file/file-link read is in scope but blocked/planned until a bounded binary/download surface with size limits, redaction, and fixture evidence is authored",
-      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/v1/files/{file}",
         "max_bytes": 16777216
       }
     },
@@ -9035,6 +8975,66 @@
       "rest": {
         "method": "DELETE",
         "path": "/v1/webhook_endpoints/{webhook_endpoint}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "stripe.get.v1-file-links",
+      "kind": "binary_download",
+      "summary": "GET /v1/file_links",
+      "description": "official Stripe file/file-link read is in scope but blocked/planned until a bounded binary/download surface with size limits, redaction, and fixture evidence is authored",
+      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/v1/file_links",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "stripe.get.v1-file-links-link",
+      "kind": "binary_download",
+      "summary": "GET /v1/file_links/{link}",
+      "description": "official Stripe file/file-link read is in scope but blocked/planned until a bounded binary/download surface with size limits, redaction, and fixture evidence is authored",
+      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/v1/file_links/{link}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "stripe.get.v1-files",
+      "kind": "binary_download",
+      "summary": "GET /v1/files",
+      "description": "official Stripe file/file-link read is in scope but blocked/planned until a bounded binary/download surface with size limits, redaction, and fixture evidence is authored",
+      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/v1/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "stripe.get.v1-files-file",
+      "kind": "binary_download",
+      "summary": "GET /v1/files/{file}",
+      "description": "official Stripe file/file-link read is in scope but blocked/planned until a bounded binary/download surface with size limits, redaction, and fixture evidence is authored",
+      "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "risk": "medium",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/v1/files/{file}",
         "max_bytes": 16777216
       }
     }

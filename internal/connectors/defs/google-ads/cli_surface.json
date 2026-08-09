@@ -15,6 +15,19 @@
         "api get v22 resource-name listasyncerrors",
         "api get v22 resource-name listexperimentasyncerrors",
         "api get v22 resource-name listresults",
+        "api post v22 customers customer-id generateaudiencecompositioninsights",
+        "api post v22 customers customer-id generateaudienceoverlapinsights",
+        "api post v22 customers customer-id generatecreatorinsights",
+        "api post v22 customers customer-id generateinsightsfinderreport",
+        "api post v22 customers customer-id generatekeywordforecastmetrics",
+        "api post v22 customers customer-id generatereachforecast",
+        "api post v22 customers customer-id generateshareablepreviews",
+        "api post v22 customers customer-id generatetargetingsuggestionmetrics",
+        "api post v22 customers customer-id generatetrendinginsights",
+        "api post v22 customers customer-id suggestkeywordthemes",
+        "api post v22 customers customer-id suggestsmartcampaignad",
+        "api post v22 customers customer-id suggestsmartcampaignbudgetoptions",
+        "api post v22 resource-name regenerateshareablelinkid",
         "audience-insights list-insights-eligible-dates",
         "campaigns list",
         "customers asset-generations generate-images",
@@ -115,15 +128,6 @@
         "api post v22 customers customer-id datalinks-create",
         "api post v22 customers customer-id experimentarms-mutate",
         "api post v22 customers customer-id experiments-mutate",
-        "api post v22 customers customer-id generateaudiencecompositioninsights",
-        "api post v22 customers customer-id generateaudienceoverlapinsights",
-        "api post v22 customers customer-id generatecreatorinsights",
-        "api post v22 customers customer-id generateinsightsfinderreport",
-        "api post v22 customers customer-id generatekeywordforecastmetrics",
-        "api post v22 customers customer-id generatereachforecast",
-        "api post v22 customers customer-id generateshareablepreviews",
-        "api post v22 customers customer-id generatetargetingsuggestionmetrics",
-        "api post v22 customers customer-id generatetrendinginsights",
         "api post v22 customers customer-id goals-mutate",
         "api post v22 customers customer-id googleads-mutate",
         "api post v22 customers customer-id googleads-search",
@@ -148,9 +152,6 @@
         "api post v22 customers customer-id sharedcriteria-mutate",
         "api post v22 customers customer-id sharedsets-mutate",
         "api post v22 customers customer-id smartcampaignsettings-mutate",
-        "api post v22 customers customer-id suggestkeywordthemes",
-        "api post v22 customers customer-id suggestsmartcampaignad",
-        "api post v22 customers customer-id suggestsmartcampaignbudgetoptions",
         "api post v22 customers customer-id uploadcallconversions",
         "api post v22 customers customer-id uploadclickconversions",
         "api post v22 customers customer-id uploadconversionadjustments",
@@ -166,7 +167,6 @@
         "api post v22 resource-name addoperations operation",
         "api post v22 resource-name promoteexperiment",
         "api post v22 resource-name provideleadfeedback",
-        "api post v22 resource-name regenerateshareablelinkid",
         "api post v22 resource-name run",
         "api post v22 resource-name run operation",
         "api post v22 resource-name scheduleexperiment",
@@ -1799,7 +1799,7 @@
     {
       "path": "api post v22 customers customer-id generateaudiencecompositioninsights",
       "summary": "Documented POST /v22/customers/{customer_id}:generateAudienceCompositionInsights (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -1813,13 +1813,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-generateaudiencecompositioninsights",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id generateaudienceoverlapinsights",
       "summary": "Documented POST /v22/customers/{customer_id}:generateAudienceOverlapInsights (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -1833,13 +1833,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-generateaudienceoverlapinsights",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id generatecreatorinsights",
       "summary": "Documented POST /v22/customers/{customer_id}:generateCreatorInsights (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -1853,13 +1853,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-generatecreatorinsights",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id generateinsightsfinderreport",
       "summary": "Documented POST /v22/customers/{customer_id}:generateInsightsFinderReport (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -1873,13 +1873,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-generateinsightsfinderreport",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id generatekeywordforecastmetrics",
       "summary": "Documented POST /v22/customers/{customer_id}:generateKeywordForecastMetrics (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -1893,13 +1893,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-generatekeywordforecastmetrics",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id generatereachforecast",
       "summary": "Documented POST /v22/customers/{customer_id}:generateReachForecast (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -1913,13 +1913,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-generatereachforecast",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id generateshareablepreviews",
       "summary": "Documented POST /v22/customers/{customer_id}:generateShareablePreviews (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -1933,13 +1933,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-generateshareablepreviews",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id generatetargetingsuggestionmetrics",
       "summary": "Documented POST /v22/customers/{customer_id}:generateTargetingSuggestionMetrics (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -1953,13 +1953,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-generatetargetingsuggestionmetrics",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id generatetrendinginsights",
       "summary": "Documented POST /v22/customers/{customer_id}:generateTrendingInsights (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -1973,8 +1973,8 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-generatetrendinginsights",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id goals-mutate",
@@ -2459,7 +2459,7 @@
     {
       "path": "api post v22 customers customer-id suggestkeywordthemes",
       "summary": "Documented POST /v22/customers/{customer_id}:suggestKeywordThemes (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -2473,13 +2473,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-suggestkeywordthemes",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id suggestsmartcampaignad",
       "summary": "Documented POST /v22/customers/{customer_id}:suggestSmartCampaignAd (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -2493,13 +2493,13 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-suggestsmartcampaignad",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id suggestsmartcampaignbudgetoptions",
       "summary": "Documented POST /v22/customers/{customer_id}:suggestSmartCampaignBudgetOptions (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -2513,8 +2513,8 @@
       ],
       "operation": "google-ads.post.v22-customers-customer-id-suggestsmartcampaignbudgetoptions",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 customers customer-id uploadcallconversions",
@@ -2819,7 +2819,7 @@
     {
       "path": "api post v22 resource-name regenerateshareablelinkid",
       "summary": "Documented POST /v22/{resource_name}:regenerateShareableLinkId (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://googleads.googleapis.com/$discovery/rest?version=v22",
       "examples": [
@@ -2833,8 +2833,8 @@
       ],
       "operation": "google-ads.post.v22-resource-name-regenerateshareablelinkid",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "api post v22 resource-name run",

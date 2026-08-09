@@ -10,6 +10,7 @@
         "agents list",
         "agents statuses",
         "agents view",
+        "api post users fetch",
         "business-hours status",
         "channels list",
         "conversations fields",
@@ -36,7 +37,6 @@
         "agents update",
         "api post files upload",
         "api post images upload",
-        "api post users fetch",
         "conversations create",
         "conversations message send",
         "conversations update",
@@ -329,7 +329,7 @@
     {
       "path": "api post users fetch",
       "summary": "Documented POST /users/fetch (not implemented)",
-      "intent": "direct_write",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://developers.freshchat.com/api/",
       "examples": [
@@ -343,8 +343,8 @@
       ],
       "operation": "freshchat.post.users-fetch",
       "risk": "medium",
-      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
-      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "notes": "named_dependency=engine.direct_read_operation_contract: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
     },
     {
       "path": "business-hours status",

@@ -2801,6 +2801,23 @@ func materializedNamedDependency(method, path, reason string) (string, string) {
 	}
 }
 
+func materializedEndpointNamedDependency(endpoint engine.SurfaceEndpoint) (string, string) {
+	reason := ""
+	if endpoint.Operation != nil {
+		reason = endpoint.Operation.Reason
+		switch endpoint.Operation.Model {
+		case "direct_read":
+			method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+			if method != http.MethodGet && method != http.MethodHead {
+				return "engine.direct_read_operation_contract", "the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract"
+			}
+		case "binary_read":
+			return "engine.binary_download_operation_contract", "the binary-download executor lacks a reviewed operation-specific destination and CLI contract"
+		}
+	}
+	return materializedNamedDependency(endpoint.Method, endpoint.Path, reason)
+}
+
 func materializedNamedDependencyNote(dependency, description string) string {
 	return materializeNamedDependencyPrefix + dependency + ": " + description
 }
@@ -2815,8 +2832,8 @@ func ensureMaterializedCoverage(bundle engine.Bundle, surface engine.APISurface)
 		for _, stream := range endpoint.CoveredBy.StreamTargets() {
 			coveredStreams[stream] = true
 		}
-		if endpoint.CoveredBy.Write != "" {
-			coveredWrites[endpoint.CoveredBy.Write] = true
+		for _, write := range endpoint.CoveredBy.WriteTargets() {
+			coveredWrites[write] = true
 		}
 	}
 	for _, stream := range bundle.Streams {
@@ -2844,8 +2861,57 @@ func materializedAPIName(existing, artifactVersion string) string {
 	return base + marker + artifactVersion
 }
 
+type materializedEndpointOperationPlan struct {
+	intent        string
+	fallbackKind  string
+	existingKinds []string
+}
+
+func (plan materializedEndpointOperationPlan) matches(kind string) bool {
+	for _, expected := range plan.existingKinds {
+		if kind == expected {
+			return true
+		}
+	}
+	return false
+}
+
+func materializedEndpointOperationPlanFor(endpoint engine.SurfaceEndpoint) materializedEndpointOperationPlan {
+	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+	model := ""
+	if endpoint.Operation != nil {
+		model = endpoint.Operation.Model
+	}
+
+	switch model {
+	case "direct_read":
+		switch method {
+		case http.MethodGet:
+			return materializedEndpointOperationPlan{intent: "direct_read", fallbackKind: "rest_read", existingKinds: []string{"rest_read"}}
+		case http.MethodPost:
+			return materializedEndpointOperationPlan{intent: "direct_read", fallbackKind: "composite", existingKinds: []string{"rest_read", "provider_search", "composite"}}
+		default:
+			return materializedEndpointOperationPlan{intent: "direct_read", fallbackKind: "composite", existingKinds: []string{"composite"}}
+		}
+	case "binary_read":
+		if method == http.MethodGet {
+			return materializedEndpointOperationPlan{intent: "binary_download", fallbackKind: "binary_download", existingKinds: []string{"binary_download"}}
+		}
+		return materializedEndpointOperationPlan{intent: "binary_download", fallbackKind: "composite", existingKinds: []string{"composite"}}
+	}
+
+	switch {
+	case method == http.MethodGet:
+		return materializedEndpointOperationPlan{intent: "direct_read", fallbackKind: "rest_read", existingKinds: []string{"rest_read"}}
+	case batchArtifactMutationMethod(method):
+		return materializedEndpointOperationPlan{intent: "direct_write", fallbackKind: "rest_write", existingKinds: []string{"rest_write"}}
+	default:
+		return materializedEndpointOperationPlan{intent: "docs_only", fallbackKind: "composite", existingKinds: []string{"composite"}}
+	}
+}
+
 func materializeOperationCatalog(bundle engine.Bundle, surface engine.APISurface, candidate BatchManifestConnector) ([]engine.OperationSpec, error) {
-	operations := append([]engine.OperationSpec{}, bundle.Operations...)
+	operations := materializedRetainedOperations(bundle.Operations, bundle.Name, surface)
 	usedIDs := make(map[string]bool, len(operations))
 	for _, operation := range operations {
 		usedIDs[operation.ID] = true
@@ -2854,13 +2920,21 @@ func materializeOperationCatalog(bundle engine.Bundle, surface engine.APISurface
 		if endpoint.Operation == nil {
 			continue
 		}
-		_, dependencyReason := materializedNamedDependency(endpoint.Method, endpoint.Path, endpoint.Operation.Reason)
+		if materializedOperationForEndpoint(operations, endpoint) != "" {
+			continue
+		}
+		plan := materializedEndpointOperationPlanFor(endpoint)
+		_, dependencyReason := materializedEndpointNamedDependency(endpoint)
 		id := materializedOperationID(bundle.Name, endpoint.Method, endpoint.Path, usedIDs)
+		sourceURL := candidate.Artifact.URL
+		if endpoint.Provenance != nil && endpoint.Provenance.SourceURL != "" {
+			sourceURL = endpoint.Provenance.SourceURL
+		}
 		operation := engine.OperationSpec{
 			ID:           id,
 			Summary:      fmt.Sprintf("%s %s", endpoint.Method, endpoint.Path),
 			Description:  endpoint.Operation.Reason,
-			SourceURL:    endpoint.Provenance.SourceURL,
+			SourceURL:    sourceURL,
 			Risk:         endpoint.Operation.Risk,
 			Approval:     "not implemented: " + dependencyReason,
 			OutputPolicy: "json",
@@ -2869,14 +2943,18 @@ func materializeOperationCatalog(bundle engine.Bundle, surface engine.APISurface
 			operation.Risk = "high"
 		}
 		method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
-		switch method {
-		case http.MethodGet:
+		switch plan.fallbackKind {
+		case "rest_read":
 			operation.Kind = "rest_read"
 			operation.REST = &engine.RESTOperationSpec{Method: method, Path: endpoint.Path, MaxBytes: maxMaterializeArtifactBytes}
-		case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
+		case "rest_write":
 			operation.Kind = "rest_write"
 			operation.MutationClass = materializedMutationClass(method)
 			operation.REST = &engine.RESTOperationSpec{Method: method, Path: endpoint.Path, MaxBytes: maxMaterializeArtifactBytes}
+		case "binary_download":
+			operation.Kind = "binary_download"
+			operation.OutputPolicy = "binary_file_bounded"
+			operation.Binary = &engine.BinaryOperationSpec{Method: method, Path: endpoint.Path, MaxBytes: maxMaterializeArtifactBytes}
 		default:
 			operation.Kind = "composite"
 			operation.Composite = &engine.CompositeOperationSpec{Steps: []string{fmt.Sprintf("%s %s", method, endpoint.Path)}}
@@ -2886,8 +2964,44 @@ func materializeOperationCatalog(bundle engine.Bundle, surface engine.APISurface
 	return operations, nil
 }
 
+func materializedRetainedOperations(operations []engine.OperationSpec, connector string, surface engine.APISurface) []engine.OperationSpec {
+	generatedEndpoints := make(map[string][]engine.SurfaceEndpoint, len(surface.Endpoints))
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Operation == nil {
+			continue
+		}
+		base := materializedOperationIDBase(connector, endpoint.Method, endpoint.Path)
+		generatedEndpoints[base] = append(generatedEndpoints[base], endpoint)
+	}
+	retained := make([]engine.OperationSpec, 0, len(operations))
+	for _, operation := range operations {
+		endpoints, generated := materializedGeneratedOperationEndpoints(operation.ID, generatedEndpoints)
+		if generated && !materializedOperationMatchesAnyEndpoint(operation, endpoints) {
+			continue
+		}
+		retained = append(retained, operation)
+	}
+	return retained
+}
+
+func materializedGeneratedOperationEndpoints(id string, endpointsByBase map[string][]engine.SurfaceEndpoint) ([]engine.SurfaceEndpoint, bool) {
+	for base, endpoints := range endpointsByBase {
+		if id == base {
+			return endpoints, true
+		}
+		if !strings.HasPrefix(id, base+"-") {
+			continue
+		}
+		suffix := strings.TrimPrefix(id, base+"-")
+		if n, err := strconv.Atoi(suffix); err == nil && n > 1 {
+			return endpoints, true
+		}
+	}
+	return nil, false
+}
+
 func materializedOperationID(connector, method, path string, used map[string]bool) string {
-	base := strings.ToLower(strings.TrimSpace(connector)) + "." + materializedSlug(method) + "." + materializedSlug(path)
+	base := materializedOperationIDBase(connector, method, path)
 	if !used[base] {
 		used[base] = true
 		return base
@@ -2899,6 +3013,10 @@ func materializedOperationID(connector, method, path string, used map[string]boo
 			return candidate
 		}
 	}
+}
+
+func materializedOperationIDBase(connector, method, path string) string {
+	return strings.ToLower(strings.TrimSpace(connector)) + "." + materializedSlug(method) + "." + materializedSlug(path)
 }
 
 func materializedSlug(value string) string {
@@ -2951,8 +3069,8 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		for _, stream := range endpoint.CoveredBy.StreamTargets() {
 			streamRefs[stream] = append(streamRefs[stream], ref)
 		}
-		if endpoint.CoveredBy.Write != "" {
-			writeRefs[endpoint.CoveredBy.Write] = append(writeRefs[endpoint.CoveredBy.Write], ref)
+		for _, write := range endpoint.CoveredBy.WriteTargets() {
+			writeRefs[write] = append(writeRefs[write], ref)
 		}
 	}
 
@@ -3087,7 +3205,7 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		if operationID == "" {
 			return engine.CLISurface{}, fmt.Errorf("blocked operation %s %s has no generated operation metadata", endpoint.Method, endpoint.Path)
 		}
-		dependency, dependencyReason := materializedNamedDependency(endpoint.Method, endpoint.Path, endpoint.Operation.Reason)
+		dependency, dependencyReason := materializedEndpointNamedDependency(endpoint)
 		path := materializedOperationCommandPath(endpoint.Method, endpoint.Path)
 		if usedPaths[path] {
 			path += " operation"
@@ -3096,13 +3214,10 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 			path += " operation"
 		}
 		usedPaths[path] = true
-		intent := "docs_only"
+		plan := materializedEndpointOperationPlanFor(endpoint)
+		intent := plan.intent
 		paths := &readPaths
-		method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
-		if method == http.MethodGet {
-			intent = "direct_read"
-		} else if batchArtifactMutationMethod(method) {
-			intent = "direct_write"
+		if intent == "direct_write" {
 			paths = &writePaths
 		}
 		command := engine.CLICommand{
@@ -3183,16 +3298,36 @@ func materializedExistingActionCommands(bundle engine.Bundle) (map[string]engine
 }
 
 func materializedOperationForEndpoint(operations []engine.OperationSpec, endpoint engine.SurfaceEndpoint) string {
-	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
 	for _, operation := range operations {
-		if operation.REST != nil && strings.EqualFold(operation.REST.Method, method) && operation.REST.Path == endpoint.Path {
-			return operation.ID
-		}
-		if operation.Composite != nil && len(operation.Composite.Steps) == 1 && operation.Composite.Steps[0] == fmt.Sprintf("%s %s", method, endpoint.Path) {
+		if materializedOperationMatchesEndpoint(operation, endpoint) {
 			return operation.ID
 		}
 	}
 	return ""
+}
+
+func materializedOperationMatchesAnyEndpoint(operation engine.OperationSpec, endpoints []engine.SurfaceEndpoint) bool {
+	for _, endpoint := range endpoints {
+		if materializedOperationMatchesEndpoint(operation, endpoint) {
+			return true
+		}
+	}
+	return false
+}
+
+func materializedOperationMatchesEndpoint(operation engine.OperationSpec, endpoint engine.SurfaceEndpoint) bool {
+	plan := materializedEndpointOperationPlanFor(endpoint)
+	if !plan.matches(operation.Kind) {
+		return false
+	}
+	method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
+	if operation.REST != nil && strings.EqualFold(operation.REST.Method, method) && operation.REST.Path == endpoint.Path {
+		return true
+	}
+	if operation.Binary != nil && strings.EqualFold(operation.Binary.Method, method) && operation.Binary.Path == endpoint.Path {
+		return true
+	}
+	return operation.Composite != nil && len(operation.Composite.Steps) == 1 && operation.Composite.Steps[0] == fmt.Sprintf("%s %s", method, endpoint.Path)
 }
 
 func materializedOperationCommandPath(method, path string) string {

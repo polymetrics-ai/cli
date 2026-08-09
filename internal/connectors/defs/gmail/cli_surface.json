@@ -1,185 +1,346 @@
 {
-  "tagline": "Gmail command surface",
-  "usage": "pm gmail <command> [flags]",
-  "source_cli": {
-    "name": "Gmail API v1",
-    "docs": "https://gmail.googleapis.com/$discovery/rest?version=v1",
-    "reference": "Official Google Discovery document, revision 20260803",
-    "source": "provider_api"
-  },
+  "tagline": "Run Gmail's declared streams and reverse-ETL actions.",
+  "usage": "pm gmail \u003ccommand\u003e [flags]",
   "groups": [
     {
-      "id": "messages",
-      "title": "Messages",
+      "id": "read",
+      "title": "Read streams",
       "commands": [
-        "messages"
+        "api get users userid settings cse identities",
+        "api get users userid settings cse identities cseemailaddress",
+        "api get users userid settings cse keypairs",
+        "api get users userid settings cse keypairs keypairid",
+        "delegates list",
+        "drafts get",
+        "drafts list",
+        "filters list",
+        "forwarding-addresses list",
+        "history list",
+        "labels get",
+        "labels list",
+        "messages attachments download",
+        "messages get",
+        "messages list",
+        "profile list",
+        "send-as list",
+        "settings auto-forwarding get",
+        "settings delegates get",
+        "settings filters get",
+        "settings forwarding-addresses get",
+        "settings imap get",
+        "settings language get",
+        "settings pop get",
+        "settings send-as get",
+        "settings send-as smime get",
+        "settings send-as smime list",
+        "settings vacation get",
+        "threads get",
+        "threads list"
       ]
     },
     {
-      "id": "threads",
-      "title": "Threads",
+      "id": "write",
+      "title": "Reverse ETL writes",
       "commands": [
-        "threads"
+        "api delete users userid settings cse identities cseemailaddress",
+        "api patch users userid settings cse identities emailaddress",
+        "api post users userid messages batchdelete",
+        "api post users userid messages batchmodify",
+        "api post users userid settings cse identities",
+        "api post users userid settings cse keypairs",
+        "api post users userid settings cse keypairs keypairid disable",
+        "api post users userid settings cse keypairs keypairid enable",
+        "api post users userid settings cse keypairs keypairid obliterate",
+        "drafts create",
+        "drafts delete",
+        "drafts send",
+        "drafts update",
+        "labels create",
+        "labels delete",
+        "labels patch",
+        "labels update",
+        "messages delete",
+        "messages import",
+        "messages insert",
+        "messages modify",
+        "messages send",
+        "messages trash",
+        "messages untrash",
+        "settings auto-forwarding update",
+        "settings delegates create",
+        "settings delegates delete",
+        "settings filters create",
+        "settings filters delete",
+        "settings forwarding-addresses create",
+        "settings forwarding-addresses delete",
+        "settings imap update",
+        "settings language update",
+        "settings pop update",
+        "settings send-as create",
+        "settings send-as delete",
+        "settings send-as patch",
+        "settings send-as smime delete",
+        "settings send-as smime insert",
+        "settings send-as smime set-default",
+        "settings send-as update",
+        "settings send-as verify",
+        "settings vacation update",
+        "threads delete",
+        "threads modify",
+        "threads trash",
+        "threads untrash",
+        "watch start",
+        "watch stop"
       ]
-    },
-    {
-      "id": "drafts",
-      "title": "Drafts",
-      "commands": [
-        "drafts"
-      ]
-    },
-    {
-      "id": "labels",
-      "title": "Labels",
-      "commands": [
-        "labels"
-      ]
-    },
-    {
-      "id": "history",
-      "title": "History",
-      "commands": [
-        "history"
-      ]
-    },
-    {
-      "id": "filters",
-      "title": "Filters",
-      "commands": [
-        "filters"
-      ]
-    },
-    {
-      "id": "send-as",
-      "title": "Send As",
-      "commands": [
-        "send-as"
-      ]
-    },
-    {
-      "id": "delegates",
-      "title": "Delegates",
-      "commands": [
-        "delegates"
-      ]
-    },
-    {
-      "id": "forwarding-addresses",
-      "title": "Forwarding Addresses",
-      "commands": [
-        "forwarding-addresses"
-      ]
-    },
-    {
-      "id": "profile",
-      "title": "Profile",
-      "commands": [
-        "profile"
-      ]
-    },
-    {
-      "id": "settings",
-      "title": "Settings",
-      "commands": [
-        "settings"
-      ]
-    },
-    {
-      "id": "watch",
-      "title": "Watch",
-      "commands": [
-        "watch"
-      ]
-    }
-  ],
-  "global_flags": [
-    {
-      "name": "credential",
-      "type": "string",
-      "summary": "Credential name to use for the Gmail request."
-    },
-    {
-      "name": "json",
-      "type": "boolean",
-      "summary": "Emit machine-readable JSON output."
-    },
-    {
-      "name": "max-bytes",
-      "type": "integer",
-      "summary": "Maximum direct-read response bytes."
     }
   ],
   "commands": [
     {
-      "path": "messages list",
-      "summary": "List Gmail messages as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "messages",
+      "path": "api delete users userid settings cse identities cseemailaddress",
+      "summary": "Documented DELETE /users/{userId}/settings/cse/identities/{cseEmailAddress} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
       "examples": [
-        "pm gmail messages list --json --limit 25"
-      ]
+        "pm gmail api delete users userid settings cse identities cseemailaddress --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}"
+        }
+      ],
+      "operation": "gmail.delete.users-userid-settings-cse-identities-cseemailaddress",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "threads list",
-      "summary": "List Gmail threads as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "threads",
+      "path": "api get users userid settings cse identities",
+      "summary": "Documented GET /users/{userId}/settings/cse/identities (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
       "examples": [
-        "pm gmail threads list --json --limit 25"
-      ]
+        "pm gmail api get users userid settings cse identities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/cse/identities"
+        }
+      ],
+      "operation": "gmail.get.users-userid-settings-cse-identities",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "drafts list",
-      "summary": "List Gmail drafts as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "drafts",
+      "path": "api get users userid settings cse identities cseemailaddress",
+      "summary": "Documented GET /users/{userId}/settings/cse/identities/{cseEmailAddress} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
       "examples": [
-        "pm gmail drafts list --json --limit 25"
-      ]
+        "pm gmail api get users userid settings cse identities cseemailaddress --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/cse/identities/{cseEmailAddress}"
+        }
+      ],
+      "operation": "gmail.get.users-userid-settings-cse-identities-cseemailaddress",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "labels list",
-      "summary": "List Gmail labels as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "labels",
+      "path": "api get users userid settings cse keypairs",
+      "summary": "Documented GET /users/{userId}/settings/cse/keypairs (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
       "examples": [
-        "pm gmail labels list --json --limit 25"
-      ]
+        "pm gmail api get users userid settings cse keypairs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/cse/keypairs"
+        }
+      ],
+      "operation": "gmail.get.users-userid-settings-cse-keypairs",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "history list",
-      "summary": "List Gmail history as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "history",
+      "path": "api get users userid settings cse keypairs keypairid",
+      "summary": "Documented GET /users/{userId}/settings/cse/keypairs/{keyPairId} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
       "examples": [
-        "pm gmail history list --json --limit 25"
-      ]
+        "pm gmail api get users userid settings cse keypairs keypairid --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}"
+        }
+      ],
+      "operation": "gmail.get.users-userid-settings-cse-keypairs-keypairid",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
     },
     {
-      "path": "filters list",
-      "summary": "List Gmail filters as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "filters",
+      "path": "api patch users userid settings cse identities emailaddress",
+      "summary": "Documented PATCH /users/{userId}/settings/cse/identities/{emailAddress} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
       "examples": [
-        "pm gmail filters list --json --limit 25"
-      ]
+        "pm gmail api patch users userid settings cse identities emailaddress --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/users/{userId}/settings/cse/identities/{emailAddress}"
+        }
+      ],
+      "operation": "gmail.patch.users-userid-settings-cse-identities-emailaddress",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
-      "path": "send-as list",
-      "summary": "List Gmail send as as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "send_as",
+      "path": "api post users userid messages batchdelete",
+      "summary": "Documented POST /users/{userId}/messages/batchDelete (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
       "examples": [
-        "pm gmail send-as list --json --limit 25"
-      ]
+        "pm gmail api post users userid messages batchdelete --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/messages/batchDelete"
+        }
+      ],
+      "operation": "gmail.post.users-userid-messages-batchdelete",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid messages batchmodify",
+      "summary": "Documented POST /users/{userId}/messages/batchModify (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm gmail api post users userid messages batchmodify --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/messages/batchModify"
+        }
+      ],
+      "operation": "gmail.post.users-userid-messages-batchmodify",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid settings cse identities",
+      "summary": "Documented POST /users/{userId}/settings/cse/identities (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm gmail api post users userid settings cse identities --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/cse/identities"
+        }
+      ],
+      "operation": "gmail.post.users-userid-settings-cse-identities",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid settings cse keypairs",
+      "summary": "Documented POST /users/{userId}/settings/cse/keypairs (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm gmail api post users userid settings cse keypairs --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/cse/keypairs"
+        }
+      ],
+      "operation": "gmail.post.users-userid-settings-cse-keypairs",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid settings cse keypairs keypairid disable",
+      "summary": "Documented POST /users/{userId}/settings/cse/keypairs/{keyPairId}:disable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm gmail api post users userid settings cse keypairs keypairid disable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:disable"
+        }
+      ],
+      "operation": "gmail.post.users-userid-settings-cse-keypairs-keypairid-disable",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid settings cse keypairs keypairid enable",
+      "summary": "Documented POST /users/{userId}/settings/cse/keypairs/{keyPairId}:enable (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm gmail api post users userid settings cse keypairs keypairid enable --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:enable"
+        }
+      ],
+      "operation": "gmail.post.users-userid-settings-cse-keypairs-keypairid-enable",
+      "risk": "medium",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post users userid settings cse keypairs keypairid obliterate",
+      "summary": "Documented POST /users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "examples": [
+        "pm gmail api post users userid settings cse keypairs keypairid obliterate --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/cse/keypairs/{keyPairId}:obliterate"
+        }
+      ],
+      "operation": "gmail.post.users-userid-settings-cse-keypairs-keypairid-obliterate",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
     },
     {
       "path": "delegates list",
@@ -189,77 +350,56 @@
       "stream": "delegates",
       "examples": [
         "pm gmail delegates list --json --limit 25"
-      ]
-    },
-    {
-      "path": "forwarding-addresses list",
-      "summary": "List Gmail forwarding addresses as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "forwarding_addresses",
-      "examples": [
-        "pm gmail forwarding-addresses list --json --limit 25"
-      ]
-    },
-    {
-      "path": "profile list",
-      "summary": "List Gmail profile as ETL records.",
-      "intent": "etl",
-      "availability": "implemented",
-      "stream": "profile",
-      "examples": [
-        "pm gmail profile list --json --limit 25"
-      ]
-    },
-    {
-      "path": "messages get",
-      "summary": "Get a message by id.",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id path value",
-          "maps_to": "path.id"
-        }
       ],
       "api_surface": [
         {
           "method": "GET",
-          "path": "/users/{userId}/messages/{id}"
+          "path": "/users/{userId}/settings/delegates"
         }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
-      "examples": [
-        "pm gmail messages get --json --max-bytes 1048576"
       ]
     },
     {
-      "path": "threads get",
-      "summary": "Get a thread by id.",
-      "intent": "direct_read",
+      "path": "drafts create",
+      "summary": "creates a new unsent draft, visible to the mailbox owner",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_draft",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/drafts"
+        }
+      ],
+      "risk": "creates a new unsent draft, visible to the mailbox owner",
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute",
+      "notes": "Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records."
+    },
+    {
+      "path": "drafts delete",
+      "summary": "permanently deletes a draft; irreversible",
+      "intent": "reverse_etl",
       "availability": "implemented",
+      "write": "delete_draft",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "id path value",
-          "maps_to": "path.id"
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
         }
+      ],
+      "examples": [
+        "pm gmail delete draft apply --plan \u003cplan-name\u003e"
       ],
       "api_surface": [
         {
-          "method": "GET",
-          "path": "/users/{userId}/threads/{id}"
+          "method": "DELETE",
+          "path": "/users/{userId}/drafts/{id}"
         }
       ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
-      "examples": [
-        "pm gmail threads get --json --max-bytes 1048576"
-      ]
+      "risk": "permanently deletes a draft; irreversible",
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "drafts get",
@@ -274,6 +414,9 @@
           "maps_to": "path.id"
         }
       ],
+      "examples": [
+        "pm gmail drafts get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -281,10 +424,176 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "drafts list",
+      "summary": "List Gmail drafts as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "drafts",
       "examples": [
-        "pm gmail drafts get --json --max-bytes 1048576"
+        "pm gmail drafts list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/drafts"
+        }
       ]
+    },
+    {
+      "path": "drafts send",
+      "summary": "sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_draft",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail send draft apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/drafts/send"
+        }
+      ],
+      "risk": "sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "drafts update",
+      "summary": "replaces the entire content of an existing draft",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "update_draft",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id value",
+          "maps_to": "record.id"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}/drafts/{id}"
+        }
+      ],
+      "risk": "replaces the entire content of an existing draft",
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute",
+      "notes": "Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records."
+    },
+    {
+      "path": "filters list",
+      "summary": "List Gmail filters as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "filters",
+      "examples": [
+        "pm gmail filters list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/filters"
+        }
+      ]
+    },
+    {
+      "path": "forwarding-addresses list",
+      "summary": "List Gmail forwarding addresses as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "forwarding_addresses",
+      "examples": [
+        "pm gmail forwarding-addresses list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/forwardingAddresses"
+        }
+      ]
+    },
+    {
+      "path": "history list",
+      "summary": "List Gmail history as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "history",
+      "examples": [
+        "pm gmail history list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/history"
+        }
+      ]
+    },
+    {
+      "path": "labels create",
+      "summary": "creates a new custom label visible in the mailbox owner's label list",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_label",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail create label apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/labels"
+        }
+      ],
+      "risk": "creates a new custom label visible in the mailbox owner's label list",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "labels delete",
+      "summary": "removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_label",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail delete label apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/labels/{id}"
+        }
+      ],
+      "risk": "removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error",
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "labels get",
@@ -299,6 +608,9 @@
           "maps_to": "path.id"
         }
       ],
+      "examples": [
+        "pm gmail labels get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -306,14 +618,147 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "labels list",
+      "summary": "List Gmail labels as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "labels",
       "examples": [
-        "pm gmail labels get --json --max-bytes 1048576"
+        "pm gmail labels list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/labels"
+        }
       ]
     },
     {
-      "path": "settings filters get",
-      "summary": "Get a filter by id.",
+      "path": "labels patch",
+      "summary": "partially updates an existing label's fields, leaving unset fields unchanged",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_label",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail patch label apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/users/{userId}/labels/{id}"
+        }
+      ],
+      "risk": "partially updates an existing label's fields, leaving unset fields unchanged",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "labels update",
+      "summary": "replaces the full definition of an existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail even though the request is ",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_label",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail update label apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}/labels/{id}"
+        }
+      ],
+      "risk": "replaces the full definition of an existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail even though the request is accepted",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "messages attachments download",
+      "summary": "Download a message attachment to a bounded destination.",
+      "intent": "binary_download",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "messageId",
+          "type": "string",
+          "summary": "messageId path value",
+          "maps_to": "path.messageId"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id path value",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm gmail messages attachments download --messageId \u003cid\u003e --id \u003cattachment-id\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/messages/{messageId}/attachments/{id}"
+        }
+      ],
+      "operation": "gmail.messages.attachment_download",
+      "risk": "bounded binary download; size-capped and written only to an explicit destination",
+      "approval": "filesystem writes require an explicit destination policy"
+    },
+    {
+      "path": "messages delete",
+      "summary": "permanently deletes a message immediately, bypassing Trash; irreversible",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_message",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail delete message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/messages/{id}"
+        }
+      ],
+      "risk": "permanently deletes a message immediately, bypassing Trash; irreversible",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "messages get",
+      "summary": "Get a message by id.",
       "intent": "direct_read",
       "availability": "implemented",
       "flags": [
@@ -324,42 +769,325 @@
           "maps_to": "path.id"
         }
       ],
+      "examples": [
+        "pm gmail messages get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
-          "path": "/users/{userId}/settings/filters/{id}"
+          "path": "/users/{userId}/messages/{id}"
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "messages import",
+      "summary": "imports a message into the mailbox from an external mail migration source, bypassing spam classification by default",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "import_message",
+      "flags": [
+        {
+          "name": "raw",
+          "type": "string",
+          "summary": "Required raw record field.",
+          "maps_to": "record.raw",
+          "required": true
+        }
+      ],
       "examples": [
-        "pm gmail settings filters get --json --max-bytes 1048576"
+        "pm gmail import message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/messages/import"
+        }
+      ],
+      "risk": "imports a message into the mailbox from an external mail migration source, bypassing spam classification by default",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "messages insert",
+      "summary": "inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "insert_message",
+      "flags": [
+        {
+          "name": "raw",
+          "type": "string",
+          "summary": "Required raw record field.",
+          "maps_to": "record.raw",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail insert message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/messages"
+        }
+      ],
+      "risk": "inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "messages list",
+      "summary": "List Gmail messages as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "messages",
+      "examples": [
+        "pm gmail messages list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/messages"
+        }
       ]
     },
     {
-      "path": "settings send-as get",
-      "summary": "Get a send-as alias.",
-      "intent": "direct_read",
+      "path": "messages modify",
+      "summary": "changes label state on an existing message (e.g. moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner",
+      "intent": "reverse_etl",
       "availability": "implemented",
+      "write": "modify_message",
       "flags": [
         {
-          "name": "sendAsEmail",
+          "name": "id",
           "type": "string",
-          "summary": "sendAsEmail path value",
-          "maps_to": "path.sendAsEmail"
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
         }
+      ],
+      "examples": [
+        "pm gmail modify message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/messages/{id}/modify"
+        }
+      ],
+      "risk": "changes label state on an existing message (e.g. moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "messages send",
+      "summary": "sends a real outbound email on behalf of the mailbox owner; irreversible once delivered",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "send_message",
+      "flags": [
+        {
+          "name": "raw",
+          "type": "string",
+          "summary": "Required raw record field.",
+          "maps_to": "record.raw",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail send message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/messages/send"
+        }
+      ],
+      "risk": "sends a real outbound email on behalf of the mailbox owner; irreversible once delivered",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "messages trash",
+      "summary": "moves a message to Trash; auto-purged by Gmail after 30 days",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "trash_message",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail trash message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/messages/{id}/trash"
+        }
+      ],
+      "risk": "moves a message to Trash; auto-purged by Gmail after 30 days",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "messages untrash",
+      "summary": "restores a trashed message back to its prior labels",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "untrash_message",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail untrash message apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/messages/{id}/untrash"
+        }
+      ],
+      "risk": "restores a trashed message back to its prior labels",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "profile list",
+      "summary": "List Gmail profile as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "profile",
+      "examples": [
+        "pm gmail profile list --json --limit 25"
       ],
       "api_surface": [
         {
           "method": "GET",
-          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}"
+          "path": "/users/{userId}/profile"
+        }
+      ]
+    },
+    {
+      "path": "send-as list",
+      "summary": "List Gmail send as as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "send_as",
+      "examples": [
+        "pm gmail send-as list --json --limit 25"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/sendAs"
+        }
+      ]
+    },
+    {
+      "path": "settings auto-forwarding get",
+      "summary": "Get auto-forwarding settings.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "examples": [
+        "pm gmail settings auto-forwarding get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/autoForwarding"
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "settings auto-forwarding update",
+      "summary": "changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_auto_forwarding",
+      "flags": [
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "summary": "Required enabled record field.",
+          "maps_to": "record.enabled",
+          "required": true
+        }
+      ],
       "examples": [
-        "pm gmail settings send-as get --json --max-bytes 1048576"
-      ]
+        "pm gmail update auto forwarding apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}/settings/autoForwarding"
+        }
+      ],
+      "risk": "changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings delegates create",
+      "summary": "grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_delegate",
+      "flags": [
+        {
+          "name": "delegateEmail",
+          "type": "string",
+          "summary": "Required delegateEmail record field.",
+          "maps_to": "record.delegateEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail create delegate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/delegates"
+        }
+      ],
+      "risk": "grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings delegates delete",
+      "summary": "revokes another account's delegated access to this mailbox",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_delegate",
+      "flags": [
+        {
+          "name": "delegateEmail",
+          "type": "string",
+          "summary": "Required delegateEmail record field.",
+          "maps_to": "record.delegateEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail delete delegate apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/settings/delegates/{delegateEmail}"
+        }
+      ],
+      "risk": "revokes another account's delegated access to this mailbox",
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "settings delegates get",
@@ -374,6 +1102,9 @@
           "maps_to": "path.delegateEmail"
         }
       ],
+      "examples": [
+        "pm gmail settings delegates get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -381,10 +1112,129 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "settings filters create",
+      "summary": "creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally)",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "create_filter",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/filters"
+        }
+      ],
+      "risk": "creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally)",
+      "approval": "reverse ETL plan -\u003e preview -\u003e approval -\u003e execute",
+      "notes": "Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records."
+    },
+    {
+      "path": "settings filters delete",
+      "summary": "removes an existing mail filter; future messages stop being auto-actioned by it",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_filter",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
       "examples": [
-        "pm gmail settings delegates get --json --max-bytes 1048576"
-      ]
+        "pm gmail delete filter apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/settings/filters/{id}"
+        }
+      ],
+      "risk": "removes an existing mail filter; future messages stop being auto-actioned by it",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings filters get",
+      "summary": "Get a filter by id.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id path value",
+          "maps_to": "path.id"
+        }
+      ],
+      "examples": [
+        "pm gmail settings filters get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/filters/{id}"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "settings forwarding-addresses create",
+      "summary": "proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_forwarding_address",
+      "flags": [
+        {
+          "name": "forwardingEmail",
+          "type": "string",
+          "summary": "Required forwardingEmail record field.",
+          "maps_to": "record.forwardingEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail create forwarding address apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/forwardingAddresses"
+        }
+      ],
+      "risk": "proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings forwarding-addresses delete",
+      "summary": "removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_forwarding_address",
+      "flags": [
+        {
+          "name": "forwardingEmail",
+          "type": "string",
+          "summary": "Required forwardingEmail record field.",
+          "maps_to": "record.forwardingEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail delete forwarding address apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/settings/forwardingAddresses/{forwardingEmail}"
+        }
+      ],
+      "risk": "removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops",
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "settings forwarding-addresses get",
@@ -399,6 +1249,9 @@
           "maps_to": "path.forwardingEmail"
         }
       ],
+      "examples": [
+        "pm gmail settings forwarding-addresses get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -406,71 +1259,16 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
-      "examples": [
-        "pm gmail settings forwarding-addresses get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "settings auto-forwarding get",
-      "summary": "Get auto-forwarding settings.",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/users/{userId}/settings/autoForwarding"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
-      "examples": [
-        "pm gmail settings auto-forwarding get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "settings vacation get",
-      "summary": "Get vacation responder settings.",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/users/{userId}/settings/vacation"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
-      "examples": [
-        "pm gmail settings vacation get --json --max-bytes 1048576"
-      ]
-    },
-    {
-      "path": "settings language get",
-      "summary": "Get display-language settings.",
-      "intent": "direct_read",
-      "availability": "implemented",
-      "flags": [],
-      "api_surface": [
-        {
-          "method": "GET",
-          "path": "/users/{userId}/settings/language"
-        }
-      ],
-      "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
-      "examples": [
-        "pm gmail settings language get --json --max-bytes 1048576"
-      ]
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
     },
     {
       "path": "settings imap get",
       "summary": "Get IMAP settings.",
       "intent": "direct_read",
       "availability": "implemented",
-      "flags": [],
+      "examples": [
+        "pm gmail settings imap get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -478,17 +1276,78 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "settings imap update",
+      "summary": "changes the account-wide IMAP-access singleton; disabling breaks any external IMAP client currently connected",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_imap",
       "examples": [
-        "pm gmail settings imap get --json --max-bytes 1048576"
-      ]
+        "pm gmail update imap apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}/settings/imap"
+        }
+      ],
+      "risk": "changes the account-wide IMAP-access singleton; disabling breaks any external IMAP client currently connected",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings language get",
+      "summary": "Get display-language settings.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "examples": [
+        "pm gmail settings language get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/language"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "settings language update",
+      "summary": "changes the Gmail web interface display language for the account",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_language",
+      "flags": [
+        {
+          "name": "displayLanguage",
+          "type": "string",
+          "summary": "Required displayLanguage record field.",
+          "maps_to": "record.displayLanguage",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail update language apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}/settings/language"
+        }
+      ],
+      "risk": "changes the Gmail web interface display language for the account",
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "settings pop get",
       "summary": "Get POP settings.",
       "intent": "direct_read",
       "availability": "implemented",
-      "flags": [],
+      "examples": [
+        "pm gmail settings pop get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -496,14 +1355,83 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
-      "examples": [
-        "pm gmail settings pop get --json --max-bytes 1048576"
-      ]
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
     },
     {
-      "path": "settings send-as smime list",
-      "summary": "List S/MIME configs for a send-as alias.",
+      "path": "settings pop update",
+      "summary": "changes the account-wide POP-access singleton, including what happens to mail after it is fetched via POP",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_pop",
+      "examples": [
+        "pm gmail update pop apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}/settings/pop"
+        }
+      ],
+      "risk": "changes the account-wide POP-access singleton, including what happens to mail after it is fetched via POP",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings send-as create",
+      "summary": "adds a new custom From: alias; Google emails a verification link to the new address before it can send mail",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_send_as",
+      "flags": [
+        {
+          "name": "sendAsEmail",
+          "type": "string",
+          "summary": "Required sendAsEmail record field.",
+          "maps_to": "record.sendAsEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail create send as apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/sendAs"
+        }
+      ],
+      "risk": "adds a new custom From: alias; Google emails a verification link to the new address before it can send mail",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings send-as delete",
+      "summary": "removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_send_as",
+      "flags": [
+        {
+          "name": "sendAsEmail",
+          "type": "string",
+          "summary": "Required sendAsEmail record field.",
+          "maps_to": "record.sendAsEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail delete send as apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}"
+        }
+      ],
+      "risk": "removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request)",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings send-as get",
+      "summary": "Get a send-as alias.",
       "intent": "direct_read",
       "availability": "implemented",
       "flags": [
@@ -514,17 +1442,78 @@
           "maps_to": "path.sendAsEmail"
         }
       ],
+      "examples": [
+        "pm gmail settings send-as get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
-          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo"
+          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}"
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "settings send-as patch",
+      "summary": "partially updates an existing send-as alias, leaving unset fields unchanged",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "patch_send_as",
+      "flags": [
+        {
+          "name": "sendAsEmail",
+          "type": "string",
+          "summary": "Required sendAsEmail record field.",
+          "maps_to": "record.sendAsEmail",
+          "required": true
+        }
+      ],
       "examples": [
-        "pm gmail settings send-as smime list --json --max-bytes 1048576"
-      ]
+        "pm gmail patch send as apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}"
+        }
+      ],
+      "risk": "partially updates an existing send-as alias, leaving unset fields unchanged",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings send-as smime delete",
+      "summary": "high: delete_smime_info",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_smime_info",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        },
+        {
+          "name": "sendAsEmail",
+          "type": "string",
+          "summary": "Required sendAsEmail record field.",
+          "maps_to": "record.sendAsEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail delete smime info apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}"
+        }
+      ],
+      "risk": "high: delete_smime_info",
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "settings send-as smime get",
@@ -545,6 +1534,9 @@
           "maps_to": "path.id"
         }
       ],
+      "examples": [
+        "pm gmail settings send-as smime get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
@@ -552,24 +1544,216 @@
         }
       ],
       "output_policy": "json_redacted",
-      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted",
-      "examples": [
-        "pm gmail settings send-as smime get --json --max-bytes 1048576"
-      ]
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
     },
     {
-      "path": "messages attachments download",
-      "summary": "Download a message attachment to a bounded destination.",
-      "intent": "binary_download",
+      "path": "settings send-as smime insert",
+      "summary": "high: insert_smime_info",
+      "intent": "reverse_etl",
       "availability": "implemented",
-      "operation": "gmail.messages.attachment_download",
+      "write": "insert_smime_info",
       "flags": [
         {
-          "name": "messageId",
+          "name": "sendAsEmail",
           "type": "string",
-          "summary": "messageId path value",
-          "maps_to": "path.messageId"
+          "summary": "Required sendAsEmail record field.",
+          "maps_to": "record.sendAsEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail insert smime info apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo"
+        }
+      ],
+      "risk": "high: insert_smime_info",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings send-as smime list",
+      "summary": "List S/MIME configs for a send-as alias.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "sendAsEmail",
+          "type": "string",
+          "summary": "sendAsEmail path value",
+          "maps_to": "path.sendAsEmail"
+        }
+      ],
+      "examples": [
+        "pm gmail settings send-as smime list --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "settings send-as smime set-default",
+      "summary": "high: set_default_smime_info",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "set_default_smime_info",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
         },
+        {
+          "name": "sendAsEmail",
+          "type": "string",
+          "summary": "Required sendAsEmail record field.",
+          "maps_to": "record.sendAsEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail set default smime info apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/smimeInfo/{id}/setDefault"
+        }
+      ],
+      "risk": "high: set_default_smime_info",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings send-as update",
+      "summary": "replaces the full send-as alias configuration, including which alias is the account default",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_send_as",
+      "flags": [
+        {
+          "name": "sendAsEmail",
+          "type": "string",
+          "summary": "Required sendAsEmail record field.",
+          "maps_to": "record.sendAsEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail update send as apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}"
+        }
+      ],
+      "risk": "replaces the full send-as alias configuration, including which alias is the account default",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings send-as verify",
+      "summary": "re-sends the verification email for a pending custom From: alias",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "verify_send_as",
+      "flags": [
+        {
+          "name": "sendAsEmail",
+          "type": "string",
+          "summary": "Required sendAsEmail record field.",
+          "maps_to": "record.sendAsEmail",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail verify send as apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/settings/sendAs/{sendAsEmail}/verify"
+        }
+      ],
+      "risk": "re-sends the verification email for a pending custom From: alias",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "settings vacation get",
+      "summary": "Get vacation responder settings.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "examples": [
+        "pm gmail settings vacation get --json --max-bytes 1048576"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/users/{userId}/settings/vacation"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "settings vacation update",
+      "summary": "changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_vacation",
+      "examples": [
+        "pm gmail update vacation apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/users/{userId}/settings/vacation"
+        }
+      ],
+      "risk": "changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "threads delete",
+      "summary": "permanently deletes every message in a thread immediately, bypassing Trash; irreversible",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_thread",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gmail delete thread apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/users/{userId}/threads/{id}"
+        }
+      ],
+      "risk": "permanently deletes every message in a thread immediately, bypassing Trash; irreversible",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "threads get",
+      "summary": "Get a thread by id.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
         {
           "name": "id",
           "type": "string",
@@ -577,134 +1761,31 @@
           "maps_to": "path.id"
         }
       ],
+      "examples": [
+        "pm gmail threads get --json --max-bytes 1048576"
+      ],
       "api_surface": [
         {
           "method": "GET",
-          "path": "/users/{userId}/messages/{messageId}/attachments/{id}"
+          "path": "/users/{userId}/threads/{id}"
         }
       ],
-      "risk": "bounded binary download; size-capped and written only to an explicit destination",
-      "approval": "filesystem writes require an explicit destination policy",
+      "output_policy": "json_redacted",
+      "risk": "bounded Gmail JSON read; response is size-limited and secret-shaped fields are redacted"
+    },
+    {
+      "path": "threads list",
+      "summary": "List Gmail threads as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "threads",
       "examples": [
-        "pm gmail messages attachments download --messageId <id> --id <attachment-id>"
-      ]
-    },
-    {
-      "path": "messages send",
-      "summary": "sends a real outbound email on behalf of the mailbox owner; irreversible once delivered",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "send_message",
-      "risk": "sends a real outbound email on behalf of the mailbox owner; irreversible once delivered",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
+        "pm gmail threads list --json --limit 25"
+      ],
+      "api_surface": [
         {
-          "name": "raw",
-          "type": "string",
-          "summary": "Entire RFC 2822 message, base64url-encoded, including headers and MIME body.",
-          "maps_to": "record.raw"
-        }
-      ]
-    },
-    {
-      "path": "messages insert",
-      "summary": "inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "insert_message",
-      "risk": "inserts a message directly into the mailbox without sending it (no SMTP delivery, no notifications) -- still a real, visible mailbox mutation",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "raw",
-          "type": "string",
-          "summary": "Entire RFC 2822 message, base64url-encoded.",
-          "maps_to": "record.raw"
-        }
-      ]
-    },
-    {
-      "path": "messages import",
-      "summary": "imports a message into the mailbox from an external mail migration source, bypassing spam classification by default",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "import_message",
-      "risk": "imports a message into the mailbox from an external mail migration source, bypassing spam classification by default",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "raw",
-          "type": "string",
-          "summary": "Entire RFC 2822 message, base64url-encoded.",
-          "maps_to": "record.raw"
-        }
-      ]
-    },
-    {
-      "path": "messages modify",
-      "summary": "changes label state on an existing message (e.g. moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "modify_message",
-      "risk": "changes label state on an existing message (e.g. moving in/out of INBOX/TRASH/UNREAD), visible to the mailbox owner",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        }
-      ]
-    },
-    {
-      "path": "messages trash",
-      "summary": "moves a message to Trash; auto-purged by Gmail after 30 days",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "trash_message",
-      "risk": "moves a message to Trash; auto-purged by Gmail after 30 days",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        }
-      ]
-    },
-    {
-      "path": "messages untrash",
-      "summary": "restores a trashed message back to its prior labels",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "untrash_message",
-      "risk": "restores a trashed message back to its prior labels",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        }
-      ]
-    },
-    {
-      "path": "messages delete",
-      "summary": "permanently deletes a message immediately, bypassing Trash; irreversible",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_message",
-      "risk": "permanently deletes a message immediately, bypassing Trash; irreversible",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
+          "method": "GET",
+          "path": "/users/{userId}/threads"
         }
       ]
     },
@@ -714,16 +1795,26 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "modify_thread",
-      "risk": "changes label state on every message in an existing thread",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
         }
-      ]
+      ],
+      "examples": [
+        "pm gmail modify thread apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/threads/{id}/modify"
+        }
+      ],
+      "risk": "changes label state on every message in an existing thread",
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "threads trash",
@@ -731,16 +1822,26 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "trash_thread",
-      "risk": "moves an entire thread to Trash; auto-purged by Gmail after 30 days",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
         }
-      ]
+      ],
+      "examples": [
+        "pm gmail trash thread apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/threads/{id}/trash"
+        }
+      ],
+      "risk": "moves an entire thread to Trash; auto-purged by Gmail after 30 days",
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "threads untrash",
@@ -748,478 +1849,26 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "untrash_thread",
-      "risk": "restores a trashed thread back to its prior labels",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
       "flags": [
         {
           "name": "id",
           "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        }
-      ]
-    },
-    {
-      "path": "threads delete",
-      "summary": "permanently deletes every message in a thread immediately, bypassing Trash; irreversible",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_thread",
-      "risk": "permanently deletes every message in a thread immediately, bypassing Trash; irreversible",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        }
-      ]
-    },
-    {
-      "path": "drafts create",
-      "summary": "creates a new unsent draft, visible to the mailbox owner",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "create_draft",
-      "risk": "creates a new unsent draft, visible to the mailbox owner",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [],
-      "notes": "Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records."
-    },
-    {
-      "path": "drafts update",
-      "summary": "replaces the entire content of an existing draft",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "update_draft",
-      "risk": "replaces the entire content of an existing draft",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
         }
       ],
-      "notes": "Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records."
-    },
-    {
-      "path": "drafts send",
-      "summary": "sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "send_draft",
-      "risk": "sends a real outbound email from an existing draft on behalf of the mailbox owner; irreversible once delivered",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
+      "examples": [
+        "pm gmail untrash thread apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
         {
-          "name": "id",
-          "type": "string",
-          "summary": "The draft ID to send (Gmail's drafts.send accepts { \"id\": \"<draftId>\" } as its full request body).",
-          "maps_to": "record.id"
+          "method": "POST",
+          "path": "/users/{userId}/threads/{id}/untrash"
         }
-      ]
-    },
-    {
-      "path": "drafts delete",
-      "summary": "permanently deletes a draft; irreversible",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_draft",
-      "risk": "permanently deletes a draft; irreversible",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        }
-      ]
-    },
-    {
-      "path": "labels create",
-      "summary": "creates a new custom label visible in the mailbox owner's label list",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_label",
-      "risk": "creates a new custom label visible in the mailbox owner's label list",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "name value",
-          "maps_to": "record.name"
-        }
-      ]
-    },
-    {
-      "path": "labels update",
-      "summary": "replaces the full definition of an existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail even though the request is ",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_label",
-      "risk": "replaces the full definition of an existing label (name/visibility/color); a system label's name cannot actually be changed by Gmail even though the request is accepted",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "summary": "name value",
-          "maps_to": "record.name"
-        }
-      ]
-    },
-    {
-      "path": "labels patch",
-      "summary": "partially updates an existing label's fields, leaving unset fields unchanged",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "patch_label",
-      "risk": "partially updates an existing label's fields, leaving unset fields unchanged",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        }
-      ]
-    },
-    {
-      "path": "labels delete",
-      "summary": "removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_label",
-      "risk": "removes a user label from the account and from every message/thread that carried it; system labels reject deletion with an error",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        }
-      ]
-    },
-    {
-      "path": "settings filters create",
-      "summary": "creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally)",
-      "intent": "reverse_etl",
-      "availability": "partial",
-      "write": "create_filter",
-      "risk": "creates a mail filter that automatically acts on future incoming messages matching its criteria (may auto-forward mail externally)",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [],
-      "notes": "Required field with no scalar leaf; use the typed reverse-ETL record path for the full object. Connector command execution is metadata-only for complex object/array records."
-    },
-    {
-      "path": "settings filters delete",
-      "summary": "removes an existing mail filter; future messages stop being auto-actioned by it",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_filter",
-      "risk": "removes an existing mail filter; future messages stop being auto-actioned by it",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        }
-      ]
-    },
-    {
-      "path": "settings send-as create",
-      "summary": "adds a new custom From: alias; Google emails a verification link to the new address before it can send mail",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_send_as",
-      "risk": "adds a new custom From: alias; Google emails a verification link to the new address before it can send mail",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "sendAsEmail",
-          "type": "string",
-          "summary": "sendAsEmail value",
-          "maps_to": "record.sendAsEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings send-as update",
-      "summary": "replaces the full send-as alias configuration, including which alias is the account default",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_send_as",
-      "risk": "replaces the full send-as alias configuration, including which alias is the account default",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "sendAsEmail",
-          "type": "string",
-          "summary": "sendAsEmail value",
-          "maps_to": "record.sendAsEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings send-as patch",
-      "summary": "partially updates an existing send-as alias, leaving unset fields unchanged",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "patch_send_as",
-      "risk": "partially updates an existing send-as alias, leaving unset fields unchanged",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "sendAsEmail",
-          "type": "string",
-          "summary": "sendAsEmail value",
-          "maps_to": "record.sendAsEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings send-as delete",
-      "summary": "removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request)",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_send_as",
-      "risk": "removes a custom From: alias (the account's primary address cannot be deleted; Gmail rejects that request)",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "sendAsEmail",
-          "type": "string",
-          "summary": "sendAsEmail value",
-          "maps_to": "record.sendAsEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings send-as verify",
-      "summary": "re-sends the verification email for a pending custom From: alias",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "verify_send_as",
-      "risk": "re-sends the verification email for a pending custom From: alias",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "sendAsEmail",
-          "type": "string",
-          "summary": "sendAsEmail value",
-          "maps_to": "record.sendAsEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings delegates create",
-      "summary": "grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_delegate",
-      "risk": "grants another account read/send/delete access to this mailbox (Google Workspace accounts only); a significant access-control change",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "delegateEmail",
-          "type": "string",
-          "summary": "delegateEmail value",
-          "maps_to": "record.delegateEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings delegates delete",
-      "summary": "revokes another account's delegated access to this mailbox",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_delegate",
-      "risk": "revokes another account's delegated access to this mailbox",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "delegateEmail",
-          "type": "string",
-          "summary": "delegateEmail value",
-          "maps_to": "record.delegateEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings forwarding-addresses create",
-      "summary": "proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "create_forwarding_address",
-      "risk": "proposes a new external forwarding address; Google emails a verification link before it can be used by update_auto_forwarding",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "forwardingEmail",
-          "type": "string",
-          "summary": "forwardingEmail value",
-          "maps_to": "record.forwardingEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings forwarding-addresses delete",
-      "summary": "removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_forwarding_address",
-      "risk": "removes a forwarding address; if it is the account's current auto-forwarding target, forwarding stops",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "forwardingEmail",
-          "type": "string",
-          "summary": "forwardingEmail value",
-          "maps_to": "record.forwardingEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings auto-forwarding update",
-      "summary": "changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_auto_forwarding",
-      "risk": "changes the account-wide auto-forwarding singleton; when enabled, silently copies all future incoming mail to an external address",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "enabled",
-          "type": "boolean",
-          "summary": "enabled value",
-          "maps_to": "record.enabled"
-        }
-      ]
-    },
-    {
-      "path": "settings vacation update",
-      "summary": "changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_vacation",
-      "risk": "changes the account-wide vacation-responder singleton; when enabled, auto-replies to external senders with the configured message",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": []
-    },
-    {
-      "path": "settings language update",
-      "summary": "changes the Gmail web interface display language for the account",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_language",
-      "risk": "changes the Gmail web interface display language for the account",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "displayLanguage",
-          "type": "string",
-          "summary": "displayLanguage value",
-          "maps_to": "record.displayLanguage"
-        }
-      ]
-    },
-    {
-      "path": "settings imap update",
-      "summary": "changes the account-wide IMAP-access singleton; disabling breaks any external IMAP client currently connected",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_imap",
-      "risk": "changes the account-wide IMAP-access singleton; disabling breaks any external IMAP client currently connected",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": []
-    },
-    {
-      "path": "settings pop update",
-      "summary": "changes the account-wide POP-access singleton, including what happens to mail after it is fetched via POP",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_pop",
-      "risk": "changes the account-wide POP-access singleton, including what happens to mail after it is fetched via POP",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": []
-    },
-    {
-      "path": "settings send-as smime insert",
-      "summary": "high: insert_smime_info",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "insert_smime_info",
-      "risk": "high: insert_smime_info",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "sendAsEmail",
-          "type": "string",
-          "summary": "sendAsEmail value",
-          "maps_to": "record.sendAsEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings send-as smime delete",
-      "summary": "high: delete_smime_info",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_smime_info",
-      "risk": "high: delete_smime_info",
-      "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        },
-        {
-          "name": "sendAsEmail",
-          "type": "string",
-          "summary": "sendAsEmail value",
-          "maps_to": "record.sendAsEmail"
-        }
-      ]
-    },
-    {
-      "path": "settings send-as smime set-default",
-      "summary": "high: set_default_smime_info",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "set_default_smime_info",
-      "risk": "high: set_default_smime_info",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": [
-        {
-          "name": "id",
-          "type": "string",
-          "summary": "id value",
-          "maps_to": "record.id"
-        },
-        {
-          "name": "sendAsEmail",
-          "type": "string",
-          "summary": "sendAsEmail value",
-          "maps_to": "record.sendAsEmail"
-        }
-      ]
+      ],
+      "risk": "restores a trashed thread back to its prior labels",
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "watch start",
@@ -1227,9 +1876,17 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "watch_mailbox",
+      "examples": [
+        "pm gmail watch mailbox apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/watch"
+        }
+      ],
       "risk": "high: watch_mailbox",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": []
+      "approval": "requires plan, preview, approval, and execute"
     },
     {
       "path": "watch stop",
@@ -1237,19 +1894,17 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "stop_mailbox_watch",
+      "examples": [
+        "pm gmail stop mailbox watch apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/users/{userId}/stop"
+        }
+      ],
       "risk": "high: stop_mailbox_watch",
-      "approval": "reverse ETL plan -> preview -> approval -> execute",
-      "flags": []
-    }
-  ],
-  "help_topics": [
-    {
-      "name": "gmail-auth",
-      "summary": "Gmail uses OAuth2 authorization-code credentials; never pass secrets in command text."
-    },
-    {
-      "name": "gmail-writes",
-      "summary": "Gmail mutations are typed reverse-ETL writes: plan -> preview -> approval -> execute."
+      "approval": "requires plan, preview, approval, and execute"
     }
   ]
 }

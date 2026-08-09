@@ -1559,21 +1559,6 @@
       }
     },
     {
-      "id": "aircall.get.v2-users-456",
-      "kind": "rest_read",
-      "summary": "GET /v2/users/456",
-      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
-      "source_url": "https://developers.aircall.io/api-references",
-      "risk": "low",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/v2/users/456",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "aircall.get.v2-users-id",
       "kind": "rest_read",
       "summary": "GET /v2/users/:id",
@@ -1646,6 +1631,21 @@
       "rest": {
         "method": "GET",
         "path": "/v2/users/{user_id}/numbers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "aircall.get.v2-users-456",
+      "kind": "rest_read",
+      "summary": "GET /v2/users/456",
+      "description": "Documented provider read has no matching executable stream. It remains blocked because the current direct-read executor has no non-redacting output policy.",
+      "source_url": "https://developers.aircall.io/api-references",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/users/456",
         "max_bytes": 16777216
       }
     }

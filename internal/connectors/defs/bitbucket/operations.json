@@ -2492,21 +2492,6 @@
       }
     },
     {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-diff-spec",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/diff/{spec}",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "bitbucket.get.repositories-workspace-repo-slug-downloads",
       "kind": "rest_read",
       "summary": "GET /repositories/{workspace}/{repo_slug}/downloads",
@@ -2534,21 +2519,6 @@
       "rest": {
         "method": "POST",
         "path": "/repositories/{workspace}/{repo_slug}/downloads",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-downloads-filename",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/downloads/{filename}",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}",
         "max_bytes": 16777216
       }
     },
@@ -2665,21 +2635,6 @@
       }
     },
     {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-issues-export-repo-name-issues-task-id-zip",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/issues/export/{repo_name}-issues-{task_id}.zip",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/issues/export/{repo_name}-issues-{task_id}.zip",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "bitbucket.post.repositories-workspace-repo-slug-issues-import",
       "kind": "rest_write",
       "summary": "POST /repositories/{workspace}/{repo_slug}/issues/import",
@@ -2724,21 +2679,6 @@
       "rest": {
         "method": "POST",
         "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-issues-issue-id-attachments-path",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}",
         "max_bytes": 16777216
       }
     },
@@ -2869,21 +2809,6 @@
       }
     },
     {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-patch-spec",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/patch/{spec}",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "bitbucket.put.repositories-workspace-repo-slug-permissions-config-groups-group-slug",
       "kind": "rest_write",
       "summary": "PUT /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}",
@@ -2960,36 +2885,6 @@
       "rest": {
         "method": "PUT",
         "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-pipelines-pipeline-uuid-steps-step-uuid-log",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-pipelines-pipeline-uuid-steps-step-uuid-logs-log-uuid",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}",
         "max_bytes": 16777216
       }
     },
@@ -3387,21 +3282,6 @@
       }
     },
     {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-pullrequests-pull-request-id-diff",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "bitbucket.get.repositories-workspace-repo-slug-pullrequests-pull-request-id-diffstat",
       "kind": "rest_read",
       "summary": "GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat",
@@ -3444,21 +3324,6 @@
       "rest": {
         "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-pullrequests-pull-request-id-patch",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch",
         "max_bytes": 16777216
       }
     },
@@ -3575,21 +3440,6 @@
       }
     },
     {
-      "id": "bitbucket.get.repositories-workspace-repo-slug-src-commit-path",
-      "kind": "rest_read",
-      "summary": "GET /repositories/{workspace}/{repo_slug}/src/{commit}/{path}",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/src/{commit}/{path}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "bitbucket.post.snippets",
       "kind": "rest_write",
       "summary": "POST /snippets",
@@ -3670,21 +3520,6 @@
       }
     },
     {
-      "id": "bitbucket.get.snippets-workspace-encoded-id-files-path",
-      "kind": "rest_read",
-      "summary": "GET /snippets/{workspace}/{encoded_id}/files/{path}",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/snippets/{workspace}/{encoded_id}/files/{path}",
-        "max_bytes": 16777216
-      }
-    },
-    {
       "id": "bitbucket.get.snippets-workspace-encoded-id-watch",
       "kind": "rest_read",
       "summary": "GET /snippets/{workspace}/{encoded_id}/watch",
@@ -3728,51 +3563,6 @@
       "rest": {
         "method": "PUT",
         "path": "/snippets/{workspace}/{encoded_id}/{node_id}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "bitbucket.get.snippets-workspace-encoded-id-node-id-files-path",
-      "kind": "rest_read",
-      "summary": "GET /snippets/{workspace}/{encoded_id}/{node_id}/files/{path}",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "bitbucket.get.snippets-workspace-encoded-id-revision-diff",
-      "kind": "rest_read",
-      "summary": "GET /snippets/{workspace}/{encoded_id}/{revision}/diff",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "bitbucket.get.snippets-workspace-encoded-id-revision-patch",
-      "kind": "rest_read",
-      "summary": "GET /snippets/{workspace}/{encoded_id}/{revision}/patch",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch",
         "max_bytes": 16777216
       }
     },
@@ -4214,21 +4004,6 @@
       "rest": {
         "method": "GET",
         "path": "/workspaces/{workspace}/search/code",
-        "max_bytes": 16777216
-      }
-    },
-    {
-      "id": "bitbucket.get.workspaces-workspace-settings-gpg-public-key",
-      "kind": "rest_read",
-      "summary": "GET /workspaces/{workspace}/settings/gpg/public-key",
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "risk": "medium",
-      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
-      "output_policy": "json",
-      "rest": {
-        "method": "GET",
-        "path": "/workspaces/{workspace}/settings/gpg/public-key",
         "max_bytes": 16777216
       }
     }

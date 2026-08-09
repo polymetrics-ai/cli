@@ -354,6 +354,684 @@
         "path": "/users/{user}",
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "lever-hiring.put.contacts-contact",
+      "kind": "rest_write",
+      "summary": "PUT /contacts/{contact}",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/contacts/{contact}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-feedback",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/feedback",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/feedback",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-files",
+      "kind": "composite",
+      "summary": "POST /opportunities/{opportunity}/files",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /opportunities/{opportunity}/files"
+        ]
+      }
+    },
+    {
+      "id": "lever-hiring.get.opportunities-opportunity-files-file",
+      "kind": "binary_download",
+      "summary": "GET /opportunities/{opportunity}/files/{file}",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/files/{file}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.get.opportunities-opportunity-files",
+      "kind": "binary_download",
+      "summary": "GET /opportunities/{opportunity}/files",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/files",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.get.opportunities-opportunity-files-file-download",
+      "kind": "binary_download",
+      "summary": "GET /opportunities/{opportunity}/files/{file}/download",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/files/{file}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.delete.opportunities-opportunity-files-file",
+      "kind": "composite",
+      "summary": "DELETE /opportunities/{opportunity}/files/{file}",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "DELETE /opportunities/{opportunity}/files/{file}"
+        ]
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-interviews",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/interviews",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/interviews",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.opportunities-opportunity-interviews-interview",
+      "kind": "rest_write",
+      "summary": "PUT /opportunities/{opportunity}/interviews/{interview}",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/opportunities/{opportunity}/interviews/{interview}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.delete.opportunities-opportunity-interviews-interview",
+      "kind": "rest_write",
+      "summary": "DELETE /opportunities/{opportunity}/interviews/{interview}",
+      "description": "Destructive Lever operation is blocked until a closed schema, typed confirmation, redaction, and provider idempotency evidence are authored.",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/opportunities/{opportunity}/interviews/{interview}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-notes",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/notes",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/notes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.opportunities-opportunity-notes-note",
+      "kind": "rest_write",
+      "summary": "PUT /opportunities/{opportunity}/notes/{note}",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/opportunities/{opportunity}/notes/{note}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.get.opportunities-opportunity-offers-offer-download",
+      "kind": "binary_download",
+      "summary": "GET /opportunities/{opportunity}/offers/{offer}/download",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/offers/{offer}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities",
+      "kind": "rest_write",
+      "summary": "POST /opportunities",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.opportunities-opportunity-stage",
+      "kind": "rest_write",
+      "summary": "PUT /opportunities/{opportunity}/stage",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/opportunities/{opportunity}/stage",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.opportunities-opportunity-archived",
+      "kind": "rest_write",
+      "summary": "PUT /opportunities/{opportunity}/archived",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/opportunities/{opportunity}/archived",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-addlinks",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/addLinks",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/addLinks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-removelinks",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/removeLinks",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/removeLinks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-addtags",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/addTags",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/addTags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-removetags",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/removeTags",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/removeTags",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-addsources",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/addSources",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/addSources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-removesources",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/removeSources",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/removeSources",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-panels",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/panels",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/panels",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.opportunities-opportunity-panels-panel",
+      "kind": "rest_write",
+      "summary": "PUT /opportunities/{opportunity}/panels/{panel}",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/opportunities/{opportunity}/panels/{panel}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.delete.opportunities-opportunity-panels-panel",
+      "kind": "rest_write",
+      "summary": "DELETE /opportunities/{opportunity}/panels/{panel}",
+      "description": "Destructive Lever operation is blocked until a closed schema, typed confirmation, redaction, and provider idempotency evidence are authored.",
+      "risk": "critical",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/opportunities/{opportunity}/panels/{panel}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.postings",
+      "kind": "rest_write",
+      "summary": "POST /postings",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/postings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.postings-posting",
+      "kind": "rest_write",
+      "summary": "POST /postings/{posting}",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/postings/{posting}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.postings-posting-apply",
+      "kind": "rest_write",
+      "summary": "POST /postings/{posting}/apply",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/postings/{posting}/apply",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.opportunities-opportunity-forms",
+      "kind": "rest_write",
+      "summary": "POST /opportunities/{opportunity}/forms",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/opportunities/{opportunity}/forms",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.requisitions",
+      "kind": "rest_write",
+      "summary": "POST /requisitions",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/requisitions",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.requisitions-requisition",
+      "kind": "rest_write",
+      "summary": "PUT /requisitions/{requisition}",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/requisitions/{requisition}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.requisition-fields",
+      "kind": "rest_write",
+      "summary": "POST /requisition_fields",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/requisition_fields",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.requisition-fields-requisition-field",
+      "kind": "rest_write",
+      "summary": "PUT /requisition_fields/{requisition_field}",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/requisition_fields/{requisition_field}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.requisition-fields-requisition-field-options",
+      "kind": "rest_write",
+      "summary": "POST /requisition_fields/{requisition_field}/options",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/requisition_fields/{requisition_field}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.requisition-fields-requisition-field-options",
+      "kind": "rest_write",
+      "summary": "PUT /requisition_fields/{requisition_field}/options",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/requisition_fields/{requisition_field}/options",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.get.opportunities-opportunity-resumes-resume",
+      "kind": "binary_download",
+      "summary": "GET /opportunities/{opportunity}/resumes/{resume}",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/resumes/{resume}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.get.opportunities-opportunity-resumes",
+      "kind": "binary_download",
+      "summary": "GET /opportunities/{opportunity}/resumes",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/resumes",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.get.opportunities-opportunity-resumes-resume-download",
+      "kind": "binary_download",
+      "summary": "GET /opportunities/{opportunity}/resumes/{resume}/download",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/opportunities/{opportunity}/resumes/{resume}/download",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.uploads",
+      "kind": "composite",
+      "summary": "POST /uploads",
+      "description": "Lever file/resume/upload/download operation requires a bounded binary or multipart transfer executor; no generic file byte passthrough is exposed.",
+      "risk": "high",
+      "approval": "not implemented: the binary-download executor lacks a reviewed operation-specific destination and CLI contract",
+      "output_policy": "json",
+      "composite": {
+        "steps": [
+          "POST /uploads"
+        ]
+      }
+    },
+    {
+      "id": "lever-hiring.post.users",
+      "kind": "rest_write",
+      "summary": "POST /users",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.users-user",
+      "kind": "rest_write",
+      "summary": "PUT /users/{user}",
+      "description": "Lever mutation is blocked because the documented request uses required query/form parameters or a body shape the current declarative write contract cannot express without a generic passthrough.",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/users/{user}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.get.webhooks",
+      "kind": "rest_read",
+      "summary": "GET /webhooks",
+      "description": "Lever webhook subscription lifecycle is a CDC/changefeed control surface; blocked pending webhook/CDC foundation #2986/#2988 and no live subscription configuration is performed.",
+      "risk": "high",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.post.webhooks",
+      "kind": "rest_write",
+      "summary": "POST /webhooks",
+      "description": "Lever webhook subscription lifecycle is a CDC/changefeed control surface; blocked pending webhook/CDC foundation #2986/#2988 and no live subscription configuration is performed.",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/webhooks",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.put.webhooks",
+      "kind": "rest_write",
+      "summary": "PUT /webhooks/",
+      "description": "Lever webhook subscription lifecycle is a CDC/changefeed control surface; blocked pending webhook/CDC foundation #2986/#2988 and no live subscription configuration is performed.",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/webhooks/",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.delete.webhooks-webhookid",
+      "kind": "rest_write",
+      "summary": "DELETE /webhooks/{webhookId}",
+      "description": "Lever webhook subscription lifecycle is a CDC/changefeed control surface; blocked pending webhook/CDC foundation #2986/#2988 and no live subscription configuration is performed.",
+      "risk": "high",
+      "approval": "not implemented: the provider webhook-URL mutation has no dedicated security-reviewed execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/webhooks/{webhookId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "lever-hiring.get.v1-eeo-responses",
+      "kind": "rest_read",
+      "summary": "GET /v1/eeo/responses",
+      "description": "EEO responses carry protected-characteristic data (race, gender, veteran and disability status). Named dependency: a bounded PII read policy for equal-employment data, the same gate already applied to GET /v1/eeo/responses/pii in this bundle.",
+      "risk": "high",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v1/eeo/responses",
+        "max_bytes": 16777216
+      }
     }
   ]
 }

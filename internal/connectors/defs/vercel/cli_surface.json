@@ -4591,7 +4591,7 @@
     {
       "path": "api head v1 installations integrationconfigurationid resources resourceid experimentation global-config",
       "summary": "Documented HEAD /v1/installations/{integrationConfigurationId}/resources/{resourceId}/experimentation/global-config (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://openapi.vercel.sh/",
       "examples": [
@@ -4611,7 +4611,7 @@
     {
       "path": "api head v2 teamslug projectslug repositoryname blobs digest",
       "summary": "Documented HEAD /v2/{teamSlug}/{projectSlug}/{repositoryName}/blobs/{digest} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://openapi.vercel.sh/",
       "examples": [
@@ -4631,7 +4631,7 @@
     {
       "path": "api head v2 teamslug projectslug repositoryname manifests reference",
       "summary": "Documented HEAD /v2/{teamSlug}/{projectSlug}/{repositoryName}/manifests/{reference} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://openapi.vercel.sh/",
       "examples": [
@@ -4651,7 +4651,7 @@
     {
       "path": "api head v8 artifacts hash",
       "summary": "Documented HEAD /v8/artifacts/{hash} (not implemented)",
-      "intent": "docs_only",
+      "intent": "direct_read",
       "availability": "not_implemented",
       "source_url": "https://openapi.vercel.sh/",
       "examples": [

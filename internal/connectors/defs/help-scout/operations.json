@@ -12,9 +12,77 @@
       "binary": {
         "method": "GET",
         "path": "/v2/conversations/{conversationId}/attachments/{attachmentId}/file",
-        "max_bytes": 26214400,
-        "allow_overwrite": false,
-        "extract_archives": false
+        "max_bytes": 26214400
+      }
+    },
+    {
+      "id": "help-scout.get.v3-conversations-conversationid",
+      "kind": "rest_read",
+      "summary": "GET /v3/conversations/{conversationId}",
+      "description": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/conversations/{conversationId}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "help-scout.get.v3-conversations-conversationid-threads",
+      "kind": "rest_read",
+      "summary": "GET /v3/conversations/{conversationId}/threads",
+      "description": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/conversations/{conversationId}/threads",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "help-scout.get.v3-customers",
+      "kind": "rest_read",
+      "summary": "GET /v3/customers",
+      "description": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/customers",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "help-scout.get.v3-system-users",
+      "kind": "rest_read",
+      "summary": "GET /v3/system-users",
+      "description": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/system-users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "help-scout.get.v3-system-users-systemuserid",
+      "kind": "rest_read",
+      "summary": "GET /v3/system-users/{systemUserId}",
+      "description": "Mailbox API v3 operation. This bundle's base_url is https://api.helpscout.net/v2, so a /v3 path lies outside it: engine.normalizeDirectReadPathForBaseURL only strips a base path the request path actually starts with, so /v3/... is concatenated to the /v2 base and builds .../v2/v3/..., while the runtime operation endpoint ledger separately requires operation.rest.path to equal an api_surface row verbatim. Correct URL construction and ledger membership cannot both hold for an out-of-base path.",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor lacks a reviewed operation-specific request, output-policy, and CLI contract",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v3/system-users/{systemUserId}",
+        "max_bytes": 16777216
       }
     }
   ]
