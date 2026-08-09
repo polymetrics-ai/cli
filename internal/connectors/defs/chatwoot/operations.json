@@ -1,0 +1,492 @@
+{
+  "operations": [
+    {
+      "id": "chatwoot.account_get",
+      "kind": "rest_read",
+      "summary": "Retrieve account settings",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.account_get_branded_email_layout",
+      "kind": "rest_read",
+      "summary": "Retrieve the account's branded email layout",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/branded_email_layout",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.agent_bots_get",
+      "kind": "rest_read",
+      "summary": "Retrieve a single agent bot",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/agent_bots/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.agent_bots_list",
+      "kind": "rest_read",
+      "summary": "List agent bots",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/agent_bots",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.audit_logs_list",
+      "kind": "rest_read",
+      "summary": "List account audit log entries",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/audit_logs",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.automation_rules_get",
+      "kind": "rest_read",
+      "summary": "Retrieve a single automation rule",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/automation_rules/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.automation_rules_list",
+      "kind": "rest_read",
+      "summary": "List automation rules",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/automation_rules",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.canned_responses_list",
+      "kind": "rest_read",
+      "summary": "List canned responses",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/canned_responses",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.contacts_filter",
+      "kind": "rest_read",
+      "summary": "Advanced filtered contact search",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/contacts/filter",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "chatwoot.contacts_get",
+      "kind": "rest_read",
+      "summary": "Retrieve a single contact",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.contacts_list_contactable_inboxes",
+      "kind": "rest_read",
+      "summary": "List inboxes a contact can be contacted through",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}/contactable_inboxes",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.contacts_list_conversations",
+      "kind": "rest_read",
+      "summary": "List conversations for a contact",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}/conversations",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.contacts_list_labels",
+      "kind": "rest_read",
+      "summary": "List labels attached to a contact",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/{id}/labels",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.contacts_search",
+      "kind": "rest_read",
+      "summary": "Search contacts by name/email/phone",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/contacts/search",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.conversations_filter",
+      "kind": "rest_read",
+      "summary": "Advanced filtered conversation search",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/api/v1/accounts/{account_id}/conversations/filter",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "chatwoot.conversations_get",
+      "kind": "rest_read",
+      "summary": "Retrieve a single conversation",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.conversations_list_labels",
+      "kind": "rest_read",
+      "summary": "List labels attached to a conversation",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/labels",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.conversations_list_reporting_events",
+      "kind": "rest_read",
+      "summary": "List reporting events for a conversation",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/conversations/{conversation_id}/reporting_events",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.conversations_meta",
+      "kind": "rest_read",
+      "summary": "Retrieve conversation count summary (mine/unassigned/all)",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/conversations/meta",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.custom_attributes_get",
+      "kind": "rest_read",
+      "summary": "Retrieve a single custom attribute definition",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.custom_attributes_list",
+      "kind": "rest_read",
+      "summary": "List custom attribute definitions",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/custom_attribute_definitions",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.custom_filters_get",
+      "kind": "rest_read",
+      "summary": "Retrieve a single custom filter",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/custom_filters/{custom_filter_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.custom_filters_list",
+      "kind": "rest_read",
+      "summary": "List saved custom filters",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/custom_filters",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.inbox_members_list",
+      "kind": "rest_read",
+      "summary": "List agents who are members of an inbox",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/inbox_members/{inbox_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.inboxes_get",
+      "kind": "rest_read",
+      "summary": "Retrieve a single inbox",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/inboxes/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.inboxes_get_agent_bot",
+      "kind": "rest_read",
+      "summary": "Retrieve the agent bot attached to an inbox",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/inboxes/{id}/agent_bot",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.inboxes_list_message_templates",
+      "kind": "rest_read",
+      "summary": "List WhatsApp message templates for an inbox",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/inboxes/{id}/message_templates",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.integrations_list_apps",
+      "kind": "rest_read",
+      "summary": "List installed integrations",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/integrations/apps",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.labels_get",
+      "kind": "rest_read",
+      "summary": "Retrieve a single label",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/labels/{id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.portals_list",
+      "kind": "rest_read",
+      "summary": "List help-center portals",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/portals",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.reporting_events_list",
+      "kind": "rest_read",
+      "summary": "List account-wide reporting events",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/reporting_events",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.teams_get",
+      "kind": "rest_read",
+      "summary": "Retrieve a single team",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/teams/{team_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.teams_list_members",
+      "kind": "rest_read",
+      "summary": "List a team's member agents",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/teams/{team_id}/team_members",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "chatwoot.webhooks_list",
+      "kind": "rest_read",
+      "summary": "List webhook subscriptions",
+      "source_url": "https://developers.chatwoot.com/api-reference",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "GET",
+        "path": "/api/v1/accounts/{account_id}/webhooks",
+        "max_bytes": 1048576
+      }
+    }
+  ]
+}

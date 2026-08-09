@@ -1190,6 +1190,13 @@ func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {
 		// S4 engine mini-wave item 2: fan_out.ids_from.request.path gets the
 		// same static ResolveCheck treatment as an ordinary stream.Path.
 		{"fanout-request-path-unknown-spec-key", ruleInterpolationUnresolved},
+		// ResolveCheck scans {{ }} only, so a bare {projectId} in a stream
+		// path used to validate clean and then reach the wire verbatim (12
+		// help-scout streams shipped that way). A declarative read path binds
+		// values only through interpolation, so an unbound single-brace
+		// placeholder is a finding. writes.json is deliberately exempt:
+		// WriteAction.path_fields binds {owner}/{repo}-style placeholders.
+		{"stream-path-literal-placeholder", ruleInterpolationUnresolved},
 		// S4 engine mini-wave item 4: oauth2_client_credentials auth.extra_params
 		// values get the same static ResolveCheck treatment as token_url/
 		// client_id/client_secret/scopes.

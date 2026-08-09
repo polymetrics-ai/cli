@@ -1,0 +1,1102 @@
+{
+  "operations": [
+    {
+      "id": "jira.app_get_custom_fields_configurations",
+      "kind": "rest_read",
+      "summary": "Bulk get custom field configurations.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/app/field/context/configuration/list",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "List of custom fields identifiers which will be used to filter configurations",
+          "required": [
+            "fieldIdsOrKeys"
+          ],
+          "properties": {
+            "fieldIdsOrKeys": {
+              "type": "array",
+              "description": "List of IDs or keys of the custom fields. It can be a mix of IDs and keys in the same query.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.changelog_get_bulk_changelogs",
+      "kind": "rest_read",
+      "summary": "Bulk fetch changelogs.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/changelog/bulkfetch",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Request bean for bulk changelog retrieval",
+          "required": [
+            "issueIdsOrKeys"
+          ],
+          "properties": {
+            "fieldIds": {
+              "type": "array",
+              "description": "List of field IDs to filter changelogs",
+              "items": {
+                "type": "string",
+                "description": "List of field IDs to filter changelogs"
+              }
+            },
+            "issueIdsOrKeys": {
+              "type": "array",
+              "description": "List of issue IDs/keys to fetch changelogs for",
+              "items": {
+                "type": "string",
+                "description": "List of issue IDs/keys to fetch changelogs for"
+              }
+            },
+            "maxResults": {
+              "type": "integer",
+              "format": "int32",
+              "description": "The maximum number of items to return per page"
+            },
+            "nextPageToken": {
+              "type": "string",
+              "description": "The cursor for pagination"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.comment_get_comments_by_ids",
+      "kind": "rest_read",
+      "summary": "Get comments by IDs.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/comment/list",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "ids"
+          ],
+          "properties": {
+            "ids": {
+              "type": "array",
+              "description": "The list of comment IDs. A maximum of 1000 IDs can be specified.",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.expression_analyse_expression",
+      "kind": "rest_read",
+      "summary": "Analyse Jira expression.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/expression/analyse",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Details of Jira expressions for analysis.",
+          "required": [
+            "expressions"
+          ],
+          "properties": {
+            "contextVariables": {
+              "type": "object",
+              "description": "Context variables and their types. The type checker assumes that [common context variables](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#context-variables), such as `issue` or `project`, are available in context and sets their type. Use this property to override the default types or provide details of new variables."
+            },
+            "expressions": {
+              "type": "array",
+              "description": "The list of Jira expressions to analyse.",
+              "items": {
+                "type": "string",
+                "description": "The list of Jira expressions to analyse."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.expression_evaluate_jira_expression",
+      "kind": "rest_read",
+      "summary": "Currently being removed. (deprecated by Atlassian, still documented)",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/expression/eval",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "expression"
+          ],
+          "properties": {
+            "context": {
+              "type": "object",
+              "properties": {
+                "board": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The ID of the board that is available under the `board` variable when evaluating the expression."
+                },
+                "custom": {
+                  "type": "array",
+                  "description": "Custom context variables and their types. These variable types are available for use in a custom context:\n\n *  `user`: A [user](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user) specified as an Atlassian account ID.\n *  `issue`: An [issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue) specified by ID or key. All the fields of the issue object are available in the Jira expression.\n *  `json`: A JSON object containing custom content.\n *  `list`: A JSON list of `user`, `issue`, or `json` variable types.",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "type"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "customerRequest": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The ID of the customer request that is available under the `customerRequest` variable when evaluating the expression. This is the same as the ID of the underlying Jira issue, but the customer request context variable will have a different type."
+                },
+                "issue": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "The ID of the referenced item."
+                    },
+                    "key": {
+                      "type": "string",
+                      "description": "The key of the referenced item."
+                    }
+                  }
+                },
+                "issues": {
+                  "type": "object",
+                  "properties": {
+                    "jql": {
+                      "type": "object",
+                      "properties": {
+                        "maxResults": {
+                          "type": "integer"
+                        },
+                        "query": {
+                          "type": "string"
+                        },
+                        "startAt": {
+                          "type": "integer"
+                        },
+                        "validation": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "project": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "The ID of the referenced item."
+                    },
+                    "key": {
+                      "type": "string",
+                      "description": "The key of the referenced item."
+                    }
+                  }
+                },
+                "serviceDesk": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The ID of the service desk that is available under the `serviceDesk` variable when evaluating the expression."
+                },
+                "sprint": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The ID of the sprint that is available under the `sprint` variable when evaluating the expression."
+                }
+              }
+            },
+            "expression": {
+              "type": "string",
+              "description": "The Jira expression to evaluate."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.expression_evaluate_jsisjira_expression",
+      "kind": "rest_read",
+      "summary": "Evaluate Jira expression using enhanced search API.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/expression/evaluate",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "The request to evaluate a Jira expression. This bean will be replacing `JiraExpressionEvaluateRequest` as part of new `evaluate` endpoint",
+          "required": [
+            "expression"
+          ],
+          "properties": {
+            "context": {
+              "type": "object",
+              "properties": {
+                "board": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The ID of the board that is available under the `board` variable when evaluating the expression."
+                },
+                "custom": {
+                  "type": "array",
+                  "description": "Custom context variables and their types. These variable types are available for use in a custom context:\n\n *  `user`: A [user](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user) specified as an Atlassian account ID.\n *  `issue`: An [issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue) specified by ID or key. All the fields of the issue object are available in the Jira expression.\n *  `json`: A JSON object containing custom content.\n *  `list`: A JSON list of `user`, `issue`, or `json` variable types.",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "type"
+                    ],
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "customerRequest": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The ID of the customer request that is available under the `customerRequest` variable when evaluating the expression. This is the same as the ID of the underlying Jira issue, but the customer request context variable will have a different type."
+                },
+                "issue": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "The ID of the referenced item."
+                    },
+                    "key": {
+                      "type": "string",
+                      "description": "The key of the referenced item."
+                    }
+                  }
+                },
+                "issues": {
+                  "type": "object",
+                  "properties": {
+                    "jql": {
+                      "type": "object",
+                      "properties": {
+                        "maxResults": {
+                          "type": "integer"
+                        },
+                        "nextPageToken": {
+                          "type": "string"
+                        },
+                        "query": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "project": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "The ID of the referenced item."
+                    },
+                    "key": {
+                      "type": "string",
+                      "description": "The key of the referenced item."
+                    }
+                  }
+                },
+                "serviceDesk": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The ID of the service desk that is available under the `serviceDesk` variable when evaluating the expression."
+                },
+                "sprint": {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "The ID of the sprint that is available under the `sprint` variable when evaluating the expression."
+                }
+              }
+            },
+            "expression": {
+              "type": "string",
+              "description": "The Jira expression to evaluate."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.issue_bulk_fetch_issues",
+      "kind": "rest_read",
+      "summary": "Bulk fetch issues.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/issue/bulkfetch",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "issueIdsOrKeys"
+          ],
+          "properties": {
+            "expand": {
+              "type": "array",
+              "description": "Use [expand](#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a list of values. The expand options are:\n\n *  `renderedFields` Returns field values rendered in HTML format.\n *  `names` Returns the display name of each field.\n *  `schema` Returns the schema describing a field type.\n *  `transitions` Returns all possible transitions for the issue.\n *  `operations` Returns all possible operations for the issue.\n *  `editmeta` Returns information about how each field can be edited.\n *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent. This returns a maximum of 40 changelogs. If you require more, please refer to [Bulk fetch changelogs](#api-rest-api-3-changelog-bulkfetch-post).\n *  `versionedRepresentations` Instead of `fields`, returns `versionedRepresentations` a JSON array containing each version of a field's value, with the highest numbered item representing the most recent version.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "fields": {
+              "type": "array",
+              "description": "A list of fields to return for each issue, use it to retrieve a subset of fields. This parameter accepts a comma-separated list. Expand options include:\n\n *  `*all` Returns all fields.\n *  `*navigable` Returns navigable fields.\n *  Any issue field, prefixed with a minus to exclude.\n\nThe default is `*navigable`.\n\nExamples:\n\n *  `summary,comment` Returns the summary and comments fields only.\n *  `-description` Returns all navigable (default) fields except description.\n *  `*all,-comment` Returns all fields except comments.\n\nMultiple `fields` parameters can be included in a request.\n\nNote: All navigable fields are returned by default. This differs from [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "fieldsByKeys": {
+              "type": "boolean",
+              "description": "Reference fields by their key (rather than ID). The default is `false`."
+            },
+            "issueIdsOrKeys": {
+              "type": "array",
+              "description": "An array of issue IDs or issue keys to fetch. You can mix issue IDs and keys in the same query.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "properties": {
+              "type": "array",
+              "description": "A list of issue property keys of issue properties to be included in the results. A maximum of 5 issue property keys can be specified.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.issue_get_change_logs_by_ids",
+      "kind": "rest_read",
+      "summary": "Get changelogs by IDs.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/issue/{issueIdOrKey}/changelog/list",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "A list of changelog IDs.",
+          "required": [
+            "changelogIds"
+          ],
+          "properties": {
+            "changelogIds": {
+              "type": "array",
+              "description": "The list of changelog IDs.",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.jql_get_auto_complete_post",
+      "kind": "rest_read",
+      "summary": "Get field reference data (POST).",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/autocompletedata",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Details of how to filter and list search auto complete information.",
+          "properties": {
+            "includeCollapsedFields": {
+              "type": "boolean",
+              "description": "Include collapsed fields for fields that have non-unique names."
+            },
+            "projectIds": {
+              "type": "array",
+              "description": "List of project IDs used to filter the visible field details returned.",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.jql_get_precomputations_by_id",
+      "kind": "rest_read",
+      "summary": "Get precomputations by ID (apps).",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/function/computation/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Request to fetch precomputations by ID.",
+          "properties": {
+            "precomputationIDs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.jql_match_issues",
+      "kind": "rest_read",
+      "summary": "Check issues against JQL.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/match",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "List of issues and JQL queries.",
+          "required": [
+            "issueIds",
+            "jqls"
+          ],
+          "properties": {
+            "issueIds": {
+              "type": "array",
+              "description": "A list of issue IDs.",
+              "items": {
+                "type": "integer",
+                "format": "int64",
+                "description": "A list of issue IDs."
+              }
+            },
+            "jqls": {
+              "type": "array",
+              "description": "A list of JQL queries.",
+              "items": {
+                "type": "string",
+                "description": "A list of JQL queries."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.jql_parse_jql_queries",
+      "kind": "rest_read",
+      "summary": "Parse JQL query.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/parse",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "A list of JQL queries to parse.",
+          "required": [
+            "queries"
+          ],
+          "properties": {
+            "queries": {
+              "type": "array",
+              "description": "A list of queries to parse.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.jql_migrate_queries",
+      "kind": "rest_read",
+      "summary": "Convert user identifiers to account IDs in JQL queries.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/pdcleaner",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "The JQL queries to be converted.",
+          "properties": {
+            "queryStrings": {
+              "type": "array",
+              "description": "A list of queries with user identifiers. Maximum of 100 queries.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.jql_sanitise_jql_queries",
+      "kind": "rest_read",
+      "summary": "Sanitize JQL queries.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/sanitize",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "The list of JQL queries to sanitize for the given account IDs.",
+          "required": [
+            "queries"
+          ],
+          "properties": {
+            "queries": {
+              "type": "array",
+              "description": "The list of JQL queries to sanitize. Must contain unique values. Maximum of 20 queries.",
+              "items": {
+                "type": "object",
+                "description": "The JQL query to sanitize for the account ID. If the account ID is null, sanitizing is performed for an anonymous user.",
+                "required": [
+                  "query"
+                ],
+                "properties": {
+                  "accountId": {
+                    "type": "string",
+                    "description": "The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*."
+                  },
+                  "query": {
+                    "type": "string",
+                    "description": "The query to sanitize."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.priorityscheme_suggested_priorities_for_mappings",
+      "kind": "rest_read",
+      "summary": "Suggested priorities for mappings.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/priorityscheme/mappings",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Details of changes to a priority scheme that require suggested priority mappings.",
+          "properties": {
+            "maxResults": {
+              "type": "integer",
+              "format": "int32",
+              "description": "The maximum number of results that could be on the page."
+            },
+            "priorities": {
+              "type": "object",
+              "properties": {
+                "add": {
+                  "type": "array",
+                  "description": "The ids of priorities being removed from the scheme.",
+                  "items": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                },
+                "remove": {
+                  "type": "array",
+                  "description": "The ids of priorities being removed from the scheme.",
+                  "items": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              }
+            },
+            "projects": {
+              "type": "object",
+              "properties": {
+                "add": {
+                  "type": "array",
+                  "description": "The ids of projects being added to the scheme.",
+                  "items": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              }
+            },
+            "schemeId": {
+              "type": "integer",
+              "format": "int64",
+              "description": "The id of the priority scheme."
+            },
+            "startAt": {
+              "type": "integer",
+              "format": "int64",
+              "description": "The index of the first item returned on the page."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.search_search_for_issues_using_jql_post",
+      "kind": "rest_read",
+      "summary": "Currently being removed. (deprecated by Atlassian, still documented)",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "expand": {
+              "type": "array",
+              "description": "Use [expand](#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a list of values. The expand options are:\n\n *  `renderedFields` Returns field values rendered in HTML format.\n *  `names` Returns the display name of each field.\n *  `schema` Returns the schema describing a field type.\n *  `transitions` Returns all possible transitions for the issue.\n *  `operations` Returns all possible operations for the issue.\n *  `editmeta` Returns information about how each field can be edited.\n *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent.\n *  `versionedRepresentations` Instead of `fields`, returns `versionedRepresentations` a JSON array containing each version of a field's value, with the highest numbered item representing the most recent version.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "fields": {
+              "type": "array",
+              "description": "A list of fields to return for each issue, use it to retrieve a subset of fields. This parameter accepts a comma-separated list. Expand options include:\n\n *  `*all` Returns all fields.\n *  `*navigable` Returns navigable fields.\n *  Any issue field, prefixed with a minus to exclude.\n\nThe default is `*navigable`.\n\nExamples:\n\n *  `summary,comment` Returns the summary and comments fields only.\n *  `-description` Returns all navigable (default) fields except description.\n *  `*all,-comment` Returns all fields except comments.\n\nMultiple `fields` parameters can be included in a request.\n\nNote: All navigable fields are returned by default. This differs from [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "fieldsByKeys": {
+              "type": "boolean",
+              "description": "Reference fields by their key (rather than ID). The default is `false`."
+            },
+            "jql": {
+              "type": "string",
+              "description": "A [JQL](https://confluence.atlassian.com/x/egORLQ) expression."
+            },
+            "maxResults": {
+              "type": "integer",
+              "format": "int32",
+              "description": "The maximum number of items to return per page."
+            },
+            "properties": {
+              "type": "array",
+              "description": "A list of up to 5 issue properties to include in the results. This parameter accepts a comma-separated list.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "startAt": {
+              "type": "integer",
+              "format": "int32",
+              "description": "The index of the first item to return in the page of results (page offset). The base index is `0`."
+            },
+            "validateQuery": {
+              "type": "string",
+              "enum": [
+                "strict",
+                "warn",
+                "none",
+                "true",
+                "false"
+              ],
+              "description": "Determines how to validate the JQL query and treat the validation results. Supported values:\n\n *  `strict` Returns a 400 response code if any errors are found, along with a list of all errors (and warnings).\n *  `warn` Returns all errors as warnings.\n *  `none` No validation is performed.\n *  `true` *Deprecated* A legacy synonym for `strict`.\n *  `false` *Deprecated* A legacy synonym for `warn`.\n\nThe default is `strict`.\n\nNote: If the JQL is not correctly formed a 400 response code is returned, regardless of the `validateQuery` value."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.search_count_issues",
+      "kind": "rest_read",
+      "summary": "Count issues using JQL.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/search/approximate-count",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "jql": {
+              "type": "string",
+              "description": "A [JQL](https://confluence.atlassian.com/x/egORLQ) expression. For performance reasons, this parameter requires a bounded query. A bounded query is a query with a search restriction."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.search_search_and_reconsile_issues_using_jql_post",
+      "kind": "rest_read",
+      "summary": "Search for issues using JQL enhanced search (POST).",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/search/jql",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "expand": {
+              "type": "string",
+              "description": "Use [expand](#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a comma-delimited string of values. The expand options are:\n\n *  `renderedFields` Returns field values rendered in HTML format.\n *  `names` Returns the display name of each field.\n *  `schema` Returns the schema describing a field type.\n *  `transitions` Returns all possible transitions for the issue.\n *  `operations` Returns all possible operations for the issue.\n *  `editmeta` Returns information about how each field can be edited.\n *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent.\n *  `versionedRepresentations` Instead of `fields`, returns `versionedRepresentations` a JSON array containing each version of a field's value, with the highest numbered item representing the most recent version.\n\nExamples: `\"names,changelog\"` Returns the display name of each field as well as a list of recent updates to an issue."
+            },
+            "fields": {
+              "type": "array",
+              "description": "A list of fields to return for each issue. Use it to retrieve a subset of fields. This parameter accepts a comma-separated list. Expand options include:\n\n *  `*all` Returns all fields.\n *  `*navigable` Returns navigable fields.\n *  `id` Returns only issue IDs.\n *  Any issue field, prefixed with a dash to exclude.\n\nThe default is `id`.\n\nExamples:\n\n *  `summary,comment` Returns the summary and comments fields only.\n *  `*all,-comment` Returns all fields except comments.\n\nMultiple `fields` parameters can be included in a request.\n\nNote: By default, this resource returns IDs only. This differs from [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "fieldsByKeys": {
+              "type": "boolean",
+              "description": "Reference fields by their key (rather than ID). The default is `false`."
+            },
+            "jql": {
+              "type": "string",
+              "description": "A [JQL](https://confluence.atlassian.com/x/egORLQ) expression. For performance reasons, this parameter requires a bounded query. A bounded query is a query with a search restriction.\n\n *  Example of an unbounded query: `order by key desc`.\n *  Example of a bounded query: `assignee = currentUser() order by key`.\n\nAdditionally, `orderBy` clause can contain a maximum of 7 fields."
+            },
+            "maxResults": {
+              "type": "integer",
+              "format": "int32",
+              "description": "The maximum number of items to return per page. To manage page size, API may return fewer items per page where a large number of fields are requested. The greatest number of items returned per page is achieved when requesting `id` or `key` only. It returns max 5000 issues."
+            },
+            "nextPageToken": {
+              "type": "string",
+              "description": "The token for a page to fetch that is not the first page. The first page has a `nextPageToken` of `null`. Use the `nextPageToken` to fetch the next page of issues."
+            },
+            "properties": {
+              "type": "array",
+              "description": "A list of up to 5 issue properties to include in the results. This parameter accepts a comma-separated list.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reconcileIssues": {
+              "type": "array",
+              "description": "Strong consistency issue ids to be reconciled with search results. Accepts max 50 ids. This list of ids should be consistent with each paginated request across different pages.",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.universal_avatar_get_avatar_image_by_type",
+      "kind": "binary_download",
+      "summary": "Get avatar image by type.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/rest/api/3/universal_avatar/view/type/{type}",
+        "max_bytes": 10485760,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "jira.universal_avatar_get_avatar_image_by_id",
+      "kind": "binary_download",
+      "summary": "Get avatar image by ID.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/rest/api/3/universal_avatar/view/type/{type}/avatar/{id}",
+        "max_bytes": 10485760,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "jira.universal_avatar_get_avatar_image_by_owner",
+      "kind": "binary_download",
+      "summary": "Get avatar image by owner.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "binary_file_bounded",
+      "binary": {
+        "method": "GET",
+        "path": "/rest/api/3/universal_avatar/view/type/{type}/owner/{entityId}",
+        "max_bytes": 10485760,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "jira.workflow_list_workflow_history",
+      "kind": "rest_read",
+      "summary": "List workflow history entries.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflow/history/list",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "A request to read all the workflow history entries for a specific workflow.",
+          "properties": {
+            "workflowId": {
+              "type": "string",
+              "description": "The id of the workflow to read the history for."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.workflows_read_workflow_previews",
+      "kind": "rest_read",
+      "summary": "Preview workflow.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflows/preview",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "The details of the preview workflow request.",
+          "required": [
+            "projectId"
+          ],
+          "properties": {
+            "issueTypeIds": {
+              "type": "array",
+              "description": "The list of issue type IDs. At most 25 issue type IDs can be specified.",
+              "items": {
+                "type": "string",
+                "description": "The list of issue type IDs. At most 25 issue type IDs can be specified."
+              }
+            },
+            "projectId": {
+              "type": "string",
+              "description": "The projectId parameter is required and will be used for permission checks. In addition, you must supply at least one of the following lookup terms: *workflowNames*, *workflowIds*, or *issueTypeIds*. The specified workflows must be associated with the given project."
+            },
+            "workflowIds": {
+              "type": "array",
+              "description": "The list of workflow IDs to be returned. At most 25 workflow IDs can be specified.",
+              "items": {
+                "type": "string",
+                "description": "The list of workflow IDs to be returned. At most 25 workflow IDs can be specified."
+              }
+            },
+            "workflowNames": {
+              "type": "array",
+              "description": "The list of workflow names to be returned. At most 25 workflow names can be specified.",
+              "items": {
+                "type": "string",
+                "description": "The list of workflow names to be returned. At most 25 workflow names can be specified."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.worklog_get_worklogs_for_ids",
+      "kind": "rest_read",
+      "summary": "Get worklogs.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/worklog/list",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "ids"
+          ],
+          "properties": {
+            "ids": {
+              "type": "array",
+              "description": "A list of worklog IDs.",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.connect_workflow_rule_search",
+      "kind": "rest_read",
+      "summary": "Get workflow transition rule configurations.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/atlassian-connect/1/migration/workflow/rule/search",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Details of the workflow and its transition rules.",
+          "required": [
+            "ruleIds",
+            "workflowEntityId"
+          ],
+          "properties": {
+            "expand": {
+              "type": "string",
+              "description": "Use expand to include additional information in the response. This parameter accepts `transition` which, for each rule, returns information about the transition the rule is assigned to."
+            },
+            "ruleIds": {
+              "type": "array",
+              "description": "The list of workflow rule IDs.",
+              "items": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Workflow rule ID."
+              }
+            },
+            "workflowEntityId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "The workflow ID."
+            }
+          }
+        }
+      }
+    }
+  ]
+}

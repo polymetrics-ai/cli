@@ -81,7 +81,7 @@
 - [chargedesk](chargedesk/MANUAL.md): Reads ChargeDesk charges, customers, subscriptions, and products through the ChargeDesk REST API.
 - [chargify](chargify/MANUAL.md): Reads and writes Chargify (Maxio Advanced Billing) customers, subscriptions, products, product families, coupons, transactions, invoices, payment profiles, events, and statements through the Chargify REST API.
 - [chartmogul](chartmogul/MANUAL.md): Reads and writes ChartMogul customers, contacts, subscription activities, plans, invoices, tasks, customer-count metrics, and account details through the ChartMogul REST API.
-- [chatwoot](chatwoot/MANUAL.md): Reads Chatwoot Support conversations, contacts, inboxes, agents, teams, labels, and conversation-scoped messages, and writes contact/conversation/message/label mutations through the Chatwoot Application API.
+- [chatwoot](chatwoot/MANUAL.md): Reads and writes the full account-scoped Chatwoot Application API support-desk surface: conversations, contacts, inboxes, agents, agent bots, teams, labels, conversation-scoped messages, canned responses, custom attribute definitions, custom filters, webhooks, integration hooks, automation rules, help-center portals, inbox membership, and account settings.
 - [chift](chift/MANUAL.md): Reads and writes Chift consumers, connections, syncs, integrations, datastores, and webhook event definitions through the Chift REST API using a session-token (client credentials) exchange.
 - [churnkey](churnkey/MANUAL.md): Reads Churnkey cancel-flow sessions and aggregated session counts through the Churnkey Data API, and sends usage/billing events and customer attribute updates through the Churnkey Event Tracking API.
 - [cimis](cimis/MANUAL.md): Reads California Irrigation Management Information System (CIMIS) weather station metadata and station/spatial zip-code reference lists through the CIMIS Web API. Read-only.
@@ -217,7 +217,7 @@
 - [harvest](harvest/MANUAL.md): Reads Harvest clients, contacts, company settings, projects, tasks, task assignments, users, time entries, invoices, estimates, expenses, item categories, expense categories, and roles through the Harvest v2 REST API.
 - [height](height/MANUAL.md): Reads Height tasks, lists, field templates, users, and workspace through the Height REST API.
 - [hellobaton](hellobaton/MANUAL.md): Reads Hellobaton projects, milestones, tasks, phases, companies, and users through the Hellobaton REST API.
-- [help-scout](help-scout/MANUAL.md): Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.
+- [help-scout](help-scout/MANUAL.md): Reads and writes the documented Help Scout Mailbox API v2 surface: conversations and threads, customers and their email/phone/chat/social/website contact records, organizations, mailboxes and mailbox configuration, users, teams, tags, webhooks, and workflows, through OAuth2 client-credentials authentication.
 - [hibob](hibob/MANUAL.md): Reads HiBob HR data: employee profiles, company named lists, and people field definitions via the HiBob REST API (read-only).
 - [high-level](high-level/MANUAL.md): Reads HighLevel (Go HighLevel / LeadConnector) contacts, opportunities, pipelines, custom fields, and form submissions for a location through the HighLevel REST API.
 - [hoorayhr](hoorayhr/MANUAL.md): Reads HoorayHR users, time-off, leave-types, and sick-leave records through the HoorayHR REST API using session-token authentication.
@@ -242,7 +242,7 @@
 - [ip2whois](ip2whois/MANUAL.md): Looks up WHOIS records for configured domains via the IP2WHOIS API, exposing a flattened whois stream and per-role contact streams (registrant, admin, tech, billing). The nameservers stream is not migrated; see docs.md Known limits.
 - [iterable](iterable/MANUAL.md): Reads Iterable lists, campaigns, and templates through the Iterable REST API. Read-only.
 - [jamf-pro](jamf-pro/MANUAL.md): Reads Jamf Pro buildings, departments, categories, and scripts through the Jamf Pro REST API using Basic-credential token-exchange authentication.
-- [jira](jira/MANUAL.md): Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using HTTP Basic auth (email + API token). Read-only.
+- [jira](jira/MANUAL.md): Reads and writes the full documented Jira Cloud platform REST API v3 surface: 617 operations across issues, projects, users, fields, workflows, dashboards and instance administration.
 - [jobnimbus](jobnimbus/MANUAL.md): Reads JobNimbus CRM contacts, jobs, tasks, activities, and files through the JobNimbus REST API.
 - [jotform](jotform/MANUAL.md): Reads Jotform forms, submissions, reports, folders, and the account profile through the Jotform REST API.
 - [judge-me-reviews](judge-me-reviews/MANUAL.md): Reads and writes Judge.me reviews, widgets, reviewers, webhooks, shop metadata, settings, replies, and legacy product/widget resources through the Judge.me REST API.
@@ -262,7 +262,7 @@
 - [leadfeeder](leadfeeder/MANUAL.md): Reads Leadfeeder accounts and their leads, visits, and custom feeds through the Leadfeeder JSON:API.
 - [lemlist](lemlist/MANUAL.md): Reads lemlist campaigns, activities, team metadata, CRM contacts/companies, schedules, tasks, webhooks, unsubscribes, field definitions, and signal-agent data through the lemlist REST API.
 - [less-annoying-crm](less-annoying-crm/MANUAL.md): Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API.
-- [lever-hiring](lever-hiring/MANUAL.md): Reads Lever Hiring opportunities, postings, users, requisitions, and stages through the Lever Data API. Read-only (full-refresh).
+- [lever-hiring](lever-hiring/MANUAL.md): Reads Lever Hiring opportunities, postings, users, requisitions, stages, and related hiring resources; exposes bounded direct reads and selected typed reverse-ETL write plans.
 - [lightspeed-retail](lightspeed-retail/MANUAL.md): Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and registers through the Lightspeed REST API. Read-only.
 - [linear](linear/MANUAL.md): Reads Linear issues, teams, projects, and users through the Linear GraphQL API. Read-only.
 - [linkedin-ads](linkedin-ads/MANUAL.md): Reads LinkedIn Ads accounts, campaign groups, campaigns, and creatives through the LinkedIn Marketing REST API.
@@ -531,7 +531,7 @@
 - [wordpress](wordpress/MANUAL.md): Reads and writes WordPress REST API content: posts, pages, comments, media, users, categories, tags, taxonomies, post types, and post statuses.
 - [workable](workable/MANUAL.md): Reads Workable recruiting, account, employee, time tracking, time off, review, subscription, requisition, and offer data; writes Workable candidate, employee, department, member, subscription, time tracking, time off, offer, and requisition mutations.
 - [workday](workday/MANUAL.md): Reads Workday tenant data (workers, organizations, positions) through conservative Workday API endpoints. Read-only.
-- [workday-rest](workday-rest/MANUAL.md): Reads Workday REST API resources (workers, organizations, job profiles) with bearer-token authentication. Read-only.
+- [workday-rest](workday-rest/MANUAL.md): Reads and writes the full documented Workday REST surface: 907 operations across the 52 independently versioned services Workday's own directory publishes.
 - [workflowmax](workflowmax/MANUAL.md): Reads and writes WorkflowMax jobs, clients, and client contacts through the real WorkflowMax API v2 (api.workflowmax2.com/v2).
 - [workramp](workramp/MANUAL.md): Reads and writes WorkRamp users and groups, and reads guides, resources, and SCORM courses, through the real WorkRamp Employee Learning Cloud API (app.workramp.com/api/v1).
 - [wrike](wrike/MANUAL.md): Reads Wrike tasks, folders, and contacts through the Wrike REST API. Read-only.

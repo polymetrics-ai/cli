@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"mime"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 
@@ -388,12 +389,24 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		}
 	}
 
-	check("streams.json", b.HTTP.URL)
+	checkPath := func(file, what, template string) {
+		if template == "" {
+			return
+		}
+		if err := engine.ResolveCheckRequestPath(what, template, specKeys); err != nil {
+			findings = append(findings, Finding{
+				Connector: b.Name, File: file, Rule: ruleInterpolationUnresolved,
+				Message: err.Error(),
+			})
+		}
+	}
+
+	checkPath("streams.json", "base.url", b.HTTP.URL)
 	for _, h := range b.HTTP.Headers {
 		check("streams.json", h)
 	}
 	if b.HTTP.Check != nil {
-		check("streams.json", b.HTTP.Check.Path)
+		checkPath("streams.json", "base.check.path", b.HTTP.Check.Path)
 		// checkquery-ledger.md: base.check.query (RequestSpec.Query) is the
 		// SAME QueryParam dialect as stream.Query, so its templates get the
 		// SAME static validation stream.Query's entries already get below —
@@ -420,7 +433,7 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		}
 	}
 	for _, s := range b.Streams {
-		check("streams.json", s.Path)
+		checkPath("streams.json", fmt.Sprintf("stream %q path", s.Name), s.Path)
 		for _, v := range s.Query {
 			check("streams.json", v.Template)
 		}
@@ -440,7 +453,7 @@ func checkInterpolations(b engine.Bundle) []Finding {
 		// static ResolveCheck coverage (an undeclared spec key here would
 		// otherwise only fail the first time the stream is actually read).
 		if s.FanOut != nil && s.FanOut.IDsFrom.Request != nil {
-			check("streams.json", s.FanOut.IDsFrom.Request.Path)
+			checkPath("streams.json", fmt.Sprintf("stream %q fan_out.ids_from.request.path", s.Name), s.FanOut.IDsFrom.Request.Path)
 		}
 	}
 	for _, w := range b.Writes {
@@ -615,7 +628,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -659,14 +672,14 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					coveredStreams[ep.CoveredBy.Stream] = true
 				}
 			}
-			if ep.CoveredBy.Write != "" {
-				if !writes[ep.CoveredBy.Write] {
+			for _, write := range ep.CoveredBy.WriteTargets() {
+				if !writes[write] {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceUnknownTarget,
-						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, ep.CoveredBy.Write),
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, write),
 					})
 				} else {
-					coveredWrites[ep.CoveredBy.Write] = true
+					coveredWrites[write] = true
 				}
 			}
 			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
@@ -687,7 +700,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
-			if ep.CoveredBy.Write != "" && mutationMethods[strings.ToUpper(ep.Method)] {
+			if len(ep.CoveredBy.WriteTargets()) > 0 && mutationMethods[strings.ToUpper(ep.Method)] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:
@@ -1788,7 +1801,7 @@ func checkCLISurfaceEndpointCoverage(
 			})
 			continue
 		}
-		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && state.coveredBy.Write == "") {
+		if state.excluded || state.operation != nil || state.coveredBy == nil || (state.coveredBy.Stream == "" && len(state.coveredBy.WriteTargets()) == 0) {
 			if cmd.Operation != "" && state.operation != nil {
 				continue
 			}
@@ -1815,12 +1828,12 @@ func checkCLISurfaceEndpointCoverage(
 				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by stream %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Stream, cmd.Stream),
 			})
 		}
-		if cmd.Write != "" && state.coveredBy.Write != cmd.Write {
+		if cmd.Write != "" && !slices.Contains(state.coveredBy.WriteTargets(), cmd.Write) {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceSafety,
-				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by write %q, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.Write, cmd.Write),
+				Message:   fmt.Sprintf("command %d (%q) references api_surface endpoint %s %s covered by write %v, want %q", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path, state.coveredBy.WriteTargets(), cmd.Write),
 			})
 		}
 	}

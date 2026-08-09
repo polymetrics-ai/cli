@@ -3,8 +3,17 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
-      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "", "when": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": "",
+        "when": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
@@ -13,48 +22,454 @@
       "stop_path": "hasNext",
       "page_size": 100
     },
-    "check": { "method": "GET", "path": "/postings", "query": { "limit": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/postings",
+      "query": {
+        "limit": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "lever-hiring credentials are missing or invalid; re-run pm credentials add lever-hiring" },
-      { "status": 403, "hint": "lever-hiring account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "lever-hiring rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "lever-hiring credentials are missing or invalid; re-run pm credentials add lever-hiring"
+      },
+      {
+        "status": 403,
+        "hint": "lever-hiring account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "lever-hiring rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "opportunities",
       "path": "/opportunities",
-      "query": { "limit": "100" },
-      "records": { "path": "data" },
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/opportunities.json"
     },
     {
       "name": "postings",
       "path": "/postings",
-      "query": { "limit": "100" },
-      "records": { "path": "data" },
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/postings.json"
     },
     {
       "name": "users",
       "path": "/users",
-      "query": { "limit": "100" },
-      "records": { "path": "data" },
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/users.json"
     },
     {
       "name": "requisitions",
       "path": "/requisitions",
-      "query": { "limit": "100" },
-      "records": { "path": "data" },
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/requisitions.json"
     },
     {
       "name": "stages",
       "path": "/stages",
-      "query": { "limit": "100" },
-      "records": { "path": "data" },
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
       "schema": "schemas/stages.json"
+    },
+    {
+      "name": "deleted_applications",
+      "path": "/applications/deleted",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deleted_applications.json"
+    },
+    {
+      "name": "archive_reasons",
+      "path": "/archive_reasons",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/archive_reasons.json"
+    },
+    {
+      "name": "audit_events",
+      "path": "/audit_events",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/audit_events.json"
+    },
+    {
+      "name": "disposition_stages",
+      "path": "/disposition_stages",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/disposition_stages.json"
+    },
+    {
+      "name": "feedback_templates",
+      "path": "/feedback_templates",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/feedback_templates.json"
+    },
+    {
+      "name": "deleted_opportunities",
+      "path": "/opportunities/deleted",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deleted_opportunities.json"
+    },
+    {
+      "name": "deleted_postings",
+      "path": "/postings/deleted",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/deleted_postings.json"
+    },
+    {
+      "name": "form_templates",
+      "path": "/form_templates",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/form_templates.json"
+    },
+    {
+      "name": "requisition_fields",
+      "path": "/requisition_fields",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/requisition_fields.json"
+    },
+    {
+      "name": "sources",
+      "path": "/sources",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/sources.json"
+    },
+    {
+      "name": "applications",
+      "path": "/opportunities/{{ fanout.id }}/applications",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/opportunities",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "opportunity_id"
+      },
+      "schema": "schemas/applications.json"
+    },
+    {
+      "name": "opportunity_feedback",
+      "path": "/opportunities/{{ fanout.id }}/feedback",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/opportunities",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "opportunity_id"
+      },
+      "schema": "schemas/opportunity_feedback.json"
+    },
+    {
+      "name": "opportunity_interviews",
+      "path": "/opportunities/{{ fanout.id }}/interviews",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/opportunities",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "opportunity_id"
+      },
+      "schema": "schemas/opportunity_interviews.json"
+    },
+    {
+      "name": "opportunity_notes",
+      "path": "/opportunities/{{ fanout.id }}/notes",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/opportunities",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "opportunity_id"
+      },
+      "schema": "schemas/opportunity_notes.json"
+    },
+    {
+      "name": "opportunity_offers",
+      "path": "/opportunities/{{ fanout.id }}/offers",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/opportunities",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "opportunity_id"
+      },
+      "schema": "schemas/opportunity_offers.json"
+    },
+    {
+      "name": "opportunity_file_actions",
+      "path": "/opportunities/{{ fanout.id }}/file_actions",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/opportunities",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "opportunity_id"
+      },
+      "schema": "schemas/opportunity_file_actions.json"
+    },
+    {
+      "name": "opportunity_panels",
+      "path": "/opportunities/{{ fanout.id }}/panels",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/opportunities",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "opportunity_id"
+      },
+      "schema": "schemas/opportunity_panels.json"
+    },
+    {
+      "name": "opportunity_forms",
+      "path": "/opportunities/{{ fanout.id }}/forms",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/opportunities",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "opportunity_id"
+      },
+      "schema": "schemas/opportunity_forms.json"
+    },
+    {
+      "name": "opportunity_referrals",
+      "path": "/opportunities/{{ fanout.id }}/referrals",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/opportunities",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "opportunity_id"
+      },
+      "schema": "schemas/opportunity_referrals.json"
+    },
+    {
+      "name": "posting_users",
+      "path": "/postings/{{ fanout.id }}/users",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "projection": "passthrough",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "path": "/postings",
+            "records_path": "data",
+            "id_field": "id"
+          }
+        },
+        "into": {
+          "path_var": "id"
+        },
+        "stamp_field": "posting_id"
+      },
+      "schema": "schemas/posting_users.json"
     }
   ]
 }

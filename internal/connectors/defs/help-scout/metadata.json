@@ -1,14 +1,14 @@
 {
   "name": "help-scout",
   "display_name": "Help Scout",
-  "description": "Reads Help Scout conversations, customers, mailboxes, and users through the Mailbox API using OAuth2 client-credentials authentication.",
+  "description": "Reads and writes the documented Help Scout Mailbox API v2 surface: conversations and threads, customers and their email/phone/chat/social/website contact records, organizations, mailboxes and mailbox configuration, users, teams, tags, webhooks, and workflows, through OAuth2 client-credentials authentication.",
   "integration_type": "api",
   "docs_url": "https://developer.helpscout.com/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -17,8 +17,9 @@
     "read_page_size": 50
   },
   "risk": {
-    "read": "external Help Scout API read of conversation, customer, mailbox, and user data",
-    "approval": "none; read-only, no obviously-safe reverse-ETL writes"
+    "read": "external Help Scout API read of conversation, thread, customer, organization, mailbox, team, tag, webhook, workflow, and user data",
+    "write": "external Help Scout Mailbox API mutation of conversations, threads, customers and their contact records, organizations, users, teams, tags, webhooks, and workflows; 18 of the 65 write actions are permanent DELETEs that remove Help Scout records outright, including delete_customer, delete_conversation, delete_attachment, delete_email, and delete_phone",
+    "approval": "required for every write action; reverse ETL plan, preview, explicit approval, then execute, and the 18 destructive delete actions additionally require a typed confirmation"
   },
   "conformance": {
     "skip_dynamic": true,

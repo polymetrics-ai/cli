@@ -203,9 +203,20 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 		}
 		return engine.ResolveCheckWhen(template, specKeys)
 	}
+	checkPath := func(what, template string) error {
+		if template == "" {
+			return nil
+		}
+		return engine.ResolveCheckRequestPath(what, template, specKeys)
+	}
 
-	if err := check(b.HTTP.URL); err != nil {
+	if err := checkPath("base.url", b.HTTP.URL); err != nil {
 		return err
+	}
+	if b.HTTP.Check != nil {
+		if err := checkPath("base.check.path", b.HTTP.Check.Path); err != nil {
+			return err
+		}
 	}
 	for _, h := range b.HTTP.Headers {
 		if err := check(h); err != nil {
@@ -224,8 +235,13 @@ func checkInterpolationsResolve(b engine.Bundle) error {
 		}
 	}
 	for _, s := range b.Streams {
-		if err := check(s.Path); err != nil {
+		if err := checkPath("path", s.Path); err != nil {
 			return fmt.Errorf("stream %q: %w", s.Name, err)
+		}
+		if s.FanOut != nil && s.FanOut.IDsFrom.Request != nil {
+			if err := checkPath("fan_out.ids_from.request.path", s.FanOut.IDsFrom.Request.Path); err != nil {
+				return fmt.Errorf("stream %q: %w", s.Name, err)
+			}
 		}
 		for _, v := range s.Query {
 			// engine.StreamSpec.Query values are engine.QueryParam (gap-loop
@@ -319,7 +335,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || ep.CoveredBy.Write != "" || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0)
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -344,11 +360,11 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				}
 				coveredStreams[ep.CoveredBy.Stream] = true
 			}
-			if ep.CoveredBy.Write != "" {
-				if !writes[ep.CoveredBy.Write] {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, ep.CoveredBy.Write)
+			for _, write := range ep.CoveredBy.WriteTargets() {
+				if !writes[write] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.write %q is not a declared write action", i, ep.Method, ep.Path, write)
 				}
-				coveredWrites[ep.CoveredBy.Write] = true
+				coveredWrites[write] = true
 			}
 			for _, directRead := range coveredDirectReadTargets(ep.CoveredBy) {
 				if !directReads[directRead] {
@@ -362,7 +378,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 			if strings.EqualFold(ep.Method, "GET") {
 				hasNonExcludedGET = true
 			}
-			if ep.CoveredBy.Write != "" && mutationMethods[strings.ToUpper(ep.Method)] {
+			if len(ep.CoveredBy.WriteTargets()) > 0 && mutationMethods[strings.ToUpper(ep.Method)] {
 				hasNonExcludedMutation = true
 			}
 		case hasExcluded:
