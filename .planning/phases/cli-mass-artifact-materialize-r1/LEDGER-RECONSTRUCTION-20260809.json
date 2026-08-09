@@ -2,23 +2,23 @@
   "assertions": {
     "lost_provenance": false,
     "materialized_plus_retry_pending_plus_blocked": 426,
-    "queue_entries": 223,
-    "resolved_entries": 203,
+    "queue_entries": 222,
+    "resolved_entries": 204,
     "target_total": 426,
     "unique_target_names": 426
   },
   "authority": "CAPTAIN-ORDER-unblock-to-mergeable-20260809.md",
   "counts": {
     "already_complete": 5,
-    "foundation_pending": 189,
+    "foundation_pending": 190,
     "genuinely_blocked": 0,
-    "materialized_total": 203,
-    "newly_materialized": 187,
-    "reachable": 22,
+    "materialized_total": 204,
+    "newly_materialized": 188,
+    "reachable": 23,
     "recovered_pilot": 4,
     "recovered_seven": 7,
-    "remaining": 223,
-    "retry_pending": 223
+    "remaining": 222,
+    "retry_pending": 222
   },
   "inputs": {
     "batch_report_files": [
@@ -171,7 +171,13 @@
       "batches/batch-039-7shifts-materialize.json",
       "batches/batch-039-7shifts-source-index.json",
       "batches/batch-039-fetch-results.json",
-      "batches/batch-039-outcomes.json"
+      "batches/batch-039-outcomes.json",
+      "batches/batch-040-100ms-direct-reference-manifest.json",
+      "batches/batch-040-100ms-inspect.json",
+      "batches/batch-040-100ms-materialize.json",
+      "batches/batch-040-100ms-source-index.json",
+      "batches/batch-040-fetch-results.json",
+      "batches/batch-040-outcomes.json"
     ],
     "current_defs_root": "internal/connectors/defs",
     "reconciliation_outcomes": "reconciled-complete-outcomes.json",
@@ -187,5 +193,5 @@
     "workday-rest"
   ],
   "schema_version": 1,
-  "v2_bundle_count": 196
+  "v2_bundle_count": 197
 }
