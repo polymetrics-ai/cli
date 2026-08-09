@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://redditinc.com/policies/data-api-terms (retrieved 2026-08-06): Reddit reserves discretion to set and enforce Data API limits and does not publish a stable enumerable policy for this bundle."
+}

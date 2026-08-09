@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 320,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "ruddr",
+      "state": "unknown",
+      "file": "internal/connectors/defs/ruddr/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "salesflare",
+      "state": "unknown",
+      "file": "internal/connectors/defs/salesflare/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "salesforce",
+      "state": "unknown",
+      "file": "internal/connectors/defs/salesforce/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "salesloft",
+      "state": "unknown",
+      "file": "internal/connectors/defs/salesloft/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "savvycal",
+      "state": "unknown",
+      "file": "internal/connectors/defs/savvycal/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "scryfall",
+      "state": "unknown",
+      "file": "internal/connectors/defs/scryfall/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "searxng",
+      "state": "unknown",
+      "file": "internal/connectors/defs/searxng/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "secoda",
+      "state": "unknown",
+      "file": "internal/connectors/defs/secoda/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "segment",
+      "state": "unknown",
+      "file": "internal/connectors/defs/segment/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "sendgrid",
+      "state": "unknown",
+      "file": "internal/connectors/defs/sendgrid/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "sendinblue",
+      "state": "unknown",
+      "file": "internal/connectors/defs/sendinblue/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "sendowl",
+      "state": "unknown",
+      "file": "internal/connectors/defs/sendowl/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "sendpulse",
+      "state": "unknown",
+      "file": "internal/connectors/defs/sendpulse/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "senseforce",
+      "state": "unknown",
+      "file": "internal/connectors/defs/senseforce/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "sentry",
+      "state": "unknown",
+      "file": "internal/connectors/defs/sentry/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "serpstat",
+      "state": "unknown",
+      "file": "internal/connectors/defs/serpstat/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "service-now",
+      "state": "unknown",
+      "file": "internal/connectors/defs/service-now/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "sharetribe",
+      "state": "unknown",
+      "file": "internal/connectors/defs/sharetribe/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "shippo",
+      "state": "unknown",
+      "file": "internal/connectors/defs/shippo/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "shipstation",
+      "state": "unknown",
+      "file": "internal/connectors/defs/shipstation/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "shopwired",
+      "state": "unknown",
+      "file": "internal/connectors/defs/shopwired/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "shortcut",
+      "state": "unknown",
+      "file": "internal/connectors/defs/shortcut/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "shortio",
+      "state": "unknown",
+      "file": "internal/connectors/defs/shortio/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "shutterstock",
+      "state": "unknown",
+      "file": "internal/connectors/defs/shutterstock/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "sigma-computing",
+      "state": "unknown",
+      "file": "internal/connectors/defs/sigma-computing/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "signnow",
+      "state": "unknown",
+      "file": "internal/connectors/defs/signnow/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "simfin",
+      "state": "unknown",
+      "file": "internal/connectors/defs/simfin/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "simplesat",
+      "state": "unknown",
+      "file": "internal/connectors/defs/simplesat/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "smaily",
+      "state": "unknown",
+      "file": "internal/connectors/defs/smaily/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "smartreach",
+      "state": "unknown",
+      "file": "internal/connectors/defs/smartreach/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "smartsheets",
+      "state": "unknown",
+      "file": "internal/connectors/defs/smartsheets/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "smartwaiver",
+      "state": "unknown",
+      "file": "internal/connectors/defs/smartwaiver/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "snapchat-marketing",
+      "state": "unknown",
+      "file": "internal/connectors/defs/snapchat-marketing/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "solarwinds-service-desk",
+      "state": "unknown",
+      "file": "internal/connectors/defs/solarwinds-service-desk/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "sonar-cloud",
+      "state": "unknown",
+      "file": "internal/connectors/defs/sonar-cloud/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "sparkpost",
+      "state": "unknown",
+      "file": "internal/connectors/defs/sparkpost/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "split-io",
+      "state": "unknown",
+      "file": "internal/connectors/defs/split-io/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "spotify-ads",
+      "state": "unknown",
+      "file": "internal/connectors/defs/spotify-ads/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "square",
+      "state": "unknown",
+      "file": "internal/connectors/defs/square/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "squarespace",
+      "state": "unknown",
+      "file": "internal/connectors/defs/squarespace/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 0,
+    "unknown": 40,
+    "not_applicable": 0,
+    "file_total": 40
+  }
+}

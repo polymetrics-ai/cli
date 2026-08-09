@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "not_applicable",
+  "reason": "Skipped because the connector has no external provider API surface to inventory. Provider HTTP/API rate limiting is not applicable."
+}

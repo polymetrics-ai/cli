@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://documentation.mailgun.com/docs/mailgun/api-reference/api-overview (retrieved 2026-08-06): Mailgun exposes per-API rate-limit headers but states that time windows vary by resource, so no general bundle policy is enumerable."
+}

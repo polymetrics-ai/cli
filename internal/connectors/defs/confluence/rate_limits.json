@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.atlassian.com/cloud/confluence/rate-limiting/ (retrieved 2026-08-06): Confluence Cloud publishes app and tenant points quotas plus endpoint burst limits, while API-token traffic follows separate limits; the bundle has no matching selector."
+}

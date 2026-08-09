@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://developer.squareup.com/docs/build-basics/general-considerations/handling-errors (retrieved 2026-08-06): Square documents that rate limits may differ by endpoint but does not publish compatible enumerable budgets for this bundle."
+}

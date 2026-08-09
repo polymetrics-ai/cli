@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "source_ledger": ".planning/phases/cli-mass-artifact-materialize-r1/RATE-LIMIT-SOURCE-LEDGER.json",
+  "offset": 160,
+  "requested_size": 40,
+  "entries": [
+    {
+      "connector": "google-forms",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-forms/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "google-pagespeed-insights",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-pagespeed-insights/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "google-search-console",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-search-console/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "google-tasks",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-tasks/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "google-webfonts",
+      "state": "unknown",
+      "file": "internal/connectors/defs/google-webfonts/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "gorgias",
+      "state": "unknown",
+      "file": "internal/connectors/defs/gorgias/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "grafana",
+      "state": "unknown",
+      "file": "internal/connectors/defs/grafana/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "granola",
+      "state": "unknown",
+      "file": "internal/connectors/defs/granola/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "greenhouse",
+      "state": "unknown",
+      "file": "internal/connectors/defs/greenhouse/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "guru",
+      "state": "unknown",
+      "file": "internal/connectors/defs/guru/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "gutendex",
+      "state": "unknown",
+      "file": "internal/connectors/defs/gutendex/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "harness",
+      "state": "unknown",
+      "file": "internal/connectors/defs/harness/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "harvest",
+      "state": "declared",
+      "file": "internal/connectors/defs/harvest/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "help-scout",
+      "state": "unknown",
+      "file": "internal/connectors/defs/help-scout/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "hibob",
+      "state": "unknown",
+      "file": "internal/connectors/defs/hibob/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "high-level",
+      "state": "unknown",
+      "file": "internal/connectors/defs/high-level/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "hubplanner",
+      "state": "unknown",
+      "file": "internal/connectors/defs/hubplanner/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "hubspot",
+      "state": "unknown",
+      "file": "internal/connectors/defs/hubspot/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "hugging-face-datasets",
+      "state": "unknown",
+      "file": "internal/connectors/defs/hugging-face-datasets/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "illumina-basespace",
+      "state": "unknown",
+      "file": "internal/connectors/defs/illumina-basespace/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "imagga",
+      "state": "unknown",
+      "file": "internal/connectors/defs/imagga/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "incident-io",
+      "state": "unknown",
+      "file": "internal/connectors/defs/incident-io/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "insightful",
+      "state": "unknown",
+      "file": "internal/connectors/defs/insightful/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "insightly",
+      "state": "unknown",
+      "file": "internal/connectors/defs/insightly/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "instatus",
+      "state": "unknown",
+      "file": "internal/connectors/defs/instatus/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "intercom",
+      "state": "unknown",
+      "file": "internal/connectors/defs/intercom/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "intruder",
+      "state": "unknown",
+      "file": "internal/connectors/defs/intruder/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "invoiced",
+      "state": "unknown",
+      "file": "internal/connectors/defs/invoiced/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "invoiceninja",
+      "state": "unknown",
+      "file": "internal/connectors/defs/invoiceninja/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "ip2whois",
+      "state": "unknown",
+      "file": "internal/connectors/defs/ip2whois/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "iterable",
+      "state": "unknown",
+      "file": "internal/connectors/defs/iterable/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "jamf-pro",
+      "state": "unknown",
+      "file": "internal/connectors/defs/jamf-pro/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "jira",
+      "state": "unknown",
+      "file": "internal/connectors/defs/jira/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "jobnimbus",
+      "state": "unknown",
+      "file": "internal/connectors/defs/jobnimbus/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "jotform",
+      "state": "unknown",
+      "file": "internal/connectors/defs/jotform/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "judge-me-reviews",
+      "state": "unknown",
+      "file": "internal/connectors/defs/judge-me-reviews/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "just-sift",
+      "state": "unknown",
+      "file": "internal/connectors/defs/just-sift/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "justcall",
+      "state": "unknown",
+      "file": "internal/connectors/defs/justcall/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "k6-cloud",
+      "state": "unknown",
+      "file": "internal/connectors/defs/k6-cloud/rate_limits.json",
+      "status": "written"
+    },
+    {
+      "connector": "katana",
+      "state": "unknown",
+      "file": "internal/connectors/defs/katana/rate_limits.json",
+      "status": "written"
+    }
+  ],
+  "counts": {
+    "declared": 1,
+    "unknown": 39,
+    "not_applicable": 0,
+    "file_total": 40
+  }
+}

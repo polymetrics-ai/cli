@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "state": "unknown",
+  "reason": "Official provider rate-limit source https://docs.apify.com/api/v2 (retrieved 2026-08-06): Apify publishes a user-scoped global budget and resource-scoped limits; this dataset bundle cannot represent either scope without a secret or unsupported resource subject."
+}
