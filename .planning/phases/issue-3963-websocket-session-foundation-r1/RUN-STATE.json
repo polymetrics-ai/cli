@@ -1,0 +1,26 @@
+{
+  "phase": "issue-3963-websocket-session-foundation-r1",
+  "issue": 3963,
+  "parent_issue": 3915,
+  "consumer_issue": 3935,
+  "status": "red-captured",
+  "lifecycle": {
+    "mode": "inline-manual-gsd-fallback",
+    "reason": "The official phase runtime has no registered issue-3963 phase and the parent contract forbids role spawning.",
+    "sources_resolved": ["discuss-phase", "plan-phase", "execute-phase", "verify-work", "code-review"],
+    "prompts_generated_at": "2026-08-09"
+  },
+  "source_artifact": {
+    "url": "https://developers.zoom.us/docs/api/ai-services.md",
+    "retrieved_at": "2026-08-09T20:57:31Z",
+    "http_status": 200,
+    "bytes": 87750,
+    "sha256": "154631ef97c292468c81a79dc50cd51ea142d18f1f9fab060622215ddf3ba367"
+  },
+  "red_predecessor": "ae43c153c",
+  "red": "captured: closed operations schema rejects the fixed websocket block as an additional property",
+  "scope": "shared engine/schema/commandrunner foundation only",
+  "green": "pending",
+  "verification": "pending",
+  "review": "pending"
+}
