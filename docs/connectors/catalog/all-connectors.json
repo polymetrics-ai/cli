@@ -64844,6 +64844,246 @@
         "method": "POST",
         "path": "/users/{{ record.username }}/projectsV2/{{ record.project_number }}/items",
         "risk": "low"
+      },
+      {
+        "name": "app_installations_installation_id_access_tokens",
+        "kind": "create",
+        "method": "POST",
+        "path": "/app/installations/{{ record.installation_id }}/access_tokens",
+        "risk": "low"
+      },
+      {
+        "name": "actions_artifacts_artifact_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/artifacts/{{ record.artifact_id }}",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_runs_run_id_force_cancel",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/force-cancel",
+        "risk": "low"
+      },
+      {
+        "name": "actions_runs_run_id_rerun_failed_jobs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/actions/runs/{{ record.run_id }}/rerun-failed-jobs",
+        "risk": "low"
+      },
+      {
+        "name": "agents_secrets_secret_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/secrets/{{ record.secret_name }}",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "agents_secrets_secret_name3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/secrets/{{ record.secret_name }}",
+        "risk": "low"
+      },
+      {
+        "name": "agents_variables2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/variables",
+        "risk": "low"
+      },
+      {
+        "name": "agents_variables_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/variables/{{ record.name }}",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "agents_variables_name3",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/agents/variables/{{ record.name }}",
+        "risk": "low"
+      },
+      {
+        "name": "git_tags",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/git/tags",
+        "risk": "low"
+      },
+      {
+        "name": "hooks_hook_id_config2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/hooks/{{ record.hook_id }}/config",
+        "risk": "low"
+      },
+      {
+        "name": "issues_issue_number_labels",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}/labels",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "pulls_pull_number_comments_comment_id_replies",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/comments/{{ record.comment_id }}/replies",
+        "risk": "low"
+      },
+      {
+        "name": "pulls_pull_number_reviews_review_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "pulls_pull_number_reviews_review_id3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}/reviews/{{ record.review_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "applications_client_id_grant",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/applications/{{ record.client_id }}/grant",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "applications_client_id_token",
+        "kind": "create",
+        "method": "POST",
+        "path": "/applications/{{ record.client_id }}/token",
+        "risk": "low"
+      },
+      {
+        "name": "applications_client_id_token2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/applications/{{ record.client_id }}/token",
+        "risk": "low"
+      },
+      {
+        "name": "applications_client_id_token3",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/applications/{{ record.client_id }}/token",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "org_custom_pattern_update_pattern",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "org_custom_pattern_update_start_delimiter",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "org_custom_pattern_update_end_delimiter",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "org_custom_pattern_update_must_match",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "org_custom_pattern_update_must_not_match",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/orgs/{{ record.org }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_pattern",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_start_delimiter",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_end_delimiter",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_must_match",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "repo_custom_pattern_update_must_not_match",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/custom-patterns/{{ record.pattern_id }}",
+        "risk": "low"
+      },
+      {
+        "name": "user_emails_add_object",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/emails",
+        "risk": "low"
+      },
+      {
+        "name": "user_emails_add_array",
+        "kind": "create",
+        "method": "POST",
+        "path": "/user/emails",
+        "risk": "low"
+      },
+      {
+        "name": "user_emails_delete_object",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/emails",
+        "risk": "low",
+        "confirm": "destructive"
+      },
+      {
+        "name": "user_emails_delete_array",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/user/emails",
+        "risk": "low",
+        "confirm": "destructive"
       }
     ],
     "risk": {

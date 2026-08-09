@@ -27,11 +27,11 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	if result.Endpoints != wantEndpoints {
 		t.Fatalf("Endpoints = %d, want source-derived REST plus legacy bindings plus fixed GraphQL transport %d", result.Endpoints, wantEndpoints)
 	}
-	if result.Covered != 1147+transportEndpoints {
-		t.Fatalf("Covered = %d, want legacy coverage plus fixed GraphQL transport %d", result.Covered, 1147+transportEndpoints)
+	if result.Covered != wantEndpoints {
+		t.Fatalf("Covered = %d, want every source-derived endpoint covered %d", result.Covered, wantEndpoints)
 	}
-	if result.Blocked != 77 {
-		t.Fatalf("Blocked = %d, want 77", result.Blocked)
+	if result.Blocked != 0 {
+		t.Fatalf("Blocked = %d, want 0 after complete parity", result.Blocked)
 	}
 	if result.CoveredBy["stream"] != 37 {
 		t.Fatalf("CoveredBy[stream] = %d, want 37", result.CoveredBy["stream"])
@@ -40,20 +40,20 @@ func TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints(t *testing.T) 
 	// several write contracts each, so this count has to come from
 	// WriteTargets(); reading only the singular field leaves those endpoints
 	// looking uncovered and fails the whole inventory.
-	if result.CoveredBy["write"] != 574 {
-		t.Fatalf("CoveredBy[write] = %d, want 574", result.CoveredBy["write"])
+	if result.CoveredBy["write"] != 607 {
+		t.Fatalf("CoveredBy[write] = %d, want 607", result.CoveredBy["write"])
 	}
-	if result.CoveredBy["direct_read"] != 368 {
-		t.Fatalf("CoveredBy[direct_read] = %d, want 368", result.CoveredBy["direct_read"])
+	if result.CoveredBy["direct_read"] != 366 {
+		t.Fatalf("CoveredBy[direct_read] = %d, want 366", result.CoveredBy["direct_read"])
 	}
-	if result.CoveredBy["direct_reads"] != 186 {
-		t.Fatalf("CoveredBy[direct_reads] = %d, want 186", result.CoveredBy["direct_reads"])
+	if result.CoveredBy["direct_reads"] != 252 {
+		t.Fatalf("CoveredBy[direct_reads] = %d, want 252", result.CoveredBy["direct_reads"])
 	}
 	if result.CoveredBy["operation"] != transportOperations {
 		t.Fatalf("CoveredBy[operation] = %d, want every source-locked GraphQL root %d", result.CoveredBy["operation"], transportOperations)
 	}
-	if result.BlockedByModel["duplicate"] != 67 {
-		t.Fatalf("BlockedByModel[duplicate] = %d, want 67", result.BlockedByModel["duplicate"])
+	if len(result.BlockedByModel) != 0 || len(result.BlockedByStatus) != 0 {
+		t.Fatalf("blocked classifications = models=%v status=%v, want none after complete parity", result.BlockedByModel, result.BlockedByStatus)
 	}
 	if result.Provenance == nil {
 		t.Fatal("Provenance = nil, want legacy provenance evidence")

@@ -31,9 +31,9 @@
       "percent": 100
     },
     "implementation": {
-      "implemented": 1345,
+      "implemented": 1464,
       "total": 1525,
-      "percent": 88.2
+      "percent": 96
     },
     "live_proof": {
       "proven": 0,
@@ -3487,6 +3487,7 @@
       },
       "pm": {
         "commands": [
+          "discussion create",
           "graphql mutation create-discussion"
         ],
         "operation_ids": [
@@ -4105,7 +4106,7 @@
         "mapping": "fixed-document binding"
       },
       "implementation": {
-        "state": "declared_not_executable"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -4127,11 +4128,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "mapped_command_not_executable",
-        "reason": "PM maps this source operation to graphql mutation create-migration-source (unsafe_or_disallowed), but the declared command availability is not executable by the typed GraphQL operation contract runtime.",
-        "unblocking_condition": "Add an executable typed GraphQL operation contract for the mapped PM command with its declared safety policy, typed inputs, auth/scope classification, fixture/read-back, and cleanup contract."
       }
     },
     {
@@ -4224,7 +4220,8 @@
       },
       "pm": {
         "commands": [
-          "graphql mutation create-project-v2"
+          "graphql mutation create-project-v2",
+          "project create"
         ],
         "operation_ids": [
           "github.graphql.mutation.create-project-v2"
@@ -5570,13 +5567,12 @@
           "issue delete"
         ],
         "operation_ids": [
-          "github.graphql.mutation.delete-issue",
-          "github.issue.delete"
+          "github.graphql.mutation.delete-issue"
         ],
         "mapping": "fixed-document binding"
       },
       "implementation": {
-        "state": "declared_not_executable"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -5598,11 +5594,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "mapped_command_not_executable",
-        "reason": "PM maps this source operation to graphql mutation delete-issue (unsafe_or_disallowed), issue delete (unsafe_or_disallowed), but the declared command availability is not executable by the typed GraphQL operation contract runtime.",
-        "unblocking_condition": "Add an executable typed GraphQL operation contract for the mapped PM command with its declared safety policy, typed inputs, auth/scope classification, fixture/read-back, and cleanup contract."
       }
     },
     {
@@ -8997,7 +8988,7 @@
         "mapping": "fixed-document binding"
       },
       "implementation": {
-        "state": "declared_not_executable"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -9019,11 +9010,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "mapped_command_not_executable",
-        "reason": "PM maps this source operation to graphql mutation regenerate-verifiable-domain-token (unsafe_or_disallowed), but the declared command availability is not executable by the typed GraphQL operation contract runtime.",
-        "unblocking_condition": "Add an executable typed GraphQL operation contract for the mapped PM command with its declared safety policy, typed inputs, auth/scope classification, fixture/read-back, and cleanup contract."
       }
     },
     {
@@ -10702,7 +10688,8 @@
       },
       "pm": {
         "commands": [
-          "graphql mutation revert-pull-request"
+          "graphql mutation revert-pull-request",
+          "pr revert"
         ],
         "operation_ids": [
           "github.graphql.mutation.revert-pull-request"
@@ -11259,7 +11246,7 @@
         "mapping": "fixed-document binding"
       },
       "implementation": {
-        "state": "declared_not_executable"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -11281,11 +11268,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "mapped_command_not_executable",
-        "reason": "PM maps this source operation to graphql mutation start-organization-migration (unsafe_or_disallowed), but the declared command availability is not executable by the typed GraphQL operation contract runtime.",
-        "unblocking_condition": "Add an executable typed GraphQL operation contract for the mapped PM command with its declared safety policy, typed inputs, auth/scope classification, fixture/read-back, and cleanup contract."
       }
     },
     {
@@ -11325,7 +11307,7 @@
         "mapping": "fixed-document binding"
       },
       "implementation": {
-        "state": "declared_not_executable"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -11347,11 +11329,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "mapped_command_not_executable",
-        "reason": "PM maps this source operation to graphql mutation start-repository-migration (unsafe_or_disallowed), but the declared command availability is not executable by the typed GraphQL operation contract runtime.",
-        "unblocking_condition": "Add an executable typed GraphQL operation contract for the mapped PM command with its declared safety policy, typed inputs, auth/scope classification, fixture/read-back, and cleanup contract."
       }
     },
     {
@@ -11505,7 +11482,8 @@
       },
       "pm": {
         "commands": [
-          "graphql mutation transfer-issue"
+          "graphql mutation transfer-issue",
+          "issue transfer"
         ],
         "operation_ids": [
           "github.graphql.mutation.transfer-issue"
@@ -20198,7 +20176,8 @@
       },
       "pm": {
         "commands": [
-          "graphql query viewer"
+          "graphql query viewer",
+          "status"
         ],
         "operation_ids": [
           "github.graphql.query.viewer"
@@ -20656,7 +20635,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -21282,11 +21261,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "actions artifacts delete"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -21308,11 +21289,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single artifact detail/delete; the workflow_artifacts stream already covers the list data, and per-id deletion of build artifacts is a low-value cleanup action not modeled as a write this pass",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -22411,11 +22387,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "actions force-cancel create"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -22437,11 +22415,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "cancel_workflow_run write already covers the ordinary cancel path; force-cancel is a narrow escalation of the same action for runs that failed to stop, not independently exposed",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -23089,11 +23062,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "artifact download-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -23115,11 +23090,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single artifact detail/delete; the workflow_artifacts stream already covers the list data, and per-id deletion of build artifacts is a low-value cleanup action not modeled as a write this pass",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -24757,11 +24727,14 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "actions workflows view",
+          "workflow view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24783,11 +24756,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single workflow detail is already covered in aggregate by the workflows stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -24850,11 +24818,14 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "actions runs view",
+          "run view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -24876,11 +24847,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single workflow-run detail is already covered in aggregate by the workflow_runs stream (list); a per-id detail GET adds no data the list page doesn't already include",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -25932,13 +25898,12 @@
       },
       "pm": {
         "commands": [
-          "workflow list",
-          "workflow view"
+          "workflow list"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26427,11 +26392,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "artifact download-3"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26453,11 +26420,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "per-run artifact listing is already covered in aggregate by the workflow_artifacts stream (workflow_run_id computed field ties artifacts back to their run)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -26475,11 +26437,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "actions runs view-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26501,11 +26465,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "per-workflow run listing is already covered in aggregate by the workflow_runs stream (every run carries its own workflow_id)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -26524,13 +26483,12 @@
       },
       "pm": {
         "commands": [
-          "run list",
-          "run view"
+          "run list"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26659,11 +26617,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "actions rerun-failed-jobs create"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -26685,11 +26645,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "rerun_workflow_run write already covers re-running a run; rerunning only failed jobs is a narrower variant of the same action, not independently exposed",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -28108,7 +28063,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -28153,7 +28108,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -28198,7 +28153,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -28243,7 +28198,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -28288,7 +28243,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -28333,7 +28288,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29407,11 +29362,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "events view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -29433,11 +29390,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "GitHub's public repository timeline events feed is a legacy/deprecated activity API GitHub recommends against relying on for new integrations; issue_events/commits/pull_requests streams already cover the underlying activity with typed, stable shapes",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -30486,11 +30438,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "secret set-6"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30512,11 +30466,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -30579,11 +30528,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "variable create-3"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30605,11 +30556,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -30717,11 +30663,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "secret delete-6"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30743,11 +30691,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -30765,11 +30708,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "variable delete-4"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30791,11 +30736,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -30948,11 +30888,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "agents public-key view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -30974,11 +30916,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -30996,11 +30933,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "agents secrets view-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31022,11 +30961,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -31044,11 +30978,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "agents variables view-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31070,11 +31006,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -31182,11 +31113,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "agents organization-secrets view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31208,11 +31141,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -31230,11 +31158,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "agents organization-variables view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31256,11 +31186,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -31278,11 +31203,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "agents secrets view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31304,11 +31231,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -31326,11 +31248,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "agents variables view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31352,11 +31276,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -31560,7 +31479,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31605,7 +31524,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31689,11 +31608,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "variable update-3"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -31715,11 +31636,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the agents/* endpoints are a preview-tag mirror of actions/secrets and actions/variables (identical secret/variable management shape scoped to Copilot coding agent) already excluded as requires_elevated_scope under the actions/ prefix; not an independent resource",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -32187,11 +32103,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "applications token create"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32213,11 +32131,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the documented request body carries an OAuth access_token",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -32280,11 +32193,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "app access_tokens create"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32306,11 +32221,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "auth token-exchange endpoint used internally by the github_app AuthHook, not a syncable data stream or a directly caller-invoked write action",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -32328,11 +32238,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "applications grant delete"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32354,11 +32266,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the documented request body carries an OAuth access_token",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -32421,11 +32328,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "applications token delete"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -32447,11 +32356,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the documented request body carries an OAuth access_token",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -33549,11 +33453,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "applications token update"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -33575,11 +33481,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the documented request body carries an OAuth access_token",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -34859,7 +34760,8 @@
       },
       "pm": {
         "commands": [
-          "commits check-runs view"
+          "commits check-runs view",
+          "pr checks"
         ],
         "mapping": "declared PM command binding"
       },
@@ -35848,11 +35750,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "code-scanning alerts view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -35874,11 +35778,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single alert detail is already covered in aggregate by the code_scanning_alerts stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -36843,7 +36742,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -39454,7 +39353,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -39499,7 +39398,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -39904,7 +39803,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -39949,7 +39848,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42244,7 +42143,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42643,11 +42542,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "dependabot alerts view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -42669,11 +42570,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single alert detail is already covered in aggregate by the dependabot_alerts stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -43370,7 +43266,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -44628,7 +44524,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45610,11 +45506,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "git tags create"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45636,11 +45534,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "low-level annotated-tag-object creation; create_ref already covers creating the refs/tags/* pointer reverse-ETL callers need",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -45791,11 +45684,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "git commits view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -45817,11 +45712,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "raw git commit-object detail duplicates the richer commits stream's per-commit record (same underlying commit, GitHub API-decorated shape)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -45974,11 +45864,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "git matching-refs view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -46000,11 +45892,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "ref-prefix matching duplicates data already covered by the branches and tags streams (refs/heads/* and refs/tags/* respectively)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -47901,11 +47788,14 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "issue view",
+          "issues view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -47927,11 +47817,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single issue detail is already covered in aggregate by the issues stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -47949,11 +47834,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "issues comments view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -47975,11 +47862,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single issue-comment detail is already covered in aggregate by the issue_comments stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -47997,11 +47879,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "issues events view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48023,11 +47907,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single issue-event detail is already covered in aggregate by the issue_events stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -48045,11 +47924,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "labels view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48071,11 +47952,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single label detail is already covered in aggregate by the labels stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -48093,11 +47969,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "milestones view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48119,11 +47997,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single milestone detail is already covered in aggregate by the milestones stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -48231,11 +48104,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "assignees view-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48257,11 +48132,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the assignable-user list is derivable from the collaborators stream (assignees are always a subset of collaborators); not modeled as its own stream to avoid a near-duplicate record set",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -48279,11 +48149,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "issues comments view-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48305,11 +48177,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "per-issue comment listing is already covered in aggregate by the issue_comments stream (every comment carries its own issue reference)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -48460,11 +48327,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "issues events view-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48486,11 +48355,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "per-issue event listing is already covered in aggregate by the issue_events stream (every event carries its own issue reference)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -48551,11 +48415,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "issues timeline view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48577,11 +48443,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the issue timeline is a combined view over issue_events + issue_comments + cross-referenced commits, all already available as separate typed streams; not modeled as its own merged/untyped stream",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -48600,6 +48461,7 @@
       },
       "pm": {
         "commands": [
+          "issue status",
           "issues list-for-authenticated-user"
         ],
         "mapping": "declared PM command binding"
@@ -48690,13 +48552,12 @@
       },
       "pm": {
         "commands": [
-          "issue list",
-          "issue view"
+          "issue list"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48870,11 +48731,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "issues labels view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -48896,11 +48759,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "an issue's labels are already present as the labels field on each record of the issues stream",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -49142,11 +49000,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "issues labels delete"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -49168,11 +49028,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "\"remove all labels\" is equivalent to set_issue_labels with an empty labels array; not independently exposed",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -52069,7 +51924,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -52339,7 +52194,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -52384,7 +52239,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -55490,7 +55345,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -55580,7 +55435,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -55985,7 +55840,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58692,7 +58547,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58737,7 +58592,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58782,7 +58637,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -58827,7 +58682,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59091,11 +58946,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "pulls replies create"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59117,11 +58974,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "a threaded reply is create_review_comment with in_reply_to set; not an independently modeled action",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -59227,11 +59079,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "pulls reviews delete"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59253,11 +59107,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -59361,11 +59210,14 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "pr view",
+          "pulls view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59387,11 +59239,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single pull request detail is already covered in aggregate by the pull_requests stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -59454,11 +59301,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "pulls reviews view-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59480,11 +59329,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -59502,11 +59346,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "pulls comments view-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59528,11 +59374,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single review-comment detail is already covered in aggregate by the pull_request_review_comments stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -59552,12 +59393,12 @@
       "pm": {
         "commands": [
           "pr list",
-          "pr view"
+          "pr status"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59731,11 +59572,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "pulls requested_reviewers view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59757,11 +59600,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "requested reviewers are already present as a field on the pull_requests stream's own record (requested_reviewers/requested_teams)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -59779,11 +59617,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "pulls comments view-3"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -59805,11 +59645,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "per-PR review-comment listing is already covered in aggregate by the pull_request_review_comments stream (every comment carries its own pull_request_url)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -60228,11 +60063,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "pulls reviews set"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -60254,11 +60091,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single review detail/update is the same resource submit_pull_request_review/dismiss_pull_request_review/delete_pending review already write against; a dedicated detail GET has no bulk enumeration source (see the reviews-list exclusion above)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -61397,11 +61229,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "collaborators view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -61423,11 +61257,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "a boolean collaborator-membership check; membership data is already covered in aggregate by the collaborators stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -64532,11 +64361,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "topics view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -64558,11 +64389,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "topics are already present as the topics field on the repository stream's own record; replace_repo_topics covers the write side",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -64625,11 +64451,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "autolinks view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -64651,11 +64479,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single autolink detail is already covered in aggregate by the autolinks stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -64673,11 +64496,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "branches view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -64699,11 +64524,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single branch detail is already covered in aggregate by the branches stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -64766,11 +64586,14 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "rules branches view",
+          "ruleset check"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -64792,11 +64615,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the effective-rules-for-a-branch view is a derived evaluation over the same rulesets the repo_rulesets stream already syncs",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -64904,11 +64722,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "collaborators permission view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -64930,11 +64750,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "per-user permission level is already present as a field on each record of the collaborators stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -64997,11 +64812,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "commits view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65023,11 +64840,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single commit detail is already covered in aggregate by the commits stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -65090,11 +64902,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "comments view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65116,11 +64930,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single commit-comment detail is already covered in aggregate by the commit_comments stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -65364,11 +65173,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "keys view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65390,11 +65201,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single deploy-key detail is already covered in aggregate by the deploy_keys stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -65412,11 +65218,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "deployments view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65438,11 +65246,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single deployment detail is already covered in aggregate by the deployments stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -65505,11 +65308,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "deployments statuses view-2"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65531,11 +65336,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single deployment-status detail; see the statuses list exclusion above",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -65553,11 +65353,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "environments view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65579,11 +65381,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single environment detail is already covered in aggregate by the environments stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -65691,11 +65488,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "releases latest view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -65717,11 +65516,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "\"most recent release\" is derivable from the releases stream (list) by sorting on published_at/created_at",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -66324,11 +66118,14 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "release view",
+          "releases view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -66350,11 +66147,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single release detail is already covered in aggregate by the releases stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -66417,11 +66209,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "releases tags view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -66443,11 +66237,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "release lookup by tag name is already covered in aggregate by the releases stream (list); every record carries its own tag_name",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -66555,11 +66344,14 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "ruleset view",
+          "rulesets view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -66581,11 +66373,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single ruleset detail is already covered in aggregate by the repo_rulesets stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -66694,13 +66481,12 @@
       },
       "pm": {
         "commands": [
-          "ruleset list",
-          "ruleset view"
+          "ruleset list"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67009,11 +66795,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "hooks view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67035,11 +66823,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single webhook detail is already covered in aggregate by the webhooks stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -67057,11 +66840,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "hooks config view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67083,11 +66868,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "webhook config is already a field on each record of the webhooks stream (config_url computed field); the dedicated config sub-resource GET/PATCH is a narrower view of the same data update_webhook already covers",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -67150,11 +66930,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "activity view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67176,11 +66958,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "the repository activity feed (pushes/merges/force-pushes) overlaps with data already covered by the commits and pull_requests streams; not modeled as its own separate untyped stream",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -67419,11 +67196,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "commits comments view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -67445,11 +67224,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "per-commit comment listing is already covered in aggregate by the commit_comments stream (every comment carries its own commit_id)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -68399,13 +68173,12 @@
       },
       "pm": {
         "commands": [
-          "release list",
-          "release view"
+          "release list"
         ],
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70095,11 +69868,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "webhook update"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70121,11 +69896,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "webhook config is already a field on each record of the webhooks stream (config_url computed field); the dedicated config sub-resource GET/PATCH is a narrower view of the same data update_webhook already covers",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -70279,7 +70049,8 @@
       },
       "pm": {
         "commands": [
-          "search issues"
+          "search issues",
+          "search prs"
         ],
         "mapping": "declared PM command binding"
       },
@@ -70509,7 +70280,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70554,7 +70325,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70599,7 +70370,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70644,7 +70415,7 @@
         "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "partially_implemented"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70728,11 +70499,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "secret-scanning alerts view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -70754,11 +70527,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single alert detail is already covered in aggregate by the secret_scanning_alerts stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -71132,11 +70900,17 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "org secret-scanning custom-pattern update-end-delimiter",
+          "org secret-scanning custom-pattern update-must-match",
+          "org secret-scanning custom-pattern update-must-not-match",
+          "org secret-scanning custom-pattern update-pattern",
+          "org secret-scanning custom-pattern update-start-delimiter"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -71158,11 +70932,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "documented request body is rooted at anyOf with 5 arms, which is not one executable command contract",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -71225,11 +70994,17 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "repo secret-scanning custom-pattern update-end-delimiter",
+          "repo secret-scanning custom-pattern update-must-match",
+          "repo secret-scanning custom-pattern update-must-not-match",
+          "repo secret-scanning custom-pattern update-pattern",
+          "repo secret-scanning custom-pattern update-start-delimiter"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -71251,11 +71026,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "documented request body is rooted at anyOf with 5 arms, which is not one executable command contract",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -71498,11 +71268,13 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "security-advisories view"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -71524,11 +71296,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "single advisory detail is already covered in aggregate by the security_advisories stream (list)",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -73164,11 +72931,14 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "user emails add",
+          "user emails add-array"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -73190,11 +72960,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "documented request body is rooted at oneOf with 3 arms, which is not one executable command contract",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {
@@ -73708,11 +73473,14 @@
         "deprecated": false
       },
       "pm": {
-        "commands": [],
-        "mapping": "no typed PM command"
+        "commands": [
+          "user emails delete",
+          "user emails delete-array"
+        ],
+        "mapping": "declared PM command binding"
       },
       "implementation": {
-        "state": "blocked"
+        "state": "implemented"
       },
       "auth": {
         "persona": "requires_operation_contract",
@@ -73734,11 +73502,6 @@
       },
       "terminal_evidence": {
         "state": "not_attempted"
-      },
-      "blocker": {
-        "category": "existing_bundle_block",
-        "reason": "documented request body is rooted at oneOf with 3 arms, which is not one executable command contract",
-        "unblocking_condition": "Implement the named dependency recorded by the existing GitHub bundle contract."
       }
     },
     {

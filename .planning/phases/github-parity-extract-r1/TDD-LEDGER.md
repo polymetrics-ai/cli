@@ -2822,3 +2822,24 @@ $ go test -timeout 20m ./internal/connectors/commandrunner \
     -run '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1
 ok   polymetrics.ai/internal/connectors/commandrunner
 ```
+
+---
+
+## Cycle 35 — post-`f96a47e80` regenerated certification inventory
+
+**Red — rebase exposed stale fixed inventory totals, not a runtime regression.** The first
+post-main focused gate ran the real regenerated GitHub bundle and failed
+`TestSurfaceInventoryForGitHubAccountsForAllReviewedEndpoints` with
+`Covered = 1225, want legacy coverage plus fixed GraphQL transport 1148`, and
+`TestGithubWriteActionInventoryAccountsForAllDeclaredActions` with
+`len(items) = 607, want 574`. The generated `api_surface.json` is the
+authoritative source for this assertion: it contains 1,225 rows (1,220 REST,
+four retained legacy GraphQL bindings, and one shared GraphQL transport), all
+covered; its coverage totals are 37 streams, 607 writes, 366 singular
+direct-reads, 252 plural direct-reads, and 305 GraphQL operation bindings.
+
+**Green — assert complete parity rather than the superseded blocked baseline.** The certify
+test now derives its endpoint denominator from the pinned REST count plus the explicit GraphQL
+rows, requires every endpoint to be covered and no blocker models/statuses, and pins the
+source-derived coverage/write-action totals above. This strengthens the test: regenerating a
+partially covered surface cannot silently retain the former 77 blocked rows.
