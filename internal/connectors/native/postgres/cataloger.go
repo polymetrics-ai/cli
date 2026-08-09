@@ -25,7 +25,7 @@ func (c Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (c
 		return connectors.Catalog{Connector: c.Name(), Streams: fixtureStreams()}, nil
 	}
 
-	pool, err := pgxpool.New(ctx, conn.dsn())
+	pool, err := conn.openPool(ctx)
 	if err != nil {
 		return connectors.Catalog{}, fmt.Errorf("catalog postgres: open pool: %w", err)
 	}

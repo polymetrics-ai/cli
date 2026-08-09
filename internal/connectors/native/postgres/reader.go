@@ -50,7 +50,7 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 		return err
 	}
 
-	pool, err := pgxpool.New(ctx, conn.dsn())
+	pool, err := conn.openPool(ctx)
 	if err != nil {
 		return fmt.Errorf("read postgres: open pool: %w", err)
 	}

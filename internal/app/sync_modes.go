@@ -162,8 +162,6 @@ func streamStateKey(connection, stream string) string {
 }
 
 func compareCursor(a, b string) int {
-	a = strings.TrimSpace(a)
-	b = strings.TrimSpace(b)
 	if a == b {
 		return 0
 	}
@@ -234,9 +232,6 @@ func recordCursor(record map[string]any, field string) (string, error) {
 		return "", fmt.Errorf("record is missing cursor field %q", field)
 	}
 	cursor := toComparableString(value)
-	if strings.TrimSpace(cursor) == "" {
-		return "", fmt.Errorf("record has empty cursor field %q", field)
-	}
 	return cursor, nil
 }
 

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -35,16 +36,21 @@ type pendingStreamState struct {
 }
 
 type localRawRecord struct {
-	RawID        string            `json:"_polymetrics_raw_id"`
-	RunID        string            `json:"_polymetrics_run_id"`
-	SyncID       string            `json:"_polymetrics_sync_id"`
-	GenerationID int64             `json:"_polymetrics_generation_id"`
-	ExtractedAt  string            `json:"_polymetrics_extracted_at"`
-	LoadedAt     string            `json:"_polymetrics_loaded_at"`
-	Cursor       string            `json:"_polymetrics_cursor,omitempty"`
-	PrimaryKey   string            `json:"_polymetrics_primary_key,omitempty"`
-	Deleted      bool              `json:"_polymetrics_deleted"`
-	Record       connectors.Record `json:"record"`
+	RawID        string               `json:"_polymetrics_raw_id"`
+	RunID        string               `json:"_polymetrics_run_id"`
+	SyncID       string               `json:"_polymetrics_sync_id"`
+	GenerationID int64                `json:"_polymetrics_generation_id"`
+	ExtractedAt  string               `json:"_polymetrics_extracted_at"`
+	LoadedAt     string               `json:"_polymetrics_loaded_at"`
+	Cursor       string               `json:"_polymetrics_cursor,omitempty"`
+	CursorState  *localRawCursorState `json:"_polymetrics_cursor_state,omitempty"`
+	PrimaryKey   string               `json:"_polymetrics_primary_key,omitempty"`
+	Deleted      bool                 `json:"_polymetrics_deleted"`
+	Record       connectors.Record    `json:"record"`
+}
+
+type localRawCursorState struct {
+	Token []byte `json:"token"`
 }
 
 // syncLocalWarehouseDirectoryCommit is a test seam for the platform directory
@@ -62,6 +68,10 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	generationID := prior.GenerationID
 	if generationID == 0 || mode.IsOverwrite() {
 		generationID++
+	}
+	cursorTracker, err := newStreamCursorTracker(prior, source, sourceRuntime, stream.CursorField, mode.Source)
+	if err != nil {
+		return etlExecutionResult{}, err
 	}
 
 	dir := localWarehouseDir(destRuntime)
@@ -96,6 +106,11 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	rawPath, err := location.WALPath(streamName)
 	if err != nil {
 		return etlExecutionResult{}, err
+	}
+	if mode.IsDeduped() && !mode.IsOverwrite() && cursorTracker.sourceOrdered != nil {
+		if err := validateSourceOrderedLocalRawRecords(ctx, rawPath); err != nil {
+			return etlExecutionResult{}, err
+		}
 	}
 	// Directory nesting already makes a shared table path unrepresentable.
 	// Re-deriving ownership from the table path is the independent check that
@@ -134,8 +149,6 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	result := etlExecutionResult{}
 	rawBatch := make([]localRawRecord, 0, batchSize)
-	priorCursor := streamStateCursor(prior)
-	nextCursor := priorCursor
 	rawSeq := 0
 	observedAt := time.Time{}
 
@@ -156,29 +169,19 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		return nil
 	}
 
-	readConfig := sourceRuntime
-	readConfig.Config = cloneStringMap(sourceRuntime.Config)
-	if priorCursor != "" {
-		readConfig.Config["since"] = priorCursor
-	}
-	err = source.Read(ctx, connectors.ReadRequest{
-		Stream: streamName,
-		Config: readConfig,
-		State:  map[string]string{"cursor": priorCursor, "generation_id": strconv.FormatInt(generationID, 10)},
-	}, func(record connectors.Record) error {
+	err = source.Read(ctx, cursorTracker.readRequest(streamName, sourceRuntime, prior, generationID, mode.Source), func(record connectors.Record) error {
 		result.RecordsRead++
 		cursor := ""
+		cursorState := connectors.OpaqueCursorState{}
 		if stream.CursorField != "" {
+			var include bool
 			var err error
-			cursor, err = recordCursor(record, stream.CursorField)
+			cursor, cursorState, include, err = cursorTracker.observe(record, stream.CursorField, mode.Source)
 			if err != nil {
 				return err
 			}
-			if mode.Source == SourceSyncIncremental && priorCursor != "" && compareCursor(cursor, priorCursor) < 0 {
+			if !include {
 				return nil
-			}
-			if nextCursor == "" || compareCursor(cursor, nextCursor) > 0 {
-				nextCursor = cursor
 			}
 		}
 		deleted := isDeletedRecord(record)
@@ -186,7 +189,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 		enriched["_polymetrics_run_id"] = runID
 		enriched["_polymetrics_synced_at"] = now
 		enriched["_polymetrics_deleted"] = deleted
-		if cursor != "" {
+		if stream.CursorField != "" {
 			enriched["_polymetrics_cursor"] = cursor
 		}
 
@@ -207,6 +210,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 			ExtractedAt:  time.Now().UTC().Format(time.RFC3339Nano),
 			LoadedAt:     now,
 			Cursor:       cursor,
+			CursorState:  localRawCursorStateFor(cursorState),
 			PrimaryKey:   pk,
 			Deleted:      deleted,
 			Record:       enriched,
@@ -248,7 +252,7 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	// table O_APPEND, which Parquet cannot support: a Parquet file cannot be
 	// appended to once closed. Rebuilding from the log is what makes the table
 	// format a derived detail rather than a constraint on the write pattern.
-	finalCount, err := materializeFinalTable(ctx, rawPath, finalPath, mode.IsDeduped())
+	finalCount, err := materializeFinalTable(ctx, rawPath, finalPath, mode.IsDeduped(), cursorTracker.sourceOrdered)
 	if err != nil {
 		return result, err
 	}
@@ -273,11 +277,13 @@ func (a *App) runWarehouseETL(ctx context.Context, runID string, conn Connection
 	if err != nil {
 		return result, err
 	}
-	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, generationID, result.RecordsLoaded, observedAt, acknowledgement)
+	nextCursor, nextCursorObserved := cursorTracker.checkpoint()
+	updated, err := committedLegacyStreamState(conn, sourceExpectation, streamName, stream, runID, nextCursor, nextCursorObserved, generationID, result.RecordsLoaded, observedAt, acknowledgement)
 	if err != nil {
 		return result, err
 	}
-	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated)
+	reportedCursor, reportedCursorObserved := cursorTracker.reportedCursor()
+	result.Checkpoint = checkpointForResult(result, mode, stateKey, updated, reportedCursor, reportedCursorObserved)
 	result.PendingStreamState = &pendingStreamState{Key: stateKey, State: updated}
 	success = true
 	return result, nil
@@ -311,7 +317,7 @@ func syncLocalWarehouseDirectoryChain(dir string) error {
 	}
 }
 
-func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey string, state StreamState) map[string]string {
+func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey string, state StreamState, cursor string, cursorObserved bool) map[string]string {
 	// This map is a backward-compatible run report, not resumable sync state.
 	// StreamState.Checkpoint is the sole durable resume record.
 	checkpoint := map[string]string{
@@ -324,7 +330,7 @@ func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey stri
 		"state_key":           stateKey,
 		"generation_id":       strconv.FormatInt(state.GenerationID, 10),
 	}
-	if cursor := streamStateCursor(state); cursor != "" {
+	if cursorObserved {
 		checkpoint["cursor"] = cursor
 	}
 	return checkpoint
@@ -337,7 +343,7 @@ func checkpointForResult(result etlExecutionResult, mode SyncMode, stateKey stri
 // key order. An append table replays the log in the order it was written, which
 // is the order the streaming append path produced — including across earlier
 // runs, because the log accumulates the same way the table used to.
-func materializeFinalTable(ctx context.Context, rawPath, finalPath string, deduped bool) (int, error) {
+func materializeFinalTable(ctx context.Context, rawPath, finalPath string, deduped bool, sourceOrdered connectors.SourceOrderedCursorReader) (int, error) {
 	writer, err := warehouse.NewTableWriter(finalPath)
 	if err != nil {
 		return 0, err
@@ -350,7 +356,7 @@ func materializeFinalTable(ctx context.Context, rawPath, finalPath string, dedup
 	}()
 
 	if deduped {
-		best, err := readBestLocalRawRecords(ctx, rawPath)
+		best, err := readBestLocalRawRecords(ctx, rawPath, sourceOrdered)
 		if err != nil {
 			return 0, err
 		}
@@ -384,32 +390,95 @@ func materializeFinalTable(ctx context.Context, rawPath, finalPath string, dedup
 	return count, nil
 }
 
-func rawRecordNewer(candidate, current localRawRecord) bool {
-	if cmp := compareCursor(candidate.Cursor, current.Cursor); cmp != 0 {
-		return cmp > 0
+func localRawCursorStateFor(state connectors.OpaqueCursorState) *localRawCursorState {
+	if !state.Present {
+		return nil
 	}
-	if cmp := compareCursor(candidate.ExtractedAt, current.ExtractedAt); cmp != 0 {
-		return cmp > 0
-	}
-	return candidate.RawID > current.RawID
+	return &localRawCursorState{Token: append([]byte(nil), state.Token...)}
 }
 
-func readBestLocalRawRecords(ctx context.Context, path string) (map[string]localRawRecord, error) {
-	best := map[string]localRawRecord{}
+func (r localRawRecord) opaqueCursorState() (connectors.OpaqueCursorState, error) {
+	if r.CursorState == nil {
+		return connectors.OpaqueCursorState{}, fmt.Errorf("raw record %s is missing source cursor state", r.RawID)
+	}
+	return connectors.OpaqueCursorState{Token: append([]byte(nil), r.CursorState.Token...), Present: true}, nil
+}
+
+func rawRecordNewer(candidate, current localRawRecord, candidateSequence, currentSequence uint64, sourceOrdered connectors.SourceOrderedCursorReader) (bool, error) {
+	if sourceOrdered != nil {
+		candidateState, err := candidate.opaqueCursorState()
+		if err != nil {
+			return false, err
+		}
+		currentState, err := current.opaqueCursorState()
+		if err != nil {
+			return false, err
+		}
+		cmp, err := sourceOrdered.CompareCursorStates(candidateState, currentState)
+		if err == nil && cmp != 0 {
+			return cmp > 0, nil
+		}
+		if err != nil && !errors.Is(err, connectors.ErrOpaqueCursorOrderUnavailable) {
+			return false, err
+		}
+		return candidateSequence > currentSequence, nil
+	}
+	if cmp := compareCursor(candidate.Cursor, current.Cursor); cmp != 0 {
+		return cmp > 0, nil
+	}
+	if cmp := compareCursor(candidate.ExtractedAt, current.ExtractedAt); cmp != 0 {
+		return cmp > 0, nil
+	}
+	return candidate.RawID > current.RawID, nil
+}
+
+type indexedLocalRawRecord struct {
+	record   localRawRecord
+	sequence uint64
+}
+
+func readBestLocalRawRecords(ctx context.Context, path string, sourceOrdered connectors.SourceOrderedCursorReader) (map[string]localRawRecord, error) {
+	best := map[string]indexedLocalRawRecord{}
+	var sequence uint64
 	err := forEachLocalRawRecord(ctx, path, func(record localRawRecord) error {
+		sequence++
 		if record.PrimaryKey == "" {
 			return fmt.Errorf("raw record %s is missing primary key metadata", record.RawID)
 		}
 		current, ok := best[record.PrimaryKey]
-		if !ok || rawRecordNewer(record, current) {
-			best[record.PrimaryKey] = record
+		if !ok {
+			if sourceOrdered != nil {
+				if _, err := record.opaqueCursorState(); err != nil {
+					return err
+				}
+			}
+			best[record.PrimaryKey] = indexedLocalRawRecord{record: record, sequence: sequence}
+			return nil
+		}
+		newer, err := rawRecordNewer(record, current.record, sequence, current.sequence, sourceOrdered)
+		if err != nil {
+			return err
+		}
+		if newer {
+			best[record.PrimaryKey] = indexedLocalRawRecord{record: record, sequence: sequence}
 		}
 		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
-	return best, nil
+	resolved := make(map[string]localRawRecord, len(best))
+	for key, record := range best {
+		resolved[key] = record.record
+	}
+	return resolved, nil
+}
+
+func validateSourceOrderedLocalRawRecords(ctx context.Context, path string) error {
+	return forEachLocalRawRecord(ctx, path, func(record localRawRecord) error {
+		_, err := record.opaqueCursorState()
+		return err
+	})
 }
 
 // forEachLocalRawRecord streams a write-ahead log in the order it was written.

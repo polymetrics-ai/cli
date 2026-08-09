@@ -1,0 +1,990 @@
+package dbtest
+
+import (
+	"context"
+	"errors"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"reflect"
+	"strings"
+	"syscall"
+	"testing"
+	"time"
+)
+
+const testEndpoint = "unix:///tmp/dbtest.sock"
+
+type scriptedRunner struct {
+	volumePresent       bool
+	containerLive       bool
+	pullErr             error
+	tagErr              error
+	volumeInspectErr    error
+	volumeCreateErr     error
+	containerInspectErr error
+	runErr              error
+	infoErr             error
+	infoOutput          string
+	infoOutputs         []string
+	infoCalls           int
+	images              map[string]bool
+	commands            [][]string
+	endpoints           []string
+}
+
+type contextAwareRunner struct {
+	scriptedRunner
+}
+
+func (r *contextAwareRunner) Run(ctx context.Context, endpoint string, args ...string) (string, error) {
+	if err := ctx.Err(); err != nil {
+		return "", err
+	}
+	return r.scriptedRunner.Run(ctx, endpoint, args...)
+}
+
+func (r *scriptedRunner) Run(_ context.Context, endpoint string, args ...string) (string, error) {
+	r.endpoints = append(r.endpoints, endpoint)
+	r.commands = append(r.commands, append([]string(nil), args...))
+	switch {
+	case len(args) > 0 && args[0] == "pull":
+		if len(args) > 1 {
+			r.setImage(args[1], true)
+		}
+		return "", r.pullErr
+	case commandHasPrefix(args, "image", "tag"):
+		if len(args) > 3 {
+			r.setImage(args[3], true)
+		}
+		return "", r.tagErr
+	case commandHasPrefix(args, "image", "rm"):
+		if len(args) > 2 {
+			r.setImage(args[2], false)
+		}
+	case commandHasPrefix(args, "image", "inspect"):
+		if len(args) > 2 && r.imagePresent(args[2]) {
+			return "", nil
+		}
+		return "", errPodmanResourceNotFound
+	case commandHasPrefix(args, "volume", "inspect"):
+		if r.volumeInspectErr != nil {
+			return "", r.volumeInspectErr
+		}
+		if r.volumePresent {
+			return "", nil
+		}
+		return "", errPodmanResourceNotFound
+	case commandHasPrefix(args, "volume", "create"):
+		r.volumePresent = true
+		return "", r.volumeCreateErr
+	case commandHasPrefix(args, "volume", "rm"):
+		r.volumePresent = false
+	case commandHasPrefix(args, "container", "inspect"):
+		if r.containerInspectErr != nil {
+			return "", r.containerInspectErr
+		}
+		if r.containerLive {
+			return "", nil
+		}
+		return "", errPodmanResourceNotFound
+	case len(args) > 0 && args[0] == "run":
+		r.containerLive = true
+		return "", r.runErr
+	case commandHasPrefix(args, "container", "rm"):
+		r.containerLive = false
+	case len(args) > 0 && args[0] == "port":
+		return "127.0.0.1:43123\n", nil
+	case len(args) > 0 && args[0] == "info":
+		if r.infoErr != nil {
+			return "", r.infoErr
+		}
+		output := r.infoOutput
+		if len(r.infoOutputs) > 0 {
+			index := r.infoCalls
+			if index >= len(r.infoOutputs) {
+				index = len(r.infoOutputs) - 1
+			}
+			output = r.infoOutputs[index]
+		}
+		r.infoCalls++
+		if output == "" {
+			output = "/tmp/dbtest.sock\t/var/lib/containers/storage\t0\t0\n"
+		}
+		return output, nil
+	}
+	return "", nil
+}
+
+func (r *scriptedRunner) imagePresent(image string) bool {
+	return r.images != nil && r.images[image]
+}
+
+func (r *scriptedRunner) setImage(image string, present bool) {
+	if r.images == nil {
+		r.images = make(map[string]bool)
+	}
+	if present {
+		r.images[image] = true
+		return
+	}
+	delete(r.images, image)
+}
+
+func commandHasPrefix(args []string, prefix ...string) bool {
+	return len(args) >= len(prefix) && reflect.DeepEqual(args[:len(prefix)], prefix)
+}
+
+func commandsContain(commands [][]string, prefix ...string) bool {
+	for _, command := range commands {
+		if commandHasPrefix(command, prefix...) {
+			return true
+		}
+	}
+	return false
+}
+
+func testConfig(runner CommandRunner) Config {
+	return Config{
+		Engine:             "mysql",
+		Image:              "example.invalid/mysql:8.4.11",
+		ContainerPort:      3306,
+		DataVolumePath:     "/var/lib/mysql",
+		ContainerEndpoint:  testEndpoint,
+		ExpectedImageBytes: 32,
+		Run:                runner,
+		DiskFreeAt: func(string) (uint64, error) {
+			return 123, nil
+		},
+	}
+}
+
+func TestNewRejectsUnsafeEndpoints(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		endpoint string
+	}{
+		{name: "empty", endpoint: ""},
+		{name: "named connection", endpoint: "lane-machine"},
+		{name: "remote ssh endpoint", endpoint: "ssh://core@127.0.0.1/run/podman.sock"},
+		{name: "remote TCP endpoint", endpoint: "tcp://127.0.0.1:1234"},
+		{name: "hosted Unix endpoint", endpoint: "unix://localhost/tmp/dbtest.sock"},
+		{name: "newline", endpoint: "unix:///tmp/dbtest.sock\n"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			config := testConfig(&scriptedRunner{})
+			config.ContainerEndpoint = tc.endpoint
+			if _, err := New(config); err == nil {
+				t.Fatal("New() accepted an unsafe or non-local Podman endpoint")
+			}
+		})
+	}
+}
+
+func TestNewRejectsUnpinnedImages(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		mutate func(*Config)
+	}{
+		{name: "latest image", mutate: func(c *Config) { c.Image = "example.invalid/mysql:latest" }},
+		{name: "unversioned image", mutate: func(c *Config) { c.Image = "example.invalid/mysql" }},
+		{name: "digest form", mutate: func(c *Config) { c.Image = "example.invalid/mysql@sha256:abc" }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			config := testConfig(&scriptedRunner{})
+			tc.mutate(&config)
+			if _, err := New(config); err == nil {
+				t.Fatal("New() accepted unsafe configuration")
+			}
+		})
+	}
+}
+
+func TestCleanupRemovesOnlyRunOwnedResources(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	endpoint, err := h.Start(context.Background())
+	if err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if endpoint.Host != "127.0.0.1" || endpoint.Port == 3306 {
+		t.Fatalf("endpoint = %+v, want loopback non-default port", endpoint)
+	}
+	if !runner.imagePresent(config.Image) || !runner.imagePresent(h.runImage) {
+		t.Fatalf("images after start = %#v, want source and generated references", runner.images)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if runner.imagePresent(h.runImage) {
+		t.Fatalf("images after cleanup = %#v, want the run-generated reference removed", runner.images)
+	}
+	if !runner.imagePresent(config.Image) {
+		t.Fatalf("images after cleanup = %#v, want the source image retained", runner.images)
+	}
+	if commandsContain(runner.commands, "image", "rm", config.Image) {
+		t.Fatalf("commands = %v, want no source image removal", runner.commands)
+	}
+	var gotCleanup [][]string
+	for _, command := range runner.commands {
+		if commandHasPrefix(command, "container", "rm") || commandHasPrefix(command, "volume", "rm") || commandHasPrefix(command, "image", "rm") {
+			gotCleanup = append(gotCleanup, command[:2])
+		}
+	}
+	want := [][]string{{"container", "rm"}, {"volume", "rm"}, {"image", "rm"}}
+	if !reflect.DeepEqual(gotCleanup, want) {
+		t.Fatalf("cleanup order = %v, want %v", gotCleanup, want)
+	}
+	for _, endpoint := range runner.endpoints {
+		if endpoint != config.ContainerEndpoint {
+			t.Fatalf("Podman command used endpoint %q, want the configured endpoint", endpoint)
+		}
+	}
+	report := h.Report()
+	if report.DiskFreeBefore != 123 || report.DiskFreeAfter != 123 {
+		t.Fatalf("disk report = %+v, want target measurements", report)
+	}
+}
+
+func TestStartFailsClosedWhenCachedTargetIdentityCannotBeProven(t *testing.T) {
+	runner := &scriptedRunner{infoOutputs: []string{
+		"/tmp/dbtest.sock\t/var/lib/containers/storage\t0\t0\n",
+		"/tmp/other.sock\t/var/lib/containers/storage\t0\t0\n",
+	}}
+	config := testConfig(runner)
+	runner.setImage(config.Image, true)
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil {
+		t.Fatal("Start() accepted a cached image after the target identity changed")
+	}
+	for _, prefix := range [][]string{{"pull"}, {"image", "tag"}, {"volume", "create"}, {"run"}} {
+		if commandsContain(runner.commands, prefix...) {
+			t.Fatalf("commands = %v, want no mutation after identity proof failed", runner.commands)
+		}
+	}
+}
+
+func TestStartFailsClosedWhenCachedTargetCapacityCannotBeProven(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	runner.setImage(config.Image, true)
+	config.DiskFreeAt = func(string) (uint64, error) {
+		return 0, errors.New("unavailable")
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	startErr := func() error {
+		_, err := h.Start(context.Background())
+		return err
+	}()
+	if startErr == nil || !strings.Contains(startErr.Error(), "capacity") {
+		t.Fatalf("Start() error = %v, want a target capacity failure", startErr)
+	}
+	for _, prefix := range [][]string{{"pull"}, {"image", "tag"}, {"volume", "create"}, {"run"}} {
+		if commandsContain(runner.commands, prefix...) {
+			t.Fatalf("commands = %v, want no mutation before target capacity is proven", runner.commands)
+		}
+	}
+}
+
+func TestEveryTargetCommandRechecksTargetIdentity(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	for index, command := range runner.commands {
+		if commandHasPrefix(command, "info") {
+			continue
+		}
+		if index == 0 || !commandHasPrefix(runner.commands[index-1], "info") {
+			t.Fatalf("target command %v was not immediately preceded by an identity check: %v", command, runner.commands)
+		}
+	}
+}
+
+func TestCleanupFailsClosedWhenTargetIdentityChanges(t *testing.T) {
+	for _, changedIdentity := range []string{
+		"/tmp/other.sock\t/var/lib/containers/storage\t0\t0\n",
+		"/tmp/dbtest.sock\t/var/lib/other-storage\t0\t0\n",
+	} {
+		t.Run(changedIdentity, func(t *testing.T) {
+			runner := &scriptedRunner{}
+			h, err := New(testConfig(runner))
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			if _, err := h.Start(context.Background()); err != nil {
+				t.Fatalf("Start(): %v", err)
+			}
+			runner.infoOutput = changedIdentity
+			if err := h.Close(context.Background()); err == nil {
+				t.Fatal("Close() removed resources after target identity changed")
+			}
+			for _, prefix := range [][]string{{"container", "rm"}, {"volume", "rm"}, {"image", "rm"}} {
+				if commandsContain(runner.commands, prefix...) {
+					t.Fatalf("commands = %v, want no cleanup mutation on an unproven endpoint", runner.commands)
+				}
+			}
+		})
+	}
+}
+
+func TestStartPlacesEngineArgumentsAfterImage(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	config.ContainerArgs = []string{"--env", "SAFE_OPTION=value"}
+	config.EngineArgs = []string{"--server-id=731000"}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	defer func() { _ = h.Close(context.Background()) }()
+	for _, command := range runner.commands {
+		if len(command) == 0 || command[0] != "run" {
+			continue
+		}
+		imageIndex, engineArgumentIndex := -1, -1
+		for index, arg := range command {
+			if arg == h.runImage {
+				imageIndex = index
+			}
+			if arg == "--server-id=731000" {
+				engineArgumentIndex = index
+			}
+		}
+		if imageIndex < 0 || engineArgumentIndex != imageIndex+1 {
+			t.Fatalf("run arguments = %v, want engine command after image", command)
+		}
+		return
+	}
+	t.Fatal("Start did not issue a Podman run command")
+}
+
+func TestCopyFileFromContainerUsesTheConfiguredEndpoint(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	defer func() { _ = h.Close(context.Background()) }()
+	destination := filepath.Join(t.TempDir(), "ca.pem")
+	if err := h.CopyFileFromContainer(context.Background(), "/var/lib/mysql/ca.pem", destination); err != nil {
+		t.Fatalf("CopyFileFromContainer(): %v", err)
+	}
+	if !commandsContain(runner.commands, "cp", h.containerName+":"+"/var/lib/mysql/ca.pem", destination) {
+		t.Fatalf("commands = %v, want scoped container certificate copy", runner.commands)
+	}
+	for _, endpoint := range runner.endpoints {
+		if endpoint != config.ContainerEndpoint {
+			t.Fatalf("endpoint = %q, want %q", endpoint, config.ContainerEndpoint)
+		}
+	}
+}
+
+func TestStartPublishesOnlyLoopback(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	defer func() { _ = h.Close(context.Background()) }()
+	for _, command := range runner.commands {
+		if len(command) == 0 || command[0] != "run" {
+			continue
+		}
+		for index, arg := range command {
+			if arg != "--publish" {
+				continue
+			}
+			if want := "127.0.0.1::3306"; command[index+1] != want {
+				t.Fatalf("publish argument = %q, want %q", command[index+1], want)
+			}
+			return
+		}
+	}
+	t.Fatal("Start did not publish the engine port on loopback")
+}
+
+func TestStartCleansResourcesAfterIndeterminateEngineOutcomes(t *testing.T) {
+	for _, tc := range []struct {
+		name             string
+		runner           *scriptedRunner
+		wantClean        [][]string
+		wantNoImageClean bool
+	}{
+		{name: "pull returns an error before any generated reference is owned", runner: &scriptedRunner{pullErr: context.Canceled}, wantNoImageClean: true},
+		{name: "tag returns an error after the pull succeeded", runner: &scriptedRunner{tagErr: context.Canceled}, wantClean: [][]string{{"image", "rm"}}},
+		{name: "volume create returns an error after creating the volume", runner: &scriptedRunner{volumeCreateErr: context.Canceled}, wantClean: [][]string{{"volume", "rm"}, {"image", "rm"}}},
+		{name: "container run returns an error after creating the container", runner: &scriptedRunner{runErr: context.Canceled}, wantClean: [][]string{{"container", "rm"}, {"volume", "rm"}, {"image", "rm"}}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			config := testConfig(tc.runner)
+			h, err := New(config)
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			if _, err := h.Start(context.Background()); err == nil {
+				t.Fatal("Start() succeeded after an indeterminate engine outcome")
+			}
+			for _, prefix := range tc.wantClean {
+				if !commandsContain(tc.runner.commands, prefix...) {
+					t.Fatalf("cleanup commands = %v, missing %v", tc.runner.commands, prefix)
+				}
+			}
+			if tc.wantNoImageClean && commandsContain(tc.runner.commands, "image", "rm") {
+				t.Fatalf("cleanup commands = %v, want no generated image removal when the pull failed", tc.runner.commands)
+			}
+			if !tc.wantNoImageClean && tc.runner.imagePresent(h.runImage) {
+				t.Fatalf("images after cleanup = %#v, want generated reference removed", tc.runner.images)
+			}
+		})
+	}
+}
+
+func TestStartReleasesTheEngineSlotOnEveryExitPath(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		runner *scriptedRunner
+	}{
+		{name: "successful run", runner: &scriptedRunner{}},
+		{name: "failed start", runner: &scriptedRunner{runErr: context.Canceled}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			h, err := New(testConfig(tc.runner))
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			if _, err := h.Start(context.Background()); err == nil {
+				_ = h.Close(context.Background())
+			}
+			select {
+			case engineSlots <- struct{}{}:
+				<-engineSlots
+			default:
+				t.Fatal("engine slot was not released after the run finished")
+			}
+		})
+	}
+}
+
+func TestStartInspectsTheSourceImageOnlyToSizeThePull(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	config.ExpectedImageBytes = 830 << 20
+	config.DiskFreeAt = func(string) (uint64, error) { return 8 << 30, nil }
+	runner.setImage(config.Image, true)
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if !commandsContain(runner.commands, "pull", config.Image) || !commandsContain(runner.commands, "image", "tag", config.Image, h.runImage) {
+		t.Fatalf("commands = %v, want generated image reference", runner.commands)
+	}
+	if commandsContain(runner.commands, "image", "rm", config.Image) {
+		t.Fatalf("commands = %v, want no source-image removal", runner.commands)
+	}
+}
+
+func TestPodmanResourceNotFoundClassifiesOnlyKnownAbsence(t *testing.T) {
+	for _, stderr := range []string{
+		`Error: no such container "x"`,
+		`Error: no such volume "x"`,
+		"Error: x: image not known",
+		"Error response from daemon: No such image",
+	} {
+		if !podmanResourceNotFound(&exec.ExitError{Stderr: []byte(stderr)}) {
+			t.Fatalf("podmanResourceNotFound(%q) = false, want recognized absence", stderr)
+		}
+	}
+	for _, stderr := range []string{"Error response from daemon: access denied", "Error: unable to connect to Podman socket"} {
+		if podmanResourceNotFound(&exec.ExitError{Stderr: []byte(stderr)}) {
+			t.Fatalf("podmanResourceNotFound(%q) = true, want indeterminate error", stderr)
+		}
+	}
+}
+
+func TestStartPreservesPreexistingGeneratedVolume(t *testing.T) {
+	runner := &scriptedRunner{volumePresent: true}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil {
+		t.Fatal("Start() accepted an existing generated volume")
+	}
+	if commandsContain(runner.commands, "volume", "rm") {
+		t.Fatalf("commands = %v, want no removal of a pre-existing volume", runner.commands)
+	}
+}
+
+func TestInterruptCleanupClosesEveryLiveHarnessBeforeExiting(t *testing.T) {
+	SetMaxConcurrentEngines(2)
+	defer SetMaxConcurrentEngines(1)
+	runners := []*scriptedRunner{{}, {}}
+	harnesses := make([]*Harness, 0, len(runners))
+	for _, runner := range runners {
+		h, err := New(testConfig(runner))
+		if err != nil {
+			t.Fatalf("New(): %v", err)
+		}
+		if _, err := h.Start(context.Background()); err != nil {
+			t.Fatalf("Start(): %v", err)
+		}
+		harnesses = append(harnesses, h)
+	}
+	closeLiveHarnesses(context.Background())
+	for index, runner := range runners {
+		if runner.containerLive || runner.volumePresent || runner.imagePresent(harnesses[index].runImage) {
+			t.Fatalf("harness %d retained a generated resource through interrupt cleanup", index)
+		}
+	}
+	for _, h := range harnesses {
+		if err := h.Close(context.Background()); err != nil {
+			t.Fatalf("Close(): %v", err)
+		}
+	}
+}
+
+func TestInterruptDrainKeepsWatchingAndRejectsNewStarts(t *testing.T) {
+	firstRunner := &scriptedRunner{}
+	first, err := New(testConfig(firstRunner))
+	if err != nil {
+		t.Fatalf("New(first): %v", err)
+	}
+	if _, err := first.Start(context.Background()); err != nil {
+		t.Fatalf("Start(first): %v", err)
+	}
+
+	secondRunner := &scriptedRunner{}
+	second, err := New(testConfig(secondRunner))
+	if err != nil {
+		t.Fatalf("New(second): %v", err)
+	}
+	interruptCleanup.mu.Lock()
+	signals := interruptCleanup.signals
+	interruptCleanup.mu.Unlock()
+	if signals == nil {
+		t.Fatal("Start(first) did not arm interrupt cleanup")
+	}
+	live := beginInterruptDrain()
+	defer func() {
+		closeHarnesses(context.Background(), live)
+		_ = second.Close(context.Background())
+		finishInterruptDrain(signals)
+	}()
+	if len(live) != 1 || live[0] != first {
+		t.Fatalf("interrupt drain snapshot = %#v, want first harness", live)
+	}
+
+	closeHarnesses(context.Background(), live)
+	interruptCleanup.mu.Lock()
+	stillWatching := interruptCleanup.signals == signals
+	draining := interruptCleanup.draining
+	interruptCleanup.mu.Unlock()
+	if !stillWatching || !draining {
+		t.Fatalf("interrupt cleanup state after teardown: watching=%t draining=%t", stillWatching, draining)
+	}
+	if _, err := second.Start(context.Background()); err == nil {
+		t.Fatal("Start(second) succeeded after interrupt draining began")
+	}
+	if len(secondRunner.commands) != 0 {
+		t.Fatalf("Start(second) issued Podman commands after interrupt draining: %v", secondRunner.commands)
+	}
+}
+
+func TestWaitForInterruptCleanupAbsorbsRepeatedSignals(t *testing.T) {
+	signals := make(chan os.Signal)
+	done := make(chan struct{})
+	returned := make(chan struct{})
+	go func() {
+		waitForInterruptCleanup(signals, done)
+		close(returned)
+	}()
+	signals <- os.Interrupt
+	signals <- syscall.SIGTERM
+	select {
+	case <-returned:
+		t.Fatal("interrupt cleanup stopped before teardown completed")
+	default:
+	}
+	close(done)
+	select {
+	case <-returned:
+	case <-time.After(time.Second):
+		t.Fatal("interrupt cleanup did not finish after teardown")
+	}
+}
+
+func TestSetMaxConcurrentEnginesRefusesAChangeWhileASlotIsHeld(t *testing.T) {
+	h, err := New(testConfig(&scriptedRunner{}))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	defer func() {
+		if recovered := recover(); recovered == nil {
+			t.Error("SetMaxConcurrentEngines() replaced the slot channel while a harness held a token")
+		}
+		if err := h.Close(context.Background()); err != nil {
+			t.Errorf("Close(): %v", err)
+		}
+	}()
+	SetMaxConcurrentEngines(2)
+}
+
+func TestParseMappedPortRefusesTheEngineDefaultPort(t *testing.T) {
+	if _, err := parseMappedPort("127.0.0.1:3306\n", 3306); err == nil {
+		t.Fatal("parseMappedPort() accepted the engine default host port")
+	}
+	port, err := parseMappedPort("127.0.0.1:43123\n", 3306)
+	if err != nil || port != 43123 {
+		t.Fatalf("parseMappedPort() = %d, %v, want 43123", port, err)
+	}
+}
+
+type interruptingRunner struct {
+	scriptedRunner
+	harness  *Harness
+	on       string
+	fired    bool
+	done     chan struct{}
+	closeErr error
+}
+
+func (r *interruptingRunner) Run(ctx context.Context, endpoint string, args ...string) (string, error) {
+	if !r.fired && len(args) > 0 && args[0] == r.on {
+		r.fired = true
+		r.done = make(chan struct{})
+		go func() {
+			defer close(r.done)
+			r.closeErr = r.harness.Close(context.Background())
+		}()
+		select {
+		case <-r.done:
+			r.closeErr = errors.New("Close finished while a create command was still running")
+		case <-time.After(25 * time.Millisecond):
+		}
+	}
+	return r.scriptedRunner.Run(ctx, endpoint, args...)
+}
+
+func TestCloseDuringCreateStillRemovesTheCreatedResource(t *testing.T) {
+	for _, step := range []string{"run", "volume"} {
+		t.Run("interrupted during "+step, func(t *testing.T) {
+			runner := &interruptingRunner{on: step}
+			h, err := New(testConfig(runner))
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			runner.harness = h
+			if _, err := h.Start(context.Background()); err == nil {
+				t.Fatal("Start() succeeded after the harness was closed mid-startup")
+			}
+			if runner.done == nil {
+				t.Fatalf("the %q step never ran, so the race was not exercised", step)
+			}
+			select {
+			case <-runner.done:
+			case <-time.After(30 * time.Second):
+				t.Fatal("Close did not return after Start finished")
+			}
+			if runner.closeErr != nil {
+				t.Fatalf("Close() during startup: %v", runner.closeErr)
+			}
+			if runner.containerLive || runner.volumePresent || runner.imagePresent(h.runImage) {
+				t.Fatal("interrupt left a generated resource behind")
+			}
+			select {
+			case engineSlots <- struct{}{}:
+				<-engineSlots
+			default:
+				t.Fatal("interrupt leaked the engine slot")
+			}
+		})
+	}
+}
+
+type teardownProbeRunner struct {
+	scriptedRunner
+	harness *Harness
+	probes  []teardownProbe
+}
+
+type teardownProbe struct {
+	command    string
+	registered bool
+	armed      bool
+}
+
+func (r *teardownProbeRunner) Run(ctx context.Context, endpoint string, args ...string) (string, error) {
+	if len(args) > 1 && args[1] == "rm" {
+		interruptCleanup.mu.Lock()
+		_, registered := interruptCleanup.live[r.harness]
+		armed := interruptCleanup.signals != nil
+		interruptCleanup.mu.Unlock()
+		r.probes = append(r.probes, teardownProbe{command: args[0] + " " + args[1], registered: registered, armed: armed})
+	}
+	return r.scriptedRunner.Run(ctx, endpoint, args...)
+}
+
+func TestCloseKeepsInterruptCleanupArmedUntilTeardownFinishes(t *testing.T) {
+	runner := &teardownProbeRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	runner.harness = h
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if len(runner.probes) != 3 {
+		t.Fatalf("teardown probes = %+v, want one per generated resource", runner.probes)
+	}
+	for _, probe := range runner.probes {
+		if !probe.registered || !probe.armed {
+			t.Fatalf("%q ran outside the interrupt cleanup: registered=%t armed=%t", probe.command, probe.registered, probe.armed)
+		}
+	}
+	interruptCleanup.mu.Lock()
+	_, registered := interruptCleanup.live[h]
+	interruptCleanup.mu.Unlock()
+	if registered {
+		t.Fatal("Close left the finished harness registered for interrupt cleanup")
+	}
+}
+
+func TestCloseCleansUpWithCanceledCallerContext(t *testing.T) {
+	runner := &contextAwareRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	canceled, cancel := context.WithCancel(context.Background())
+	cancel()
+	if err := h.Close(canceled); err != nil {
+		t.Fatalf("Close() with canceled context: %v", err)
+	}
+	if runner.containerLive || runner.volumePresent || runner.imagePresent(h.runImage) {
+		t.Fatal("Close() with canceled context left a generated resource behind")
+	}
+	interruptCleanup.mu.Lock()
+	_, registered := interruptCleanup.live[h]
+	interruptCleanup.mu.Unlock()
+	if registered {
+		t.Fatal("Close() with canceled context left interrupt cleanup registered")
+	}
+}
+
+func TestNewRequiresTheImageFootprint(t *testing.T) {
+	for _, bytes := range []uint64{0, maxExpectedImageBytes + 1} {
+		config := testConfig(&scriptedRunner{})
+		config.ExpectedImageBytes = bytes
+		if _, err := New(config); err == nil {
+			t.Fatalf("New() accepted an image footprint of %d, which cannot gate a pull", bytes)
+		}
+	}
+}
+
+func TestStartRefusesToPullWithoutHeadroomForTheImage(t *testing.T) {
+	const imageBytes = 830 << 20
+	for _, tc := range []struct {
+		name     string
+		free     uint64
+		cached   bool
+		wantPull bool
+	}{
+		{name: "free space barely exceeds the image itself", free: 854 << 20},
+		{name: "free space clears the documented headroom", free: imagePullFreeSpaceFactor * imageBytes, wantPull: true},
+		{name: "cached image needs no headroom after capacity proof", free: 854 << 20, cached: true, wantPull: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			runner := &scriptedRunner{}
+			config := testConfig(runner)
+			config.ExpectedImageBytes = imageBytes
+			config.DiskFreeAt = func(string) (uint64, error) { return tc.free, nil }
+			if tc.cached {
+				runner.setImage(config.Image, true)
+			}
+			h, err := New(config)
+			if err != nil {
+				t.Fatalf("New(): %v", err)
+			}
+			_, startErr := h.Start(context.Background())
+			if err := h.Close(context.Background()); err != nil {
+				t.Fatalf("Close(): %v", err)
+			}
+			if tc.wantPull && startErr != nil {
+				t.Fatalf("Start(): %v", startErr)
+			}
+			if !tc.wantPull && startErr == nil {
+				t.Fatal("Start() pulled an image the target had no room for")
+			}
+			if pulled := commandsContain(runner.commands, "pull", config.Image); pulled != tc.wantPull {
+				t.Fatalf("pull issued = %t, want %t (commands = %v)", pulled, tc.wantPull, runner.commands)
+			}
+			if !tc.wantPull && (runner.containerLive || runner.volumePresent) {
+				t.Fatal("a refused start left a container or volume behind")
+			}
+		})
+	}
+}
+
+func TestTargetCapacityUsesTheProvenStorePath(t *testing.T) {
+	runner := &scriptedRunner{}
+	config := testConfig(runner)
+	var paths []string
+	config.DiskFreeAt = func(path string) (uint64, error) {
+		paths = append(paths, path)
+		return 1 << 30, nil
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if len(paths) == 0 {
+		t.Fatal("target capacity was never measured")
+	}
+	for _, path := range paths {
+		if path != "/var/lib/containers/storage" {
+			t.Fatalf("capacity path = %q, want the proven image-store path", path)
+		}
+	}
+}
+
+func TestStartUsesPodmanMachineDaemonCapacity(t *testing.T) {
+	runner := &scriptedRunner{infoOutput: "unix:///run/user/1000/podman/podman.sock\t/var/lib/containers/storage\t300\t100\n"}
+	config := testConfig(runner)
+	var hostCapacityCalls int
+	config.DiskFreeAt = func(string) (uint64, error) {
+		hostCapacityCalls++
+		return 0, errors.New("host store is not mounted")
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	defer func() {
+		if err := h.Close(context.Background()); err != nil {
+			t.Fatalf("Close(): %v", err)
+		}
+	}()
+	if _, err := h.Start(context.Background()); err != nil {
+		t.Fatalf("Start(): %v", err)
+	}
+	if hostCapacityCalls != 0 {
+		t.Fatalf("host capacity checks = %d, want daemon capacity for a forwarded Podman machine", hostCapacityCalls)
+	}
+	if report := h.Report(); report.DiskFreeBefore != 200 {
+		t.Fatalf("disk report before = %d, want daemon-reported free capacity", report.DiskFreeBefore)
+	}
+}
+
+func TestStartRefusesForwardedPodmanMachineWithoutDaemonCapacity(t *testing.T) {
+	runner := &scriptedRunner{infoOutput: "unix:///run/user/1000/podman/podman.sock\t/var/lib/containers/storage\tunknown\t100\n"}
+	config := testConfig(runner)
+	config.DiskFreeAt = func(string) (uint64, error) {
+		return 1 << 30, nil
+	}
+	h, err := New(config)
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil || !strings.Contains(err.Error(), "invalid image-store capacity") {
+		t.Fatalf("Start() error = %v, want a forwarded-target capacity refusal", err)
+	}
+	for _, prefix := range [][]string{{"pull"}, {"image", "tag"}, {"volume", "create"}, {"run"}} {
+		if commandsContain(runner.commands, prefix...) {
+			t.Fatalf("commands = %v, want no mutation before forwarded capacity is proven", runner.commands)
+		}
+	}
+}
+
+func TestStartRefusesToCreateAfterClose(t *testing.T) {
+	runner := &scriptedRunner{}
+	h, err := New(testConfig(runner))
+	if err != nil {
+		t.Fatalf("New(): %v", err)
+	}
+	if err := h.Close(context.Background()); err != nil {
+		t.Fatalf("Close(): %v", err)
+	}
+	if _, err := h.Start(context.Background()); err == nil {
+		t.Fatal("Start() created resources after the harness was closed")
+	}
+	if commandsContain(runner.commands, "run") || commandsContain(runner.commands, "volume", "create") {
+		t.Fatalf("commands = %v, want no creates after Close", runner.commands)
+	}
+	interruptCleanup.mu.Lock()
+	_, registered := interruptCleanup.live[h]
+	interruptCleanup.mu.Unlock()
+	if registered {
+		t.Fatal("Start() registered an already closed harness for interrupt cleanup")
+	}
+	select {
+	case engineSlots <- struct{}{}:
+		<-engineSlots
+	default:
+		t.Fatal("a Start refused after Close leaked the engine slot")
+	}
+}
+
+func TestParseTargetIdentity(t *testing.T) {
+	identity, err := parseTargetIdentity("/tmp/dbtest.sock\t/var/lib/containers/storage\t0\t0\n", "/tmp/dbtest.sock")
+	if err != nil {
+		t.Fatalf("parseTargetIdentity(): %v", err)
+	}
+	if identity.socketPath != "/tmp/dbtest.sock" || identity.graphRoot != "/var/lib/containers/storage" {
+		t.Fatalf("identity = %+v, want socket and image-store paths", identity)
+	}
+	for _, raw := range []string{"", "/tmp/socket", "/tmp/socket\t../store\t0\t0", "/tmp/socket\t/store\t0\t0\nsecond"} {
+		if _, err := parseTargetIdentity(raw, "/tmp/socket"); err == nil {
+			t.Fatalf("parseTargetIdentity(%q) accepted invalid target evidence", raw)
+		}
+	}
+}

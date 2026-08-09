@@ -20,6 +20,7 @@ import (
 )
 
 var ErrUnsupportedOperation = errors.New("unsupported connector operation")
+var ErrOpaqueCursorOrderUnavailable = errors.New("opaque cursor order is unavailable")
 
 var defaultRegistryBuilder = struct {
 	mu sync.RWMutex
@@ -259,12 +260,24 @@ func PayloadApprovalKey(recordIndex int, field string) string {
 	return fmt.Sprintf("%d:%s", recordIndex, field)
 }
 
+type OpaqueCursorState struct {
+	Token   []byte
+	Present bool
+}
+
+type SourceOrderedCursorReader interface {
+	CursorStateFromRecord(Record, string) (OpaqueCursorState, error)
+	ValidateCursorField(RuntimeConfig, string) error
+	CompareCursorStates(OpaqueCursorState, OpaqueCursorState) (int, error)
+}
+
 type ReadRequest struct {
-	Stream string
-	Config RuntimeConfig
-	State  map[string]string
-	Query  map[string]string
-	Limit  int
+	Stream      string
+	Config      RuntimeConfig
+	State       map[string]string
+	CursorState OpaqueCursorState
+	Query       map[string]string
+	Limit       int
 }
 
 type DirectReadRequest struct {
@@ -666,10 +679,15 @@ type ChangefeedMechanism string
 
 const (
 	ChangefeedMechanismLogicalReplication ChangefeedMechanism = "logical_replication"
-	ChangefeedMechanismIncrementalCursor  ChangefeedMechanism = "incremental_cursor"
-	ChangefeedMechanismWebhook            ChangefeedMechanism = "webhook"
-	ChangefeedMechanismEventStream        ChangefeedMechanism = "event_stream"
-	ChangefeedMechanismPollingWatermark   ChangefeedMechanism = "polling_watermark"
+	// ChangefeedMechanismBinlogReplication identifies MySQL/MariaDB's binary
+	// log replication protocol. It is distinct from PostgreSQL logical
+	// replication: each mechanism has different server prerequisites,
+	// checkpoint positions, and decoders.
+	ChangefeedMechanismBinlogReplication ChangefeedMechanism = "binlog_replication"
+	ChangefeedMechanismIncrementalCursor ChangefeedMechanism = "incremental_cursor"
+	ChangefeedMechanismWebhook           ChangefeedMechanism = "webhook"
+	ChangefeedMechanismEventStream       ChangefeedMechanism = "event_stream"
+	ChangefeedMechanismPollingWatermark  ChangefeedMechanism = "polling_watermark"
 )
 
 // ChangefeedSource records the provider artifact that supports a declared
@@ -922,7 +940,7 @@ func (s ChangefeedStatus) valid() bool {
 
 func (m ChangefeedMechanism) valid() bool {
 	switch m {
-	case ChangefeedMechanismLogicalReplication, ChangefeedMechanismIncrementalCursor, ChangefeedMechanismWebhook, ChangefeedMechanismEventStream, ChangefeedMechanismPollingWatermark:
+	case ChangefeedMechanismLogicalReplication, ChangefeedMechanismBinlogReplication, ChangefeedMechanismIncrementalCursor, ChangefeedMechanismWebhook, ChangefeedMechanismEventStream, ChangefeedMechanismPollingWatermark:
 		return true
 	default:
 		return false

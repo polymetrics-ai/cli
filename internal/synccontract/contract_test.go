@@ -59,6 +59,9 @@ func TestCheckpointEnvelopePreservesOpaqueTokensAndPartitionState(t *testing.T) 
 	if !bytes.Equal(decoded.Position.Primary, checkpoint.Position.Primary) || !bytes.Equal(decoded.Position.TieBreaker, checkpoint.Position.TieBreaker) {
 		t.Fatalf("global ordering token changed: got %#v want %#v", decoded.Position, checkpoint.Position)
 	}
+	if decoded.PositionObserved == nil || checkpoint.PositionObserved == nil || *decoded.PositionObserved != *checkpoint.PositionObserved {
+		t.Fatalf("position observation changed: got %#v want %#v", decoded.PositionObserved, checkpoint.PositionObserved)
+	}
 	if !bytes.Equal(decoded.Partitions[0].Partition, checkpoint.Partitions[0].Partition) || !bytes.Equal(decoded.Partitions[0].Position.Primary, checkpoint.Partitions[0].Position.Primary) {
 		t.Fatalf("partition token changed: got %#v want %#v", decoded.Partitions[0], checkpoint.Partitions[0])
 	}
@@ -77,8 +80,12 @@ func TestCheckpointEnvelopePreservesOpaqueTokensAndPartitionState(t *testing.T) 
 	clone.Dedupe.Value[0] ^= 0xff
 	clone.DedupeWindow.Start[0] ^= 0xff
 	clone.DedupeWindow.End[0] ^= 0xff
+	*clone.PositionObserved = false
 	if bytes.Equal(clone.Position.Primary, checkpoint.Position.Primary) || bytes.Equal(clone.Partitions[0].Position.Primary, checkpoint.Partitions[0].Position.Primary) || bytes.Equal(clone.SnapshotBarrier.Token, checkpoint.SnapshotBarrier.Token) || bytes.Equal(clone.SourceGeneration, checkpoint.SourceGeneration) || bytes.Equal(clone.Dedupe.Value, checkpoint.Dedupe.Value) || bytes.Equal(clone.DedupeWindow.Start, checkpoint.DedupeWindow.Start) || bytes.Equal(clone.DedupeWindow.End, checkpoint.DedupeWindow.End) {
 		t.Fatal("CheckpointEnvelope.Clone() aliases opaque token storage")
+	}
+	if !*checkpoint.PositionObserved {
+		t.Fatal("CheckpointEnvelope.Clone() aliases position observation")
 	}
 }
 
@@ -494,6 +501,7 @@ func TestConformanceFixturesAreVersionedAndDefensivelyCopied(t *testing.T) {
 }
 
 func validCheckpoint() CheckpointEnvelope {
+	positionObserved := true
 	return CheckpointEnvelope{
 		StateVersion: StateVersion,
 		Source: SourceIdentity{
@@ -510,6 +518,7 @@ func validCheckpoint() CheckpointEnvelope {
 			Primary:    OpaqueToken{0xff, 0x00, 0x02},
 			TieBreaker: OpaqueToken{0x01, 0x00, 0xfe},
 		},
+		PositionObserved: &positionObserved,
 		Partitions: []PartitionState{{
 			Partition: OpaqueToken{0x00, 0xff, 0x02},
 			Position: CheckpointPosition{
