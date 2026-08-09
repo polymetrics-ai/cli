@@ -2670,3 +2670,25 @@ $ go test -timeout 20m ./internal/connectors/commandrunner \
   -run '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1
 ok   polymetrics.ai/internal/connectors/commandrunner
 ```
+
+**Green 33c(1) — 31 partial reverse-ETL aliases now have exact record forms.**
+`gen-github-parity.py` derives each missing required top-level field from the action's concrete
+`record_schema`: scalars retain scalar flags, declared objects/non-string arrays become required
+`json` record flags, and string arrays retain `string_array`. It refuses root `oneOf`/`anyOf`
+instead of broadening an input contract. This changed the source inventory from 37 partial rows to
+the six true read-alias gaps; the complete-parity red test now reports 22 nonterminal rows
+(6 partial + 8 planned + 8 non-held unsafe), down from 53. The shared runtime sweep confirms none
+of the 31 promotions stops at preflight.
+
+```
+$ python3 scripts/gen-github-parity.py
+generated: 0 endpoints covered
+  promoted partial structured writes: 31
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs/github
+connectorgen validate: 1 connector(s) checked, 0 findings
+
+$ go test -timeout 20m ./internal/connectors/commandrunner \
+  -run '^TestEveryImplementedCommandPassesRuntimePreflight$' -count=1
+ok   polymetrics.ai/internal/connectors/commandrunner
+```

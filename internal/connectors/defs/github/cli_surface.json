@@ -20171,7 +20171,7 @@
       "path": "gists create",
       "summary": "Create a gist",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "gists_create",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/gists/gists#create-a-gist",
@@ -20185,6 +20185,13 @@
           "maps_to": "record.description"
         },
         {
+          "name": "files",
+          "type": "json",
+          "maps_to": "record.files",
+          "required": true,
+          "summary": "Required files record field."
+        },
+        {
           "name": "public",
           "type": "string",
           "summary": "Sets public.",
@@ -20196,8 +20203,7 @@
           "method": "POST",
           "path": "/gists"
         }
-      ],
-      "notes": "Required record field(s) files have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "gists update",
@@ -21101,7 +21107,7 @@
       "path": "actions create-hosted-runner-for-org",
       "summary": "Create a GitHub-hosted runner for an organization",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "actions_create_hosted_runner_for_org",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/hosted-runners#create-a-github-hosted-runner-for-an-organization",
@@ -21109,11 +21115,29 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
+          "name": "enable-static-ip",
+          "type": "boolean",
+          "summary": "Sets enable_static_ip.",
+          "maps_to": "record.enable_static_ip"
+        },
+        {
+          "name": "image",
+          "type": "json",
+          "maps_to": "record.image",
+          "required": true,
+          "summary": "Required image record field."
+        },
+        {
+          "name": "image-gen",
+          "type": "boolean",
+          "summary": "Sets image_gen.",
+          "maps_to": "record.image_gen"
+        },
+        {
+          "name": "maximum-runners",
+          "type": "integer",
+          "summary": "Sets maximum_runners.",
+          "maps_to": "record.maximum_runners"
         },
         {
           "name": "name",
@@ -21123,10 +21147,10 @@
           "required": true
         },
         {
-          "name": "size",
+          "name": "org",
           "type": "string",
-          "summary": "Sets size.",
-          "maps_to": "record.size",
+          "summary": "The organization name.",
+          "maps_to": "record.org",
           "required": true
         },
         {
@@ -21137,22 +21161,11 @@
           "required": true
         },
         {
-          "name": "maximum-runners",
-          "type": "integer",
-          "summary": "Sets maximum_runners.",
-          "maps_to": "record.maximum_runners"
-        },
-        {
-          "name": "enable-static-ip",
-          "type": "boolean",
-          "summary": "Sets enable_static_ip.",
-          "maps_to": "record.enable_static_ip"
-        },
-        {
-          "name": "image-gen",
-          "type": "boolean",
-          "summary": "Sets image_gen.",
-          "maps_to": "record.image_gen"
+          "name": "size",
+          "type": "string",
+          "summary": "Sets size.",
+          "maps_to": "record.size",
+          "required": true
         }
       ],
       "api_surface": [
@@ -21160,8 +21173,7 @@
           "method": "POST",
           "path": "/orgs/{org}/actions/hosted-runners"
         }
-      ],
-      "notes": "Required record field(s) image have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "actions delete-custom-image-from-org",
@@ -21646,7 +21658,7 @@
       "path": "actions set-selected-repositories-enabled-github-actions-organization",
       "summary": "Set selected repositories enabled for GitHub Actions in an organization",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "actions_set_selected_repositories_enabled_github_actions_organization",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-selected-repositories-enabled-for-github-actions-in-an-organization",
@@ -21659,6 +21671,13 @@
           "summary": "The organization name.",
           "maps_to": "record.org",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -21666,8 +21685,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/actions/permissions/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "actions enable-selected-repository-github-actions-organization",
@@ -21821,7 +21839,7 @@
       "path": "actions set-selected-repositories-self-hosted-runners-organization",
       "summary": "Set repositories allowed to use self-hosted runners in an organization",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "actions_set_selected_repositories_self_hosted_runners_organization",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/permissions#set-repositories-allowed-to-use-self-hosted-runners-in-an-organization",
@@ -21834,6 +21852,13 @@
           "summary": "The organization name.",
           "maps_to": "record.org",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -21841,8 +21866,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/actions/permissions/self-hosted-runners/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "actions enable-selected-repository-self-hosted-runners-organization",
@@ -22132,7 +22156,7 @@
       "path": "actions set-repo-access-to-self-hosted-runner-group-in-org",
       "summary": "Set repository access for a self-hosted runner group in an organization",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "actions_set_repo_access_to_self_hosted_runner_group_in_org",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runner-groups#set-repository-access-for-a-self-hosted-runner-group-in-an-organization",
@@ -22152,6 +22176,13 @@
           "summary": "Unique identifier of the self-hosted runner group.",
           "maps_to": "record.runner_group_id",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -22159,8 +22190,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/actions/runner-groups/{runner_group_id}/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "actions add-repo-access-to-self-hosted-runner-group-in-org",
@@ -22246,7 +22276,7 @@
       "path": "actions set-self-hosted-runners-in-group-for-org",
       "summary": "Set self-hosted runners in a group for an organization",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "actions_set_self_hosted_runners_in_group_for_org",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/self-hosted-runner-groups#set-self-hosted-runners-in-a-group-for-an-organization",
@@ -22266,6 +22296,13 @@
           "summary": "Unique identifier of the self-hosted runner group.",
           "maps_to": "record.runner_group_id",
           "required": true
+        },
+        {
+          "name": "runners",
+          "type": "json",
+          "maps_to": "record.runners",
+          "required": true,
+          "summary": "Required runners record field."
         }
       ],
       "api_surface": [
@@ -22273,8 +22310,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/actions/runner-groups/{runner_group_id}/runners"
         }
-      ],
-      "notes": "Required record field(s) runners have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "actions add-self-hosted-runner-to-group-for-org",
@@ -22743,7 +22779,7 @@
       "path": "actions set-selected-repos-for-org-secret",
       "summary": "Set selected repositories for an organization secret",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "actions_set_selected_repos_for_org_secret",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/secrets#set-selected-repositories-for-an-organization-secret",
@@ -22763,6 +22799,13 @@
           "summary": "The name of the secret.",
           "maps_to": "record.secret_name",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -22770,8 +22813,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/actions/secrets/{secret_name}/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "actions add-selected-repo-to-org-secret",
@@ -22992,13 +23034,20 @@
       "path": "actions set-selected-repos-for-org-variable",
       "summary": "Set selected repositories for an organization variable",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "actions_set_selected_repos_for_org_variable",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/actions/variables#set-selected-repositories-for-an-organization-variable",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization variable.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the variable.",
+          "maps_to": "record.name",
+          "required": true
+        },
         {
           "name": "org",
           "type": "string",
@@ -23007,11 +23056,11 @@
           "required": true
         },
         {
-          "name": "name",
-          "type": "string",
-          "summary": "The name of the variable.",
-          "maps_to": "record.name",
-          "required": true
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -23019,8 +23068,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/actions/variables/{name}/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "actions add-selected-repo-to-org-variable",
@@ -23198,7 +23246,7 @@
       "path": "agents set-selected-repos-for-org-secret",
       "summary": "Set selected repositories for an organization secret",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "agents_set_selected_repos_for_org_secret",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agents/secrets#set-selected-repositories-for-an-organization-secret",
@@ -23218,6 +23266,13 @@
           "summary": "The name of the secret.",
           "maps_to": "record.secret_name",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -23225,8 +23280,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/agents/secrets/{secret_name}/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "agents add-selected-repo-to-org-secret",
@@ -23447,13 +23501,20 @@
       "path": "agents set-selected-repos-for-org-variable",
       "summary": "Set selected repositories for an organization variable",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "agents_set_selected_repos_for_org_variable",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/agents/variables#set-selected-repositories-for-an-organization-variable",
       "risk": "Mutates existing provider-side state: Set selected repositories for an organization variable.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "The name of the variable.",
+          "maps_to": "record.name",
+          "required": true
+        },
         {
           "name": "org",
           "type": "string",
@@ -23462,11 +23523,11 @@
           "required": true
         },
         {
-          "name": "name",
-          "type": "string",
-          "summary": "The name of the variable.",
-          "maps_to": "record.name",
-          "required": true
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -23474,8 +23535,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/agents/variables/{name}/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "agents add-selected-repo-to-org-variable",
@@ -23662,7 +23722,7 @@
       "path": "orgs set-cluster-deployment-records",
       "summary": "Set cluster deployment records",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "orgs_set_cluster_deployment_records",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/artifact-metadata#set-cluster-deployment-records",
@@ -23670,18 +23730,18 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
-        {
           "name": "cluster",
           "type": "string",
           "summary": "The cluster name.",
           "maps_to": "record.cluster",
           "required": true
+        },
+        {
+          "name": "deployments",
+          "type": "json",
+          "maps_to": "record.deployments",
+          "required": true,
+          "summary": "Required deployments record field."
         },
         {
           "name": "logical-environment",
@@ -23691,16 +23751,23 @@
           "required": true
         },
         {
-          "name": "physical-environment",
+          "name": "org",
           "type": "string",
-          "summary": "Sets physical_environment.",
-          "maps_to": "record.physical_environment"
+          "summary": "The organization name.",
+          "maps_to": "record.org",
+          "required": true
         },
         {
           "name": "partial-success",
           "type": "boolean",
           "summary": "Sets partial_success.",
           "maps_to": "record.partial_success"
+        },
+        {
+          "name": "physical-environment",
+          "type": "string",
+          "summary": "Sets physical_environment.",
+          "maps_to": "record.physical_environment"
         },
         {
           "name": "return-records",
@@ -23714,27 +23781,19 @@
           "method": "POST",
           "path": "/orgs/{org}/artifacts/metadata/deployment-record/cluster/{cluster}"
         }
-      ],
-      "notes": "Required record field(s) deployments have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "orgs create-cluster-deployment-records-job",
       "summary": "Create a cluster deployment records job",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "orgs_create_cluster_deployment_records_job",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/artifact-metadata#create-a-cluster-deployment-records-job",
       "risk": "Creates provider-side state: Create a cluster deployment records job.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
-        {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
         {
           "name": "cluster",
           "type": "string",
@@ -23743,10 +23802,24 @@
           "required": true
         },
         {
+          "name": "deployments",
+          "type": "json",
+          "maps_to": "record.deployments",
+          "required": true,
+          "summary": "Required deployments record field."
+        },
+        {
           "name": "logical-environment",
           "type": "string",
           "summary": "Sets logical_environment.",
           "maps_to": "record.logical_environment",
+          "required": true
+        },
+        {
+          "name": "org",
+          "type": "string",
+          "summary": "The organization name.",
+          "maps_to": "record.org",
           "required": true
         },
         {
@@ -23761,8 +23834,7 @@
           "method": "POST",
           "path": "/orgs/{org}/artifacts/metadata/deployment-record/cluster/{cluster}/jobs"
         }
-      ],
-      "notes": "Required record field(s) deployments have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "orgs create-artifact-storage-record",
@@ -24403,7 +24475,7 @@
       "path": "code-security detach-configuration",
       "summary": "Detach configurations from repositories",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "code_security_detach_configuration",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/code-security/configurations#detach-configurations-from-repositories",
@@ -24416,6 +24488,13 @@
           "summary": "The organization name.",
           "maps_to": "record.org",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -24423,8 +24502,7 @@
           "method": "DELETE",
           "path": "/orgs/{org}/code-security/configurations/detach"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "code-security update-configuration",
@@ -25021,7 +25099,7 @@
       "path": "codespaces set-selected-repos-for-org-secret",
       "summary": "Set selected repositories for an organization secret",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "codespaces_set_selected_repos_for_org_secret",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/organization-secrets#set-selected-repositories-for-an-organization-secret",
@@ -25041,6 +25119,13 @@
           "summary": "The name of the secret.",
           "maps_to": "record.secret_name",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -25048,8 +25133,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/codespaces/secrets/{secret_name}/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "codespaces add-selected-repo-to-org-secret",
@@ -25458,7 +25542,7 @@
       "path": "copilot-spaces create-resource-for-org",
       "summary": "Create a resource for an organization Copilot Space",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "copilot_spaces_create_resource_for_org",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#create-a-resource-for-an-organization-copilot-space",
@@ -25466,17 +25550,17 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
+          "name": "metadata",
+          "type": "json",
+          "maps_to": "record.metadata",
+          "required": true,
+          "summary": "Required metadata record field."
+        },
+        {
           "name": "org",
           "type": "string",
           "summary": "The organization name.",
           "maps_to": "record.org",
-          "required": true
-        },
-        {
-          "name": "space-number",
-          "type": "integer",
-          "summary": "The unique identifier of the Copilot Space.",
-          "maps_to": "record.space_number",
           "required": true
         },
         {
@@ -25492,6 +25576,13 @@
             "github_pull_request"
           ],
           "required": true
+        },
+        {
+          "name": "space-number",
+          "type": "integer",
+          "summary": "The unique identifier of the Copilot Space.",
+          "maps_to": "record.space_number",
+          "required": true
         }
       ],
       "api_surface": [
@@ -25499,8 +25590,7 @@
           "method": "POST",
           "path": "/orgs/{org}/copilot-spaces/{space_number}/resources"
         }
-      ],
-      "notes": "Required record field(s) metadata have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "copilot-spaces update-resource-for-org",
@@ -25756,7 +25846,7 @@
       "path": "copilot set-copilot-coding-agent-selected-repositories-for-organization",
       "summary": "Set selected repositories for Copilot cloud agent in an organization",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "copilot_set_copilot_coding_agent_selected_repositories_for_organization",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot/copilot-coding-agent-management#set-selected-repositories-for-copilot-cloud-agent-in-an-organization",
@@ -25769,6 +25859,13 @@
           "summary": "The organization name.",
           "maps_to": "record.org",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -25776,8 +25873,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/copilot/coding-agent/permissions/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "copilot enable-copilot-coding-agent-for-repository-in-organization",
@@ -26034,7 +26130,7 @@
       "path": "dependabot set-selected-repos-for-org-secret",
       "summary": "Set selected repositories for an organization secret",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "dependabot_set_selected_repos_for_org_secret",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/dependabot/secrets#set-selected-repositories-for-an-organization-secret",
@@ -26054,6 +26150,13 @@
           "summary": "The name of the secret.",
           "maps_to": "record.secret_name",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -26061,8 +26164,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/dependabot/secrets/{secret_name}/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "dependabot add-selected-repo-to-org-secret",
@@ -27836,20 +27938,13 @@
       "path": "orgs update-pat-accesses",
       "summary": "Update the access to organization resources via fine-grained personal access tokens",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "orgs_update_pat_accesses",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/personal-access-tokens#update-the-access-to-organization-resources-via-fine-grained-personal-access-tokens",
       "risk": "Creates provider-side state: Update the access to organization resources via fine-grained personal access tokens.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
-        {
-          "name": "org",
-          "type": "string",
-          "summary": "The organization name.",
-          "maps_to": "record.org",
-          "required": true
-        },
         {
           "name": "action",
           "type": "enum",
@@ -27859,6 +27954,20 @@
             "revoke"
           ],
           "required": true
+        },
+        {
+          "name": "org",
+          "type": "string",
+          "summary": "The organization name.",
+          "maps_to": "record.org",
+          "required": true
+        },
+        {
+          "name": "pat-ids",
+          "type": "json",
+          "maps_to": "record.pat_ids",
+          "required": true,
+          "summary": "Required pat ids record field."
         }
       ],
       "api_surface": [
@@ -27866,8 +27975,7 @@
           "method": "POST",
           "path": "/orgs/{org}/personal-access-tokens"
         }
-      ],
-      "notes": "Required record field(s) pat_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "orgs update-pat-access",
@@ -28395,13 +28503,27 @@
       "path": "projects update-item-for-org",
       "summary": "Update project item for organization",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "projects_update_item_for_org",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#update-project-item-for-organization",
       "risk": "Mutates existing provider-side state: Update project item for organization.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
+        {
+          "name": "fields",
+          "type": "json",
+          "maps_to": "record.fields",
+          "required": true,
+          "summary": "Required fields record field."
+        },
+        {
+          "name": "item-id",
+          "type": "integer",
+          "summary": "The unique identifier of the project item.",
+          "maps_to": "record.item_id",
+          "required": true
+        },
         {
           "name": "org",
           "type": "string",
@@ -28415,13 +28537,6 @@
           "summary": "The project's number.",
           "maps_to": "record.project_number",
           "required": true
-        },
-        {
-          "name": "item-id",
-          "type": "integer",
-          "summary": "The unique identifier of the project item.",
-          "maps_to": "record.item_id",
-          "required": true
         }
       ],
       "api_surface": [
@@ -28429,8 +28544,7 @@
           "method": "PATCH",
           "path": "/orgs/{org}/projectsV2/{project_number}/items/{item_id}"
         }
-      ],
-      "notes": "Required record field(s) fields have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "projects delete-item-for-org",
@@ -28534,7 +28648,7 @@
       "path": "orgs custom-properties-for-repos-create-or-update-organization-definitions",
       "summary": "Create or update custom properties for an organization",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "orgs_custom_properties_for_repos_create_or_update_organization_definitions",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/custom-properties#create-or-update-custom-properties-for-an-organization",
@@ -28547,6 +28661,13 @@
           "summary": "The organization name.",
           "maps_to": "record.org",
           "required": true
+        },
+        {
+          "name": "properties",
+          "type": "json",
+          "maps_to": "record.properties",
+          "required": true,
+          "summary": "Required properties record field."
         }
       ],
       "api_surface": [
@@ -28554,8 +28675,7 @@
           "method": "PATCH",
           "path": "/orgs/{org}/properties/schema"
         }
-      ],
-      "notes": "Required record field(s) properties have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "orgs custom-properties-for-repos-create-or-update-organization-definition",
@@ -28681,7 +28801,7 @@
       "path": "orgs custom-properties-for-repos-create-or-update-organization-values",
       "summary": "Create or update custom property values for organization repositories",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "orgs_custom_properties_for_repos_create_or_update_organization_values",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/custom-properties#create-or-update-custom-property-values-for-organization-repositories",
@@ -28696,6 +28816,13 @@
           "required": true
         },
         {
+          "name": "properties",
+          "type": "json",
+          "maps_to": "record.properties",
+          "required": true,
+          "summary": "Required properties record field."
+        },
+        {
           "name": "repository-names",
           "type": "string_array",
           "summary": "Sets repository_names.",
@@ -28708,8 +28835,7 @@
           "method": "PATCH",
           "path": "/orgs/{org}/properties/values"
         }
-      ],
-      "notes": "Required record field(s) properties have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "orgs set-public-membership-for-authenticated-user",
@@ -29126,7 +29252,7 @@
       "path": "secret-scanning bulk-create-org-custom-patterns",
       "summary": "Bulk create organization custom patterns",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "secret_scanning_bulk_create_org_custom_patterns",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#bulk-create-organization-custom-patterns",
@@ -29139,6 +29265,13 @@
           "summary": "The organization name.",
           "maps_to": "record.org",
           "required": true
+        },
+        {
+          "name": "patterns",
+          "type": "json",
+          "maps_to": "record.patterns",
+          "required": true,
+          "summary": "Required patterns record field."
         }
       ],
       "api_surface": [
@@ -29146,14 +29279,13 @@
           "method": "POST",
           "path": "/orgs/{org}/secret-scanning/custom-patterns"
         }
-      ],
-      "notes": "Required record field(s) patterns have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "secret-scanning bulk-delete-org-custom-patterns",
       "summary": "Bulk delete organization custom patterns",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "secret_scanning_bulk_delete_org_custom_patterns",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#bulk-delete-organization-custom-patterns",
@@ -29166,6 +29298,13 @@
           "summary": "The organization name.",
           "maps_to": "record.org",
           "required": true
+        },
+        {
+          "name": "patterns",
+          "type": "json",
+          "maps_to": "record.patterns",
+          "required": true,
+          "summary": "Required patterns record field."
         },
         {
           "name": "post-delete-action",
@@ -29183,8 +29322,7 @@
           "method": "DELETE",
           "path": "/orgs/{org}/secret-scanning/custom-patterns"
         }
-      ],
-      "notes": "Required record field(s) patterns have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "secret-scanning update-org-pattern-configs",
@@ -29326,7 +29464,7 @@
       "path": "orgs set-immutable-releases-settings-repositories",
       "summary": "Set selected repositories for immutable releases enforcement",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "orgs_set_immutable_releases_settings_repositories",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/orgs/orgs#set-selected-repositories-for-immutable-releases-enforcement",
@@ -29339,6 +29477,13 @@
           "summary": "The organization name.",
           "maps_to": "record.org",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -29346,8 +29491,7 @@
           "method": "PUT",
           "path": "/orgs/{org}/settings/immutable-releases/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "orgs enable-selected-repository-immutable-releases-organization",
@@ -30171,32 +30315,46 @@
       "path": "secret-scanning bulk-create-repo-custom-patterns",
       "summary": "Bulk create repository custom patterns",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "secret_scanning_bulk_create_repo_custom_patterns",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#bulk-create-repository-custom-patterns",
       "risk": "Creates provider-side state: Bulk create repository custom patterns.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "patterns",
+          "type": "json",
+          "maps_to": "record.patterns",
+          "required": true,
+          "summary": "Required patterns record field."
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns"
         }
-      ],
-      "notes": "Required record field(s) patterns have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "secret-scanning bulk-delete-repo-custom-patterns",
       "summary": "Bulk delete repository custom patterns",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "secret_scanning_bulk_delete_repo_custom_patterns",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/secret-scanning/custom-patterns#bulk-delete-repository-custom-patterns",
       "risk": "Destructive: Bulk delete repository custom patterns. Removes provider-side state.",
       "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
+        {
+          "name": "patterns",
+          "type": "json",
+          "maps_to": "record.patterns",
+          "required": true,
+          "summary": "Required patterns record field."
+        },
         {
           "name": "post-delete-action",
           "type": "enum",
@@ -30213,39 +30371,52 @@
           "method": "DELETE",
           "path": "/repos/{owner}/{repo}/secret-scanning/custom-patterns"
         }
-      ],
-      "notes": "Required record field(s) patterns have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "pull-request-stacks create",
       "summary": "Create a pull request stack",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "pull_request_stacks_create",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/pulls/stacks#create-a-pull-request-stack",
       "risk": "Creates provider-side state: Create a pull request stack.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
-      "flags": [],
+      "flags": [
+        {
+          "name": "pull-requests",
+          "type": "json",
+          "maps_to": "record.pull_requests",
+          "required": true,
+          "summary": "Required pull requests record field."
+        }
+      ],
       "api_surface": [
         {
           "method": "POST",
           "path": "/repos/{owner}/{repo}/stacks"
         }
-      ],
-      "notes": "Required record field(s) pull_requests have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "pull-request-stacks add",
       "summary": "Add pull requests to a pull request stack",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "pull_request_stacks_add",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/pulls/stacks#add-pull-requests-to-a-pull-request-stack",
       "risk": "Creates provider-side state: Add pull requests to a pull request stack.",
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
+        {
+          "name": "pull-requests",
+          "type": "json",
+          "maps_to": "record.pull_requests",
+          "required": true,
+          "summary": "Required pull requests record field."
+        },
         {
           "name": "stack-number",
           "type": "integer",
@@ -30259,8 +30430,7 @@
           "method": "POST",
           "path": "/repos/{owner}/{repo}/stacks/{stack_number}/add"
         }
-      ],
-      "notes": "Required record field(s) pull_requests have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "pull-request-stacks unstack",
@@ -30859,7 +31029,7 @@
       "path": "codespaces set-repositories-for-secret-for-authenticated-user",
       "summary": "Set selected repositories for a user secret",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "codespaces_set_repositories_for_secret_for_authenticated_user",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/codespaces/secrets#set-selected-repositories-for-a-user-secret",
@@ -30872,6 +31042,13 @@
           "summary": "The name of the secret.",
           "maps_to": "record.secret_name",
           "required": true
+        },
+        {
+          "name": "selected-repository-ids",
+          "type": "json",
+          "maps_to": "record.selected_repository_ids",
+          "required": true,
+          "summary": "Required selected repository ids record field."
         }
       ],
       "api_surface": [
@@ -30879,8 +31056,7 @@
           "method": "PUT",
           "path": "/user/codespaces/secrets/{secret_name}/repositories"
         }
-      ],
-      "notes": "Required record field(s) selected_repository_ids have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "codespaces add-repository-for-secret-for-authenticated-user",
@@ -32680,7 +32856,7 @@
       "path": "copilot-spaces create-resource-for-user",
       "summary": "Create a resource for a Copilot Space for a user",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "copilot_spaces_create_resource_for_user",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/copilot-spaces/resources#create-a-resource-for-a-copilot-space-for-a-user",
@@ -32688,18 +32864,11 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "username",
-          "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
-          "required": true
-        },
-        {
-          "name": "space-number",
-          "type": "integer",
-          "summary": "The unique identifier of the Copilot Space.",
-          "maps_to": "record.space_number",
-          "required": true
+          "name": "metadata",
+          "type": "json",
+          "maps_to": "record.metadata",
+          "required": true,
+          "summary": "Required metadata record field."
         },
         {
           "name": "resource-type",
@@ -32714,6 +32883,20 @@
             "github_pull_request"
           ],
           "required": true
+        },
+        {
+          "name": "space-number",
+          "type": "integer",
+          "summary": "The unique identifier of the Copilot Space.",
+          "maps_to": "record.space_number",
+          "required": true
+        },
+        {
+          "name": "username",
+          "type": "string",
+          "summary": "The handle for the GitHub user account.",
+          "maps_to": "record.username",
+          "required": true
         }
       ],
       "api_surface": [
@@ -32721,8 +32904,7 @@
           "method": "POST",
           "path": "/users/{username}/copilot-spaces/{space_number}/resources"
         }
-      ],
-      "notes": "Required record field(s) metadata have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "copilot-spaces update-resource-for-user",
@@ -32982,7 +33164,7 @@
       "path": "projects update-item-for-user",
       "summary": "Update project item for user",
       "intent": "reverse_etl",
-      "availability": "partial",
+      "availability": "implemented",
       "write": "projects_update_item_for_user",
       "source_cli_path": "",
       "source_url": "https://docs.github.com/rest/projects/items#update-project-item-for-user",
@@ -32990,10 +33172,17 @@
       "approval": "Reverse ETL writes require plan, approval, execute; preview is optional.",
       "flags": [
         {
-          "name": "username",
-          "type": "string",
-          "summary": "The handle for the GitHub user account.",
-          "maps_to": "record.username",
+          "name": "fields",
+          "type": "json",
+          "maps_to": "record.fields",
+          "required": true,
+          "summary": "Required fields record field."
+        },
+        {
+          "name": "item-id",
+          "type": "integer",
+          "summary": "The unique identifier of the project item.",
+          "maps_to": "record.item_id",
           "required": true
         },
         {
@@ -33004,10 +33193,10 @@
           "required": true
         },
         {
-          "name": "item-id",
-          "type": "integer",
-          "summary": "The unique identifier of the project item.",
-          "maps_to": "record.item_id",
+          "name": "username",
+          "type": "string",
+          "summary": "The handle for the GitHub user account.",
+          "maps_to": "record.username",
           "required": true
         }
       ],
@@ -33016,8 +33205,7 @@
           "method": "PATCH",
           "path": "/users/{username}/projectsV2/{project_number}/items/{item_id}"
         }
-      ],
-      "notes": "Required record field(s) fields have no scalar leaf, so no flag can carry them from the command line; the write action is declared and reachable through reverse ETL with a record payload."
+      ]
     },
     {
       "path": "projects delete-item-for-user",

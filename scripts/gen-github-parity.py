@@ -506,6 +506,74 @@ def structured_record_flag(name, schema, required=False):
         raise ValueError(f"oneOf field {name!r} has unsupported schema type {kind!r}")
     return contract_flag(name.replace("_", "-"), flag_type, f"record.{name}", required=required)
 
+def materialized_record_flag(name, schema, required=False):
+    """Derive one closed record flag from a concrete top-level property.
+
+    This mirrors the shared connectorgen materializer: scalar fields retain a
+    scalar flag, while a declared object or non-string array becomes one
+    declaration-bound JSON record flag. It does not accept a raw body or a
+    nested mapping, and rejects a union so the endpoint must be expanded into
+    separate named actions first.
+    """
+    kind = schema.get("type")
+    if isinstance(kind, list) or kind is None:
+        raise ValueError(f"record field {name!r} has no single concrete type")
+    values = schema.get("enum")
+    if values and kind == "string":
+        return contract_flag(name.replace("_", "-"), "enum", f"record.{name}", required=required, values=values)
+    if kind in ("string", "integer", "number", "boolean", "object"):
+        flag_type = "json" if kind == "object" else kind
+        return contract_flag(name.replace("_", "-"), flag_type, f"record.{name}", required=required)
+    if kind == "array":
+        items = schema.get("items") or {}
+        item_type = items.get("type")
+        flag_type = "string_array" if item_type == "string" else "json"
+        return contract_flag(name.replace("_", "-"), flag_type, f"record.{name}", required=required)
+    raise ValueError(f"record field {name!r} has unsupported type {kind!r}")
+
+def promote_partial_structured_write_commands():
+    """Promote partial GitHub write aliases once their schema has a faithful CLI form.
+
+    The partial commands were not provider/runtime limitations: each already
+    referenced an executable reverse-ETL action, but their required object or
+    non-string array inputs lacked a command form. Build the form from the
+    action's top-level closed record schema, preserving the existing plan,
+    approval, and destructive-confirmation paths. Root unions are deliberately
+    rejected here; they require their own named actions rather than a generic
+    JSON escape hatch.
+    """
+    actions = {action["name"]: action for action in writes_doc["actions"]}
+    promoted = []
+    for command in cli_doc["commands"]:
+        if command.get("availability") != "partial" or not command.get("write"):
+            continue
+        action = actions.get(command["write"])
+        if action is None:
+            raise ValueError(f"partial command {command['path']!r} references missing write {command['write']!r}")
+        schema = action.get("record_schema") or {}
+        if "oneOf" in schema or "anyOf" in schema:
+            raise ValueError(f"partial command {command['path']!r} has a root union and needs separately named actions")
+        properties = schema.get("properties") or {}
+        required = set(schema.get("required") or [])
+        existing = {flag.get("maps_to"): flag for flag in command.get("flags", [])}
+        for name in sorted(required):
+            field = properties.get(name)
+            if field is None:
+                raise ValueError(f"partial command {command['path']!r} requires undeclared field {name!r}")
+            target = f"record.{name}"
+            flag = existing.get(target)
+            if flag is not None:
+                flag["required"] = True
+                continue
+            flag = materialized_record_flag(name, field, required=True)
+            flag["summary"] = f"Required {name.replace('_', ' ')} record field."
+            command.setdefault("flags", []).append(flag)
+        command["flags"].sort(key=lambda flag: flag["name"])
+        command["availability"] = "implemented"
+        command.pop("notes", None)
+        promoted.append(command["path"])
+    return promoted
+
 def append_explicit_one_of_write_contract(endpoint, operation, contract):
     """Append all concrete write contracts for one documented oneOf endpoint."""
     method = endpoint["method"]
@@ -596,6 +664,8 @@ def append_explicit_one_of_write_contract(endpoint, operation, contract):
         actions.append(action_name)
 
     endpoint["covered_by"] = {"writes": actions}
+
+promoted_partial_write_commands = promote_partial_structured_write_commands()
 
 new_ops, new_writes, new_cmds = [], [], []
 covered_added = 0
@@ -744,12 +814,27 @@ ops_doc["operations"].extend(new_ops)
 writes_doc["actions"].extend(new_writes)
 cli_doc["commands"].extend(new_cmds)
 
-json.dump(ops_doc, open(f"{ROOT}/operations.json", "w"), indent=2)
-json.dump(writes_doc, open(f"{ROOT}/writes.json", "w"), indent=2)
-json.dump(cli_doc, open(f"{ROOT}/cli_surface.json", "w"), indent=2)
-json.dump(api, open(f"{ROOT}/api_surface.json", "w"), indent=2)
+def write_generated_json(path, value):
+    # Keep generated artifacts byte-stable when their semantic content did not
+    # change. Existing source artifacts intentionally differ on their final
+    # newline convention, so preserve that convention as well as Unicode text.
+    with open(path, encoding="utf-8") as source:
+        existing = source.read()
+    encoded = json.dumps(value, indent=2, ensure_ascii=False)
+    if existing.endswith("\n"):
+        encoded += "\n"
+    if encoded == existing:
+        return
+    with open(path, "w", encoding="utf-8") as output:
+        output.write(encoded)
+
+write_generated_json(f"{ROOT}/operations.json", ops_doc)
+write_generated_json(f"{ROOT}/writes.json", writes_doc)
+write_generated_json(f"{ROOT}/cli_surface.json", cli_doc)
+write_generated_json(f"{ROOT}/api_surface.json", api)
 
 print(f"generated: {covered_added} endpoints covered")
 print(f"  new operations: {len(new_ops)} (total {len(ops_doc['operations'])})")
 print(f"  new write actions: {len(new_writes)} (total {len(writes_doc['actions'])})")
 print(f"  new cli commands: {len(new_cmds)} (total {len(cli_doc['commands'])})")
+print(f"  promoted partial structured writes: {len(promoted_partial_write_commands)}")
