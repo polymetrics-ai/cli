@@ -391,7 +391,7 @@
 | `recreation` | [`icons/recreation.svg`](../icons/recreation.svg) | Recreation.gov | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://ridb.recreation.gov/docs) | bundle definition |
 | `recruitee` | [`icons/recruitee.svg`](../icons/recruitee.svg) | Recruitee | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://apidocs.recruitee.com/) | bundle definition |
 | `recurly` | [`icons/recurly.svg`](../icons/recurly.svg) | Recurly | `api` | beta | check, catalog, read, write | 93 | 96 | [Documentation](https://recurly.com/developers/api/v2021-02-25/) | bundle definition |
-| `reddit` | [`icons/simple-icons/reddit.svg`](../icons/simple-icons/reddit.svg) | Reddit | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://www.reddit.com/dev/api/) | bundle definition |
+| `reddit` | [`icons/simple-icons/reddit.svg`](../icons/simple-icons/reddit.svg) | Reddit | `api` | ga | check, catalog, read, write | 50 | 122 | [Documentation](https://www.reddit.com/dev/api/) | bundle definition |
 | `referralhero` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | ReferralHero | `api` | ga | check, catalog, read, write | 21 | 17 | [Documentation](https://support.referralhero.com/integrate/rest-api) | bundle definition |
 | `rentcast` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | RentCast | `api` | ga | check, catalog, read | 6 | 0 | [Documentation](https://developers.rentcast.io/) | bundle definition |
 | `repairshopr` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | RepairShopr | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://api-docs.repairshopr.com/) | bundle definition |

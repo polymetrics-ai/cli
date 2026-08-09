@@ -1,0 +1,24 @@
+{
+  "record": {
+    "file_path": "fixture-emoji.png",
+    "mimetype": "image/png"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/api/v1/synthetic-conformance-value/emoji_asset_upload_s3.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "s3UploadLease": {
+        "action": "https://s3.amazonaws.com/reddit-fixture",
+        "fields": [
+          {
+            "name": "key",
+            "value": "synthetic/emoji.png"
+          }
+        ]
+      }
+    }
+  }
+}

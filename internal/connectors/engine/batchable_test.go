@@ -157,9 +157,9 @@ func TestBatchableManifestDoesNotAliasBundlePointer(t *testing.T) {
 }
 
 // R3 originally guarded the transition where no shipped bundle declared the
-// field. Google Calendar is the first intentional adopter, so lock the exact
-// shipped policy: every other action remains batchable by default, and these
-// safety-sensitive actions cannot silently become batchable.
+// field. Lock the exact shipped policy: every other action remains batchable
+// by default, and these safety-sensitive actions cannot silently become
+// batchable.
 func TestEveryShippedWriteActionHasExpectedBatchability(t *testing.T) {
 	expectedNonBatchable := map[string]struct{}{
 		"google-calendar/clear_calendar":              {},
@@ -172,6 +172,10 @@ func TestEveryShippedWriteActionHasExpectedBatchability(t *testing.T) {
 		"google-calendar/watch_calendar_list":         {},
 		"google-calendar/watch_events":                {},
 		"google-calendar/watch_settings":              {},
+		"reddit/emoji_asset_upload_s3":                {},
+		"reddit/upload_sr_img":                        {},
+		"reddit/widget_image_upload_s3":               {},
+		"reddit/vote":                                 {},
 	}
 	seenNonBatchable := make(map[string]struct{}, len(expectedNonBatchable))
 

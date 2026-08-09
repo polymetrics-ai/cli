@@ -2,7 +2,7 @@
   "api": "Reddit OAuth API (https://oauth.reddit.com)",
   "docs": "https://www.reddit.com/dev/api/",
   "reviewed_at": "2026-08-04",
-  "scope": "Full documented-parity migration (cli-reddit-full-parity-r1, 2026-08-04): all 202 endpoints documented at https://www.reddit.com/dev/api/ (re-verified live via headed Chrome DOM extraction on 2026-08-04, reproducing the same 202/78-GET/109-POST/3-PATCH/7-DELETE/5-PUT and 19-section counts as the prior research report) are dispositioned exactly once below: covered by an ETL stream, a direct-read command, or a reverse-ETL write action, or excluded with a named reason. Per the captain's 2026-08-04 ruling, moderator-scoped (81, of which 3 also carry a binary_payload S3-lease disposition) and live-thread-management-scoped (10) endpoints are BUILT as real commands rather than ledgered-only -- they function only when the token holder moderates/owns the target subreddit or live thread, which is a runtime authorization outcome, not a reason to withhold implementation; the required OAuth scope is declared per stream/action so an operator sees exactly what they are granting. POST /api/vote is ledgered as excluded pending a generic writes.schema.json batchable:false engine primitive (tracked as a separate foundation PR) needed to guarantee it can never be reached by a scheduled sync or bulk reverse-ETL plan, honoring Reddit's human-one-for-one voting rule. 7 endpoints are blocked by a named Reddit-side dependency (approved-app-only, premium-subscription-only, deprecated, or an S3-lease binary upload). Reddit's commercial-use contract requirement and its content-deletion propagation obligation are open captain decisions outside this PR's scope; see docs.md. 228 rows total, not 202: 26 documented endpoints use a generic {where}/{sort}/{location} placeholder covering multiple genuinely distinct concrete resources (e.g. /user/{username}/submitted vs /user/{username}/saved), so each concrete resolved path gets its own row here even though it is one doc block on reddit.com/dev/api/ -- 49 concrete streams from 23 documented listing endpoints; the exact variant split is a reasoned interpretation, not a re-derivation of the prior research report's 234 figure. CAVEAT (carried from PR #3677): the comments stream's GET /r/{subreddit}/comments is NOT among the 202 documented endpoints -- the only documented comments listing is the per-article tree GET [/r/subreddit]/comments/{article} (see its excluded row below). The bare route is live and working but undocumented surface; kept as-is because the documented per-article route returns a two-element top-level Listing array this engine's records.path dialect cannot parse, and migrating would require an N+1 fan-out over every post in the subreddit against Reddit's 100 QPM budget.",
+  "scope": "Full documented-parity completion (cli-reddit-full-parity-r1, 2026-08-10): the rebased ledger has 230 concrete api_surface rows (expanded documented URI variants). Every row is dispositioned exactly once: 225 are covered by an ETL stream, direct read, or typed reverse-ETL action; five carry the captain-approved provider constraint (approved OAuth app, Reddit Premium, deprecated, legacy captcha flow, or superseded per-article comments route). Moderator-scoped and live-thread-management operations are executable commands when the token holder has the provider-granted role; an authorization failure is a runtime outcome, not an exclusion. The three former binary rows are executable bounded image uploads: emoji and widget uploads acquire a Reddit S3 lease and perform its one typed, HTTPS-only S3 form upload; upload_sr_img is a direct Reddit multipart form upload. POST /api/vote is a one-record, non-batchable human command with typed confirmation. Reddit's commercial-use contract requirement remains an open captain decision; content retention and deletion propagation remain the operator's responsibility. The undocumented bare /r/{subreddit}/comments stream remains separately disclosed below; the documented per-article comments route is excluded as superseded because its two-listing response and required article fan-out do not represent the connector's existing subwide dataset.",
   "endpoints": [
     {
       "method": "GET",
@@ -113,9 +113,8 @@
     {
       "method": "POST",
       "path": "/api/v1/{subreddit}/emoji_asset_upload_s3.json",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Acquires an upload lease to an S3 temp bucket requiring a second multipart PUT to a third-party host; binary_payload disposition (used elsewhere in this repo) until a bounded-transfer executor exists."
+      "covered_by": {
+        "write": "emoji_asset_upload_s3"
       }
     },
     {
@@ -423,9 +422,8 @@
     {
       "method": "POST",
       "path": "/api/vote",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "Verbatim from Reddit's docs: \"votes must be cast by humans. That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.\" The captain ruled on 2026-08-04 that pm reddit vote should ship as a human-invoked, non-batchable interactive command, one vote per explicit confirmation -- never reachable from a scheduled sync or bulk reverse-ETL plan. Verified against internal/app/app.go's PlanReverseETL and engine/direct_read.go: the write engine has no way to express that exclusion today (writes.json has no non-batchable marker; operations.json's rest_write kind is schema-declared with zero execution path). A generic writes.schema.json batchable:false field + a PlanReverseETL guard is tracked as a separate foundation PR (not connector-scoped). Ledgered here pending that primitive; flip to covered_by.write once it lands."
+      "covered_by": {
+        "write": "vote"
       }
     },
     {
@@ -1230,9 +1228,8 @@
     {
       "method": "POST",
       "path": "/r/{subreddit}/api/upload_sr_img",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Acquires an upload lease to an S3 temp bucket requiring a second multipart PUT to a third-party host; binary_payload disposition, same as the other 2 S3-lease upload endpoints."
+      "covered_by": {
+        "write": "upload_sr_img"
       }
     },
     {
@@ -1512,9 +1509,8 @@
     {
       "method": "POST",
       "path": "/r/{subreddit}/api/widget_image_upload_s3",
-      "excluded": {
-        "category": "binary_payload",
-        "reason": "Acquires an upload lease to an S3 temp bucket requiring a second multipart PUT to a third-party host; binary_payload disposition, same as the other 2 S3-lease upload endpoints."
+      "covered_by": {
+        "write": "widget_image_upload_s3"
       }
     },
     {

@@ -1,5 +1,5 @@
 {
-  "tagline": "Full documented parity with Reddit's OAuth API (https://www.reddit.com/dev/api/): 194 of 202 endpoints executable as pm reddit commands (streams, direct reads, and reverse-ETL writes), 8 ledgered blocked/excluded.",
+  "tagline": "Full documented parity with Reddit's OAuth API (https://www.reddit.com/dev/api/): 225 of 230 concrete documented URI variants are executable as pm reddit commands; five remain provider-blocked with named reasons.",
   "usage": "pm reddit <command> [flags]",
   "source_cli": {
     "name": "Reddit OAuth API",
@@ -170,7 +170,8 @@
         "search-subreddits",
         "site-admin",
         "subreddit-stylesheet",
-        "subscribe"
+        "subscribe",
+        "upload-sr-img"
       ]
     },
     {
@@ -230,7 +231,8 @@
         "subreddit-emojis-all",
         "subreddit-emoji-json",
         "subreddit-emoji-emoji-name",
-        "subreddit-emoji-custom-size"
+        "subreddit-emoji-custom-size",
+        "emoji-asset-upload-s3"
       ]
     },
     {
@@ -259,7 +261,8 @@
         "unlock",
         "unmarknsfw",
         "unsave",
-        "unspoiler"
+        "unspoiler",
+        "vote"
       ]
     },
     {
@@ -324,7 +327,8 @@
         "widget",
         "widget-widget-id",
         "widget-widget-id-2",
-        "widget-order-section"
+        "widget-order-section",
+        "widget-image-upload-s3"
       ]
     }
   ],
@@ -7775,6 +7779,182 @@
           "maps_to": "record.permlevel",
           "summary": "an integer",
           "required": false
+        }
+      ]
+    },
+    {
+      "path": "emoji emoji-asset-upload-s3",
+      "summary": "Acquire a bounded Reddit S3 lease and upload one approved emoji image",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "emoji_asset_upload_s3",
+      "source_url": "https://www.reddit.com/dev/api/#POST_api_v1_subreddit_emoji_asset_upload_s3.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/v1/{subreddit}/emoji_asset_upload_s3.json"
+        }
+      ],
+      "risk": "One approved bounded image upload through a Reddit-issued S3 lease; requires target-subreddit moderator authority (OAuth scope: structuredstyles).",
+      "approval": "explicit",
+      "notes": "Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators. This action is one-record-only.",
+      "flags": [
+        {
+          "name": "file-path",
+          "type": "string",
+          "maps_to": "record.file_path",
+          "summary": "Project-relative image file.",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "mimetype",
+          "type": "string",
+          "maps_to": "record.mimetype",
+          "summary": "Image MIME type, for example image/png.",
+          "required": true,
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "subreddits upload-sr-img",
+      "summary": "Upload one approved PNG or JPEG subreddit image directly to Reddit",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "upload_sr_img",
+      "source_url": "https://www.reddit.com/dev/api/#POST_api_upload_sr_img",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/r/{subreddit}/api/upload_sr_img"
+        }
+      ],
+      "risk": "One approved 500 KiB maximum image upload directly to Reddit; requires target-subreddit moderator authority (OAuth scope: modconfig).",
+      "approval": "explicit",
+      "notes": "Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators. This action is one-record-only.",
+      "flags": [
+        {
+          "name": "file-path",
+          "type": "string",
+          "maps_to": "record.file_path",
+          "summary": "Project-relative PNG or JPEG file, maximum 500 KiB.",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "img-type",
+          "type": "enum",
+          "values": [
+            "png",
+            "jpg"
+          ],
+          "maps_to": "record.img_type",
+          "summary": "How Reddit stores the uploaded image.",
+          "required": true
+        },
+        {
+          "name": "upload-type",
+          "type": "enum",
+          "values": [
+            "img",
+            "header",
+            "icon",
+            "banner"
+          ],
+          "maps_to": "record.upload_type",
+          "summary": "The subreddit image role.",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "maps_to": "record.name",
+          "summary": "Required by Reddit when upload-type is img.",
+          "allow_empty": false
+        },
+        {
+          "name": "header",
+          "type": "integer",
+          "maps_to": "record.header",
+          "summary": "Legacy image/header selector.",
+          "minimum": 0
+        },
+        {
+          "name": "formid",
+          "type": "string",
+          "maps_to": "record.formid",
+          "summary": "Optional legacy form identifier.",
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "widgets widget-image-upload-s3",
+      "summary": "Acquire a bounded Reddit S3 lease and upload one approved widget image",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "widget_image_upload_s3",
+      "source_url": "https://www.reddit.com/dev/api/#POST_api_widget_image_upload_s3",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/r/{subreddit}/api/widget_image_upload_s3"
+        }
+      ],
+      "risk": "One approved bounded image upload through a Reddit-issued S3 lease; requires target-subreddit moderator authority (OAuth scope: structuredstyles).",
+      "approval": "explicit",
+      "notes": "Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators. This action is one-record-only.",
+      "flags": [
+        {
+          "name": "file-path",
+          "type": "string",
+          "maps_to": "record.file_path",
+          "summary": "Project-relative image file.",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "mimetype",
+          "type": "string",
+          "maps_to": "record.mimetype",
+          "summary": "Image MIME type, for example image/png.",
+          "required": true,
+          "allow_empty": false
+        }
+      ]
+    },
+    {
+      "path": "vote",
+      "summary": "Cast exactly one human-directed Reddit vote",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "vote",
+      "source_url": "https://www.reddit.com/dev/api/#POST_api_vote",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/api/vote"
+        }
+      ],
+      "risk": "Human-only one-record mutation (OAuth scope: vote); explicit typed confirmation is required for each invocation.",
+      "approval": "explicit",
+      "notes": "Reddit rule: votes must be cast by humans. That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not. This non-batchable command cannot be used by scheduled syncs or bulk reverse ETL.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "maps_to": "record.id",
+          "summary": "Fullname of the Link or Comment to vote on.",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "dir",
+          "type": "integer",
+          "maps_to": "record.dir",
+          "summary": "Vote direction: 1 upvote, -1 downvote, 0 remove vote.",
+          "required": true
         }
       ]
     }

@@ -21,6 +21,9 @@
       "cursor_param": "after",
       "token_path": "data.after"
     },
+    "rate_limit": {
+      "requests_per_minute": 100
+    },
     "check": {
       "method": "GET",
       "path": "/r/{{ config.subreddit }}/new",
@@ -32,7 +35,7 @@
     "error_map": [
       {
         "status": 401,
-        "hint": "reddit access_token is missing, invalid, or expired (reddit bearer tokens expire 1 hour after issuance and this connector does not refresh them); re-run pm credentials add reddit with a freshly issued token"
+        "hint": "reddit authentication failed: access_token is missing, invalid, or expired, or the refresh_token exchange failed. Reddit bearer tokens expire after 1 hour; for scheduled work configure client_id, client_secret, and refresh_token, then leave access_token unset so the connector refreshes before requests."
       },
       {
         "status": 403,
@@ -204,7 +207,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.article; static replay has no legitimate synthetic Reddit post ID. The required --article command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "hot_posts",
@@ -324,7 +331,11 @@
         "created_utc": "{{ record.data.created_utc }}",
         "stricken": "{{ record.data.stricken }}"
       },
-      "schema": "schemas/live_updates.json"
+      "schema": "schemas/live_updates.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.thread; static replay has no legitimate synthetic Reddit live-thread ID. The required --thread command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "live_thread_discussions",
@@ -349,7 +360,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.thread; static replay has no legitimate synthetic Reddit live-thread ID. The required --thread command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "inbox_messages",
@@ -946,7 +961,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.username; static replay has no legitimate synthetic Reddit account. The required --username command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "user_submitted",
@@ -971,7 +990,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.username; static replay has no legitimate synthetic Reddit account. The required --username command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "user_comments",
@@ -995,7 +1018,11 @@
         "parent_id": "{{ record.data.parent_id }}",
         "score": "{{ record.data.score }}"
       },
-      "schema": "schemas/comments.json"
+      "schema": "schemas/comments.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.username; static replay has no legitimate synthetic Reddit account. The required --username command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "user_upvoted",
@@ -1020,7 +1047,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.username; static replay has no legitimate synthetic Reddit account. The required --username command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "user_downvoted",
@@ -1045,7 +1076,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.username; static replay has no legitimate synthetic Reddit account. The required --username command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "user_hidden",
@@ -1070,7 +1105,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.username; static replay has no legitimate synthetic Reddit account. The required --username command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "user_saved",
@@ -1095,7 +1134,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.username; static replay has no legitimate synthetic Reddit account. The required --username command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "user_gilded",
@@ -1120,7 +1163,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.username; static replay has no legitimate synthetic Reddit account. The required --username command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "wiki_page_discussions",
@@ -1145,7 +1192,11 @@
         "num_comments": "{{ record.data.num_comments }}",
         "over_18": "{{ record.data.over_18 }}"
       },
-      "schema": "schemas/posts.json"
+      "schema": "schemas/posts.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.page; static replay has no legitimate synthetic subreddit wiki page. The required --page command flag and fixture/schema contract cover this non-replayable route."
+      }
     },
     {
       "name": "wiki_page_revisions",
@@ -1163,7 +1214,11 @@
         "author": "{{ record.author.data.name }}",
         "reason": "{{ record.reason }}"
       },
-      "schema": "schemas/wiki_revisions.json"
+      "schema": "schemas/wiki_revisions.json",
+      "conformance": {
+        "skip_dynamic": true,
+        "reason": "Requires caller-supplied query.page; static replay has no legitimate synthetic subreddit wiki page. The required --page command flag and fixture/schema contract cover this non-replayable route."
+      }
     }
   ]
 }

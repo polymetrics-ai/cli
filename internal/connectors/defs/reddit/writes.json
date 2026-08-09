@@ -66,7 +66,7 @@
       "name": "subreddit_emoji_json",
       "kind": "custom",
       "method": "POST",
-      "path": "/api/v1/{{ record.subreddit }}/emoji.json",
+      "path": "/api/v1/{{ config.subreddit }}/emoji.json",
       "body_type": "form",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -100,7 +100,7 @@
       "name": "subreddit_emoji_emoji_name",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/api/v1/{{ record.subreddit }}/emoji/{{ record.emoji_name }}",
+      "path": "/api/v1/{{ config.subreddit }}/emoji/{{ record.emoji_name }}",
       "body_type": "form",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -121,7 +121,7 @@
       "name": "subreddit_emoji_custom_size",
       "kind": "custom",
       "method": "POST",
-      "path": "/api/v1/{{ record.subreddit }}/emoji_custom_size",
+      "path": "/api/v1/{{ config.subreddit }}/emoji_custom_size",
       "body_type": "form",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -3156,6 +3156,202 @@
       "path_fields": [
         "page"
       ]
+    },
+    {
+      "name": "emoji_asset_upload_s3",
+      "kind": "create",
+      "method": "POST",
+      "path": "/api/v1/{{ config.subreddit }}/emoji_asset_upload_s3.json",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "file_path",
+          "mimetype"
+        ],
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Project-relative image file. The hook sends only its basename to Reddit as filepath and binds its bytes to the approved plan."
+          },
+          "mimetype": {
+            "type": "string",
+            "pattern": "^image/[A-Za-z0-9.+-]+$",
+            "description": "MIME type of the image, for example image/png. The uploaded bytes must match this type."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation via POST /api/v1/{subreddit}/emoji_asset_upload_s3.json; acquires a temporary S3 upload lease then uploads one approved bounded local image; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires its own one-record plan -> preview -> explicit approval -> execute",
+      "batchable": false
+    },
+    {
+      "name": "upload_sr_img",
+      "kind": "update",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/upload_sr_img",
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 512000,
+        "parts": [
+          {
+            "name": "file",
+            "type": "file",
+            "field": "file_path",
+            "required": true,
+            "max_bytes": 512000,
+            "allowed_media_types": [
+              "image/png",
+              "image/jpeg"
+            ]
+          },
+          {
+            "name": "img_type",
+            "type": "field",
+            "field": "img_type",
+            "required": true
+          },
+          {
+            "name": "upload_type",
+            "type": "field",
+            "field": "upload_type",
+            "required": true
+          },
+          {
+            "name": "name",
+            "type": "field",
+            "field": "name"
+          },
+          {
+            "name": "header",
+            "type": "field",
+            "field": "header"
+          },
+          {
+            "name": "formid",
+            "type": "field",
+            "field": "formid"
+          }
+        ]
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "file_path",
+          "img_type",
+          "upload_type"
+        ],
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Project-relative PNG or JPEG file, maximum 500 KiB."
+          },
+          "img_type": {
+            "type": "string",
+            "enum": [
+              "png",
+              "jpg"
+            ],
+            "description": "How Reddit stores the uploaded image."
+          },
+          "upload_type": {
+            "type": "string",
+            "enum": [
+              "img",
+              "header",
+              "icon",
+              "banner"
+            ],
+            "description": "The subreddit image role."
+          },
+          "name": {
+            "type": "string",
+            "description": "Required by Reddit when upload_type is img; ignored for header, icon, and banner."
+          },
+          "header": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ],
+            "description": "Legacy image/header selector; use upload_type for new invocations."
+          },
+          "formid": {
+            "type": "string",
+            "description": "Optional legacy form identifier; Reddit documents that it can be ignored."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/upload_sr_img; uploads one approved bounded local image directly to Reddit (not an S3 lease); requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires its own one-record plan -> preview -> explicit approval -> execute",
+      "batchable": false
+    },
+    {
+      "name": "widget_image_upload_s3",
+      "kind": "create",
+      "method": "POST",
+      "path": "/r/{{ config.subreddit }}/api/widget_image_upload_s3",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "file_path",
+          "mimetype"
+        ],
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Project-relative image file. The hook sends only its basename to Reddit as filepath and binds its bytes to the approved plan."
+          },
+          "mimetype": {
+            "type": "string",
+            "pattern": "^image/[A-Za-z0-9.+-]+$",
+            "description": "MIME type of the image, for example image/png. The uploaded bytes must match this type."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "external mutation via POST /r/{subreddit}/api/widget_image_upload_s3; acquires a temporary S3 upload lease then uploads one approved bounded local image; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires its own one-record plan -> preview -> explicit approval -> execute",
+      "batchable": false
+    },
+    {
+      "name": "vote",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/api/vote",
+      "body_type": "form",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "dir"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Fullname of the Link or Comment to vote on."
+          },
+          "dir": {
+            "type": "integer",
+            "enum": [
+              -1,
+              0,
+              1
+            ],
+            "description": "Vote direction: 1 upvote, -1 downvote, 0 remove vote."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "POST /api/vote (scope: vote). Reddit rule: votes must be cast by humans. That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not. This action is non-batchable and may be invoked only as one explicit human connector command with typed confirmation.",
+      "batchable": false,
+      "confirmation": {
+        "kind": "destructive"
+      }
     }
   ]
 }

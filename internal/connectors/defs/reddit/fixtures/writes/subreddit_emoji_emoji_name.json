@@ -4,7 +4,7 @@
   },
   "expect": {
     "method": "DELETE",
-    "path": "/api/v1/{{ record.subreddit }}/emoji/fixture_emoji_name"
+    "path": "/api/v1/synthetic-conformance-value/emoji/fixture_emoji_name"
   },
   "response": {
     "status": 200,

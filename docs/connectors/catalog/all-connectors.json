@@ -127968,7 +127968,7 @@
   {
     "name": "reddit",
     "display_name": "Reddit",
-    "description": "Reads subreddit posts and comments through the Reddit OAuth API listing endpoints.",
+    "description": "Complete 230-route Reddit OAuth API parity: 50 ETL streams and 122 approval-gated reverse-ETL actions, including moderator, live-thread, bounded image-upload, and human-only vote commands.",
     "integration_type": "api",
     "docs_url": "https://www.reddit.com/dev/api/",
     "release_stage": "ga",
@@ -127976,7 +127976,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -127984,7 +127984,6 @@
       "title": "Reddit Connection Specification",
       "type": "object",
       "required": [
-        "access_token",
         "subreddit",
         "reddit_username"
       ],
@@ -127992,7 +127991,22 @@
         "access_token": {
           "type": "string",
           "x-secret": true,
-          "description": "Reddit OAuth access token, sent as a Bearer token (Authorization: Bearer \u003caccess_token\u003e). OAuth token acquisition/refresh is out of scope; the caller supplies a valid token. Reddit bearer tokens expire 1 hour after issuance and this connector does not refresh them, so any sync expected to run longer than an hour, or any recurring/scheduled sync, needs a freshly issued token supplied before each run. Never logged."
+          "description": "Reddit OAuth access token, sent as a Bearer token (Authorization: Bearer \u003caccess_token\u003e). LEAVE THIS UNSET if you configure refresh_token: when both are present, access_token takes precedence (declaration order in streams.json's base.auth) so existing stored connections keep working unchanged, but that means a set access_token silently DISABLES the auto-refresh flow even if refresh_token is also configured. Reddit bearer tokens expire 1 hour after issuance; a caller-supplied access_token with no refresh_token is not schedulable (any sync running longer than an hour, or any recurring sync, will fail once the token expires) -- configure client_id/client_secret/refresh_token instead, and leave this field empty, so this connector mints a fresh token before every read/write/check. Never logged."
+        },
+        "refresh_token": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Reddit OAuth2 refresh_token obtained from a one-time authorization_code exchange with duration=permanent (see https://github.com/reddit-archive/reddit/wiki/OAuth2#refreshing-the-token). When set (with client_id/client_secret), this connector exchanges it for a fresh access_token before every read/write/check via POST https://www.reddit.com/api/v1/access_token, so scheduled/long-running syncs never hit the 1-hour access-token expiry. This grants USER-CONTEXT access (required for moderator actions, private messages, votes, saves, and any action performed as a specific Reddit account) -- Reddit's client_credentials grant is deliberately not used here because it mints an application-only token that Reddit's own docs state can never act on behalf of a user. Never logged."
+        },
+        "client_id": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Reddit OAuth2 app client ID (from https://www.reddit.com/prefs/apps), used only for the refresh_token token exchange alongside client_secret via HTTP Basic Auth. Required when refresh_token is set."
+        },
+        "client_secret": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Reddit OAuth2 app client secret, used only for the refresh_token token exchange via HTTP Basic Auth. Installed (non-confidential) app types have no secret; leave empty in that case, matching Reddit's own documented behavior of sending an empty string password."
         },
         "subreddit": {
           "type": "string",
@@ -128000,13 +128014,19 @@
         },
         "reddit_username": {
           "type": "string",
-          "description": "Reddit username of the account that authorized access_token, e.g. \"my_bot_account\" without the /u/ prefix. Sent as the required identity component of the User-Agent header Reddit's API rules mandate (\u003cplatform\u003e:\u003capp ID\u003e:\u003cversion\u003e (by /u/\u003creddit username\u003e)); non-conforming User-Agents are drastically rate-limited. Not a secret; used for no other purpose."
+          "description": "Reddit username of the account that authorized the token, e.g. \"my_bot_account\" without the /u/ prefix. Sent as the required identity component of the User-Agent header Reddit's API rules mandate (\u003cplatform\u003e:\u003capp ID\u003e:\u003cversion\u003e (by /u/\u003creddit username\u003e)); non-conforming User-Agents are drastically rate-limited. Also sent as the User-Agent on the refresh_token exchange request itself. Not a secret; used for no other purpose."
         },
         "base_url": {
           "type": "string",
           "format": "uri",
           "default": "https://oauth.reddit.com",
           "description": "Reddit OAuth API base URL override for tests or proxies."
+        },
+        "token_url": {
+          "type": "string",
+          "format": "uri",
+          "default": "https://www.reddit.com/api/v1/access_token",
+          "description": "Reddit OAuth2 token endpoint override for tests or proxies. Real Reddit token requests always go to www.reddit.com, never oauth.reddit.com."
         }
       }
     },
@@ -128034,11 +128054,1451 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "friends_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "blocked_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "trusted_list",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "flair_list",
+        "primary_key": [
+          "user"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "best_posts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "duplicate_posts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "hot_posts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "rising_posts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "top_posts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "controversial_posts",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "live_thread_updates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "live_thread_discussions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "inbox_messages",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "unread_messages",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "sent_messages",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "mod_log",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "mod_reports_queue",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "mod_spam_queue",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "mod_modqueue",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "mod_unmoderated_queue",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "mod_edited_queue",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "search_results",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "subreddit_moderators",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "subreddit_contributors",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "subreddit_wiki_contributors",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "subreddit_banned_users",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "subreddit_muted_users",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "subreddit_wiki_banned_users",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "my_subscribed_subreddits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "my_contributor_subreddits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "my_moderated_subreddits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "my_streams_subreddits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "subreddit_search_results",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "popular_subreddits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "new_subreddits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_search_results",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "popular_user_subreddits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "new_user_subreddits",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_overview",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_submitted",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_comments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_upvoted",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_downvoted",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_hidden",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_saved",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_gilded",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "wiki_page_discussions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "created_utc",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "wiki_page_revisions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "me_prefs",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/api/v1/me/prefs",
+        "risk": "external mutation via PATCH /api/v1/me/prefs; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "announcements_v1_hide",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/announcements/v1/hide",
+        "risk": "external mutation via POST /api/announcements/v1/hide; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "announcements_v1_read",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/announcements/v1/read",
+        "risk": "external mutation via POST /api/announcements/v1/read; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "announcements_v1_read_all",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/announcements/v1/read_all",
+        "risk": "external mutation via POST /api/announcements/v1/read_all; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "subreddit_emoji_json",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/v1/{{ config.subreddit }}/emoji.json",
+        "risk": "external mutation via POST /api/v1/{subreddit}/emoji.json; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "subreddit_emoji_emoji_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/api/v1/{{ config.subreddit }}/emoji/{{ record.emoji_name }}",
+        "risk": "external mutation via DELETE /api/v1/{subreddit}/emoji/{emoji_name}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "subreddit_emoji_custom_size",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/v1/{{ config.subreddit }}/emoji_custom_size",
+        "risk": "external mutation via POST /api/v1/{subreddit}/emoji_custom_size; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "clearflairtemplates",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/clearflairtemplates",
+        "risk": "external mutation via POST /r/{subreddit}/api/clearflairtemplates; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "deleteflair",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/deleteflair",
+        "risk": "external mutation via POST /r/{subreddit}/api/deleteflair; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "deleteflairtemplate",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/deleteflairtemplate",
+        "risk": "external mutation via POST /r/{subreddit}/api/deleteflairtemplate; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "flair",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/flair",
+        "risk": "external mutation via POST /r/{subreddit}/api/flair; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "flair_template_order",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/r/{{ config.subreddit }}/api/flair_template_order",
+        "risk": "external mutation via PATCH /r/{subreddit}/api/flair_template_order; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "flairconfig",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/flairconfig",
+        "risk": "external mutation via POST /r/{subreddit}/api/flairconfig; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "flaircsv",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/flaircsv",
+        "risk": "external mutation via POST /r/{subreddit}/api/flaircsv; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "flairselector",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/flairselector",
+        "risk": "external mutation via POST /r/{subreddit}/api/flairselector; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "flairtemplate",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/flairtemplate",
+        "risk": "external mutation via POST /r/{subreddit}/api/flairtemplate; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "flairtemplate_v2",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/flairtemplate_v2",
+        "risk": "external mutation via POST /r/{subreddit}/api/flairtemplate_v2; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "selectflair",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/selectflair",
+        "risk": "external mutation via POST /r/{subreddit}/api/selectflair; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "setflairenabled",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/setflairenabled",
+        "risk": "external mutation via POST /r/{subreddit}/api/setflairenabled; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "comment",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/comment",
+        "risk": "external mutation via POST /api/comment; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "del",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/del",
+        "risk": "external mutation via POST /api/del; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "editusertext",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/editusertext",
+        "risk": "external mutation via POST /api/editusertext; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "follow_post",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/follow_post",
+        "risk": "external mutation via POST /api/follow_post; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "hide",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/hide",
+        "risk": "external mutation via POST /api/hide; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "lock",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/lock",
+        "risk": "external mutation via POST /api/lock; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "marknsfw",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/marknsfw",
+        "risk": "external mutation via POST /api/marknsfw; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "report",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/report",
+        "risk": "external mutation via POST /api/report; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "save",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/save",
+        "risk": "external mutation via POST /api/save; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "sendreplies",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/sendreplies",
+        "risk": "external mutation via POST /api/sendreplies; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "set_contest_mode",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/set_contest_mode",
+        "risk": "external mutation via POST /api/set_contest_mode; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "set_subreddit_sticky",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/set_subreddit_sticky",
+        "risk": "external mutation via POST /api/set_subreddit_sticky; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "set_suggested_sort",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/set_suggested_sort",
+        "risk": "external mutation via POST /api/set_suggested_sort; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "spoiler",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/spoiler",
+        "risk": "external mutation via POST /api/spoiler; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "submit",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/submit",
+        "risk": "external mutation via POST /api/submit; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "unhide",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/unhide",
+        "risk": "external mutation via POST /api/unhide; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "unlock",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/unlock",
+        "risk": "external mutation via POST /api/unlock; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "unmarknsfw",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/unmarknsfw",
+        "risk": "external mutation via POST /api/unmarknsfw; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "unsave",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/unsave",
+        "risk": "external mutation via POST /api/unsave; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "unspoiler",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/unspoiler",
+        "risk": "external mutation via POST /api/unspoiler; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "live_create",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/live/create",
+        "risk": "external mutation via POST /api/live/create; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_accept_contributor_invite",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/accept_contributor_invite",
+        "risk": "external mutation via POST /api/live/{thread}/accept_contributor_invite; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_close_thread",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/close_thread",
+        "risk": "external mutation via POST /api/live/{thread}/close_thread; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_delete_update",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/delete_update",
+        "risk": "external mutation via POST /api/live/{thread}/delete_update; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "live_thread_edit",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/edit",
+        "risk": "external mutation via POST /api/live/{thread}/edit; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_hide_discussion",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/hide_discussion",
+        "risk": "external mutation via POST /api/live/{thread}/hide_discussion; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_invite_contributor",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/invite_contributor",
+        "risk": "external mutation via POST /api/live/{thread}/invite_contributor; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_leave_contributor",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/leave_contributor",
+        "risk": "external mutation via POST /api/live/{thread}/leave_contributor; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "live_thread_report",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/report",
+        "risk": "external mutation via POST /api/live/{thread}/report; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_rm_contributor",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/rm_contributor",
+        "risk": "external mutation via POST /api/live/{thread}/rm_contributor; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_rm_contributor_invite",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/rm_contributor_invite",
+        "risk": "external mutation via POST /api/live/{thread}/rm_contributor_invite; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_set_contributor_permissions",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/set_contributor_permissions",
+        "risk": "external mutation via POST /api/live/{thread}/set_contributor_permissions; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_strike_update",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/strike_update",
+        "risk": "external mutation via POST /api/live/{thread}/strike_update; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "live_thread_unhide_discussion",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/unhide_discussion",
+        "risk": "external mutation via POST /api/live/{thread}/unhide_discussion; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "live_thread_update",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/live/{{ record.thread }}/update",
+        "risk": "external mutation via POST /api/live/{thread}/update; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "compose",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/compose",
+        "risk": "external mutation via POST /api/compose; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "del_msg",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/del_msg",
+        "risk": "external mutation via POST /api/del_msg; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "read_all_messages",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/read_all_messages",
+        "risk": "external mutation via POST /api/read_all_messages; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "read_message",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/read_message",
+        "risk": "external mutation via POST /api/read_message; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "accept_moderator_invite",
+        "kind": "create",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/accept_moderator_invite",
+        "risk": "external mutation via POST /r/{subreddit}/api/accept_moderator_invite; requires the connected account to moderate the target subreddit (scope: modself); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "approve",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/approve",
+        "risk": "external mutation via POST /api/approve; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "distinguish",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/distinguish",
+        "risk": "external mutation via POST /api/distinguish; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "ignore_reports",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/ignore_reports",
+        "risk": "external mutation via POST /api/ignore_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "leavecontributor",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/leavecontributor",
+        "risk": "external mutation via POST /api/leavecontributor; requires the connected account to moderate the target subreddit (scope: modself); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "leavemoderator",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/leavemoderator",
+        "risk": "external mutation via POST /api/leavemoderator; requires the connected account to moderate the target subreddit (scope: modself); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "remove",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/remove",
+        "risk": "external mutation via POST /api/remove; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "show_comment",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/show_comment",
+        "risk": "external mutation via POST /api/show_comment; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "snooze_reports",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/snooze_reports",
+        "risk": "external mutation via POST /api/snooze_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "unignore_reports",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/unignore_reports",
+        "risk": "external mutation via POST /api/unignore_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "unsnooze_reports",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/unsnooze_reports",
+        "risk": "external mutation via POST /api/unsnooze_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "update_crowd_control_level",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/update_crowd_control_level",
+        "risk": "external mutation via POST /api/update_crowd_control_level; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_bulk_read",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/bulk_read",
+        "risk": "external mutation via POST /api/mod/bulk_read; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations",
+        "risk": "external mutation via POST /api/mod/conversations; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id_approve",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id/approve",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id/approve; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id_archive",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id/archive",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id/archive; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id_disapprove",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id/disapprove",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id/disapprove; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id_highlight",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/api/mod/conversations/:conversation_id/highlight",
+        "risk": "external mutation via DELETE /api/mod/conversations/:conversation_id/highlight; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mod_conversations_conversation_id_highlight_2",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id/highlight",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id/highlight; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id_mute",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id/mute",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id/mute; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id_temp_ban",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id/temp_ban",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id/temp_ban; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id_unarchive",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id/unarchive",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id/unarchive; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id_unban",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id/unban",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id/unban; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_conversation_id_unmute",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/api/mod/conversations/:conversation_id/unmute",
+        "risk": "external mutation via POST /api/mod/conversations/:conversation_id/unmute; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mod_conversations_read",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/read",
+        "risk": "external mutation via POST /api/mod/conversations/read; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_conversations_unread",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/conversations/unread",
+        "risk": "external mutation via POST /api/mod/conversations/unread; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "mod_notes",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/api/mod/notes",
+        "risk": "external mutation via DELETE /api/mod/notes; requires the connected account to moderate the target subreddit (scope: modnote); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "mod_notes_2",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/mod/notes",
+        "risk": "external mutation via POST /api/mod/notes; requires the connected account to moderate the target subreddit (scope: modnote); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "multi_copy",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/multi/copy",
+        "risk": "external mutation via POST /api/multi/copy; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "multi_multipath",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/api/multi/{{ record.multipath }}",
+        "risk": "external mutation via DELETE /api/multi/{multipath}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "multi_multipath_2",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/multi/{{ record.multipath }}",
+        "risk": "external mutation via POST /api/multi/{multipath}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "multi_multipath_3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/multi/{{ record.multipath }}",
+        "risk": "external mutation via PUT /api/multi/{multipath}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "multi_multipath_description",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/multi/{{ record.multipath }}/description",
+        "risk": "external mutation via PUT /api/multi/{multipath}/description; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "multi_multipath_r_srname",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/api/multi/{{ record.multipath }}/r/{{ record.srname }}",
+        "risk": "external mutation via DELETE /api/multi/{multipath}/r/{srname}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "multi_multipath_r_srname_2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/multi/{{ record.multipath }}/r/{{ record.srname }}",
+        "risk": "external mutation via PUT /api/multi/{multipath}/r/{srname}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "delete_sr_banner",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/delete_sr_banner",
+        "risk": "external mutation via POST /r/{subreddit}/api/delete_sr_banner; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_sr_header",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/delete_sr_header",
+        "risk": "external mutation via POST /r/{subreddit}/api/delete_sr_header; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_sr_icon",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/delete_sr_icon",
+        "risk": "external mutation via POST /r/{subreddit}/api/delete_sr_icon; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_sr_img",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/delete_sr_img",
+        "risk": "external mutation via POST /r/{subreddit}/api/delete_sr_img; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "search_reddit_names",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/search_reddit_names",
+        "risk": "external mutation via POST /api/search_reddit_names; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "search_subreddits",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/search_subreddits",
+        "risk": "external mutation via POST /api/search_subreddits; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "site_admin",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/site_admin",
+        "risk": "external mutation via POST /api/site_admin; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "subreddit_stylesheet",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/subreddit_stylesheet",
+        "risk": "external mutation via POST /r/{subreddit}/api/subreddit_stylesheet; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "subscribe",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/subscribe",
+        "risk": "external mutation via POST /api/subscribe; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "friend",
+        "kind": "create",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/friend",
+        "risk": "external mutation via POST /r/{subreddit}/api/friend; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "report_user",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/report_user",
+        "risk": "external mutation via POST /api/report_user; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "setpermissions",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/setpermissions",
+        "risk": "external mutation via POST /r/{subreddit}/api/setpermissions; requires the connected account to moderate the target subreddit (scope: modothers); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "unfriend",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/unfriend",
+        "risk": "external mutation via POST /r/{subreddit}/api/unfriend; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "me_friends_username",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/api/v1/me/friends/{{ record.username }}",
+        "risk": "external mutation via DELETE /api/v1/me/friends/{username}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "me_friends_username_2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/api/v1/me/friends/{{ record.username }}",
+        "risk": "external mutation via PUT /api/v1/me/friends/{username}; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "widget",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/widget",
+        "risk": "external mutation via POST /r/{subreddit}/api/widget; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "widget_widget_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/r/{{ config.subreddit }}/api/widget/{{ record.widget_id }}",
+        "risk": "external mutation via DELETE /r/{subreddit}/api/widget/{widget_id}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "confirm": "destructive"
+      },
+      {
+        "name": "widget_widget_id_2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/r/{{ config.subreddit }}/api/widget/{{ record.widget_id }}",
+        "risk": "external mutation via PUT /r/{subreddit}/api/widget/{widget_id}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "widget_order_section",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/r/{{ config.subreddit }}/api/widget_order/{{ record.section }}",
+        "risk": "external mutation via PATCH /r/{subreddit}/api/widget_order/{section}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "wiki_alloweditor_act",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/wiki/alloweditor/{{ record.act }}",
+        "risk": "external mutation via POST /r/{subreddit}/api/wiki/alloweditor/{act}; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "wiki_edit",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/wiki/edit",
+        "risk": "external mutation via POST /r/{subreddit}/api/wiki/edit; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "wiki_hide",
+        "kind": "create",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/wiki/hide",
+        "risk": "external mutation via POST /r/{subreddit}/api/wiki/hide; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "wiki_revert",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/wiki/revert",
+        "risk": "external mutation via POST /r/{subreddit}/api/wiki/revert; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "wiki_settings_page",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/wiki/settings/{{ record.page }}",
+        "risk": "external mutation via POST /r/{subreddit}/wiki/settings/{page}; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute"
+      },
+      {
+        "name": "emoji_asset_upload_s3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/api/v1/{{ config.subreddit }}/emoji_asset_upload_s3.json",
+        "risk": "external mutation via POST /api/v1/{subreddit}/emoji_asset_upload_s3.json; acquires a temporary S3 upload lease then uploads one approved bounded local image; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires its own one-record plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "batchable": false
+      },
+      {
+        "name": "upload_sr_img",
+        "kind": "update",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/upload_sr_img",
+        "risk": "external mutation via POST /r/{subreddit}/api/upload_sr_img; uploads one approved bounded local image directly to Reddit (not an S3 lease); requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires its own one-record plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "batchable": false
+      },
+      {
+        "name": "widget_image_upload_s3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/r/{{ config.subreddit }}/api/widget_image_upload_s3",
+        "risk": "external mutation via POST /r/{subreddit}/api/widget_image_upload_s3; acquires a temporary S3 upload lease then uploads one approved bounded local image; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires its own one-record plan -\u003e preview -\u003e explicit approval -\u003e execute",
+        "batchable": false
+      },
+      {
+        "name": "vote",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/api/vote",
+        "risk": "POST /api/vote (scope: vote). Reddit rule: votes must be cast by humans. That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not. This action is non-batchable and may be invoked only as one explicit human connector command with typed confirmation.",
+        "batchable": false,
+        "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Reddit OAuth API read of public subreddit posts and comments",
-      "approval": "none; read-only, caller-supplied OAuth token"
+      "read": "external Reddit OAuth API reads spanning public listings and, when the connected account has the relevant OAuth scope, private/moderator-only data (private messages, saved/hidden/downvoted history, moderator queues, modmail, mod notes)",
+      "write": "external Reddit OAuth API mutations behind reverse ETL plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive writes (delete, remove, unfriend/ban, multireddit/live-update deletion) require an additional typed destructive confirmation",
+      "approval": "plan -\u003e preview -\u003e explicit approval -\u003e execute for every write; typed destructive confirmation additionally required for delete-shaped actions"
     },
     "icon": {
       "id": "simple-icons-reddit",

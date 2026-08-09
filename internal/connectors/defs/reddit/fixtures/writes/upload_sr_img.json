@@ -1,0 +1,21 @@
+{
+  "record": {
+    "file_path": "fixture-subreddit.png",
+    "img_type": "png",
+    "upload_type": "icon"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/r/synthetic-conformance-value/api/upload_sr_img"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "json": {
+        "json": {
+          "errors": []
+        }
+      }
+    }
+  }
+}

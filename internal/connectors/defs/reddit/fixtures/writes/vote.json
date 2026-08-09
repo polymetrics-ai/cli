@@ -1,17 +1,19 @@
 {
   "record": {
-    "height": 1,
-    "width": 1
+    "id": "t3_fixture",
+    "dir": 1
   },
   "expect": {
     "method": "POST",
-    "path": "/api/v1/synthetic-conformance-value/emoji_custom_size"
+    "path": "/api/vote"
   },
   "response": {
     "status": 200,
     "body": {
       "json": {
-        "errors": []
+        "json": {
+          "errors": []
+        }
       }
     }
   }

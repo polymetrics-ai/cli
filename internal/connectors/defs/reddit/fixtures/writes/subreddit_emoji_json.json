@@ -8,7 +8,7 @@
   },
   "expect": {
     "method": "POST",
-    "path": "/api/v1/{{ record.subreddit }}/emoji.json"
+    "path": "/api/v1/synthetic-conformance-value/emoji.json"
   },
   "response": {
     "status": 200,

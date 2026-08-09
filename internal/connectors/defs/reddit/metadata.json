@@ -1,7 +1,7 @@
 {
   "name": "reddit",
   "display_name": "Reddit",
-  "description": "Full documented parity with Reddit's OAuth API: reads (posts, comments, listings, search, users, subreddits, moderation, modmail, wiki, live threads) and reverse-ETL writes (submit, vote-adjacent moderation actions, flair, wiki, multireddits, live threads) behind plan/preview/approve/execute.",
+  "description": "Complete 230-route Reddit OAuth API parity: 50 ETL streams and 122 approval-gated reverse-ETL actions, including moderator, live-thread, bounded image-upload, and human-only vote commands.",
   "integration_type": "api",
   "docs_url": "https://www.reddit.com/dev/api/",
   "release_stage": "ga",
@@ -15,6 +15,9 @@
   },
   "batch": {
     "read_page_size": 100
+  },
+  "rate_limit": {
+    "requests_per_minute": 100
   },
   "risk": {
     "read": "external Reddit OAuth API reads spanning public listings and, when the connected account has the relevant OAuth scope, private/moderator-only data (private messages, saved/hidden/downvoted history, moderator queues, modmail, mod notes)",

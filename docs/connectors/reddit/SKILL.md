@@ -7,7 +7,7 @@ description: Reddit connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads subreddit posts and comments through the Reddit OAuth API listing endpoints.
+Complete 230-route Reddit OAuth API parity: 50 ETL streams and 122 approval-gated reverse-ETL actions, including moderator, live-thread, bounded image-upload, and human-only vote commands.
 
 ## Icon
 
@@ -25,7 +25,7 @@ Reads subreddit posts and comments through the Reddit OAuth API listing endpoint
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
@@ -37,7 +37,11 @@ Reads subreddit posts and comments through the Reddit OAuth API listing endpoint
 - base_url
 - reddit_username
 - subreddit
+- token_url
 - access_token (secret)
+- client_id (secret)
+- client_secret (secret)
+- refresh_token (secret)
 
 ## ETL Streams
 
@@ -49,16 +53,842 @@ Reads subreddit posts and comments through the Reddit OAuth API listing endpoint
   - primary key: id
   - cursor: created_utc
   - fields: author(string), body(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string)
+- friends_list:
+  - primary key: id
+  - fields: date(number), id(string), name(string)
+- blocked_list:
+  - primary key: id
+  - fields: date(number), id(string), name(string)
+- trusted_list:
+  - primary key: id
+  - fields: date(number), id(string), name(string)
+- flair_list:
+  - primary key: user
+  - fields: flair_css_class(string), flair_text(string), user(string)
+- best_posts:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- duplicate_posts:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- hot_posts:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- rising_posts:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- top_posts:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- controversial_posts:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- live_thread_updates:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), body(string), created_utc(number), id(string), name(string), stricken(boolean)
+- live_thread_discussions:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- inbox_messages:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), body(string), created_utc(number), dest(string), id(string), name(string), new(boolean), subject(string), was_comment(boolean)
+- unread_messages:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), body(string), created_utc(number), dest(string), id(string), name(string), new(boolean), subject(string), was_comment(boolean)
+- sent_messages:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), body(string), created_utc(number), dest(string), id(string), name(string), new(boolean), subject(string), was_comment(boolean)
+- mod_log:
+  - primary key: id
+  - cursor: created_utc
+  - fields: action(string), created_utc(number), description(string), details(string), id(string), mod(string), subreddit(string), target_author(string), target_fullname(string)
+- mod_reports_queue:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- mod_spam_queue:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- mod_modqueue:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- mod_unmoderated_queue:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- mod_edited_queue:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- search_results:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- subreddit_moderators:
+  - primary key: id
+  - fields: date(number), id(string), name(string)
+- subreddit_contributors:
+  - primary key: id
+  - fields: date(number), id(string), name(string)
+- subreddit_wiki_contributors:
+  - primary key: id
+  - fields: date(number), id(string), name(string)
+- subreddit_banned_users:
+  - primary key: id
+  - fields: date(number), id(string), name(string)
+- subreddit_muted_users:
+  - primary key: id
+  - fields: date(number), id(string), name(string)
+- subreddit_wiki_banned_users:
+  - primary key: id
+  - fields: date(number), id(string), name(string)
+- my_subscribed_subreddits:
+  - primary key: id
+  - fields: created_utc(number), display_name(string), id(string), name(string), over18(boolean), public_description(string), subscribers(integer), title(string), url(string)
+- my_contributor_subreddits:
+  - primary key: id
+  - fields: created_utc(number), display_name(string), id(string), name(string), over18(boolean), public_description(string), subscribers(integer), title(string), url(string)
+- my_moderated_subreddits:
+  - primary key: id
+  - fields: created_utc(number), display_name(string), id(string), name(string), over18(boolean), public_description(string), subscribers(integer), title(string), url(string)
+- my_streams_subreddits:
+  - primary key: id
+  - fields: created_utc(number), display_name(string), id(string), name(string), over18(boolean), public_description(string), subscribers(integer), title(string), url(string)
+- subreddit_search_results:
+  - primary key: id
+  - fields: created_utc(number), display_name(string), id(string), name(string), over18(boolean), public_description(string), subscribers(integer), title(string), url(string)
+- popular_subreddits:
+  - primary key: id
+  - fields: created_utc(number), display_name(string), id(string), name(string), over18(boolean), public_description(string), subscribers(integer), title(string), url(string)
+- new_subreddits:
+  - primary key: id
+  - fields: created_utc(number), display_name(string), id(string), name(string), over18(boolean), public_description(string), subscribers(integer), title(string), url(string)
+- user_search_results:
+  - primary key: id
+  - fields: comment_karma(integer), created_utc(number), id(string), is_mod(boolean), link_karma(integer), name(string), verified(boolean)
+- popular_user_subreddits:
+  - primary key: id
+  - fields: created_utc(number), display_name(string), id(string), name(string), over18(boolean), public_description(string), subscribers(integer), title(string), url(string)
+- new_user_subreddits:
+  - primary key: id
+  - fields: created_utc(number), display_name(string), id(string), name(string), over18(boolean), public_description(string), subscribers(integer), title(string), url(string)
+- user_overview:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- user_submitted:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- user_comments:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), body(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string)
+- user_upvoted:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- user_downvoted:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- user_hidden:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- user_saved:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- user_gilded:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- wiki_page_discussions:
+  - primary key: id
+  - cursor: created_utc
+  - fields: author(string), created_utc(number), id(string), name(string), permalink(string), subreddit(string), title(string)
+- wiki_page_revisions:
+  - primary key: id
+  - fields: author(string), id(string), reason(string), timestamp(number)
 
 ## Sync Modes
 
 - ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
+## Reverse ETL Actions
+
+- me_prefs:
+  - endpoint: PATCH /api/v1/me/prefs
+  - risk: external mutation via PATCH /api/v1/me/prefs; requires reverse ETL plan -> preview -> explicit approval -> execute
+- announcements_v1_hide:
+  - endpoint: POST /api/announcements/v1/hide
+  - risk: external mutation via POST /api/announcements/v1/hide; requires reverse ETL plan -> preview -> explicit approval -> execute
+- announcements_v1_read:
+  - endpoint: POST /api/announcements/v1/read
+  - risk: external mutation via POST /api/announcements/v1/read; requires reverse ETL plan -> preview -> explicit approval -> execute
+- announcements_v1_read_all:
+  - endpoint: POST /api/announcements/v1/read_all
+  - risk: external mutation via POST /api/announcements/v1/read_all; requires reverse ETL plan -> preview -> explicit approval -> execute
+- subreddit_emoji_json:
+  - endpoint: POST /api/v1/{{ config.subreddit }}/emoji.json
+  - risk: external mutation via POST /api/v1/{subreddit}/emoji.json; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- subreddit_emoji_emoji_name:
+  - endpoint: DELETE /api/v1/{{ config.subreddit }}/emoji/{{ record.emoji_name }}
+  - required fields: emoji_name
+  - risk: external mutation via DELETE /api/v1/{subreddit}/emoji/{emoji_name}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- subreddit_emoji_custom_size:
+  - endpoint: POST /api/v1/{{ config.subreddit }}/emoji_custom_size
+  - risk: external mutation via POST /api/v1/{subreddit}/emoji_custom_size; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- clearflairtemplates:
+  - endpoint: POST /r/{{ config.subreddit }}/api/clearflairtemplates
+  - risk: external mutation via POST /r/{subreddit}/api/clearflairtemplates; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- deleteflair:
+  - endpoint: POST /r/{{ config.subreddit }}/api/deleteflair
+  - risk: external mutation via POST /r/{subreddit}/api/deleteflair; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- deleteflairtemplate:
+  - endpoint: POST /r/{{ config.subreddit }}/api/deleteflairtemplate
+  - risk: external mutation via POST /r/{subreddit}/api/deleteflairtemplate; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- flair:
+  - endpoint: POST /r/{{ config.subreddit }}/api/flair
+  - risk: external mutation via POST /r/{subreddit}/api/flair; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- flair_template_order:
+  - endpoint: PATCH /r/{{ config.subreddit }}/api/flair_template_order
+  - risk: external mutation via PATCH /r/{subreddit}/api/flair_template_order; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- flairconfig:
+  - endpoint: POST /r/{{ config.subreddit }}/api/flairconfig
+  - risk: external mutation via POST /r/{subreddit}/api/flairconfig; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- flaircsv:
+  - endpoint: POST /r/{{ config.subreddit }}/api/flaircsv
+  - risk: external mutation via POST /r/{subreddit}/api/flaircsv; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- flairselector:
+  - endpoint: POST /r/{{ config.subreddit }}/api/flairselector
+  - risk: external mutation via POST /r/{subreddit}/api/flairselector; requires reverse ETL plan -> preview -> explicit approval -> execute
+- flairtemplate:
+  - endpoint: POST /r/{{ config.subreddit }}/api/flairtemplate
+  - risk: external mutation via POST /r/{subreddit}/api/flairtemplate; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- flairtemplate_v2:
+  - endpoint: POST /r/{{ config.subreddit }}/api/flairtemplate_v2
+  - risk: external mutation via POST /r/{subreddit}/api/flairtemplate_v2; requires the connected account to moderate the target subreddit (scope: modflair); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- selectflair:
+  - endpoint: POST /r/{{ config.subreddit }}/api/selectflair
+  - risk: external mutation via POST /r/{subreddit}/api/selectflair; requires reverse ETL plan -> preview -> explicit approval -> execute
+- setflairenabled:
+  - endpoint: POST /r/{{ config.subreddit }}/api/setflairenabled
+  - risk: external mutation via POST /r/{subreddit}/api/setflairenabled; requires reverse ETL plan -> preview -> explicit approval -> execute
+- comment:
+  - endpoint: POST /api/comment
+  - risk: external mutation via POST /api/comment; requires reverse ETL plan -> preview -> explicit approval -> execute
+- del:
+  - endpoint: POST /api/del
+  - risk: external mutation via POST /api/del; requires reverse ETL plan -> preview -> explicit approval -> execute
+- editusertext:
+  - endpoint: POST /api/editusertext
+  - risk: external mutation via POST /api/editusertext; requires reverse ETL plan -> preview -> explicit approval -> execute
+- follow_post:
+  - endpoint: POST /api/follow_post
+  - risk: external mutation via POST /api/follow_post; requires reverse ETL plan -> preview -> explicit approval -> execute
+- hide:
+  - endpoint: POST /api/hide
+  - risk: external mutation via POST /api/hide; requires reverse ETL plan -> preview -> explicit approval -> execute
+- lock:
+  - endpoint: POST /api/lock
+  - risk: external mutation via POST /api/lock; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- marknsfw:
+  - endpoint: POST /api/marknsfw
+  - risk: external mutation via POST /api/marknsfw; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- report:
+  - endpoint: POST /api/report
+  - risk: external mutation via POST /api/report; requires reverse ETL plan -> preview -> explicit approval -> execute
+- save:
+  - endpoint: POST /api/save
+  - risk: external mutation via POST /api/save; requires reverse ETL plan -> preview -> explicit approval -> execute
+- sendreplies:
+  - endpoint: POST /api/sendreplies
+  - risk: external mutation via POST /api/sendreplies; requires reverse ETL plan -> preview -> explicit approval -> execute
+- set_contest_mode:
+  - endpoint: POST /api/set_contest_mode
+  - risk: external mutation via POST /api/set_contest_mode; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- set_subreddit_sticky:
+  - endpoint: POST /api/set_subreddit_sticky
+  - risk: external mutation via POST /api/set_subreddit_sticky; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- set_suggested_sort:
+  - endpoint: POST /api/set_suggested_sort
+  - risk: external mutation via POST /api/set_suggested_sort; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- spoiler:
+  - endpoint: POST /api/spoiler
+  - risk: external mutation via POST /api/spoiler; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- submit:
+  - endpoint: POST /api/submit
+  - risk: external mutation via POST /api/submit; requires reverse ETL plan -> preview -> explicit approval -> execute
+- unhide:
+  - endpoint: POST /api/unhide
+  - risk: external mutation via POST /api/unhide; requires reverse ETL plan -> preview -> explicit approval -> execute
+- unlock:
+  - endpoint: POST /api/unlock
+  - risk: external mutation via POST /api/unlock; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- unmarknsfw:
+  - endpoint: POST /api/unmarknsfw
+  - risk: external mutation via POST /api/unmarknsfw; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- unsave:
+  - endpoint: POST /api/unsave
+  - risk: external mutation via POST /api/unsave; requires reverse ETL plan -> preview -> explicit approval -> execute
+- unspoiler:
+  - endpoint: POST /api/unspoiler
+  - risk: external mutation via POST /api/unspoiler; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_create:
+  - endpoint: POST /api/live/create
+  - risk: external mutation via POST /api/live/create; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_accept_contributor_invite:
+  - endpoint: POST /api/live/{{ record.thread }}/accept_contributor_invite
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/accept_contributor_invite; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_close_thread:
+  - endpoint: POST /api/live/{{ record.thread }}/close_thread
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/close_thread; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_delete_update:
+  - endpoint: POST /api/live/{{ record.thread }}/delete_update
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/delete_update; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_edit:
+  - endpoint: POST /api/live/{{ record.thread }}/edit
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/edit; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_hide_discussion:
+  - endpoint: POST /api/live/{{ record.thread }}/hide_discussion
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/hide_discussion; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_invite_contributor:
+  - endpoint: POST /api/live/{{ record.thread }}/invite_contributor
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/invite_contributor; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_leave_contributor:
+  - endpoint: POST /api/live/{{ record.thread }}/leave_contributor
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/leave_contributor; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_report:
+  - endpoint: POST /api/live/{{ record.thread }}/report
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/report; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_rm_contributor:
+  - endpoint: POST /api/live/{{ record.thread }}/rm_contributor
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/rm_contributor; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_rm_contributor_invite:
+  - endpoint: POST /api/live/{{ record.thread }}/rm_contributor_invite
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/rm_contributor_invite; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_set_contributor_permissions:
+  - endpoint: POST /api/live/{{ record.thread }}/set_contributor_permissions
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/set_contributor_permissions; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_strike_update:
+  - endpoint: POST /api/live/{{ record.thread }}/strike_update
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/strike_update; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_unhide_discussion:
+  - endpoint: POST /api/live/{{ record.thread }}/unhide_discussion
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/unhide_discussion; requires the connected account to own/contribute to the target live thread (scope: livemanage); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- live_thread_update:
+  - endpoint: POST /api/live/{{ record.thread }}/update
+  - required fields: thread
+  - risk: external mutation via POST /api/live/{thread}/update; requires reverse ETL plan -> preview -> explicit approval -> execute
+- compose:
+  - endpoint: POST /api/compose
+  - risk: external mutation via POST /api/compose; requires reverse ETL plan -> preview -> explicit approval -> execute
+- del_msg:
+  - endpoint: POST /api/del_msg
+  - risk: external mutation via POST /api/del_msg; requires reverse ETL plan -> preview -> explicit approval -> execute
+- read_all_messages:
+  - endpoint: POST /api/read_all_messages
+  - risk: external mutation via POST /api/read_all_messages; requires reverse ETL plan -> preview -> explicit approval -> execute
+- read_message:
+  - endpoint: POST /api/read_message
+  - risk: external mutation via POST /api/read_message; requires reverse ETL plan -> preview -> explicit approval -> execute
+- accept_moderator_invite:
+  - endpoint: POST /r/{{ config.subreddit }}/api/accept_moderator_invite
+  - risk: external mutation via POST /r/{subreddit}/api/accept_moderator_invite; requires the connected account to moderate the target subreddit (scope: modself); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- approve:
+  - endpoint: POST /api/approve
+  - risk: external mutation via POST /api/approve; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- distinguish:
+  - endpoint: POST /api/distinguish
+  - risk: external mutation via POST /api/distinguish; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- ignore_reports:
+  - endpoint: POST /api/ignore_reports
+  - risk: external mutation via POST /api/ignore_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- leavecontributor:
+  - endpoint: POST /api/leavecontributor
+  - risk: external mutation via POST /api/leavecontributor; requires the connected account to moderate the target subreddit (scope: modself); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- leavemoderator:
+  - endpoint: POST /api/leavemoderator
+  - risk: external mutation via POST /api/leavemoderator; requires the connected account to moderate the target subreddit (scope: modself); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- remove:
+  - endpoint: POST /api/remove
+  - risk: external mutation via POST /api/remove; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- show_comment:
+  - endpoint: POST /api/show_comment
+  - risk: external mutation via POST /api/show_comment; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- snooze_reports:
+  - endpoint: POST /api/snooze_reports
+  - risk: external mutation via POST /api/snooze_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- unignore_reports:
+  - endpoint: POST /api/unignore_reports
+  - risk: external mutation via POST /api/unignore_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- unsnooze_reports:
+  - endpoint: POST /api/unsnooze_reports
+  - risk: external mutation via POST /api/unsnooze_reports; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- update_crowd_control_level:
+  - endpoint: POST /api/update_crowd_control_level
+  - risk: external mutation via POST /api/update_crowd_control_level; requires the connected account to moderate the target subreddit (scope: modposts); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_bulk_read:
+  - endpoint: POST /api/mod/bulk_read
+  - risk: external mutation via POST /api/mod/bulk_read; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations:
+  - endpoint: POST /api/mod/conversations
+  - risk: external mutation via POST /api/mod/conversations; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id:
+  - endpoint: POST /api/mod/conversations/:conversation_id
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_approve:
+  - endpoint: POST /api/mod/conversations/:conversation_id/approve
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id/approve; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_archive:
+  - endpoint: POST /api/mod/conversations/:conversation_id/archive
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id/archive; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_disapprove:
+  - endpoint: POST /api/mod/conversations/:conversation_id/disapprove
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id/disapprove; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_highlight:
+  - endpoint: DELETE /api/mod/conversations/:conversation_id/highlight
+  - risk: external mutation via DELETE /api/mod/conversations/:conversation_id/highlight; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_highlight_2:
+  - endpoint: POST /api/mod/conversations/:conversation_id/highlight
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id/highlight; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_mute:
+  - endpoint: POST /api/mod/conversations/:conversation_id/mute
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id/mute; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_temp_ban:
+  - endpoint: POST /api/mod/conversations/:conversation_id/temp_ban
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id/temp_ban; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_unarchive:
+  - endpoint: POST /api/mod/conversations/:conversation_id/unarchive
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id/unarchive; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_unban:
+  - endpoint: POST /api/mod/conversations/:conversation_id/unban
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id/unban; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_conversation_id_unmute:
+  - endpoint: POST /api/mod/conversations/:conversation_id/unmute
+  - risk: external mutation via POST /api/mod/conversations/:conversation_id/unmute; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_read:
+  - endpoint: POST /api/mod/conversations/read
+  - risk: external mutation via POST /api/mod/conversations/read; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_conversations_unread:
+  - endpoint: POST /api/mod/conversations/unread
+  - risk: external mutation via POST /api/mod/conversations/unread; requires the connected account to moderate the target subreddit (scope: modmail); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_notes:
+  - endpoint: DELETE /api/mod/notes
+  - risk: external mutation via DELETE /api/mod/notes; requires the connected account to moderate the target subreddit (scope: modnote); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- mod_notes_2:
+  - endpoint: POST /api/mod/notes
+  - risk: external mutation via POST /api/mod/notes; requires the connected account to moderate the target subreddit (scope: modnote); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- multi_copy:
+  - endpoint: POST /api/multi/copy
+  - risk: external mutation via POST /api/multi/copy; requires reverse ETL plan -> preview -> explicit approval -> execute
+- multi_multipath:
+  - endpoint: DELETE /api/multi/{{ record.multipath }}
+  - required fields: multipath
+  - risk: external mutation via DELETE /api/multi/{multipath}; requires reverse ETL plan -> preview -> explicit approval -> execute
+- multi_multipath_2:
+  - endpoint: POST /api/multi/{{ record.multipath }}
+  - required fields: multipath
+  - risk: external mutation via POST /api/multi/{multipath}; requires reverse ETL plan -> preview -> explicit approval -> execute
+- multi_multipath_3:
+  - endpoint: PUT /api/multi/{{ record.multipath }}
+  - required fields: multipath
+  - risk: external mutation via PUT /api/multi/{multipath}; requires reverse ETL plan -> preview -> explicit approval -> execute
+- multi_multipath_description:
+  - endpoint: PUT /api/multi/{{ record.multipath }}/description
+  - required fields: multipath
+  - risk: external mutation via PUT /api/multi/{multipath}/description; requires reverse ETL plan -> preview -> explicit approval -> execute
+- multi_multipath_r_srname:
+  - endpoint: DELETE /api/multi/{{ record.multipath }}/r/{{ record.srname }}
+  - required fields: multipath, srname
+  - risk: external mutation via DELETE /api/multi/{multipath}/r/{srname}; requires reverse ETL plan -> preview -> explicit approval -> execute
+- multi_multipath_r_srname_2:
+  - endpoint: PUT /api/multi/{{ record.multipath }}/r/{{ record.srname }}
+  - required fields: multipath, srname
+  - risk: external mutation via PUT /api/multi/{multipath}/r/{srname}; requires reverse ETL plan -> preview -> explicit approval -> execute
+- delete_sr_banner:
+  - endpoint: POST /r/{{ config.subreddit }}/api/delete_sr_banner
+  - risk: external mutation via POST /r/{subreddit}/api/delete_sr_banner; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- delete_sr_header:
+  - endpoint: POST /r/{{ config.subreddit }}/api/delete_sr_header
+  - risk: external mutation via POST /r/{subreddit}/api/delete_sr_header; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- delete_sr_icon:
+  - endpoint: POST /r/{{ config.subreddit }}/api/delete_sr_icon
+  - risk: external mutation via POST /r/{subreddit}/api/delete_sr_icon; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- delete_sr_img:
+  - endpoint: POST /r/{{ config.subreddit }}/api/delete_sr_img
+  - risk: external mutation via POST /r/{subreddit}/api/delete_sr_img; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- search_reddit_names:
+  - endpoint: POST /api/search_reddit_names
+  - risk: external mutation via POST /api/search_reddit_names; requires reverse ETL plan -> preview -> explicit approval -> execute
+- search_subreddits:
+  - endpoint: POST /api/search_subreddits
+  - risk: external mutation via POST /api/search_subreddits; requires reverse ETL plan -> preview -> explicit approval -> execute
+- site_admin:
+  - endpoint: POST /api/site_admin
+  - risk: external mutation via POST /api/site_admin; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- subreddit_stylesheet:
+  - endpoint: POST /r/{{ config.subreddit }}/api/subreddit_stylesheet
+  - risk: external mutation via POST /r/{subreddit}/api/subreddit_stylesheet; requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- subscribe:
+  - endpoint: POST /api/subscribe
+  - risk: external mutation via POST /api/subscribe; requires reverse ETL plan -> preview -> explicit approval -> execute
+- friend:
+  - endpoint: POST /r/{{ config.subreddit }}/api/friend
+  - risk: external mutation via POST /r/{subreddit}/api/friend; requires reverse ETL plan -> preview -> explicit approval -> execute
+- report_user:
+  - endpoint: POST /api/report_user
+  - risk: external mutation via POST /api/report_user; requires reverse ETL plan -> preview -> explicit approval -> execute
+- setpermissions:
+  - endpoint: POST /r/{{ config.subreddit }}/api/setpermissions
+  - risk: external mutation via POST /r/{subreddit}/api/setpermissions; requires the connected account to moderate the target subreddit (scope: modothers); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- unfriend:
+  - endpoint: POST /r/{{ config.subreddit }}/api/unfriend
+  - risk: external mutation via POST /r/{subreddit}/api/unfriend; requires reverse ETL plan -> preview -> explicit approval -> execute
+- me_friends_username:
+  - endpoint: DELETE /api/v1/me/friends/{{ record.username }}
+  - required fields: username
+  - risk: external mutation via DELETE /api/v1/me/friends/{username}; requires reverse ETL plan -> preview -> explicit approval -> execute
+- me_friends_username_2:
+  - endpoint: PUT /api/v1/me/friends/{{ record.username }}
+  - required fields: username
+  - risk: external mutation via PUT /api/v1/me/friends/{username}; requires reverse ETL plan -> preview -> explicit approval -> execute
+- widget:
+  - endpoint: POST /r/{{ config.subreddit }}/api/widget
+  - risk: external mutation via POST /r/{subreddit}/api/widget; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- widget_widget_id:
+  - endpoint: DELETE /r/{{ config.subreddit }}/api/widget/{{ record.widget_id }}
+  - required fields: widget_id
+  - risk: external mutation via DELETE /r/{subreddit}/api/widget/{widget_id}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- widget_widget_id_2:
+  - endpoint: PUT /r/{{ config.subreddit }}/api/widget/{{ record.widget_id }}
+  - required fields: widget_id
+  - risk: external mutation via PUT /r/{subreddit}/api/widget/{widget_id}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- widget_order_section:
+  - endpoint: PATCH /r/{{ config.subreddit }}/api/widget_order/{{ record.section }}
+  - required fields: section
+  - risk: external mutation via PATCH /r/{subreddit}/api/widget_order/{section}; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- wiki_alloweditor_act:
+  - endpoint: POST /r/{{ config.subreddit }}/api/wiki/alloweditor/{{ record.act }}
+  - required fields: act
+  - risk: external mutation via POST /r/{subreddit}/api/wiki/alloweditor/{act}; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- wiki_edit:
+  - endpoint: POST /r/{{ config.subreddit }}/api/wiki/edit
+  - risk: external mutation via POST /r/{subreddit}/api/wiki/edit; requires reverse ETL plan -> preview -> explicit approval -> execute
+- wiki_hide:
+  - endpoint: POST /r/{{ config.subreddit }}/api/wiki/hide
+  - risk: external mutation via POST /r/{subreddit}/api/wiki/hide; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- wiki_revert:
+  - endpoint: POST /r/{{ config.subreddit }}/api/wiki/revert
+  - risk: external mutation via POST /r/{subreddit}/api/wiki/revert; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- wiki_settings_page:
+  - endpoint: POST /r/{{ config.subreddit }}/wiki/settings/{{ record.page }}
+  - required fields: page
+  - risk: external mutation via POST /r/{subreddit}/wiki/settings/{page}; requires the connected account to moderate the target subreddit (scope: modwiki); Reddit returns 403 otherwise; requires reverse ETL plan -> preview -> explicit approval -> execute
+- emoji_asset_upload_s3:
+  - endpoint: POST /api/v1/{{ config.subreddit }}/emoji_asset_upload_s3.json
+  - required fields: file_path, mimetype
+  - risk: external mutation via POST /api/v1/{subreddit}/emoji_asset_upload_s3.json; acquires a temporary S3 upload lease then uploads one approved bounded local image; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires its own one-record plan -> preview -> explicit approval -> execute
+  - bulk reverse ETL: refused (non-batchable; run it as its own pm command, one record at a time)
+- upload_sr_img:
+  - endpoint: POST /r/{{ config.subreddit }}/api/upload_sr_img
+  - required fields: file_path, img_type, upload_type
+  - risk: external mutation via POST /r/{subreddit}/api/upload_sr_img; uploads one approved bounded local image directly to Reddit (not an S3 lease); requires the connected account to moderate the target subreddit (scope: modconfig); Reddit returns 403 otherwise; requires its own one-record plan -> preview -> explicit approval -> execute
+  - bulk reverse ETL: refused (non-batchable; run it as its own pm command, one record at a time)
+- widget_image_upload_s3:
+  - endpoint: POST /r/{{ config.subreddit }}/api/widget_image_upload_s3
+  - required fields: file_path, mimetype
+  - risk: external mutation via POST /r/{subreddit}/api/widget_image_upload_s3; acquires a temporary S3 upload lease then uploads one approved bounded local image; requires the connected account to moderate the target subreddit (scope: structuredstyles); Reddit returns 403 otherwise; requires its own one-record plan -> preview -> explicit approval -> execute
+  - bulk reverse ETL: refused (non-batchable; run it as its own pm command, one record at a time)
+- vote:
+  - endpoint: POST /api/vote
+  - required fields: id, dir
+  - risk: POST /api/vote (scope: vote). Reddit rule: votes must be cast by humans. That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not. This action is non-batchable and may be invoked only as one explicit human connector command with typed confirmation.
+  - bulk reverse ETL: refused (non-batchable; run it as its own pm command, one record at a time)
+
 ## Security
 
-- read risk: external Reddit OAuth API read of public subreddit posts and comments
-- approval: none; read-only, caller-supplied OAuth token
+- read risk: external Reddit OAuth API reads spanning public listings and, when the connected account has the relevant OAuth scope, private/moderator-only data (private messages, saved/hidden/downvoted history, moderator queues, modmail, mod notes)
+- write risk: external Reddit OAuth API mutations behind reverse ETL plan -> preview -> explicit approval -> execute; destructive writes (delete, remove, unfriend/ban, multireddit/live-update deletion) require an additional typed destructive confirmation
+- approval: plan -> preview -> explicit approval -> execute for every write; typed destructive confirmation additionally required for delete-shaped actions
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Command Surface
+
+- Full documented parity with Reddit's OAuth API (https://www.reddit.com/dev/api/): 225 of 230 concrete documented URI variants are executable as pm reddit commands; five remain provider-blocked with named reasons.
+- Usage: pm reddit <command> [flags]
+- Source CLI: Reddit OAuth API (Full 202-endpoint DOM extraction, verified 2026-08-04)
+- Account
+- Flair
+  - flair flair-list - This endpoint is a listing. [intent=etl availability=implemented stream=flair_list]; approval: none; risk: read of Reddit OAuth API listing data; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.
+  - flair link-flair - Return list of available link flair for the current subreddit. Will not return flair if the user cannot set their own link flair and they are not a moderator that can set flair. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - flair link-flair-v2 - Return list of available link flair for the current subreddit. Will not return flair if the user cannot set their own link flair and they are not a moderator that can set flair. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - flair user-flair - Return list of available user flair for the current subreddit. Will not return flair if flair is disabled on the subreddit, the user cannot set their own flair, or they are not a moderator that can se [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - flair user-flair-v2 - Return list of available user flair for the current subreddit. If user is not a mod of the subreddit, this endpoint filters out mod_only templates. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - flair clearflairtemplates - POST /r/{subreddit}/api/clearflairtemplates [intent=reverse_etl availability=implemented write=clearflairtemplates]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; flags: --flair-type
+  - flair deleteflair - POST /r/{subreddit}/api/deleteflair [intent=reverse_etl availability=implemented write=deleteflair]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; flags: --name
+  - flair deleteflairtemplate - POST /r/{subreddit}/api/deleteflairtemplate [intent=reverse_etl availability=implemented write=deleteflairtemplate]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; flags: --flair-template-id
+  - flair flair - POST /r/{subreddit}/api/flair [intent=reverse_etl availability=implemented write=flair]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; flags: --css-class, --link, --name, --text
+  - flair flair-template-order - Update the order of flair templates in the specified subreddit. Order should contain every single flair id for that flair type; omitting any id will result in a loss of data. [intent=reverse_etl availability=implemented write=flair_template_order]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; flags: --flair-type, --subreddit
+  - flair flairconfig - POST /r/{subreddit}/api/flairconfig [intent=reverse_etl availability=implemented write=flairconfig]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; flags: --flair-enabled, --flair-position, --flair-self-assign-enabled, --link-flair-position, --link-flair-self-assign-enabled
+  - flair flaircsv - Change the flair of multiple users in the same subreddit with a single API call. Requires a string 'flair_csv' which has up to 100 lines of the form 'user,flairtext,cssclass' (Lines beyond the 100th a [intent=reverse_etl availability=implemented write=flaircsv]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; flags: --flair-csv
+  - flair flairselector - Return information about a users's flair options. If link is given, return link flair options for an existing link. If is_newlink is True, return link flairs options for a new link submission. Otherwi [intent=reverse_etl availability=implemented write=flairselector]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --is-newlink, --link, --name
+  - flair flairtemplate - POST /r/{subreddit}/api/flairtemplate [intent=reverse_etl availability=implemented write=flairtemplate]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; flags: --css-class, --flair-template-id, --flair-type, --text, --text-editable
+  - flair flairtemplate-v2 - Create or update a flair template. This new endpoint is primarily used for the redesign. [intent=reverse_etl availability=implemented write=flairtemplate_v2]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modflair); Reddit returns 403 for non-moderators.; flags: --allowable-content, --background-color, --css-class, --flair-template-id, --flair-type, --max-emojis, --mod-only, --override-css, --text, --text-color, --text-editable
+  - flair selectflair - POST /r/{subreddit}/api/selectflair [intent=reverse_etl availability=implemented write=selectflair]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --background-color, --css-class, --flair-template-id, --link, --name, --return-rtson, --text, --text-color
+  - flair setflairenabled - POST /r/{subreddit}/api/setflairenabled [intent=reverse_etl availability=implemented write=setflairenabled]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --flair-enabled
+- Listings
+- Live threads
+- Private messages
+- Moderation
+- Search
+- Subreddits
+- Users
+- Wiki
+- Announcements
+- Emoji
+- Links & comments
+  - vote - Cast exactly one human-directed Reddit vote [intent=reverse_etl availability=implemented write=vote]; approval: explicit; risk: Human-only one-record mutation (OAuth scope: vote); explicit typed confirmation is required for each invocation.; notes: Reddit rule: votes must be cast by humans. That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not. This non-batchable command cannot be used by scheduled syncs or bulk reverse ETL.; flags: --id (required), --dir (required)
+- Misc
+- New modmail
+- Mod notes
+- Multireddits
+- Widgets
+  - widgets widgets - Return all widgets for the given subreddit [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; flags: --progressive-images, --page, --page-cursor
+  - widgets widget - Add and return a widget to the specified subreddit Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root obje [intent=reverse_etl availability=implemented write=widget]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; flags: --json
+  - widgets widget-widget-id - Delete a widget from the specified subreddit (if it exists) [intent=reverse_etl availability=implemented write=widget_widget_id]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; flags: --widget-id (required)
+  - widgets widget-widget-id-2 - Update and return the data of a widget. Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root object, which m [intent=reverse_etl availability=implemented write=widget_widget_id_2]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; flags: --widget-id (required), --json
+  - widgets widget-order-section - Update the order of widget_ids in the specified subreddit [intent=reverse_etl availability=implemented write=widget_order_section]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; flags: --section (required), --json
+  - widgets widget-image-upload-s3 - Acquire a bounded Reddit S3 lease and upload one approved widget image [intent=reverse_etl availability=implemented write=widget_image_upload_s3]; approval: explicit; risk: One approved bounded image upload through a Reddit-issued S3 lease; requires target-subreddit moderator authority (OAuth scope: structuredstyles).; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators. This action is one-record-only.; flags: --file-path (required), --mimetype (required)
+- Other Commands
+  - account friends-list - This endpoint is a listing. [intent=etl availability=implemented stream=friends_list]; approval: none; risk: read of Reddit OAuth API listing data
+  - account blocked-list - This endpoint is a listing. [intent=etl availability=implemented stream=blocked_list]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: another account's block-list membership
+  - account trusted-list - This endpoint is a listing. [intent=etl availability=implemented stream=trusted_list]; approval: none; risk: read of Reddit OAuth API listing data
+  - listings best-posts - This endpoint is a listing. [intent=etl availability=implemented stream=best_posts]; approval: none; risk: read of Reddit OAuth API listing data
+  - listings duplicate-posts - Return a list of other submissions of the same URL This endpoint is a listing. [intent=etl availability=implemented stream=duplicate_posts]; approval: none; risk: read of Reddit OAuth API listing data; flags: --article (required)
+  - listings hot-posts - This endpoint is a listing. [intent=etl availability=implemented stream=hot_posts]; approval: none; risk: read of Reddit OAuth API listing data
+  - listings posts - This endpoint is a listing. [intent=etl availability=implemented stream=posts]; approval: none; risk: read of Reddit OAuth API listing data
+  - listings rising-posts - This endpoint is a listing. [intent=etl availability=implemented stream=rising_posts]; approval: none; risk: read of Reddit OAuth API listing data
+  - listings top-posts - This endpoint is a listing. [intent=etl availability=implemented stream=top_posts]; approval: none; risk: read of Reddit OAuth API listing data
+  - listings controversial-posts - This endpoint is a listing. [intent=etl availability=implemented stream=controversial_posts]; approval: none; risk: read of Reddit OAuth API listing data
+  - live live-thread-updates - Get a list of updates posted in this thread. See also: /api/live/thread/update. This endpoint is a listing. [intent=etl availability=implemented stream=live_thread_updates]; approval: none; risk: read of Reddit OAuth API listing data; flags: --thread (required)
+  - live live-thread-discussions - Get a list of reddit submissions linking to this thread. This endpoint is a listing. [intent=etl availability=implemented stream=live_thread_discussions]; approval: none; risk: read of Reddit OAuth API listing data; flags: --thread (required)
+  - messages inbox-messages - This endpoint is a listing. [intent=etl availability=implemented stream=inbox_messages]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: full private-message content
+  - messages unread-messages - This endpoint is a listing. [intent=etl availability=implemented stream=unread_messages]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: full private-message content
+  - messages sent-messages - This endpoint is a listing. [intent=etl availability=implemented stream=sent_messages]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: full private-message content
+  - moderation mod-log - Get a list of recent moderation actions. Moderator actions taken within a subreddit are logged. This listing is a view of that log with various filters to aid in analyzing the information. The optiona [intent=etl availability=implemented stream=mod_log]; approval: none; risk: read of Reddit OAuth API listing data; Requires the connected account to moderate the target subreddit (OAuth scope: modlog); Reddit returns 403 for non-moderators.
+  - moderation mod-reports-queue - Return a listing of posts relevant to moderators. reports: Things that have been reported. spam: Things that have been marked as spam or otherwise removed. modqueue: Things requiring moderator review, [intent=etl availability=implemented stream=mod_reports_queue]; approval: none; risk: read of Reddit OAuth API listing data
+  - moderation mod-spam-queue - Return a listing of posts relevant to moderators. reports: Things that have been reported. spam: Things that have been marked as spam or otherwise removed. modqueue: Things requiring moderator review, [intent=etl availability=implemented stream=mod_spam_queue]; approval: none; risk: read of Reddit OAuth API listing data
+  - moderation mod-modqueue - Return a listing of posts relevant to moderators. reports: Things that have been reported. spam: Things that have been marked as spam or otherwise removed. modqueue: Things requiring moderator review, [intent=etl availability=implemented stream=mod_modqueue]; approval: none; risk: read of Reddit OAuth API listing data
+  - moderation mod-unmoderated-queue - Return a listing of posts relevant to moderators. reports: Things that have been reported. spam: Things that have been marked as spam or otherwise removed. modqueue: Things requiring moderator review, [intent=etl availability=implemented stream=mod_unmoderated_queue]; approval: none; risk: read of Reddit OAuth API listing data
+  - moderation mod-edited-queue - Return a listing of posts relevant to moderators. reports: Things that have been reported. spam: Things that have been marked as spam or otherwise removed. modqueue: Things requiring moderator review, [intent=etl availability=implemented stream=mod_edited_queue]; approval: none; risk: read of Reddit OAuth API listing data
+  - search search-results - Search links page. This endpoint is a listing. [intent=etl availability=implemented stream=search_results]; approval: none; risk: read of Reddit OAuth API listing data; flags: --q (required)
+  - subreddits subreddit-moderators - This endpoint is a listing. [intent=etl availability=implemented stream=subreddit_moderators]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits subreddit-contributors - This endpoint is a listing. [intent=etl availability=implemented stream=subreddit_contributors]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits subreddit-wiki-contributors - This endpoint is a listing. [intent=etl availability=implemented stream=subreddit_wiki_contributors]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits subreddit-banned-users - This endpoint is a listing. [intent=etl availability=implemented stream=subreddit_banned_users]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: moderation-facing ban list
+  - subreddits subreddit-muted-users - This endpoint is a listing. [intent=etl availability=implemented stream=subreddit_muted_users]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: moderation-facing mute list
+  - subreddits subreddit-wiki-banned-users - This endpoint is a listing. [intent=etl availability=implemented stream=subreddit_wiki_banned_users]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: moderation-facing wiki-ban list
+  - subreddits my-subscribed-subreddits - Get subreddits the user has a relationship with. The where parameter chooses which subreddits are returned as follows: subscriber - subreddits the user is subscribed to contributor - subreddits the us [intent=etl availability=implemented stream=my_subscribed_subreddits]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits my-contributor-subreddits - Get subreddits the user has a relationship with. The where parameter chooses which subreddits are returned as follows: subscriber - subreddits the user is subscribed to contributor - subreddits the us [intent=etl availability=implemented stream=my_contributor_subreddits]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits my-moderated-subreddits - Get subreddits the user has a relationship with. The where parameter chooses which subreddits are returned as follows: subscriber - subreddits the user is subscribed to contributor - subreddits the us [intent=etl availability=implemented stream=my_moderated_subreddits]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits my-streams-subreddits - Get subreddits the user has a relationship with. The where parameter chooses which subreddits are returned as follows: subscriber - subreddits the user is subscribed to contributor - subreddits the us [intent=etl availability=implemented stream=my_streams_subreddits]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits subreddit-search-results - Search subreddits by title and description. This endpoint is a listing. [intent=etl availability=implemented stream=subreddit_search_results]; approval: none; risk: read of Reddit OAuth API listing data; flags: --q (required)
+  - subreddits popular-subreddits - Get all subreddits. The where parameter chooses the order in which the subreddits are displayed. popular sorts on the activity of the subreddit and the position of the subreddits can shift around. new [intent=etl availability=implemented stream=popular_subreddits]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits new-subreddits - Get all subreddits. The where parameter chooses the order in which the subreddits are displayed. popular sorts on the activity of the subreddit and the position of the subreddits can shift around. new [intent=etl availability=implemented stream=new_subreddits]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits user-search-results - Search user profiles by title and description. This endpoint is a listing. [intent=etl availability=implemented stream=user_search_results]; approval: none; risk: read of Reddit OAuth API listing data; flags: --q (required)
+  - subreddits popular-user-subreddits - Get all user subreddits. The where parameter chooses the order in which the subreddits are displayed. popular sorts on the activity of the subreddit and the position of the subreddits can shift around [intent=etl availability=implemented stream=popular_user_subreddits]; approval: none; risk: read of Reddit OAuth API listing data
+  - subreddits new-user-subreddits - Get all user subreddits. The where parameter chooses the order in which the subreddits are displayed. popular sorts on the activity of the subreddit and the position of the subreddits can shift around [intent=etl availability=implemented stream=new_user_subreddits]; approval: none; risk: read of Reddit OAuth API listing data
+  - users user-overview - This endpoint is a listing. [intent=etl availability=implemented stream=user_overview]; approval: none; risk: read of Reddit OAuth API listing data; flags: --username (required)
+  - users user-submitted - This endpoint is a listing. [intent=etl availability=implemented stream=user_submitted]; approval: none; risk: read of Reddit OAuth API listing data; flags: --username (required)
+  - users user-comments - This endpoint is a listing. [intent=etl availability=implemented stream=user_comments]; approval: none; risk: read of Reddit OAuth API listing data; flags: --username (required)
+  - users user-upvoted - This endpoint is a listing. [intent=etl availability=implemented stream=user_upvoted]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: history scope; another user's upvoted items; flags: --username (required)
+  - users user-downvoted - This endpoint is a listing. [intent=etl availability=implemented stream=user_downvoted]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: history scope; NOT STATED in Reddit's docs and unverified whether this exposes another user's private data -- treat as if it could; flags: --username (required)
+  - users user-hidden - This endpoint is a listing. [intent=etl availability=implemented stream=user_hidden]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: history scope; NOT STATED in Reddit's docs and unverified whether this exposes another user's private data -- treat as if it could; flags: --username (required)
+  - users user-saved - This endpoint is a listing. [intent=etl availability=implemented stream=user_saved]; approval: none; risk: read of Reddit OAuth API listing data; notes: SENSITIVE: history scope; NOT STATED in Reddit's docs and unverified whether this exposes another user's private data -- treat as if it could; flags: --username (required)
+  - users user-gilded - This endpoint is a listing. [intent=etl availability=implemented stream=user_gilded]; approval: none; risk: read of Reddit OAuth API listing data; flags: --username (required)
+  - wiki wiki-page-discussions - Retrieve a list of discussions about this wiki page This endpoint is a listing. [intent=etl availability=implemented stream=wiki_page_discussions]; approval: none; risk: read of Reddit OAuth API listing data; flags: --page (required)
+  - wiki wiki-page-revisions - Retrieve a list of revisions of this wiki page This endpoint is a listing. [intent=etl availability=implemented stream=wiki_page_revisions]; approval: none; risk: read of Reddit OAuth API listing data; flags: --page (required)
+  - account me - Returns the identity of the user. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - account me-karma - Return a breakdown of subreddit karma. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - account me-prefs - Return the preference settings of the logged in user [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --fields, --page, --page-cursor
+  - account me-trophies - Return a list of trophies for the current user. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - announcements announcements-v1 - Fetch announcements from Reddit. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --after, --before, --limit, --page, --page-cursor
+  - emoji subreddit-emojis-all - Get all emojis for a SR. The response includes snoomojis as well as emojis for the SR specified in the request. The response has 2 keys: - snoomojis - SR emojis [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - links-and-comments info - Return a listing of things specified by their fullnames. Only Links, Comments, and Subreddits are allowed. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --id, --sr-name, --url, --page, --page-cursor
+  - links-and-comments morechildren - Retrieve additional comments omitted from a base comment tree. When a comment tree is rendered, the most relevant comments are selected for display first. Remaining comments are stubbed out with "More [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --children, --depth, --id, --limit-children, --link-id, --sort, --page, --page-cursor
+  - links-and-comments saved-categories - Get a list of categories in which things are currently saved. See also: /api/save. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - listings by-id-names - Get a listing of links by fullname. names is a list of fullnames for links separated by commas or spaces. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --names (required), --page, --page-cursor
+  - listings comments-article - Get the comment tree for a given Link article. If supplied, comment is the ID36 of a comment in the comment tree for article. This comment will be the (highlighted) focal point of the returned view an [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --article (required), --comment, --context, --depth, --limit, --showedits, --showmedia, --showmore, --showtitle, --sort, --sr-detail, --theme, --threaded, --truncate, --page, --page-cursor
+  - live live-by-id-names - Get a listing of live events by id. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --names (required), --page, --page-cursor
+  - live live-happening-now - Get some basic information about the currently featured live thread. Returns an empty 204 response for api requests if no thread is currently featured. See also: /api/live/thread/about. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --show-announcements, --page, --page-cursor
+  - live live-thread-about - Get some basic information about the live thread. See also: /api/live/thread/edit. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --thread (required), --page, --page-cursor
+  - live live-thread-contributors - Get a list of users that contribute to this thread. See also: /api/live/thread/invite_contributor, and /api/live/thread/rm_contributor. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --thread (required), --page, --page-cursor
+  - live live-thread-updates-update-id - Get details about a specific update in a live thread. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --thread (required), --update-id (required), --page, --page-cursor
+  - misc scopes - Retrieve descriptions of reddit's OAuth2 scopes. If no scopes are given, information on all scopes are returned. Invalid scope(s) will result in a 400 error with body that indicates the invalid scope( [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --scopes, --page, --page-cursor
+  - moderation stylesheet - Redirect to the subreddit's stylesheet if one exists. See also: /api/subreddit_stylesheet. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; flags: --page, --page-cursor
+  - modmail mod-conversations - Get conversations for a logged in user or subreddits [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --after, --entity, --limit, --sort, --state, --page, --page-cursor
+  - modmail mod-conversations-conversation-id - Returns all messages, mod actions and conversation metadata for a given conversation id [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id, --markRead, --page, --page-cursor
+  - modmail mod-conversations-subreddits - Returns a list of srs that the user moderates with mail permission [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --page, --page-cursor
+  - modmail mod-conversations-unread-count - Endpoint to retrieve the unread conversation count by conversation state. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --page, --page-cursor
+  - modnote mod-notes - Get mod notes for a specific user in a given subreddit. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modnote); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modnote); Reddit returns 403 for non-moderators.; flags: --before, --filter, --limit, --subreddit, --user, --page, --page-cursor
+  - modnote mod-notes-recent - Fetch the most recent notes written by a moderator Both parameters should be comma separated lists of equal lengths. The first subreddit will be paired with the first account to represent a query for  [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modnote); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modnote); Reddit returns 403 for non-moderators.; flags: --subreddits, --users, --page, --page-cursor
+  - multis multi-mine - Fetch a list of multis belonging to the current user. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --expand-srs, --page, --page-cursor
+  - multis multi-user-username - Fetch a list of public multis belonging to username [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --username (required), --expand-srs, --page, --page-cursor
+  - multis multi-multipath - Fetch a multi's data and subreddit list by name. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --multipath (required), --expand-srs, --page, --page-cursor
+  - multis multi-multipath-description - Get a multi's description. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --multipath (required), --page, --page-cursor
+  - multis multi-multipath-r-srname - Get data about a subreddit in a multi. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --multipath (required), --srname (required), --page, --page-cursor
+  - subreddits search-reddit-names - List subreddit names that begin with a query string. Subreddits whose names begin with query will be returned. If include_over_18 is false, subreddits with over-18 content restrictions will be filtere [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --exact, --include-over-18, --include-unadvertisable, --query, --search-query-id, --typeahead-active, --page, --page-cursor
+  - subreddits submit-text - Get the submission text for the subreddit. This text is set by the subreddit moderators and intended to be displayed on the submission form. See also: /api/site_admin. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - subreddits subreddit-autocomplete - Return a list of subreddits and data for subreddits whose names start with 'query'. Uses typeahead endpoint to recieve the list of subreddits names. Typeahead provides exact matches, typo correction,  [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --include-over-18, --include-profiles, --query, --page, --page-cursor
+  - subreddits subreddit-autocomplete-v2 - Direct read of /api/subreddit_autocomplete_v2. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --include-over-18, --include-profiles, --limit, --query, --search-query-id, --typeahead-active, --page, --page-cursor
+  - subreddits subreddit-post-requirements - Fetch moderator-designated requirements to post to the subreddit. Moderators may enable certain restrictions, such as minimum title length, when making a submission to their subreddit. Clients may use [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - subreddits r-subreddit-about - Return information about the subreddit. Data includes the subscriber count, description, and header image. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - subreddits r-subreddit-about-edit - Get the current settings of a subreddit. In the API, this returns the current settings of the subreddit as used by /api/site_admin. On the HTML site, it will display a form for editing the subreddit. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; flags: --created, --location, --page, --page-cursor
+  - subreddits r-subreddit-about-rules - Get the rules for the current subreddit [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - subreddits r-subreddit-about-traffic - Direct read of /r/{subreddit}/about/traffic. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; flags: --page, --page-cursor
+  - subreddits sidebar - Get the sidebar for the current subreddit [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - subreddits sticky - Redirect to one of the posts stickied in the current subreddit The "num" argument can be used to select a specific sticky, and will default to 1 (the top sticky) if not specified. Will 404 if there is [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --num, --page, --page-cursor
+  - users user-data-by-account-ids - Direct read of /api/user_data_by_account_ids. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --ids, --page, --page-cursor
+  - users username-available - Check whether a username is available for registration. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --user, --page, --page-cursor
+  - users user-username-trophies - Return a list of trophies for the a given user. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --username (required), --id, --page, --page-cursor
+  - users user-username-about - Return information about the user, including karma and gold status. [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --username (required), --page, --page-cursor
+  - wiki wiki-pages - Retrieve a list of wiki pages in this subreddit [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page, --page-cursor
+  - wiki wiki-revisions - Retrieve a list of recently changed wiki pages in this subreddit [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --after, --before, --count, --limit, --show, --sr-detail, --page, --page-cursor
+  - wiki wiki-settings-page - Retrieve the current permission settings for page [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; flags: --page (required), --page-cursor
+  - wiki wiki-page - Return the content of a wiki page If v is given, show the wiki page as it was at that version If both v and v2 are given, show a diff of the two [intent=direct_read availability=implemented]; approval: none; risk: bounded direct JSON read; flags: --page (required), --v, --v2, --page-cursor
+  - account me-prefs - PATCH /api/v1/me/prefs [intent=reverse_etl availability=implemented write=me_prefs]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute
+  - announcements announcements-v1-hide - Accepts a list of announcement fullnames (ann_) and marks them hidden if they belong to the authenticated user [intent=reverse_etl availability=implemented write=announcements_v1_hide]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --ids
+  - announcements announcements-v1-read - Accepts a list of announcement fullnames (ann_) and marks them read if they belong to the authenticated user [intent=reverse_etl availability=implemented write=announcements_v1_read]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --ids
+  - announcements announcements-v1-read-all - Marks all unread announcements as read for the authenticated user [intent=reverse_etl availability=implemented write=announcements_v1_read_all]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute
+  - emoji subreddit-emoji-json - Add an emoji to the DB by posting a message on emoji_upload_q. A job processor that listens on a queue, uses the s3_key provided in the request to locate the image in S3 Temp Bucket and moves it to th [intent=reverse_etl availability=implemented write=subreddit_emoji_json]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; flags: --mod-flair-only, --name, --post-flair-allowed, --s3-key, --user-flair-allowed
+  - emoji subreddit-emoji-emoji-name - Delete a Subreddit emoji. Remove the emoji from Cassandra and purge the assets from S3 and the image resizing provider. [intent=reverse_etl availability=implemented write=subreddit_emoji_emoji_name]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; flags: --emoji-name (required)
+  - emoji subreddit-emoji-custom-size - Set custom emoji size. Omitting width or height will disable custom emoji sizing. [intent=reverse_etl availability=implemented write=subreddit_emoji_custom_size]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators.; flags: --height, --width
+  - links-and-comments comment - Submit a new comment or reply to a message. parent is the fullname of the thing being replied to. Its value changes the kind of object created by this request: the fullname of a Link: a top-level comm [intent=reverse_etl availability=implemented write=comment]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --recaptcha-token, --return-rtjson, --richtext-json, --text, --thing-id, --video-poster-url
+  - links-and-comments del - Delete a Link or Comment. [intent=reverse_etl availability=implemented write=del]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; flags: --id
+  - links-and-comments editusertext - Edit the body text of a comment or self-post. [intent=reverse_etl availability=implemented write=editusertext]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --return-rtjson, --richtext-json, --text, --thing-id, --video-poster-url
+  - links-and-comments follow-post - Follow or unfollow a post. To follow, follow should be True. To unfollow, follow should be False. The user must have access to the subreddit to be able to follow a post within it. [intent=reverse_etl availability=implemented write=follow_post]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --follow, --fullname
+  - links-and-comments hide - Hide a link. This removes it from the user's default view of subreddit listings. See also: /api/unhide. [intent=reverse_etl availability=implemented write=hide]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --id
+  - links-and-comments lock - Lock a link or comment. Prevents a post or new child comments from receiving new comments. See also: /api/unlock. [intent=reverse_etl availability=implemented write=lock]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - links-and-comments marknsfw - Mark a link NSFW. See also: /api/unmarknsfw. [intent=reverse_etl availability=implemented write=marknsfw]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - links-and-comments report - Report a link, comment or message. Reporting a thing brings it to the attention of the subreddit's moderators. Reporting a message sends it to a system for admin review. For links and comments, the th [intent=reverse_etl availability=implemented write=report]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --additional-info, --custom-text, --from-help-desk, --from-modmail, --modmail-conv-id, --other-reason, --reason, --rule-reason, --site-reason, --sr-name, --thing-id, --usernames
+  - links-and-comments save - Save a link or comment. Saved things are kept in the user's saved listing for later perusal. See also: /api/unsave. [intent=reverse_etl availability=implemented write=save]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --category, --id
+  - links-and-comments sendreplies - Enable or disable inbox replies for a link or comment. state is a boolean that indicates whether you are enabling or disabling inbox replies - true to enable, false to disable. [intent=reverse_etl availability=implemented write=sendreplies]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --id, --state
+  - links-and-comments set-contest-mode - Set or unset "contest mode" for a link's comments. state is a boolean that indicates whether you are enabling or disabling contest mode - true to enable, false to disable. [intent=reverse_etl availability=implemented write=set_contest_mode]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id, --state
+  - links-and-comments set-subreddit-sticky - Set or unset a Link as the sticky in its subreddit. state is a boolean that indicates whether to sticky or unsticky this post - true to sticky, false to unsticky. The num argument is optional, and onl [intent=reverse_etl availability=implemented write=set_subreddit_sticky]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id, --num, --state, --to-profile
+  - links-and-comments set-suggested-sort - Set a suggested sort for a link. Suggested sorts are useful to display comments in a certain preferred way for posts. For example, casual conversation may be better sorted by new by default, or AMAs m [intent=reverse_etl availability=implemented write=set_suggested_sort]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id, --sort
+  - links-and-comments spoiler - POST /api/spoiler [intent=reverse_etl availability=implemented write=spoiler]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - links-and-comments submit - Submit a link to a subreddit. Submit will create a link or self-post in the subreddit sr with the title title. If kind is "link", then url is expected to be a valid URL to link to. Otherwise, text, if [intent=reverse_etl availability=implemented write=submit]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --ad, --app, --collection-id, --extension, --flair-id, --flair-text, --g-recaptcha-response, --kind, --nsfw, --post-set-default-post-id, --post-set-id, --recaptcha-token, --resubmit, --richtext-json, --sendreplies, --spoiler, --sr, --text, --title, --url, --video-poster-url
+  - links-and-comments unhide - Unhide a link. See also: /api/hide. [intent=reverse_etl availability=implemented write=unhide]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; flags: --id
+  - links-and-comments unlock - Unlock a link or comment. Allow a post or comment to receive new comments. See also: /api/lock. [intent=reverse_etl availability=implemented write=unlock]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - links-and-comments unmarknsfw - Remove the NSFW marking from a link. See also: /api/marknsfw. [intent=reverse_etl availability=implemented write=unmarknsfw]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - links-and-comments unsave - Unsave a link or comment. This removes the thing from the user's saved listings as well. See also: /api/save. [intent=reverse_etl availability=implemented write=unsave]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --id
+  - links-and-comments unspoiler - POST /api/unspoiler [intent=reverse_etl availability=implemented write=unspoiler]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - live live-create - Create a new live thread. Once created, the initial settings can be modified with /api/live/thread/edit and new updates can be posted with /api/live/thread/update. [intent=reverse_etl availability=implemented write=live_create]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --description, --nsfw, --resources, --title
+  - live live-thread-accept-contributor-invite - Accept a pending invitation to contribute to the thread. See also: /api/live/thread/leave_contributor. [intent=reverse_etl availability=implemented write=live_thread_accept_contributor_invite]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required)
+  - live live-thread-close-thread - Permanently close the thread, disallowing future updates. Requires the close permission for this thread. [intent=reverse_etl availability=implemented write=live_thread_close_thread]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required)
+  - live live-thread-delete-update - Delete an update from the thread. Requires that specified update must have been authored by the user or that you have the edit permission for this thread. See also: /api/live/thread/update. [intent=reverse_etl availability=implemented write=live_thread_delete_update]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; flags: --thread (required), --id
+  - live live-thread-edit - Configure the thread. Requires the settings permission for this thread. See also: /live/thread/about.json. [intent=reverse_etl availability=implemented write=live_thread_edit]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required), --description, --nsfw, --resources, --title
+  - live live-thread-hide-discussion - Hide a linked comment thread from the discussions sidebar and listing. Requires the discussions permission for this thread. See also: /api/live/thread/unhide_discussion. [intent=reverse_etl availability=implemented write=live_thread_hide_discussion]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required), --link
+  - live live-thread-invite-contributor - Invite another user to contribute to the thread. Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified. See also: /api/liv [intent=reverse_etl availability=implemented write=live_thread_invite_contributor]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required), --name, --permissions, --type
+  - live live-thread-leave-contributor - Abdicate contributorship of the thread. See also: /api/live/thread/accept_contributor_invite, and /api/live/thread/invite_contributor. [intent=reverse_etl availability=implemented write=live_thread_leave_contributor]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required)
+  - live live-thread-report - Report the thread for violating the rules of reddit. [intent=reverse_etl availability=implemented write=live_thread_report]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --thread (required), --type
+  - live live-thread-rm-contributor - Revoke another user's contributorship. Requires the manage permission for this thread. See also: /api/live/thread/invite_contributor. [intent=reverse_etl availability=implemented write=live_thread_rm_contributor]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required), --id
+  - live live-thread-rm-contributor-invite - Revoke an outstanding contributor invite. Requires the manage permission for this thread. See also: /api/live/thread/invite_contributor. [intent=reverse_etl availability=implemented write=live_thread_rm_contributor_invite]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required), --id
+  - live live-thread-set-contributor-permissions - Change a contributor or contributor invite's permissions. Requires the manage permission for this thread. See also: /api/live/thread/invite_contributor and /api/live/thread/rm_contributor. [intent=reverse_etl availability=implemented write=live_thread_set_contributor_permissions]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required), --name, --permissions, --type
+  - live live-thread-strike-update - Strike (mark incorrect and cross out) the content of an update. Requires that specified update must have been authored by the user or that you have the edit permission for this thread. See also: /api/ [intent=reverse_etl availability=implemented write=live_thread_strike_update]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --thread (required), --id
+  - live live-thread-unhide-discussion - Unhide a linked comment thread from the discussions sidebar and listing.. Requires the discussions permission for this thread. See also: /api/live/thread/hide_discussion. [intent=reverse_etl availability=implemented write=live_thread_unhide_discussion]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; notes: Requires the connected account to own/contribute to the target live thread (OAuth scope: livemanage); Reddit returns 403 otherwise.; flags: --thread (required), --link
+  - live live-thread-update - Post an update to the thread. Requires the update permission for this thread. See also: /api/live/thread/strike_update, and /api/live/thread/delete_update. [intent=reverse_etl availability=implemented write=live_thread_update]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --thread (required), --body
+  - messages compose - Handles message composition under /message/compose. [intent=reverse_etl availability=implemented write=compose]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --from-sr, --g-recaptcha-response, --subject, --text, --to
+  - messages del-msg - Delete messages from the recipient's view of their inbox. [intent=reverse_etl availability=implemented write=del_msg]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; flags: --id
+  - messages read-all-messages - Queue up marking all messages for a user as read. This may take some time, and returns 202 to acknowledge acceptance of the request. [intent=reverse_etl availability=implemented write=read_all_messages]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --filter-types
+  - messages read-message - POST /api/read_message [intent=reverse_etl availability=implemented write=read_message]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --id
+  - moderation accept-moderator-invite - Accept an invite to moderate the specified subreddit. The authenticated user must have been invited to moderate the subreddit by one of its current moderators. See also: /api/friend and /subreddits/mi [intent=reverse_etl availability=implemented write=accept_moderator_invite]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modself); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modself); Reddit returns 403 for non-moderators.
+  - moderation approve - Approve a link or comment. If the thing was removed, it will be re-inserted into appropriate listings. Any reports on the approved thing will be discarded. See also: /api/remove. [intent=reverse_etl availability=implemented write=approve]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - moderation distinguish - Distinguish a thing's author with a sigil. This can be useful to draw attention to and confirm the identity of the user in the context of a link or comment of theirs. The options for distinguish are a [intent=reverse_etl availability=implemented write=distinguish]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --how, --id, --sticky
+  - moderation ignore-reports - Prevent future reports on a thing from causing notifications. Any reports made about a thing after this flag is set on it will not cause notifications or make the thing show up in the various moderati [intent=reverse_etl availability=implemented write=ignore_reports]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - moderation leavecontributor - Abdicate approved user status in a subreddit. See also: /api/friend. [intent=reverse_etl availability=implemented write=leavecontributor]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modself); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modself); Reddit returns 403 for non-moderators.; flags: --id
+  - moderation leavemoderator - Abdicate moderator status in a subreddit. See also: /api/friend. [intent=reverse_etl availability=implemented write=leavemoderator]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modself); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modself); Reddit returns 403 for non-moderators.; flags: --id
+  - moderation remove - Remove a link, comment, or modmail message. If the thing is a link, it will be removed from all subreddit listings. If the thing is a comment, it will be redacted and removed from all subreddit commen [intent=reverse_etl availability=implemented write=remove]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id, --spam
+  - moderation show-comment - Mark a comment that it should not be collapsed because of crowd control. The comment could still be collapsed for other reasons. [intent=reverse_etl availability=implemented write=show_comment]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - moderation snooze-reports - Prevent future reports on a thing from causing notifications. For users who reported this thing (post, comment, etc) with the given report reason, reports from those users in the next 7 days will not  [intent=reverse_etl availability=implemented write=snooze_reports]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id, --reason
+  - moderation unignore-reports - Allow future reports on a thing to cause notifications. See also: /api/ignore_reports. [intent=reverse_etl availability=implemented write=unignore_reports]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id
+  - moderation unsnooze-reports - For users whose reports were snoozed (see /api/snooze_reports), to go back to escalating future reports from those users. [intent=reverse_etl availability=implemented write=unsnooze_reports]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id, --reason
+  - moderation update-crowd-control-level - Change the post's crowd control level. [intent=reverse_etl availability=implemented write=update_crowd_control_level]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modposts); Reddit returns 403 for non-moderators.; flags: --id, --level
+  - modmail mod-bulk-read - Marks all conversations read for a particular conversation state within the passed list of subreddits. [intent=reverse_etl availability=implemented write=mod_bulk_read]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --entity, --state
+  - modmail mod-conversations - Creates a new conversation for a particular SR. This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object. A note on to: The to f [intent=reverse_etl availability=implemented write=mod_conversations]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --body, --isAuthorHidden, --srName, --subject, --to
+  - modmail mod-conversations-conversation-id - Creates a new message for a particular conversation. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --body, --conversation-id, --isAuthorHidden, --isInternal
+  - modmail mod-conversations-conversation-id-approve - Approve the non mod user associated with a particular conversation. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_approve]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id
+  - modmail mod-conversations-conversation-id-archive - Marks a conversation as archived. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_archive]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id
+  - modmail mod-conversations-conversation-id-disapprove - Disapprove the non mod user associated with a particular conversation. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_disapprove]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id
+  - modmail mod-conversations-conversation-id-highlight - Removes a highlight from a conversation. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_highlight]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id
+  - modmail mod-conversations-conversation-id-highlight-2 - Marks a conversation as highlighted. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_highlight_2]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id
+  - modmail mod-conversations-conversation-id-mute - Mutes the non mod user associated with a particular conversation. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_mute]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id, --num-hours
+  - modmail mod-conversations-conversation-id-temp-ban - Temporary ban (switch from permanent to temporary ban) the non mod user associated with a particular conversation. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_temp_ban]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id, --duration
+  - modmail mod-conversations-conversation-id-unarchive - Marks conversation as unarchived. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_unarchive]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id
+  - modmail mod-conversations-conversation-id-unban - Unban the non mod user associated with a particular conversation. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_unban]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id
+  - modmail mod-conversations-conversation-id-unmute - Unmutes the non mod user associated with a particular conversation. [intent=reverse_etl availability=implemented write=mod_conversations_conversation_id_unmute]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversation-id
+  - modmail mod-conversations-read - Marks a conversations as read for the user. [intent=reverse_etl availability=implemented write=mod_conversations_read]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversationIds
+  - modmail mod-conversations-unread - Marks conversations as unread for the user. [intent=reverse_etl availability=implemented write=mod_conversations_unread]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modmail); Reddit returns 403 for non-moderators.; flags: --conversationIds
+  - modnote mod-notes - Delete a mod user note where type=NOTE. Parameters should be passed as query parameters. [intent=reverse_etl availability=implemented write=mod_notes]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modnote); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modnote); Reddit returns 403 for non-moderators.; flags: --note-id, --subreddit, --user
+  - modnote mod-notes-2 - Create a mod user note where type=NOTE. [intent=reverse_etl availability=implemented write=mod_notes_2]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modnote); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modnote); Reddit returns 403 for non-moderators.; flags: --label, --note, --reddit-id, --subreddit, --user
+  - multis multi-copy - Copy a multi. Responds with 409 Conflict if the target already exists. A "copied from ..." line will automatically be appended to the description. [intent=reverse_etl availability=implemented write=multi_copy]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --description-md, --display-name, --expand-srs, --from, --to
+  - multis multi-multipath - Delete a multi. [intent=reverse_etl availability=implemented write=multi_multipath]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; flags: --multipath (required), --expand-srs
+  - multis multi-multipath-2 - Create a multi. Responds with 409 Conflict if it already exists. [intent=reverse_etl availability=implemented write=multi_multipath_2]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --multipath (required), --model, --expand-srs
+  - multis multi-multipath-3 - Create or update a multi. [intent=reverse_etl availability=implemented write=multi_multipath_3]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --multipath (required), --expand-srs, --model
+  - multis multi-multipath-description - Change a multi's markdown description. [intent=reverse_etl availability=implemented write=multi_multipath_description]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --multipath (required), --model
+  - multis multi-multipath-r-srname - Remove a subreddit from a multi. [intent=reverse_etl availability=implemented write=multi_multipath_r_srname]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; flags: --multipath (required), --srname (required)
+  - multis multi-multipath-r-srname-2 - Add a subreddit to a multi. [intent=reverse_etl availability=implemented write=multi_multipath_r_srname_2]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --multipath (required), --srname (required), --model
+  - subreddits delete-sr-banner - Remove the subreddit's custom mobile banner. See also: /api/upload_sr_img. [intent=reverse_etl availability=implemented write=delete_sr_banner]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.
+  - subreddits delete-sr-header - Remove the subreddit's custom header image. The sitewide-default header image will be shown again after this call. See also: /api/upload_sr_img. [intent=reverse_etl availability=implemented write=delete_sr_header]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.
+  - subreddits delete-sr-icon - Remove the subreddit's custom mobile icon. See also: /api/upload_sr_img. [intent=reverse_etl availability=implemented write=delete_sr_icon]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.
+  - subreddits delete-sr-img - Remove an image from the subreddit's custom image set. The image will no longer count against the subreddit's image limit. However, the actual image data may still be accessible for an unspecified amo [intent=reverse_etl availability=implemented write=delete_sr_img]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; flags: --img-name
+  - subreddits search-reddit-names - List subreddit names that begin with a query string. Subreddits whose names begin with query will be returned. If include_over_18 is false, subreddits with over-18 content restrictions will be filtere [intent=reverse_etl availability=implemented write=search_reddit_names]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --exact, --include-over-18, --include-unadvertisable, --query, --search-query-id, --typeahead-active
+  - subreddits search-subreddits - List subreddits that begin with a query string. Subreddits whose names begin with query will be returned. If include_over_18 is false, subreddits with over-18 content restrictions will be filtered fro [intent=reverse_etl availability=implemented write=search_subreddits]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --exact, --include-over-18, --include-unadvertisable, --query, --search-query-id, --typeahead-active
+  - subreddits site-admin - Create or configure a subreddit. If sr is specified, the request will attempt to modify the specified subreddit. If not, a subreddit with name name will be created. This endpoint expects all values to [intent=reverse_etl availability=implemented write=site_admin]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; flags: --accept-followers, --admin-override-spam-comments, --admin-override-spam-links, --admin-override-spam-selfposts, --all-original-content, --allow-chat-post-creation, --allow-discovery, --allow-galleries, --allow-images, --allow-polls, --allow-post-crossposts, --allow-prediction-contributors, --allow-predictions, --allow-predictions-tournament, --allow-talks, --allow-top, --allow-videos, --collapse-deleted-comments, --comment-contribution-settings, --comment-score-hide-mins, --crowd-control-chat-level, --crowd-control-filter, --crowd-control-level, --crowd-control-mode, --crowd-control-post-level, --description, --disable-contributor-requests, --exclude-banned-modqueue, --free-form-reports, --g-recaptcha-response, --hateful-content-threshold-abuse, --hateful-content-threshold-identity, --header-title, --hide-ads, --key-color, --link-type, --modmail-harassment-filter-enabled, --name, --new-pinned-post-pns-enabled, --original-content-tag-enabled, --over-18, --prediction-leaderboard-entry-type, --public-description, --restrict-commenting, --restrict-posting, --should-archive-posts, --show-media, --show-media-preview, --spam-comments, --spam-links, --spam-selfposts, --spoilers-enabled, --sr, --submit-link-label, --submit-text, --submit-text-label, --subreddit-discovery-settings, --suggested-comment-sort, --title, --toxicity-threshold-chat-level, --type, --user-flair-pns-enabled, --welcome-message-enabled, --welcome-message-text, --wiki-edit-age, --wiki-edit-karma, --wikimode
+  - subreddits subreddit-stylesheet - Update a subreddit's stylesheet. op should be save to update the contents of the stylesheet. [intent=reverse_etl availability=implemented write=subreddit_stylesheet]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators.; flags: --op, --reason, --stylesheet-contents
+  - subreddits subscribe - Subscribe to or unsubscribe from a subreddit. To subscribe, action should be sub. To unsubscribe, action should be unsub. The user must have access to the subreddit to be able to subscribe to it. The  [intent=reverse_etl availability=implemented write=subscribe]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --action, --action-source, --skip-initial-defaults
+  - users friend - Create a relationship between a user and another user or subreddit OAuth2 use requires appropriate scope based on the 'type' of the relationship: moderator: Use "moderator_invite" moderator_invite: mo [intent=reverse_etl availability=implemented write=friend]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --ban-context, --ban-message, --ban-reason, --container, --duration, --name, --note, --permissions, --type
+  - users report-user - Report a user. Reporting a user brings it to the attention of a Reddit admin. [intent=reverse_etl availability=implemented write=report_user]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --details, --reason, --('user',)
+  - users setpermissions - POST /r/{subreddit}/api/setpermissions [intent=reverse_etl availability=implemented write=setpermissions]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modothers); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modothers); Reddit returns 403 for non-moderators.; flags: --name, --permissions, --type
+  - users unfriend - Remove a relationship between a user and another user or subreddit The user can either be passed in by name (nuser) or by fullname (iuser). If type is friend or enemy, 'container' MUST be the current  [intent=reverse_etl availability=implemented write=unfriend]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; flags: --container, --id, --name, --type
+  - users me-friends-username - Stop being friends with a user. [intent=reverse_etl availability=implemented write=me_friends_username]; approval: typed_destructive_confirmation; risk: DESTRUCTIVE reverse-ETL write; requires plan -> preview -> explicit typed destructive confirmation -> execute; flags: --username (required), --id
+  - users me-friends-username-2 - Create or update a "friend" relationship. This operation is idempotent. It can be used to add a new friend, or update an existing friend (e.g., add/change the note on that friend) [intent=reverse_etl availability=implemented write=me_friends_username_2]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --username (required)
+  - wiki wiki-alloweditor-act - Allow/deny username to edit this wiki page [intent=reverse_etl availability=implemented write=wiki_alloweditor_act]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; flags: --act (required), --page, --username
+  - wiki wiki-edit - Edit a wiki page [intent=reverse_etl availability=implemented write=wiki_edit]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; flags: --content, --page, --previous, --reason
+  - wiki wiki-hide - Toggle the public visibility of a wiki page revision [intent=reverse_etl availability=implemented write=wiki_hide]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; flags: --page, --revision
+  - wiki wiki-revert - Revert a wiki page to revision [intent=reverse_etl availability=implemented write=wiki_revert]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; flags: --page, --revision
+  - wiki wiki-settings-page - Update the permissions and visibility of wiki page [intent=reverse_etl availability=implemented write=wiki_settings_page]; approval: explicit; risk: reverse-ETL write; requires plan -> preview -> explicit approval -> execute; Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modwiki); Reddit returns 403 for non-moderators.; flags: --page (required), --listed, --permlevel
+  - emoji emoji-asset-upload-s3 - Acquire a bounded Reddit S3 lease and upload one approved emoji image [intent=reverse_etl availability=implemented write=emoji_asset_upload_s3]; approval: explicit; risk: One approved bounded image upload through a Reddit-issued S3 lease; requires target-subreddit moderator authority (OAuth scope: structuredstyles).; notes: Requires the connected account to moderate the target subreddit (OAuth scope: structuredstyles); Reddit returns 403 for non-moderators. This action is one-record-only.; flags: --file-path (required), --mimetype (required)
+  - subreddits upload-sr-img - Upload one approved PNG or JPEG subreddit image directly to Reddit [intent=reverse_etl availability=implemented write=upload_sr_img]; approval: explicit; risk: One approved 500 KiB maximum image upload directly to Reddit; requires target-subreddit moderator authority (OAuth scope: modconfig).; notes: Requires the connected account to moderate the target subreddit (OAuth scope: modconfig); Reddit returns 403 for non-moderators. This action is one-record-only.; flags: --file-path (required), --img-type (required), --upload-type (required), --name, --header, --formid
 
 ## Commands
 
@@ -79,3 +909,4 @@ pm connectors inspect reddit --json
 - Run pm connectors inspect reddit before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
