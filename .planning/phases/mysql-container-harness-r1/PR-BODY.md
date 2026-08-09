@@ -52,9 +52,13 @@ separate `pgxpool.New` construction that could ignore `sslservername`.
 
 The documented command requires a direct `POLYMETRICS_PODMAN_ENDPOINT` Unix URI. Every Podman
 command uses `--url` with that URI; the global default connection is neither read nor changed. Before
-startup and every command, the selected daemon must report that same socket path and a local,
-measurable image-store path. Named connections and remote endpoints fail closed, including when the
-source image is cached.
+startup and every command, target identity and image-store capacity must be proven, including when
+the source image is cached. A direct daemon must report the configured safe Unix socket and a
+host-measurable image store. A Podman 5.3 local Unix forward may instead report a separate safe
+daemon Unix socket and numeric `GraphRootAllocated`/`GraphRootUsed` capacity; the harness uses their
+difference. Named connections, remote endpoints, other socket mismatches, and unprovable capacity
+fail closed. The maintainer invocation and lifecycle details live in
+`internal/connectors/native/dbtest/README.md`.
 
 The harness owns and removes only its generated container, volume, and run-image reference. The
 source image is always retained. It requires three times the declared image footprint before an

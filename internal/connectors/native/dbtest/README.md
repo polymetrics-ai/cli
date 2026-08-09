@@ -12,7 +12,7 @@ and incremental reads, every TLS mode, and the internal MySQL row-event reader.
 ```bash
 POLYMETRICS_DATABASE_INTEGRATION=1 \
   POLYMETRICS_PODMAN_ENDPOINT=unix:///run/user/1000/podman/podman.sock \
-  go test -tags=databaseintegration -count=1 -v ./internal/connectors/native/mysql
+  go test -tags=databaseintegration -count=1 -timeout 20m -v ./internal/connectors/native/mysql
 ```
 
 `POLYMETRICS_PODMAN_ENDPOINT` is a direct local Unix Podman API endpoint. Named connections and

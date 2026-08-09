@@ -21,13 +21,15 @@ path.
 - The MySQL source image is pinned at `docker.io/library/mysql:8.4.11`. Each run creates a unique
   local tag, then cleanup attempts container → volume → run tag even after an earlier cleanup
   error. The source image is never removed.
-- Before startup and before every Podman command, the endpoint must report the configured Unix socket and
-  a locally measurable image-store path. This check is required even when the source image is
-  cached. An absent source image also needs three times its declared footprint free.
+- Before startup and before every Podman command, identity and target image-store capacity must be
+  proven, including when the source image is cached. The direct-daemon, Podman 5.3 forwarded-Unix,
+  and pre-pull headroom rules are owned by
+  [`dbtest`'s maintainer guide](../../../internal/connectors/native/dbtest/README.md).
 - The test database uses only its isolated ephemeral server configuration. No credential or
   connection string is printed, logged, or stored.
-- MySQL is a dynamic-schema Tier-3 native connector. Its binary-log mechanism is declared through
-  the closed `binlog_replication` vocabulary only because a matching live executor exists.
+- MySQL is a dynamic-schema Tier-3 native connector. Its row-based/full-image binary-log reader is
+  internal proof only: it has no public changefeed declaration or `ChangefeedExecutor`, so public
+  `cdc` remains false until an operator-callable runtime entrypoint exists.
 
 ## Post-rebase reconciliation — 2026-08-08
 
