@@ -187,6 +187,28 @@ The fixture speaks only loopback WebSocket framing and synthetic PCM16 bytes. It
 provider transcript, credential, authorization value, token-derived value, signed URL, or a raw
 transport control.
 
+## Frame/session executor GREEN — captured 2026-08-10
+
+The green runner is an operation-specific `OperationWebSocketSession`, not an exported generic
+WebSocket command. It validates the closed session-update schema before opening a connection,
+requires non-empty complete PCM16 samples, binds total input to the declaration, uses the declared
+surface endpoint only, writes masked finite text/binary/close frames, answers ping with a masked
+pong, refuses masked, fragmented, binary, malformed, or oversized server payloads, and accepts
+only bounded JSON text events. Events run through `json_redacted`; transport and frame errors run
+through the redacted error policy. A context cancellation closes the connection through a joined
+cancellation callback, so no session goroutine survives the call.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestOperationWebSocketSession'
+ok  	polymetrics.ai/internal/connectors/engine	0.699s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok  	polymetrics.ai/internal/connectors/engine	4.640s
+```
+
+The next slice begins with command/preflight RED coverage. The runner currently has no connector
+interface, command intent, file-path adapter, generated help route, or provider bundle consumer.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or
