@@ -14,6 +14,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestOperationWebSocketSessionStreamsBoundedMaskedPCM16AndRedactsEvents(t *testing.T) {
@@ -102,6 +103,41 @@ func TestOperationWebSocketSessionRejectsOversizeServerFrame(t *testing.T) {
 	}
 }
 
+func TestOperationWebSocketSessionExpiresDeclarationOwnedLifetime(t *testing.T) {
+	serverReceivedClientClose := make(chan struct{})
+	srv := websocketSessionFixtureServer(t, func(t *testing.T, connection io.ReadWriteCloser, reader *bufio.ReadWriter) {
+		for range 3 {
+			websocketFixtureReadFrame(t, reader)
+		}
+		close(serverReceivedClientClose)
+		// The fixture deliberately withholds its terminal close. The engine must
+		// enforce the declaration's wall-clock bound without a caller deadline.
+		_, _ = io.Copy(io.Discard, reader)
+		_ = connection.Close()
+	})
+	defer srv.Close()
+
+	bundle := websocketSessionFixtureBundle(srv.URL, 256)
+	bundle.Operations[0].WebSocket.MaxSessionSeconds = 1
+	started := time.Now()
+	_, err := OperationWebSocketSession(context.Background(), bundle, WebSocketSessionRequest{
+		Operation:     "acme.live",
+		SessionUpdate: map[string]any{"type": "session.update", "input_audio_format": "pcm16"},
+		PCM16:         []byte{0x01, 0x80},
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), context.DeadlineExceeded.Error()) {
+		t.Fatalf("lifetime-bounded session error = %v, want context deadline exceeded", err)
+	}
+	if elapsed := time.Since(started); elapsed > 5*time.Second {
+		t.Fatalf("lifetime-bounded session took %s, want prompt deadline", elapsed)
+	}
+	select {
+	case <-serverReceivedClientClose:
+	case <-time.After(2 * time.Second):
+		t.Fatal("fixture never received the closed client session")
+	}
+}
+
 func websocketSessionFixtureBundle(baseURL string, maxFrameBytes int) Bundle {
 	return Bundle{
 		Name: "acme",
@@ -114,12 +150,13 @@ func websocketSessionFixtureBundle(baseURL string, maxFrameBytes int) Bundle {
 			Approval:     "none",
 			OutputPolicy: "json_redacted",
 			WebSocket: &WebSocketSessionSpec{
-				Method:         http.MethodGet,
-				Path:           "/live",
-				Subprotocol:    "fixture-live",
-				MaxInputBytes:  1024,
-				MaxOutputBytes: 1024,
-				MaxFrameBytes:  maxFrameBytes,
+				Method:            http.MethodGet,
+				Path:              "/live",
+				Subprotocol:       "fixture-live",
+				MaxInputBytes:     1024,
+				MaxOutputBytes:    1024,
+				MaxFrameBytes:     maxFrameBytes,
+				MaxSessionSeconds: 60,
 				SessionUpdateSchema: json.RawMessage(`{
 					"type":"object",
 					"additionalProperties":false,

@@ -457,6 +457,72 @@ The green slice must make that duration a required, positive, capped declaration
 child deadline from it before the upgrade, and prove a server that withholds its terminal close is
 closed and returned to the caller without relying on an external CLI timeout.
 
+## Review remediation GREEN — bounded session lifetime, captured 2026-08-10
+
+`websocket.max_session_seconds` is now a required closed field. The loader rejects zero and values
+above the one-hour absolute ceiling; `OperationWebSocketSession` derives a child deadline before
+the upgrade and joins its connection-close callback to that child context. The loopback regression
+withholds the terminal close and confirms the command returns `context deadline exceeded` after
+the declaration-owned one-second test lifetime, without a caller deadline.
+
+```text
+$ go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestSyncBundleDerivesClosedWebSocketSessionCommand|TestCheckAPISurfaceAndCLISurface_AcceptsClosedWebSocketSessionCoverage)$'
+ok  	polymetrics.ai/cmd/connectorgen	0.754s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestBundleLoadAcceptsClosedWebSocketSessionContract|TestBundleRejectsUnsafeWebSocketSessionContracts|TestOperationWebSocketSession)'
+ok  	polymetrics.ai/internal/connectors/engine	1.782s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestRunImplementedWebSocketSessionCommand'
+ok  	polymetrics.ai/internal/connectors/commandrunner	0.823s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/conformance -run '^TestCheckSurfaceComplete_WebSocketSessionCoverage$'
+ok  	polymetrics.ai/internal/connectors/conformance	0.452s
+
+$ go test -count=1 -timeout 20m ./internal/cli -run '^TestConnectorCommandExplicitReservedFlags$'
+ok  	polymetrics.ai/internal/cli	1.063s
+```
+
+## Final verification re-gate — captured 2026-08-10
+
+The complete scoped foundation suite was rerun after the lifetime remediation. The full CLI package
+was allowed to finish under its documented 20-minute timeout while other lanes were active; it
+exited successfully after 839.198 seconds rather than being treated as a silent success.
+
+```text
+$ go test -count=1 -timeout 20m ./internal/connectors/engine
+ok  polymetrics.ai/internal/connectors/engine  11.697s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/connsdk
+ok  polymetrics.ai/internal/connectors/connsdk  0.998s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/commandrunner
+ok  polymetrics.ai/internal/connectors/commandrunner  20.447s
+
+$ go test -count=1 -timeout 20m ./internal/connectors/conformance
+ok  polymetrics.ai/internal/connectors/conformance  49.469s
+
+$ go test -count=1 -timeout 20m ./cmd/connectorgen
+ok  polymetrics.ai/cmd/connectorgen  29.103s
+
+$ go test -count=1 -timeout 20m ./internal/cli
+ok  polymetrics.ai/internal/cli  839.198s
+
+$ go vet ./internal/connectors ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors/commandrunner ./internal/connectors/conformance ./internal/cli ./cmd/connectorgen
+
+$ go build ./cmd/pm
+
+$ go run ./cmd/connectorgen validate internal/connectors/defs
+connectorgen validate: 552 connector(s) checked, 0 findings
+
+$ go run ./cmd/connectorgen surface-sync --check
+connectorgen surface-sync: 552 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
+```
+
+`./pm docs generate --dir docs/cli --connectors-dir docs/connectors` and
+`pnpm --dir website run gen:website-data` both completed after the source changes; `git diff`
+confirmed that neither generator changed a tracked artifact. No current bundle declares a
+`websocket_session`, so the consumer must still regenerate after its Zoom declaration is authored.
+
 ## Safety assertions
 
 - No test fixture carries a credential, authorization value, token-derived value, signed URL, or

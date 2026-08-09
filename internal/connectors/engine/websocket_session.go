@@ -12,6 +12,7 @@ import (
 	"math"
 	"net/http"
 	"strings"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -24,6 +25,11 @@ const (
 	websocketFrameOpcodeClose  = 0x8
 	websocketFrameOpcodePing   = 0x9
 	websocketFrameOpcodePong   = 0xa
+
+	// maxWebSocketSessionSeconds is an absolute ceiling for one closed
+	// declaration-owned session. It prevents a malformed bundle from using a
+	// nominally finite integer as an effectively unbounded terminal command.
+	maxWebSocketSessionSeconds = 60 * 60
 )
 
 // WebSocketSessionRequest is the closed runtime input for one declared live
@@ -70,6 +76,8 @@ func OperationWebSocketSession(ctx context.Context, b Bundle, req WebSocketSessi
 	if err := validateWebSocketSessionPCM16(update, req.PCM16, spec); err != nil {
 		return WebSocketSessionResult{}, err
 	}
+	sessionCtx, cancelSession := context.WithTimeout(ctx, time.Duration(spec.MaxSessionSeconds)*time.Second)
+	defer cancelSession()
 
 	cfg := materializeConfigDefaults(b, req.Config)
 	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
@@ -80,7 +88,7 @@ func OperationWebSocketSession(ctx context.Context, b Bundle, req WebSocketSessi
 		return WebSocketSessionResult{}, fmt.Errorf("websocket session base URL is required")
 	}
 	requestPath := normalizeDirectReadPathForBaseURL(spec.Path, baseURL)
-	rt, err := newRuntime(ctx, b, cfg, h)
+	rt, err := newRuntime(sessionCtx, b, cfg, h)
 	if err != nil {
 		return WebSocketSessionResult{}, err
 	}
@@ -88,13 +96,13 @@ func OperationWebSocketSession(ctx context.Context, b Bundle, req WebSocketSessi
 	if err != nil {
 		return WebSocketSessionResult{}, err
 	}
-	upgrade, err := requester.OpenWebSocket(ctx, requestPath, spec.Subprotocol)
+	upgrade, err := requester.OpenWebSocket(sessionCtx, requestPath, spec.Subprotocol)
 	if err != nil {
 		return WebSocketSessionResult{}, websocketSessionTransportError(b, op, err)
 	}
 	conn := upgrade.Conn
 	cancelDone := make(chan struct{})
-	stopCancel := context.AfterFunc(ctx, func() {
+	stopCancel := context.AfterFunc(sessionCtx, func() {
 		_ = conn.Close()
 		close(cancelDone)
 	})
@@ -105,7 +113,7 @@ func OperationWebSocketSession(ctx context.Context, b Bundle, req WebSocketSessi
 		_ = conn.Close()
 	}()
 
-	if err := writeWebSocketClientFrame(ctx, conn, websocketFrameOpcodeText, update, spec.MaxFrameBytes); err != nil {
+	if err := writeWebSocketClientFrame(sessionCtx, conn, websocketFrameOpcodeText, update, spec.MaxFrameBytes); err != nil {
 		return WebSocketSessionResult{}, websocketSessionFrameError(err)
 	}
 	for offset := 0; offset < len(req.PCM16); {
@@ -113,16 +121,16 @@ func OperationWebSocketSession(ctx context.Context, b Bundle, req WebSocketSessi
 		if end > len(req.PCM16) {
 			end = len(req.PCM16)
 		}
-		if err := writeWebSocketClientFrame(ctx, conn, websocketFrameOpcodeBinary, req.PCM16[offset:end], spec.MaxFrameBytes); err != nil {
+		if err := writeWebSocketClientFrame(sessionCtx, conn, websocketFrameOpcodeBinary, req.PCM16[offset:end], spec.MaxFrameBytes); err != nil {
 			return WebSocketSessionResult{}, websocketSessionFrameError(err)
 		}
 		offset = end
 	}
-	if err := writeWebSocketClientFrame(ctx, conn, websocketFrameOpcodeClose, []byte{0x03, 0xe8}, spec.MaxFrameBytes); err != nil {
+	if err := writeWebSocketClientFrame(sessionCtx, conn, websocketFrameOpcodeClose, []byte{0x03, 0xe8}, spec.MaxFrameBytes); err != nil {
 		return WebSocketSessionResult{}, websocketSessionFrameError(err)
 	}
 
-	events, received, err := readWebSocketSessionEvents(ctx, conn, spec.MaxFrameBytes, spec.MaxOutputBytes)
+	events, received, err := readWebSocketSessionEvents(sessionCtx, conn, spec.MaxFrameBytes, spec.MaxOutputBytes)
 	if err != nil {
 		return WebSocketSessionResult{}, websocketSessionFrameError(err)
 	}

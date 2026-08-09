@@ -241,7 +241,7 @@
           },
           "websocket": {
             "type": "object",
-            "required": ["method", "path", "subprotocol", "max_input_bytes", "max_output_bytes", "max_frame_bytes", "session_update_schema"],
+            "required": ["method", "path", "subprotocol", "max_input_bytes", "max_output_bytes", "max_frame_bytes", "max_session_seconds", "session_update_schema"],
             "additionalProperties": false,
             "properties": {
               "method": { "type": "string" },
@@ -250,6 +250,7 @@
               "max_input_bytes": { "type": "integer" },
               "max_output_bytes": { "type": "integer" },
               "max_frame_bytes": { "type": "integer" },
+              "max_session_seconds": { "type": "integer" },
               "session_update_schema": { "type": "object" }
             }
           },

@@ -3,8 +3,10 @@
 - [x] GSD/manual fallback, source resolution, required skills, and inline discussion recorded.
 - [x] Inherited loader RED rerun and captured before production edits.
 - [x] Operation schema rejects unknown execution blocks and invalid WebSocket declarations.
-- [x] Loader enforces fixed GET/relative path/subprotocol/closed initial schema/positive bounds.
-- [x] Loopback transport proves handshake, auth boundary, masking, bounds, cancellation, close,
+- [x] Loader enforces fixed GET/relative path/subprotocol/closed initial schema/positive byte and
+  wall-clock bounds.
+- [x] Loopback transport proves handshake, auth boundary, masking, byte bounds, declaration-owned
+  deadline cancellation, close,
   redaction, and malformed-frame rejection.
 - [x] Commandrunner permits only matching implemented operation declarations and rejects
   caller-controlled WebSocket transport controls.
@@ -14,7 +16,8 @@
 - [x] No new dependency, credentialed call, reverse-ETL execution, or generic tool surface.
 - [x] Targeted tests, full `internal/cli`, vet, build, declarative surface validation, and clean
   generated-surface regeneration are recorded after the `f96a47e80` main rebase.
-- [ ] Code review, stacked-PR handoff, and consumer built-binary proof recorded.
+- [x] Inline/manual code review is recorded with finding disposition in `REVIEW.md`.
+- [ ] Stacked-PR handoff and consumer built-binary proof recorded.
 
 ## Main rebase re-gate — 2026-08-10
 
@@ -31,3 +34,23 @@
   worktree clean. A built-binary WebSocket command remains intentionally impossible until the
   #3935 Zoom AI Services consumer declares one; that consumer must perform the final reachability
   proof with the non-zero unresolved-command behavior from #3964.
+
+## Review remediation re-gate — 2026-08-10
+
+- Inline review found and remediated the missing wall-clock bound: a background CLI context plus a
+  server that withholds its terminal close could otherwise retain a completed session indefinitely.
+  The declaration now requires a positive `max_session_seconds` no greater than one hour, and the
+  executor derives and owns the corresponding deadline.
+- Focused green checks passed for the engine schema/runtime regression, commandrunner, CLI reserved
+  control preservation, static conformance, and the connectorgen derivation/validation fixture.
+  The final whole-foundation re-gate and review record follow this remediation.
+
+## Final foundation re-gate — 2026-08-10
+
+- Complete scoped engine, connsdk, commandrunner, static-conformance, connectorgen, and
+  `internal/cli` test packages passed. The CLI package completed in 839.198 seconds under its
+  configured 20-minute test timeout while shared lanes were active.
+- `go vet` for every changed package, `go build ./cmd/pm`, `connectorgen validate` (552 bundles),
+  and `surface-sync --check` (552 bundles, zero drift) passed.
+- Docs and website generators reran and left no tracked artifact diff. The inline review and its
+  fixed lifetime finding are recorded in `REVIEW.md`.

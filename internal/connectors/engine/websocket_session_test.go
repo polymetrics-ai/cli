@@ -88,6 +88,20 @@ func TestBundleRejectsUnsafeWebSocketSessionContracts(t *testing.T) {
 			want: "websocket_session max_frame_bytes must be positive",
 		},
 		{
+			name: "unbounded_session_lifetime",
+			mutate: func(operation string) string {
+				return strings.Replace(operation, `"max_session_seconds": 60`, `"max_session_seconds": 0`, 1)
+			},
+			want: "websocket_session max_session_seconds must be positive",
+		},
+		{
+			name: "excessive_session_lifetime",
+			mutate: func(operation string) string {
+				return strings.Replace(operation, `"max_session_seconds": 60`, `"max_session_seconds": 3601`, 1)
+			},
+			want: "websocket_session max_session_seconds must not exceed 3600",
+		},
+		{
 			name: "frame_cannot_hold_required_close_code",
 			mutate: func(operation string) string {
 				return strings.Replace(operation, `"max_frame_bytes": 4096`, `"max_frame_bytes": 1`, 1)
@@ -152,6 +166,7 @@ func websocketSessionBundleFS(mutate func(string) string) fstest.MapFS {
 				"max_input_bytes": 65536,
 				"max_output_bytes": 65536,
 				"max_frame_bytes": 4096,
+				"max_session_seconds": 60,
 				"session_update_schema": {
 					"type": "object",
 					"additionalProperties": false,

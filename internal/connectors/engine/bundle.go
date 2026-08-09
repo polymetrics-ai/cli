@@ -857,6 +857,7 @@ type WebSocketSessionSpec struct {
 	MaxInputBytes       int             `json:"max_input_bytes"`
 	MaxOutputBytes      int             `json:"max_output_bytes"`
 	MaxFrameBytes       int             `json:"max_frame_bytes"`
+	MaxSessionSeconds   int             `json:"max_session_seconds"`
 	SessionUpdateSchema json.RawMessage `json:"session_update_schema"`
 }
 
@@ -2704,6 +2705,12 @@ func validateWebSocketSessionSemantics(i int, op OperationSpec) error {
 	}
 	if spec.MaxFrameBytes > spec.MaxInputBytes || spec.MaxFrameBytes > spec.MaxOutputBytes {
 		return fmt.Errorf("operation %d (%q) websocket_session max_frame_bytes must not exceed max_input_bytes or max_output_bytes", i, op.ID)
+	}
+	if spec.MaxSessionSeconds <= 0 {
+		return fmt.Errorf("operation %d (%q) websocket_session max_session_seconds must be positive", i, op.ID)
+	}
+	if spec.MaxSessionSeconds > maxWebSocketSessionSeconds {
+		return fmt.Errorf("operation %d (%q) websocket_session max_session_seconds must not exceed %d", i, op.ID, maxWebSocketSessionSeconds)
 	}
 	if op.OutputPolicy != "json_redacted" {
 		return fmt.Errorf("operation %d (%q) websocket_session requires json_redacted output_policy", i, op.ID)
