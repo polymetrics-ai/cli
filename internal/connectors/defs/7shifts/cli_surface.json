@@ -1,0 +1,3940 @@
+{
+  "tagline": "Run 7shifts's declared streams and reverse-ETL actions.",
+  "usage": "pm 7shifts \u003ccommand\u003e [flags]",
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read streams",
+      "commands": [
+        "api get v2 company company-id location location-id external-user-mappings",
+        "api get v2 company company-id location location-id external-user-mappings identifier",
+        "api get v2 company company-id test-webhook",
+        "companies list",
+        "departments list",
+        "fetch tip pool manual entry list",
+        "find by id list",
+        "get assignments list",
+        "get availability by id list",
+        "get daily sales and labor list",
+        "get engage overview by location id list",
+        "get event list",
+        "get events list",
+        "get hours and wages list",
+        "get location by id list",
+        "get receipt list",
+        "get role assignments list",
+        "get task list daily summary list",
+        "get task list list",
+        "get task list template list",
+        "get task list templates list",
+        "get task lists list",
+        "get task management settings list",
+        "get time clocking payroll period list",
+        "get time clocking payroll periods list",
+        "get time off list list",
+        "get time off settings list",
+        "get time punch by id list",
+        "get tip pool settings list",
+        "get total hours list",
+        "get user list",
+        "get user wages list",
+        "list availabilities list",
+        "list availability reasons list",
+        "list company webhooks list",
+        "list department assignments list",
+        "list employment record list",
+        "list external user mappings list",
+        "list inactive reasons list",
+        "list location assignments list",
+        "list log book categories list",
+        "list log book comments list",
+        "list log book posts list",
+        "list sales receipts list",
+        "list scheduled shifts list",
+        "list shift feedback list",
+        "list user contacts list",
+        "list users authorized locations list",
+        "locations list",
+        "retrieve company labor settings list",
+        "retrieve daily stats list",
+        "retrieve day part settings list",
+        "retrieve department list",
+        "retrieve external user mapping list",
+        "retrieve log book comment list",
+        "retrieve log book post list",
+        "retrieve receipts summary list",
+        "retrieve role list",
+        "retrieve shift list",
+        "retrieve tip pool detailed report list",
+        "retrieve tip pool summary report list",
+        "retrieve user contact list",
+        "roles list",
+        "shifts list",
+        "time punches list",
+        "users list",
+        "view company list",
+        "who am i list"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": [
+        "api delete v2 company company-id location location-id external-user-mappings identifier",
+        "api post oauth2 token",
+        "api post v2 batch company company-id location location-id forecast-override",
+        "api post v2 batch company company-id users role-assignments",
+        "api post v2 company company-id create-many-users",
+        "api post v2 company company-id location location-id external-user-mappings",
+        "api post v2 company company-id location location-id external-user-mappings-bulk",
+        "api post v2 company company-id locations location-id forecast-overrides-intervals",
+        "api post v2 partner-company-creation",
+        "api put v2 company company-id location location-id external-user-mappings identifier",
+        "approve time off apply",
+        "clear task apply",
+        "complete task apply",
+        "create availability apply",
+        "create availability reason apply",
+        "create bulk forecast overrides apply",
+        "create complete receipt apply",
+        "create department apply",
+        "create department assignment apply",
+        "create employment record apply",
+        "create event apply",
+        "create external user mappings apply",
+        "create forecast override apply",
+        "create location apply",
+        "create location assignment apply",
+        "create log book category apply",
+        "create log book comment apply",
+        "create log book post apply",
+        "create projected sales interval override apply",
+        "create role apply",
+        "create role assignment apply",
+        "create task list template apply",
+        "create task tags apply",
+        "create time off apply",
+        "create user mappings bulk apply",
+        "create user wages apply",
+        "create webhook apply",
+        "deactivate user apply",
+        "decline time off apply",
+        "delete availability apply",
+        "delete availability reason apply",
+        "delete company webhook apply",
+        "delete department apply",
+        "delete department assignment apply",
+        "delete employment record apply",
+        "delete event apply",
+        "delete external user mappings apply",
+        "delete forecast override apply",
+        "delete location apply",
+        "delete location assignment apply",
+        "delete log book category apply",
+        "delete log book comment apply",
+        "delete log book post apply",
+        "delete role apply",
+        "delete role assignment apply",
+        "delete shift apply",
+        "delete task list template apply",
+        "delete task tags apply",
+        "delete time off apply",
+        "delete time punch by id apply",
+        "edit availability apply",
+        "edit availability reason apply",
+        "edit company webhook apply",
+        "edit event apply",
+        "edit task list template apply",
+        "edit time off apply",
+        "post shift apply",
+        "post time punch apply",
+        "post user apply",
+        "put time punch apply",
+        "put user apply",
+        "save time off settings apply",
+        "save tip pool manual entry apply",
+        "sync overridden projected sales interval apply",
+        "update availability status apply",
+        "update company apply",
+        "update complete receipt apply",
+        "update department apply",
+        "update employment record apply",
+        "update external user mappings apply",
+        "update location apply",
+        "update log book category apply",
+        "update role apply",
+        "update role assignment apply",
+        "update shift apply",
+        "upsert bulk employment records apply"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "api delete v2 company company-id location location-id external-user-mappings identifier",
+      "summary": "Documented DELETE /v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api delete v2 company company-id location location-id external-user-mappings identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}"
+        }
+      ],
+      "operation": "7shifts.delete.v2-company-company-id-location-location-id-external-user-mappings-identifier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api get v2 company company-id location location-id external-user-mappings",
+      "summary": "Documented GET /v2/company/{company_id}/location/{location_id}/external_user_mappings (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api get v2 company company-id location location-id external-user-mappings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings"
+        }
+      ],
+      "operation": "7shifts.get.v2-company-company-id-location-location-id-external-user-mappings",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 company company-id location location-id external-user-mappings identifier",
+      "summary": "Documented GET /v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier} (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api get v2 company company-id location location-id external-user-mappings identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}"
+        }
+      ],
+      "operation": "7shifts.get.v2-company-company-id-location-location-id-external-user-mappings-identifier",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api get v2 company company-id test-webhook",
+      "summary": "Documented GET /v2/company/{company_id}/test_webhook (not implemented)",
+      "intent": "direct_read",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api get v2 company company-id test-webhook --help"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/test_webhook"
+        }
+      ],
+      "operation": "7shifts.get.v2-company-company-id-test-webhook",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "notes": "named_dependency=engine.direct_read_executor: the direct-read executor has no non-redacting output policy for this provider operation"
+    },
+    {
+      "path": "api post oauth2 token",
+      "summary": "Documented POST /oauth2/token (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api post oauth2 token --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/oauth2/token"
+        }
+      ],
+      "operation": "7shifts.post.oauth2-token",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 batch company company-id location location-id forecast-override",
+      "summary": "Documented POST /v2/batch/company/{company_id}/location/{location_id}/forecast_override (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api post v2 batch company company-id location location-id forecast-override --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/batch/company/{company_id}/location/{location_id}/forecast_override"
+        }
+      ],
+      "operation": "7shifts.post.v2-batch-company-company-id-location-location-id-forecast-override",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 batch company company-id users role-assignments",
+      "summary": "Documented POST /v2/batch/company/{company_id}/users/role_assignments (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api post v2 batch company company-id users role-assignments --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/batch/company/{company_id}/users/role_assignments"
+        }
+      ],
+      "operation": "7shifts.post.v2-batch-company-company-id-users-role-assignments",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 company company-id create-many-users",
+      "summary": "Documented POST /v2/company/{company_id}/create_many_users (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api post v2 company company-id create-many-users --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/create_many_users"
+        }
+      ],
+      "operation": "7shifts.post.v2-company-company-id-create-many-users",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 company company-id location location-id external-user-mappings",
+      "summary": "Documented POST /v2/company/{company_id}/location/{location_id}/external_user_mappings (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api post v2 company company-id location location-id external-user-mappings --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings"
+        }
+      ],
+      "operation": "7shifts.post.v2-company-company-id-location-location-id-external-user-mappings",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 company company-id location location-id external-user-mappings-bulk",
+      "summary": "Documented POST /v2/company/{company_id}/location/{location_id}/external_user_mappings_bulk (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api post v2 company company-id location location-id external-user-mappings-bulk --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings_bulk"
+        }
+      ],
+      "operation": "7shifts.post.v2-company-company-id-location-location-id-external-user-mappings-bulk",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 company company-id locations location-id forecast-overrides-intervals",
+      "summary": "Documented POST /v2/company/{company_id}/locations/{location_id}/forecast_overrides_intervals (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api post v2 company company-id locations location-id forecast-overrides-intervals --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/locations/{location_id}/forecast_overrides_intervals"
+        }
+      ],
+      "operation": "7shifts.post.v2-company-company-id-locations-location-id-forecast-overrides-intervals",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api post v2 partner-company-creation",
+      "summary": "Documented POST /v2/partner_company_creation (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api post v2 partner-company-creation --help"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/partner_company_creation"
+        }
+      ],
+      "operation": "7shifts.post.v2-partner-company-creation",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "api put v2 company company-id location location-id external-user-mappings identifier",
+      "summary": "Documented PUT /v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier} (not implemented)",
+      "intent": "direct_write",
+      "availability": "not_implemented",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts api put v2 company company-id location location-id external-user-mappings identifier --help"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}"
+        }
+      ],
+      "operation": "7shifts.put.v2-company-company-id-location-location-id-external-user-mappings-identifier",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "notes": "named_dependency=engine.rest_write_operation_contract: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract"
+    },
+    {
+      "path": "approve time off apply",
+      "summary": "Plan and execute the approve time off reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "approve_time_off",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "time_off_id",
+          "type": "integer",
+          "summary": "Required time off id record field.",
+          "maps_to": "record.time_off_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts approve time off apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/time_off/{time_off_id}/approve"
+        }
+      ],
+      "risk": "Approve Time Off Request in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "clear task apply",
+      "summary": "Plan and execute the clear task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "clear_task",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "list_id",
+          "type": "integer",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "integer",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts clear task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/task_lists/{list_id}/tasks/{task_id}/clear"
+        }
+      ],
+      "risk": "Clear Task in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "companies list",
+      "summary": "Run the companies ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts companies list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/companies"
+        }
+      ]
+    },
+    {
+      "path": "complete task apply",
+      "summary": "Plan and execute the complete task reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "complete_task",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "list_id",
+          "type": "integer",
+          "summary": "Required list id record field.",
+          "maps_to": "record.list_id",
+          "required": true
+        },
+        {
+          "name": "task_id",
+          "type": "integer",
+          "summary": "Required task id record field.",
+          "maps_to": "record.task_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts complete task apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/task_lists/{list_id}/tasks/{task_id}/complete"
+        }
+      ],
+      "risk": "Complete Task in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create availability apply",
+      "summary": "Plan and execute the create availability reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_availability",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts create availability apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/availabilities"
+        }
+      ],
+      "risk": "Create Availability in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create availability reason apply",
+      "summary": "Plan and execute the create availability reason reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_availability_reason",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "reason",
+          "type": "string",
+          "summary": "Required reason record field.",
+          "maps_to": "record.reason",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create availability reason apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/availability_reasons"
+        }
+      ],
+      "risk": "Create Availability Reason in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create bulk forecast overrides apply",
+      "summary": "Plan and execute the create bulk forecast overrides reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_bulk_forecast_overrides",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts create bulk forecast overrides apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/location/{location_id}/forecast_overrides"
+        }
+      ],
+      "risk": "Create Daily Projected Forecast Overrides in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create complete receipt apply",
+      "summary": "Plan and execute the create complete receipt reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_complete_receipt",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts create complete receipt apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/receipts"
+        }
+      ],
+      "risk": "Create Receipt in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create department apply",
+      "summary": "Plan and execute the create department reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_department",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "default",
+          "type": "boolean",
+          "summary": "Required default record field.",
+          "maps_to": "record.default",
+          "required": true
+        },
+        {
+          "name": "location_id",
+          "type": "number",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create department apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/departments"
+        }
+      ],
+      "risk": "Create Department in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create department assignment apply",
+      "summary": "Plan and execute the create department assignment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_department_assignment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "department_id",
+          "type": "integer",
+          "summary": "Required department id record field.",
+          "maps_to": "record.department_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create department assignment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/users/{user_id}/department_assignments"
+        }
+      ],
+      "risk": "Create Department Assignment in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create employment record apply",
+      "summary": "Plan and execute the create employment record reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_employment_record",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create employment record apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/employment_records"
+        }
+      ],
+      "risk": "Create Employment Record in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create event apply",
+      "summary": "Plan and execute the create event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_event",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts create event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/events"
+        }
+      ],
+      "risk": "Create Event in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create external user mappings apply",
+      "summary": "Plan and execute the create external user mappings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_external_user_mappings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "external_user_id",
+          "type": "string",
+          "summary": "Required external user id record field.",
+          "maps_to": "record.external_user_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create external user mappings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/external_user_mappings"
+        }
+      ],
+      "risk": "Create External User Mapping in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create forecast override apply",
+      "summary": "Plan and execute the create forecast override reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_forecast_override",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "date",
+          "type": "string",
+          "summary": "Required date record field.",
+          "maps_to": "record.date",
+          "required": true
+        },
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "report_type",
+          "type": "string",
+          "summary": "Required report type record field.",
+          "maps_to": "record.report_type",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "integer",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create forecast override apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/location/{location_id}/forecast_override"
+        }
+      ],
+      "risk": "Create Daily Projected Forecast Override in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create location apply",
+      "summary": "Plan and execute the create location reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_location",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "country",
+          "type": "string",
+          "summary": "Required country record field.",
+          "maps_to": "record.country",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create location apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/locations"
+        }
+      ],
+      "risk": "Create Location in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create location assignment apply",
+      "summary": "Plan and execute the create location assignment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_location_assignment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create location assignment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/users/{user_id}/location_assignments"
+        }
+      ],
+      "risk": "Create Location Assignments in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create log book category apply",
+      "summary": "Plan and execute the create log book category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_log_book_category",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create log book category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/log_book_categories"
+        }
+      ],
+      "risk": "Create Log Book Category in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create log book comment apply",
+      "summary": "Plan and execute the create log book comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_log_book_comment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "log_book_id",
+          "type": "integer",
+          "summary": "Required log book id record field.",
+          "maps_to": "record.log_book_id",
+          "required": true
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "summary": "Required message record field.",
+          "maps_to": "record.message",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create log book comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/log_book_comments"
+        }
+      ],
+      "risk": "Create Log Book Comment in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create log book post apply",
+      "summary": "Plan and execute the create log book post reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_log_book_post",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "date",
+          "type": "string",
+          "summary": "Required date record field.",
+          "maps_to": "record.date",
+          "required": true
+        },
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "log_book_category_id",
+          "type": "integer",
+          "summary": "Required log book category id record field.",
+          "maps_to": "record.log_book_category_id",
+          "required": true
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "summary": "Required message record field.",
+          "maps_to": "record.message",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create log book post apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/log_book_posts"
+        }
+      ],
+      "risk": "Create Log Book Post in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create projected sales interval override apply",
+      "summary": "Plan and execute the create projected sales interval override reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_projected_sales_interval_override",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Required end record field.",
+          "maps_to": "record.end",
+          "required": true
+        },
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Required start record field.",
+          "maps_to": "record.start",
+          "required": true
+        },
+        {
+          "name": "value",
+          "type": "integer",
+          "summary": "Required value record field.",
+          "maps_to": "record.value",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create projected sales interval override apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/locations/{location_id}/forecast_override_interval"
+        }
+      ],
+      "risk": "Create Sales Forecast Override Interval in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create role apply",
+      "summary": "Plan and execute the create role reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_role",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "color",
+          "type": "string",
+          "summary": "Required color record field.",
+          "maps_to": "record.color",
+          "required": true
+        },
+        {
+          "name": "department_id",
+          "type": "integer",
+          "summary": "Required department id record field.",
+          "maps_to": "record.department_id",
+          "required": true
+        },
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create role apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/roles"
+        }
+      ],
+      "risk": "Create Role in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create role assignment apply",
+      "summary": "Plan and execute the create role assignment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_role_assignment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "role_id",
+          "type": "integer",
+          "summary": "Required role id record field.",
+          "maps_to": "record.role_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create role assignment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/users/{user_id}/role_assignments"
+        }
+      ],
+      "risk": "Create Role Assignment in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create task list template apply",
+      "summary": "Plan and execute the create task list template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_task_list_template",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts create task list template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/task_list_templates"
+        }
+      ],
+      "risk": "Create Task List Template in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create task tags apply",
+      "summary": "Plan and execute the create task tags reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_task_tags",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts create task tags apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/task_tags"
+        }
+      ],
+      "risk": "Create Task Tags in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create time off apply",
+      "summary": "Plan and execute the create time off reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_time_off",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "category",
+          "type": "string",
+          "summary": "Required category record field.",
+          "maps_to": "record.category",
+          "required": true
+        },
+        {
+          "name": "company_id",
+          "type": "integer",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        },
+        {
+          "name": "from_date",
+          "type": "string",
+          "summary": "Required from date record field.",
+          "maps_to": "record.from_date",
+          "required": true
+        },
+        {
+          "name": "partial",
+          "type": "boolean",
+          "summary": "Required partial record field.",
+          "maps_to": "record.partial",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "integer",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        },
+        {
+          "name": "to_date",
+          "type": "string",
+          "summary": "Required to date record field.",
+          "maps_to": "record.to_date",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create time off apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/time_off"
+        }
+      ],
+      "risk": "Create Time Off in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create user mappings bulk apply",
+      "summary": "Plan and execute the create user mappings bulk reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "create_user_mappings_bulk",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts create user mappings bulk apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/external_user_mappings_bulk"
+        }
+      ],
+      "risk": "Create User External Mappings in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "create user wages apply",
+      "summary": "Plan and execute the create user wages reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_user_wages",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "effective_date",
+          "type": "string",
+          "summary": "Required effective date record field.",
+          "maps_to": "record.effective_date",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        },
+        {
+          "name": "wage_cents",
+          "type": "integer",
+          "summary": "Required wage cents record field.",
+          "maps_to": "record.wage_cents",
+          "required": true
+        },
+        {
+          "name": "wage_type",
+          "type": "string",
+          "summary": "Required wage type record field.",
+          "maps_to": "record.wage_type",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create user wages apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/users/{user_id}/wages"
+        }
+      ],
+      "risk": "Create User Wage in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "create webhook apply",
+      "summary": "Plan and execute the create webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "create_webhook",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "event",
+          "type": "string",
+          "summary": "Required event record field.",
+          "maps_to": "record.event",
+          "required": true
+        },
+        {
+          "name": "method",
+          "type": "string",
+          "summary": "Required method record field.",
+          "maps_to": "record.method",
+          "required": true
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts create webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/webhooks"
+        }
+      ],
+      "risk": "Create Webhook in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "deactivate user apply",
+      "summary": "Plan and execute the deactivate user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "deactivate_user",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts deactivate user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/users/{identifier}"
+        }
+      ],
+      "risk": "Deactivate User in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "decline time off apply",
+      "summary": "Plan and execute the decline time off reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "decline_time_off",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "time_off_id",
+          "type": "integer",
+          "summary": "Required time off id record field.",
+          "maps_to": "record.time_off_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts decline time off apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/time_off/{time_off_id}/decline"
+        }
+      ],
+      "risk": "Decline Time Off Request in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete availability apply",
+      "summary": "Plan and execute the delete availability reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_availability",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "availability_id",
+          "type": "integer",
+          "summary": "Required availability id record field.",
+          "maps_to": "record.availability_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete availability apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/availabilities/{availability_id}"
+        }
+      ],
+      "risk": "Delete Availability in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete availability reason apply",
+      "summary": "Plan and execute the delete availability reason reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_availability_reason",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "availability_reason_id",
+          "type": "integer",
+          "summary": "Required availability reason id record field.",
+          "maps_to": "record.availability_reason_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete availability reason apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/availability_reasons/{availability_reason_id}"
+        }
+      ],
+      "risk": "Delete Availability Reason in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete company webhook apply",
+      "summary": "Plan and execute the delete company webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_company_webhook",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "webhook_id",
+          "type": "integer",
+          "summary": "Required webhook id record field.",
+          "maps_to": "record.webhook_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete company webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "Delete Webhook in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete department apply",
+      "summary": "Plan and execute the delete department reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_department",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "department_id",
+          "type": "integer",
+          "summary": "Required department id record field.",
+          "maps_to": "record.department_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete department apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/departments/{department_id}"
+        }
+      ],
+      "risk": "Delete Department in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete department assignment apply",
+      "summary": "Plan and execute the delete department assignment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_department_assignment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "department_id",
+          "type": "integer",
+          "summary": "Required department id record field.",
+          "maps_to": "record.department_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete department assignment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/users/{user_id}/department_assignments/{department_id}"
+        }
+      ],
+      "risk": "Delete Department Assignment in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete employment record apply",
+      "summary": "Plan and execute the delete employment record reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_employment_record",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "Required uuid record field.",
+          "maps_to": "record.uuid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete employment record apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/employment_record/{uuid}"
+        }
+      ],
+      "risk": "Delete Employment Record in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete event apply",
+      "summary": "Plan and execute the delete event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_event",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "event_id",
+          "type": "integer",
+          "summary": "Required event id record field.",
+          "maps_to": "record.event_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/events/{event_id}"
+        }
+      ],
+      "risk": "Delete Event in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete external user mappings apply",
+      "summary": "Plan and execute the delete external user mappings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_external_user_mappings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "identifier",
+          "type": "string",
+          "summary": "Required identifier record field.",
+          "maps_to": "record.identifier",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete external user mappings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/external_user_mappings/{identifier}"
+        }
+      ],
+      "risk": "Delete External User Mapping in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete forecast override apply",
+      "summary": "Plan and execute the delete forecast override reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_forecast_override",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "report_type",
+          "type": "string",
+          "summary": "Required report type record field.",
+          "maps_to": "record.report_type",
+          "required": true
+        },
+        {
+          "name": "start_date",
+          "type": "string",
+          "summary": "Required start date record field.",
+          "maps_to": "record.start_date",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete forecast override apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/location/{location_id}/forecast_override"
+        }
+      ],
+      "risk": "Sync Daily Projected Forecast Override in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete location apply",
+      "summary": "Plan and execute the delete location reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_location",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete location apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/locations/{location_id}"
+        }
+      ],
+      "risk": "Delete Location in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete location assignment apply",
+      "summary": "Plan and execute the delete location assignment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_location_assignment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete location assignment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/users/{user_id}/location_assignments/{location_id}"
+        }
+      ],
+      "risk": "Delete Location Assignment in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete log book category apply",
+      "summary": "Plan and execute the delete log book category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_log_book_category",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete log book category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/log_book_categories/{id}"
+        }
+      ],
+      "risk": "Delete Log Book Category in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete log book comment apply",
+      "summary": "Plan and execute the delete log book comment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_log_book_comment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete log book comment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/log_book_comments/{id}"
+        }
+      ],
+      "risk": "Delete Log Book Comment in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete log book post apply",
+      "summary": "Plan and execute the delete log book post reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_log_book_post",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete log book post apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/log_book_posts/{id}"
+        }
+      ],
+      "risk": "Delete Log Book Post in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete role apply",
+      "summary": "Plan and execute the delete role reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_role",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "role_id",
+          "type": "integer",
+          "summary": "Required role id record field.",
+          "maps_to": "record.role_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete role apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/roles/{role_id}"
+        }
+      ],
+      "risk": "Delete Role in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete role assignment apply",
+      "summary": "Plan and execute the delete role assignment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_role_assignment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "role_id",
+          "type": "integer",
+          "summary": "Required role id record field.",
+          "maps_to": "record.role_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete role assignment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/users/{user_id}/role_assignments/{role_id}"
+        }
+      ],
+      "risk": "Delete Role Assignment in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete shift apply",
+      "summary": "Plan and execute the delete shift reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_shift",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "shift_id",
+          "type": "integer",
+          "summary": "Required shift id record field.",
+          "maps_to": "record.shift_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete shift apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/shifts/{shift_id}"
+        }
+      ],
+      "risk": "Delete Shift in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete task list template apply",
+      "summary": "Plan and execute the delete task list template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task_list_template",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "Required uuid record field.",
+          "maps_to": "record.uuid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete task list template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/task_list_templates/{uuid}"
+        }
+      ],
+      "risk": "Delete Task List Template in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete task tags apply",
+      "summary": "Plan and execute the delete task tags reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_task_tags",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "company_id",
+          "type": "integer",
+          "summary": "Required company id record field.",
+          "maps_to": "record.company_id",
+          "required": true
+        },
+        {
+          "name": "uuids",
+          "type": "string_array",
+          "summary": "Required uuids record field.",
+          "maps_to": "record.uuids",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete task tags apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/task_tags"
+        }
+      ],
+      "risk": "Delete Task Tags in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete time off apply",
+      "summary": "Plan and execute the delete time off reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_time_off",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "time_off_id",
+          "type": "integer",
+          "summary": "Required time off id record field.",
+          "maps_to": "record.time_off_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete time off apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/time_off/{time_off_id}"
+        }
+      ],
+      "risk": "Delete Time Off in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "delete time punch by id apply",
+      "summary": "Plan and execute the delete time punch by id reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_time_punch_by_id",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "time_punch_id",
+          "type": "integer",
+          "summary": "Required time punch id record field.",
+          "maps_to": "record.time_punch_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts delete time punch by id apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/time_punches/{time_punch_id}"
+        }
+      ],
+      "risk": "Delete Time Punch in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "departments list",
+      "summary": "Run the departments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "departments",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts departments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/departments"
+        }
+      ]
+    },
+    {
+      "path": "edit availability apply",
+      "summary": "Plan and execute the edit availability reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "edit_availability",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "availability_id",
+          "type": "integer",
+          "summary": "Required availability id record field.",
+          "maps_to": "record.availability_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts edit availability apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/availabilities/{availability_id}"
+        }
+      ],
+      "risk": "Update Availability in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "edit availability reason apply",
+      "summary": "Plan and execute the edit availability reason reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "edit_availability_reason",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "availability_reason_id",
+          "type": "integer",
+          "summary": "Required availability reason id record field.",
+          "maps_to": "record.availability_reason_id",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "type": "string",
+          "summary": "Required reason record field.",
+          "maps_to": "record.reason",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts edit availability reason apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/availability_reasons/{availability_reason_id}"
+        }
+      ],
+      "risk": "Update Availability Reason in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "edit company webhook apply",
+      "summary": "Plan and execute the edit company webhook reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "edit_company_webhook",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "Required url record field.",
+          "maps_to": "record.url",
+          "required": true
+        },
+        {
+          "name": "webhook_id",
+          "type": "integer",
+          "summary": "Required webhook id record field.",
+          "maps_to": "record.webhook_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts edit company webhook apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/webhooks/{webhook_id}"
+        }
+      ],
+      "risk": "Update Webhook in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "edit event apply",
+      "summary": "Plan and execute the edit event reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "edit_event",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts edit event apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/company/{company_id}/events/{event_id}"
+        }
+      ],
+      "risk": "Update Event in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "edit task list template apply",
+      "summary": "Plan and execute the edit task list template reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "edit_task_list_template",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "Required uuid record field.",
+          "maps_to": "record.uuid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts edit task list template apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/task_list_templates/{uuid}"
+        }
+      ],
+      "risk": "Update Task List Template in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "edit time off apply",
+      "summary": "Plan and execute the edit time off reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "edit_time_off",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "time_off_id",
+          "type": "integer",
+          "summary": "Required time off id record field.",
+          "maps_to": "record.time_off_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts edit time off apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/time_off/{time_off_id}"
+        }
+      ],
+      "risk": "Update Time Off in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "fetch tip pool manual entry list",
+      "summary": "Run the fetch tip pool manual entry ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "fetch_tip_pool_manual_entry",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts fetch tip pool manual entry list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/tip_pool/{tip_pool_settings_uuid}/manual_entry"
+        }
+      ]
+    },
+    {
+      "path": "find by id list",
+      "summary": "Run the find by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "find_by_id",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts find by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/time_off/{time_off_id}"
+        }
+      ]
+    },
+    {
+      "path": "get assignments list",
+      "summary": "Run the get assignments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_assignments",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get assignments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/users/{user_id}/assignments"
+        }
+      ]
+    },
+    {
+      "path": "get availability by id list",
+      "summary": "Run the get availability by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_availability_by_id",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get availability by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/availabilities/{availability_id}"
+        }
+      ]
+    },
+    {
+      "path": "get daily sales and labor list",
+      "summary": "Run the get daily sales and labor ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_daily_sales_and_labor",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get daily sales and labor list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/daily_sales_and_labor"
+        }
+      ]
+    },
+    {
+      "path": "get engage overview by location id list",
+      "summary": "Run the get engage overview by location id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_engage_overview_by_location_id",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get engage overview by location id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/locations/{location_id}/engage_overview"
+        }
+      ]
+    },
+    {
+      "path": "get event list",
+      "summary": "Run the get event ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_event",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get event list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/events/{event_id}"
+        }
+      ]
+    },
+    {
+      "path": "get events list",
+      "summary": "Run the get events ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_events",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get events list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/events"
+        }
+      ]
+    },
+    {
+      "path": "get hours and wages list",
+      "summary": "Run the get hours and wages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_hours_and_wages",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get hours and wages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/reports/hours_and_wages"
+        }
+      ]
+    },
+    {
+      "path": "get location by id list",
+      "summary": "Run the get location by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_location_by_id",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get location by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/locations/{location_id}"
+        }
+      ]
+    },
+    {
+      "path": "get receipt list",
+      "summary": "Run the get receipt ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_receipt",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get receipt list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/receipts/{receipt_id}"
+        }
+      ]
+    },
+    {
+      "path": "get role assignments list",
+      "summary": "Run the get role assignments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_role_assignments",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get role assignments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/users/{user_id}/role_assignments"
+        }
+      ]
+    },
+    {
+      "path": "get task list daily summary list",
+      "summary": "Run the get task list daily summary ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_task_list_daily_summary",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get task list daily summary list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/task_list_daily_summary"
+        }
+      ]
+    },
+    {
+      "path": "get task list list",
+      "summary": "Run the get task list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_task_list",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get task list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/task_lists/{list_id}"
+        }
+      ]
+    },
+    {
+      "path": "get task list template list",
+      "summary": "Run the get task list template ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_task_list_template",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get task list template list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/task_list_templates/{uuid}"
+        }
+      ]
+    },
+    {
+      "path": "get task list templates list",
+      "summary": "Run the get task list templates ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_task_list_templates",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get task list templates list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/task_list_templates"
+        }
+      ]
+    },
+    {
+      "path": "get task lists list",
+      "summary": "Run the get task lists ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_task_lists",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get task lists list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/task_lists"
+        }
+      ]
+    },
+    {
+      "path": "get task management settings list",
+      "summary": "Run the get task management settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_task_management_settings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get task management settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/task_management_settings"
+        }
+      ]
+    },
+    {
+      "path": "get time clocking payroll period list",
+      "summary": "Run the get time clocking payroll period ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_time_clocking_payroll_period",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get time clocking payroll period list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/payroll_periods/{payroll_period_id}"
+        }
+      ]
+    },
+    {
+      "path": "get time clocking payroll periods list",
+      "summary": "Run the get time clocking payroll periods ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_time_clocking_payroll_periods",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get time clocking payroll periods list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/time_clocking/payroll_periods"
+        }
+      ]
+    },
+    {
+      "path": "get time off list list",
+      "summary": "Run the get time off list ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_time_off_list",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get time off list list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/time_off"
+        }
+      ]
+    },
+    {
+      "path": "get time off settings list",
+      "summary": "Run the get time off settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_time_off_settings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get time off settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/time_off_settings/{company_id}"
+        }
+      ]
+    },
+    {
+      "path": "get time punch by id list",
+      "summary": "Run the get time punch by id ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_time_punch_by_id",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get time punch by id list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/time_punches/{time_punch_id}"
+        }
+      ]
+    },
+    {
+      "path": "get tip pool settings list",
+      "summary": "Run the get tip pool settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_tip_pool_settings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get tip pool settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/tip_pool_settings"
+        }
+      ]
+    },
+    {
+      "path": "get total hours list",
+      "summary": "Run the get total hours ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_total_hours",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get total hours list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/time_off/total_hours"
+        }
+      ]
+    },
+    {
+      "path": "get user list",
+      "summary": "Run the get user ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_user",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get user list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/users/{identifier}"
+        }
+      ]
+    },
+    {
+      "path": "get user wages list",
+      "summary": "Run the get user wages ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_user_wages",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts get user wages list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/users/{user_id}/wages"
+        }
+      ]
+    },
+    {
+      "path": "list availabilities list",
+      "summary": "Run the list availabilities ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_availabilities",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list availabilities list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/availabilities"
+        }
+      ]
+    },
+    {
+      "path": "list availability reasons list",
+      "summary": "Run the list availability reasons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_availability_reasons",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list availability reasons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/availability_reasons"
+        }
+      ]
+    },
+    {
+      "path": "list company webhooks list",
+      "summary": "Run the list company webhooks ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_company_webhooks",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list company webhooks list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/webhooks"
+        }
+      ]
+    },
+    {
+      "path": "list department assignments list",
+      "summary": "Run the list department assignments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_department_assignments",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list department assignments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/users/{user_id}/department_assignments"
+        }
+      ]
+    },
+    {
+      "path": "list employment record list",
+      "summary": "Run the list employment record ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_employment_record",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list employment record list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/employment_records"
+        }
+      ]
+    },
+    {
+      "path": "list external user mappings list",
+      "summary": "Run the list external user mappings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_external_user_mappings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list external user mappings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/external_user_mappings"
+        }
+      ]
+    },
+    {
+      "path": "list inactive reasons list",
+      "summary": "Run the list inactive reasons ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_inactive_reasons",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list inactive reasons list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/inactive_reasons"
+        }
+      ]
+    },
+    {
+      "path": "list location assignments list",
+      "summary": "Run the list location assignments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_location_assignments",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list location assignments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/users/{user_id}/location_assignments"
+        }
+      ]
+    },
+    {
+      "path": "list log book categories list",
+      "summary": "Run the list log book categories ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_log_book_categories",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list log book categories list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/log_book_categories"
+        }
+      ]
+    },
+    {
+      "path": "list log book comments list",
+      "summary": "Run the list log book comments ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_log_book_comments",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list log book comments list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/log_book_comments"
+        }
+      ]
+    },
+    {
+      "path": "list log book posts list",
+      "summary": "Run the list log book posts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_log_book_posts",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list log book posts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/log_book_posts"
+        }
+      ]
+    },
+    {
+      "path": "list sales receipts list",
+      "summary": "Run the list sales receipts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_sales_receipts",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list sales receipts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/receipts"
+        }
+      ]
+    },
+    {
+      "path": "list scheduled shifts list",
+      "summary": "Run the list scheduled shifts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_scheduled_shifts",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list scheduled shifts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/shifts_scheduled/{id}"
+        }
+      ]
+    },
+    {
+      "path": "list shift feedback list",
+      "summary": "Run the list shift feedback ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_shift_feedback",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list shift feedback list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/shift_feedback"
+        }
+      ]
+    },
+    {
+      "path": "list user contacts list",
+      "summary": "Run the list user contacts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_user_contacts",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list user contacts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/contacts"
+        }
+      ]
+    },
+    {
+      "path": "list users authorized locations list",
+      "summary": "Run the list users authorized locations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_users_authorized_locations",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts list users authorized locations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/users/{user_id}/authorized_locations"
+        }
+      ]
+    },
+    {
+      "path": "locations list",
+      "summary": "Run the locations ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "locations",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts locations list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/locations"
+        }
+      ]
+    },
+    {
+      "path": "post shift apply",
+      "summary": "Plan and execute the post shift reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_shift",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Required end record field.",
+          "maps_to": "record.end",
+          "required": true
+        },
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Required start record field.",
+          "maps_to": "record.start",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts post shift apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/shifts"
+        }
+      ],
+      "risk": "Create Shift in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post time punch apply",
+      "summary": "Plan and execute the post time punch reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "post_time_punch",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "clocked_in",
+          "type": "string",
+          "summary": "Required clocked in record field.",
+          "maps_to": "record.clocked_in",
+          "required": true
+        },
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts post time punch apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/time_punches"
+        }
+      ],
+      "risk": "Create Time Punch in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "post user apply",
+      "summary": "Plan and execute the post user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "post_user",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts post user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/users"
+        }
+      ],
+      "risk": "Create User in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "put time punch apply",
+      "summary": "Plan and execute the put time punch reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_time_punch",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "time_punch_id",
+          "type": "integer",
+          "summary": "Required time punch id record field.",
+          "maps_to": "record.time_punch_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts put time punch apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/time_punches/{time_punch_id}"
+        }
+      ],
+      "risk": "Update Time Punch in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "put user apply",
+      "summary": "Plan and execute the put user reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "put_user",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "identifier",
+          "type": "integer",
+          "summary": "Required identifier record field.",
+          "maps_to": "record.identifier",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts put user apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/users/{identifier}"
+        }
+      ],
+      "risk": "Update User in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "retrieve company labor settings list",
+      "summary": "Run the retrieve company labor settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_company_labor_settings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve company labor settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/labor_settings"
+        }
+      ]
+    },
+    {
+      "path": "retrieve daily stats list",
+      "summary": "Run the retrieve daily stats ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_daily_stats",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve daily stats list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/location/{location_id}/daily_stats"
+        }
+      ]
+    },
+    {
+      "path": "retrieve day part settings list",
+      "summary": "Run the retrieve day part settings ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_day_part_settings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve day part settings list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/day_part/settings"
+        }
+      ]
+    },
+    {
+      "path": "retrieve department list",
+      "summary": "Run the retrieve department ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_department",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve department list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/departments/{department_id}"
+        }
+      ]
+    },
+    {
+      "path": "retrieve external user mapping list",
+      "summary": "Run the retrieve external user mapping ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_external_user_mapping",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve external user mapping list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/external_user_mappings/{identifier}"
+        }
+      ]
+    },
+    {
+      "path": "retrieve log book comment list",
+      "summary": "Run the retrieve log book comment ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_log_book_comment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve log book comment list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/log_book_comments/{id}"
+        }
+      ]
+    },
+    {
+      "path": "retrieve log book post list",
+      "summary": "Run the retrieve log book post ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_log_book_post",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve log book post list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/log_book_posts/{id}"
+        }
+      ]
+    },
+    {
+      "path": "retrieve receipts summary list",
+      "summary": "Run the retrieve receipts summary ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_receipts_summary",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve receipts summary list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/receipts_summary"
+        }
+      ]
+    },
+    {
+      "path": "retrieve role list",
+      "summary": "Run the retrieve role ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_role",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve role list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/roles/{role_id}"
+        }
+      ]
+    },
+    {
+      "path": "retrieve shift list",
+      "summary": "Run the retrieve shift ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_shift",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve shift list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/shifts/{shift_id}"
+        }
+      ]
+    },
+    {
+      "path": "retrieve tip pool detailed report list",
+      "summary": "Run the retrieve tip pool detailed report ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_tip_pool_detailed_report",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve tip pool detailed report list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/locations/{location_id}/tip_pool_detailed_report"
+        }
+      ]
+    },
+    {
+      "path": "retrieve tip pool summary report list",
+      "summary": "Run the retrieve tip pool summary report ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_tip_pool_summary_report",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve tip pool summary report list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/locations/{location_id}/tip_pool_summary_report"
+        }
+      ]
+    },
+    {
+      "path": "retrieve user contact list",
+      "summary": "Run the retrieve user contact ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "retrieve_user_contact",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts retrieve user contact list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/contacts/{identifier}"
+        }
+      ]
+    },
+    {
+      "path": "roles list",
+      "summary": "Run the roles ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roles",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts roles list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/roles"
+        }
+      ]
+    },
+    {
+      "path": "save time off settings apply",
+      "summary": "Plan and execute the save time off settings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "save_time_off_settings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts save time off settings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/time_off_settings/{company_id}"
+        }
+      ],
+      "risk": "Create Time Off Settings in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "save tip pool manual entry apply",
+      "summary": "Plan and execute the save tip pool manual entry reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "save_tip_pool_manual_entry",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts save tip pool manual entry apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/tip_pool/{tip_pool_settings_uuid}/manual_entry"
+        }
+      ],
+      "risk": "Update Tip Pool Manual Entries in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "shifts list",
+      "summary": "Run the shifts ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "shifts",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts shifts list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/shifts"
+        }
+      ]
+    },
+    {
+      "path": "sync overridden projected sales interval apply",
+      "summary": "Plan and execute the sync overridden projected sales interval reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "sync_overridden_projected_sales_interval",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "end",
+          "type": "string",
+          "summary": "Required end record field.",
+          "maps_to": "record.end",
+          "required": true
+        },
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        },
+        {
+          "name": "start",
+          "type": "string",
+          "summary": "Required start record field.",
+          "maps_to": "record.start",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts sync overridden projected sales interval apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/v2/company/{company_id}/locations/{location_id}/forecast_override_interval"
+        }
+      ],
+      "risk": "Delete Sales Forecast Override Interval in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "time punches list",
+      "summary": "Run the time punches ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "time_punches",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts time punches list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/time_punches"
+        }
+      ]
+    },
+    {
+      "path": "update availability status apply",
+      "summary": "Plan and execute the update availability status reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_availability_status",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "availability_id",
+          "type": "integer",
+          "summary": "Required availability id record field.",
+          "maps_to": "record.availability_id",
+          "required": true
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "summary": "Required status record field.",
+          "maps_to": "record.status",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update availability status apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/availabilities/{availability_id}/status"
+        }
+      ],
+      "risk": "Update Availability Status in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update company apply",
+      "summary": "Plan and execute the update company reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_company",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update company apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/companies/{id}"
+        }
+      ],
+      "risk": "Update Company in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update complete receipt apply",
+      "summary": "Plan and execute the update complete receipt reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_complete_receipt",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "net_total",
+          "type": "integer",
+          "summary": "Required net total record field.",
+          "maps_to": "record.net_total",
+          "required": true
+        },
+        {
+          "name": "receipt_id",
+          "type": "string",
+          "summary": "Required receipt id record field.",
+          "maps_to": "record.receipt_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update complete receipt apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/receipts/{receipt_id}"
+        }
+      ],
+      "risk": "Update Receipt in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update department apply",
+      "summary": "Plan and execute the update department reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_department",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "default",
+          "type": "boolean",
+          "summary": "Required default record field.",
+          "maps_to": "record.default",
+          "required": true
+        },
+        {
+          "name": "department_id",
+          "type": "integer",
+          "summary": "Required department id record field.",
+          "maps_to": "record.department_id",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Required name record field.",
+          "maps_to": "record.name",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update department apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/departments/{department_id}"
+        }
+      ],
+      "risk": "Update Department in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update employment record apply",
+      "summary": "Plan and execute the update employment record reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_employment_record",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "summary": "Required uuid record field.",
+          "maps_to": "record.uuid",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update employment record apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/employment_record/{uuid}"
+        }
+      ],
+      "risk": "Update Employment Record in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update external user mappings apply",
+      "summary": "Plan and execute the update external user mappings reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_external_user_mappings",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "identifier",
+          "type": "string",
+          "summary": "Required identifier record field.",
+          "maps_to": "record.identifier",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update external user mappings apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/external_user_mappings/{identifier}"
+        }
+      ],
+      "risk": "Update External User Mappings in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update location apply",
+      "summary": "Plan and execute the update location reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_location",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "location_id",
+          "type": "integer",
+          "summary": "Required location id record field.",
+          "maps_to": "record.location_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update location apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/locations/{location_id}"
+        }
+      ],
+      "risk": "Update Location in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update log book category apply",
+      "summary": "Plan and execute the update log book category reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_log_book_category",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "id",
+          "type": "integer",
+          "summary": "Required id record field.",
+          "maps_to": "record.id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update log book category apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/v2/company/{company_id}/log_book_categories/{id}"
+        }
+      ],
+      "risk": "Update Log Book Category in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update role apply",
+      "summary": "Plan and execute the update role reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_role",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "role_id",
+          "type": "integer",
+          "summary": "Required role id record field.",
+          "maps_to": "record.role_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update role apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/roles/{role_id}"
+        }
+      ],
+      "risk": "Update Role in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update role assignment apply",
+      "summary": "Plan and execute the update role assignment reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_role_assignment",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "role_id",
+          "type": "integer",
+          "summary": "Required role id record field.",
+          "maps_to": "record.role_id",
+          "required": true
+        },
+        {
+          "name": "user_id",
+          "type": "integer",
+          "summary": "Required user id record field.",
+          "maps_to": "record.user_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update role assignment apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/users/{user_id}/role_assignments/{role_id}"
+        }
+      ],
+      "risk": "Update Role Assignment in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "update shift apply",
+      "summary": "Plan and execute the update shift reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "update_shift",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "flags": [
+        {
+          "name": "shift_id",
+          "type": "integer",
+          "summary": "Required shift id record field.",
+          "maps_to": "record.shift_id",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm 7shifts update shift apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/v2/company/{company_id}/shifts/{shift_id}"
+        }
+      ],
+      "risk": "Update Shift in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute"
+    },
+    {
+      "path": "upsert bulk employment records apply",
+      "summary": "Plan and execute the upsert bulk employment records reverse-ETL action",
+      "intent": "reverse_etl",
+      "availability": "not_implemented",
+      "write": "upsert_bulk_employment_records",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts upsert bulk employment records apply --plan \u003cplan-name\u003e"
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/company/{company_id}/bulk_employment_records"
+        }
+      ],
+      "risk": "Create Many Employment Records in the configured 7shifts account.",
+      "approval": "requires plan, preview, approval, and execute",
+      "notes": "named_dependency=engine.reverse_etl_scalar_flag_contract: the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags"
+    },
+    {
+      "path": "users list",
+      "summary": "Run the users ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts users list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/company/{company_id}/users"
+        }
+      ]
+    },
+    {
+      "path": "view company list",
+      "summary": "Run the view company ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "view_company",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts view company list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/companies/{id}"
+        }
+      ]
+    },
+    {
+      "path": "who am i list",
+      "summary": "Run the who am i ETL stream",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "who_am_i",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "examples": [
+        "pm 7shifts who am i list --json"
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/whoami"
+        }
+      ]
+    }
+  ]
+}

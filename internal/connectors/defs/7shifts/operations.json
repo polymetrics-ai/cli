@@ -1,0 +1,209 @@
+{
+  "operations": [
+    {
+      "id": "7shifts.post.oauth2-token",
+      "kind": "rest_write",
+      "summary": "POST /oauth2/token",
+      "description": "OAuth token issuance is an authentication flow, not a data stream or reverse-ETL mutation, and the bundle uses an existing bearer token.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/oauth2/token",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.post.v2-batch-company-company-id-location-location-id-forecast-override",
+      "kind": "rest_write",
+      "summary": "POST /v2/batch/company/{company_id}/location/{location_id}/forecast_override",
+      "description": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/batch/company/{company_id}/location/{location_id}/forecast_override",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.post.v2-batch-company-company-id-users-role-assignments",
+      "kind": "rest_write",
+      "summary": "POST /v2/batch/company/{company_id}/users/role_assignments",
+      "description": "Request body is a root JSON array; the declarative write engine can send JSON objects only.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/batch/company/{company_id}/users/role_assignments",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.post.v2-company-company-id-create-many-users",
+      "kind": "rest_write",
+      "summary": "POST /v2/company/{company_id}/create_many_users",
+      "description": "Request body is a root JSON array; the declarative write engine can send JSON objects only.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/company/{company_id}/create_many_users",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.get.v2-company-company-id-location-location-id-external-user-mappings",
+      "kind": "rest_read",
+      "summary": "GET /v2/company/{company_id}/location/{location_id}/external_user_mappings",
+      "description": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.post.v2-company-company-id-location-location-id-external-user-mappings",
+      "kind": "rest_write",
+      "summary": "POST /v2/company/{company_id}/location/{location_id}/external_user_mappings",
+      "description": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.get.v2-company-company-id-location-location-id-external-user-mappings-identifier",
+      "kind": "rest_read",
+      "summary": "GET /v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+      "description": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "low",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.put.v2-company-company-id-location-location-id-external-user-mappings-identifier",
+      "kind": "rest_write",
+      "summary": "PUT /v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+      "description": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.delete.v2-company-company-id-location-location-id-external-user-mappings-identifier",
+      "kind": "rest_write",
+      "summary": "DELETE /v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+      "description": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "delete",
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings/{identifier}",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.post.v2-company-company-id-location-location-id-external-user-mappings-bulk",
+      "kind": "rest_write",
+      "summary": "POST /v2/company/{company_id}/location/{location_id}/external_user_mappings_bulk",
+      "description": "Deprecated in the 2026-01-01 7shifts API reference; superseded by the non-deprecated endpoint covering the same resource.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/company/{company_id}/location/{location_id}/external_user_mappings_bulk",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.post.v2-company-company-id-locations-location-id-forecast-overrides-intervals",
+      "kind": "rest_write",
+      "summary": "POST /v2/company/{company_id}/locations/{location_id}/forecast_overrides_intervals",
+      "description": "Request body is a root JSON array; the declarative write engine can send JSON objects only.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/company/{company_id}/locations/{location_id}/forecast_overrides_intervals",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.get.v2-company-company-id-test-webhook",
+      "kind": "rest_read",
+      "summary": "GET /v2/company/{company_id}/test_webhook",
+      "description": "Sends a test webhook notification and does not return a stable data resource for ETL.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "medium",
+      "approval": "not implemented: the direct-read executor has no non-redacting output policy for this provider operation",
+      "output_policy": "json",
+      "rest": {
+        "method": "GET",
+        "path": "/v2/company/{company_id}/test_webhook",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "7shifts.post.v2-partner-company-creation",
+      "kind": "rest_write",
+      "summary": "POST /v2/partner_company_creation",
+      "description": "Creates trial accounts through the partner setup surface and is not an ordinary tenant-scoped reverse-ETL action.",
+      "source_url": "https://developers.7shifts.com/llms.txt",
+      "risk": "high",
+      "approval": "not implemented: the REST write executor lacks a reviewed operation-specific body, risk, approval, and execution contract",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/partner_company_creation",
+        "max_bytes": 16777216
+      }
+    }
+  ]
+}

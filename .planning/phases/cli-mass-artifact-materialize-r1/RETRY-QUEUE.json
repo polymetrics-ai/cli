@@ -5,7 +5,7 @@
       "connector": "100ms",
       "official_routes": [
         {
-          "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+          "evidence": "batches/batch-037-100ms-outcomes.json",
           "route": "primary ledger artifact",
           "status": "attempted_failed"
         },
@@ -23,10 +23,10 @@
         }
       ],
       "primary_attempt": {
-        "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
-        "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route",
-        "route": "retained batch source attempt",
-        "stage": "reference_traversal_budget",
+        "evidence": "batches/batch-037-100ms-outcomes.json",
+        "reason": "Provider-linked Postman fork has no static export and the provider-linked SDK tree has no OpenAPI/Postman contract; preserve the 73-operation target for official documented-reference traversal.",
+        "route": "official Postman collection or SDK endpoint source",
+        "stage": "artifact_inventory_unknown",
         "status": "attempted_failed"
       },
       "primary_source": {
@@ -42,7 +42,8 @@
         "batches/batch-023-materialize.json",
         "batches/batch-023-outcomes.json",
         "batches/batch-023-source-materialize.json",
-        "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json"
+        "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+        "batches/batch-037-100ms-outcomes.json"
       ],
       "retry_attempts": [
         {
@@ -86,156 +87,11 @@
           "route": "retained batch source attempt",
           "stage": "reference_traversal_budget",
           "status": "attempted_failed"
-        }
-      ]
-    },
-    {
-      "connector": "7shifts",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-029-materialize.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
         },
         {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
+          "evidence": "batches/batch-037-100ms-outcomes.json",
+          "reason": "Provider-linked Postman fork has no static export and the provider-linked SDK tree has no OpenAPI/Postman contract; preserve the 73-operation target for official documented-reference traversal.",
           "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-029-materialize.json",
-        "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget",
-        "route": "retained batch source attempt",
-        "stage": "artifact_inventory_unknown",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "openapi",
-        "retrieved_at": "2026-08-05",
-        "source_reason": "",
-        "source_status": "done",
-        "url": "https://developers.7shifts.com/llms.txt"
-      },
-      "provenance_reports": [
-        "batches/batch-007-materialize.json",
-        "batches/batch-007-outcomes.json",
-        "batches/batch-015-materialize.json",
-        "batches/batch-015-outcomes.json",
-        "batches/batch-017-materialize.json",
-        "batches/batch-017-outcomes.json",
-        "batches/batch-019-7shifts-postman-materialize.json",
-        "batches/batch-019-7shifts-postman-outcomes.json",
-        "batches/batch-022-cache-preflight.json",
-        "batches/batch-022-gate.json",
-        "batches/batch-022-materialize.json",
-        "batches/batch-022-outcomes.json",
-        "batches/batch-022-source-materialize.json",
-        "batches/batch-029-materialize.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-007-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-007-outcomes.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-015-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-015-outcomes.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (artifact operation inventory is unknown: official reference traversal exceeds the 64-document limit), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: candidate reference traversal exceeds the 64-document limit",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-017-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-017-outcomes.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-019-7shifts-postman-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact yielded 128 operation(s), below the ledger's 147; official reference fallback \"https://developers.7shifts.com/reference/postman-collection.md\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-019-7shifts-postman-outcomes.json",
-          "reason": "provider-linked Postman collection enumerated 128 requests below the 147-operation authoritative ledger count; complete official reference and SDK routes remain queued",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-cache-preflight.json",
-          "reason": "artifact cache has no 7shifts.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-gate.json",
-          "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/7shifts: no such file or directory",
-          "route": "retained batch source attempt",
-          "stage": "bundle_path",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-materialize.json",
-          "reason": "bundle directory: stat /Users/karthiksivadas/.treehouse/cli-83d592/41/cli/.planning/phases/cli-mass-artifact-materialize-r1/batches/batch-022-validated-defs/7shifts: no such file or directory",
-          "route": "retained batch source attempt",
-          "stage": "bundle_path",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-outcomes.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-022-source-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference contains a selected link outside the trusted provider host",
-          "route": "retained batch source attempt",
-          "stage": "artifact_inventory_unknown",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-029-materialize.json",
-          "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget",
-          "route": "retained batch source attempt",
           "stage": "artifact_inventory_unknown",
           "status": "attempted_failed"
         }
@@ -11446,71 +11302,6 @@
       ]
     },
     {
-      "connector": "pexels-api",
-      "official_routes": [
-        {
-          "evidence": "batches/batch-028-outcomes.json",
-          "route": "primary ledger artifact",
-          "status": "attempted_failed"
-        },
-        {
-          "route": "provider-published OpenAPI/Swagger or versioned API export",
-          "status": "pending"
-        },
-        {
-          "route": "official Postman collection or SDK endpoint source",
-          "status": "pending"
-        },
-        {
-          "route": "official API reference traversal",
-          "status": "pending"
-        }
-      ],
-      "primary_attempt": {
-        "evidence": "batches/batch-028-outcomes.json",
-        "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued",
-        "route": "primary official artifact isolated retrieval",
-        "stage": "artifact_fetch",
-        "status": "attempted_failed"
-      },
-      "primary_source": {
-        "kind": "html_reference",
-        "retrieved_at": "2026-08-06",
-        "source_reason": "",
-        "source_status": "done",
-        "url": "https://www.pexels.com/api/documentation/"
-      },
-      "provenance_reports": [
-        "batches/batch-004-materialize.json",
-        "batches/batch-004-outcomes.json",
-        "batches/batch-018-interrupted-outcomes.json",
-        "batches/batch-028-outcomes.json"
-      ],
-      "retry_attempts": [
-        {
-          "evidence": "batches/batch-004-materialize.json",
-          "reason": "artifact cache has no pexels-api.{json,yaml,yml,txt,md,html,htm}",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-018-interrupted-outcomes.json",
-          "reason": "controlled stop: bounded reference traversal exceeded the fast static batch budget after cache retrieval; retry with a narrower official machine-source route",
-          "route": "retained batch source attempt",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        },
-        {
-          "evidence": "batches/batch-028-outcomes.json",
-          "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued",
-          "route": "primary official artifact isolated retrieval",
-          "stage": "artifact_fetch",
-          "status": "attempted_failed"
-        }
-      ]
-    },
-    {
       "connector": "picqer",
       "official_routes": [
         {
@@ -16883,6 +16674,39 @@
   "reconstruction_report": "LEDGER-RECONSTRUCTION-20260809.json",
   "resolved": [
     {
+      "connector": "7shifts",
+      "primary_source": {
+        "kind": "openapi",
+        "retrieved_at": "2026-08-05",
+        "source_reason": "",
+        "source_status": "done",
+        "url": "https://developers.7shifts.com/llms.txt"
+      },
+      "provenance_reports": [
+        "batches/batch-007-materialize.json",
+        "batches/batch-007-outcomes.json",
+        "batches/batch-015-materialize.json",
+        "batches/batch-015-outcomes.json",
+        "batches/batch-017-materialize.json",
+        "batches/batch-017-outcomes.json",
+        "batches/batch-019-7shifts-postman-materialize.json",
+        "batches/batch-019-7shifts-postman-outcomes.json",
+        "batches/batch-022-cache-preflight.json",
+        "batches/batch-022-gate.json",
+        "batches/batch-022-materialize.json",
+        "batches/batch-022-outcomes.json",
+        "batches/batch-022-source-materialize.json",
+        "batches/batch-029-materialize.json",
+        "batches/batch-039-7shifts-materialize.json",
+        "batches/batch-039-outcomes.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-039-outcomes.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
+    {
       "connector": "aha",
       "primary_source": {
         "kind": "openapi",
@@ -19540,6 +19364,29 @@
       ],
       "resolved_by": {
         "evidence": "batches/batch-009-outcomes.json",
+        "route": "current validated bundle and retained batch/recovery evidence",
+        "state": "newly_materialized"
+      }
+    },
+    {
+      "connector": "pexels-api",
+      "primary_source": {
+        "kind": "html_reference",
+        "retrieved_at": "2026-08-06",
+        "source_reason": "",
+        "source_status": "done",
+        "url": "https://www.pexels.com/api/documentation/"
+      },
+      "provenance_reports": [
+        "batches/batch-004-materialize.json",
+        "batches/batch-004-outcomes.json",
+        "batches/batch-018-interrupted-outcomes.json",
+        "batches/batch-028-outcomes.json",
+        "batches/batch-038-outcomes.json",
+        "batches/batch-038-pexels-materialize.json"
+      ],
+      "resolved_by": {
+        "evidence": "batches/batch-038-pexels-materialize.json",
         "route": "current validated bundle and retained batch/recovery evidence",
         "state": "newly_materialized"
       }

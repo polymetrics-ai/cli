@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "manifest": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-038-pexels-rendered-reference-manifest.json",
+  "materialize_report": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-038-pexels-materialize.json",
+  "fetch_results": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-038-fetch-results.json",
+  "outcomes": [
+    {
+      "connector": "pexels-api",
+      "state": "materialized",
+      "evidence": ".planning/phases/cli-mass-artifact-materialize-r1/batches/batch-038-pexels-materialize.json",
+      "route": "official Pexels document-renderer endpoint capture exact-surface evidence fallback after direct and browser challenge-gated retrieval",
+      "artifact": {
+        "kind": "html_reference",
+        "url": "https://www.pexels.com/api/documentation/",
+        "version": "Pexels API v1 current HTML reference",
+        "retrieved_at": "2026-08-09",
+        "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093"
+      },
+      "artifact_operations": 9,
+      "declared_operations": 9,
+      "operation_split": {
+        "executable": 7,
+        "provider_blocked": 0,
+        "excluded": 2
+      },
+      "cli_commands": 9
+    }
+  ]
+}

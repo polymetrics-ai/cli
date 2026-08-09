@@ -1,20 +1,20 @@
 {
   "counts": {
     "already_complete": 5,
-    "foundation_pending": 187,
+    "foundation_pending": 189,
     "genuinely_blocked": 0,
-    "materialized_total": 201,
-    "newly_materialized": 185,
-    "reachable": 21,
+    "materialized_total": 203,
+    "newly_materialized": 187,
+    "reachable": 22,
     "recovered_pilot": 4,
     "recovered_seven": 7,
-    "remaining": 225,
-    "retry_pending": 225
+    "remaining": 223,
+    "retry_pending": 223
   },
   "entries": [
     {
       "connector": "100ms",
-      "evidence": "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+      "evidence": "batches/batch-037-100ms-outcomes.json",
       "foundation_pending": false,
       "provenance_reports": [
         "batches/batch-006-materialize.json",
@@ -22,10 +22,11 @@
         "batches/batch-023-materialize.json",
         "batches/batch-023-outcomes.json",
         "batches/batch-023-source-materialize.json",
-        "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json"
+        "batches/batch-027-offhost-navigation-retry-interrupted-outcomes.json",
+        "batches/batch-037-100ms-outcomes.json"
       ],
       "reachability": "not_checked",
-      "reason": "controlled stop: second bounded cached HTML-reference traversal exceeded the two-minute fast static budget; retry with a narrower official machine-source, SDK, or documented endpoint route",
+      "reason": "Provider-linked Postman fork has no static export and the provider-linked SDK tree has no OpenAPI/Postman contract; preserve the 73-operation target for official documented-reference traversal.",
       "source": {
         "kind": "html_reference",
         "retrieved_at": "2026-08-05",
@@ -33,13 +34,31 @@
         "source_status": "done",
         "url": "https://www.100ms.live/docs/sitemap.xml"
       },
-      "stage": "reference_traversal_budget",
+      "stage": "artifact_inventory_unknown",
       "state": "retry_pending"
     },
     {
+      "bundle_provenance": {
+        "artifacts": [
+          {
+            "id": "7shifts-artifact-2026-08-09",
+            "url": "https://developers.7shifts.com/llms.txt",
+            "kind": "openapi",
+            "version": "3.0.2",
+            "retrieved_at": "2026-08-09",
+            "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e"
+          }
+        ],
+        "bundle_api_surface": "internal/connectors/defs/7shifts/api_surface.json",
+        "endpoint_count": 154,
+        "operation_ledger_version": 2,
+        "source_urls": [
+          "https://developers.7shifts.com/llms.txt"
+        ]
+      },
       "connector": "7shifts",
-      "evidence": "batches/batch-029-materialize.json",
-      "foundation_pending": false,
+      "evidence": "batches/batch-039-outcomes.json",
+      "foundation_pending": true,
       "provenance_reports": [
         "batches/batch-007-materialize.json",
         "batches/batch-007-outcomes.json",
@@ -54,10 +73,11 @@
         "batches/batch-022-materialize.json",
         "batches/batch-022-outcomes.json",
         "batches/batch-022-source-materialize.json",
-        "batches/batch-029-materialize.json"
+        "batches/batch-029-materialize.json",
+        "batches/batch-039-7shifts-materialize.json",
+        "batches/batch-039-outcomes.json"
       ],
-      "reachability": "not_checked",
-      "reason": "artifact operation inventory is unknown: primary artifact parse failed (decode OpenAPI or Swagger artifact: yaml: line 3: did not find expected comment or line break), and official reference fallback \"https://developers.7shifts.com/reference\" failed: artifact operation inventory is unknown: official reference traversal exceeds the bounded 67108864-byte source budget",
+      "reachability": "reachable",
       "source": {
         "kind": "openapi",
         "retrieved_at": "2026-08-05",
@@ -65,8 +85,7 @@
         "source_status": "done",
         "url": "https://developers.7shifts.com/llms.txt"
       },
-      "stage": "artifact_inventory_unknown",
-      "state": "retry_pending"
+      "state": "newly_materialized"
     },
     {
       "connector": "activecampaign",
@@ -9164,17 +9183,36 @@
       "state": "newly_materialized"
     },
     {
+      "bundle_provenance": {
+        "artifacts": [
+          {
+            "id": "pexels-api-artifact-2026-08-09",
+            "url": "https://www.pexels.com/api/documentation/",
+            "kind": "html_reference",
+            "version": "Pexels API v1 current HTML reference",
+            "retrieved_at": "2026-08-09",
+            "sha256": "31c13f13c78f6f8a1db766bbda06c7f4d3eea8011cc9fbcbaa103c2fbf98f093"
+          }
+        ],
+        "bundle_api_surface": "internal/connectors/defs/pexels-api/api_surface.json",
+        "endpoint_count": 9,
+        "operation_ledger_version": 2,
+        "source_urls": [
+          "https://www.pexels.com/api/documentation/"
+        ]
+      },
       "connector": "pexels-api",
-      "evidence": "batches/batch-028-outcomes.json",
-      "foundation_pending": false,
+      "evidence": "batches/batch-038-pexels-materialize.json",
+      "foundation_pending": true,
       "provenance_reports": [
         "batches/batch-004-materialize.json",
         "batches/batch-004-outcomes.json",
         "batches/batch-018-interrupted-outcomes.json",
-        "batches/batch-028-outcomes.json"
+        "batches/batch-028-outcomes.json",
+        "batches/batch-038-outcomes.json",
+        "batches/batch-038-pexels-materialize.json"
       ],
-      "reachability": "not_checked",
-      "reason": "official primary artifact retrieval failed; isolated alternative-source retry queued",
+      "reachability": "pending_static_gate",
       "source": {
         "kind": "html_reference",
         "retrieved_at": "2026-08-06",
@@ -9182,8 +9220,7 @@
         "source_status": "done",
         "url": "https://www.pexels.com/api/documentation/"
       },
-      "stage": "artifact_fetch",
-      "state": "retry_pending"
+      "state": "newly_materialized"
     },
     {
       "connector": "picqer",

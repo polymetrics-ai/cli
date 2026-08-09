@@ -1,0 +1,935 @@
+{
+  "schema_version": 1,
+  "connector": "7shifts",
+  "retrieval": {
+    "root_index": {
+      "url": "https://developers.7shifts.com/llms.txt",
+      "retrieved_at": "2026-08-09",
+      "sha256": "6d527b3fe704d2eca8b54c16121647f4bd517534f73b2d72217162eeebaac18c",
+      "reference_entries": 158
+    },
+    "direct_selection": {
+      "selection_index_sha256": "5968f9d896b45606f14d70f9ee4b8796899474880d79cc2665a83ae728e63749",
+      "selected_pages": 147,
+      "excluded": [
+        {
+          "count": 1,
+          "reason": "Authentication overview is not an API operation"
+        },
+        {
+          "count": 1,
+          "reason": "Postman Collection overview is not an API operation"
+        },
+        {
+          "count": 2,
+          "reason": "Webhook introduction/configuration pages are guides, not operations"
+        },
+        {
+          "count": 6,
+          "reason": "Explicitly deprecated external-mapping duplicate operations"
+        },
+        {
+          "count": 1,
+          "reason": "Explicitly deprecated forecast-overrides duplicate operation"
+        }
+      ],
+      "expected_operations": 147,
+      "observed_fragment_operations": 147,
+      "observed_read_operations": 66,
+      "observed_write_operations": 81
+    },
+    "page_openapi_version": "3.0.2",
+    "provider_api_version": "2026-06-01",
+    "derived_combined_openapi": {
+      "sha256": "a7e8973010d7358ae461fce1a9a6125ed0e1245f8f5d5ccfe66bfab7f689db5e",
+      "bytes": 2527728,
+      "paths": 89,
+      "operations": 147
+    },
+    "nonrecursive": true
+  },
+  "pages": [
+    {
+      "slug": "approvetimeoff",
+      "url": "https://developers.7shifts.com/reference/approvetimeoff.md",
+      "sha256": "753cba0caced0a548e53dd3ac1de90fa9d0c68c607da52bd2db5a26f207eb8f0",
+      "bytes": 6749
+    },
+    {
+      "slug": "cleartask",
+      "url": "https://developers.7shifts.com/reference/cleartask.md",
+      "sha256": "6037952e6695fe41a6c059ea305e25f66406c79f43278d3d64eca33f4fa17e48",
+      "bytes": 25757
+    },
+    {
+      "slug": "completetask",
+      "url": "https://developers.7shifts.com/reference/completetask.md",
+      "sha256": "85745be378f8943b92f3b38a6fcb3140279f32b01e3d8d3faa4df712310b1414",
+      "bytes": 25857
+    },
+    {
+      "slug": "createavailability",
+      "url": "https://developers.7shifts.com/reference/createavailability.md",
+      "sha256": "00fac1c5fdbe2ce5093281aa95d0e3304405cff24f736c52815c56f01cc9cbb1",
+      "bytes": 24588
+    },
+    {
+      "slug": "createavailabilityreason",
+      "url": "https://developers.7shifts.com/reference/createavailabilityreason.md",
+      "sha256": "8ed71a0429f9ce2d3143351d60ca88530297390504b073988ad42f59f5cd7301",
+      "bytes": 15193
+    },
+    {
+      "slug": "createbulkforecastoverrides",
+      "url": "https://developers.7shifts.com/reference/createbulkforecastoverrides.md",
+      "sha256": "4c3239823d80e8f57135c880dbdfc02674e493448b6a57acc332044505468d40",
+      "bytes": 21143
+    },
+    {
+      "slug": "createbulkprojectedsalesintervaloverride",
+      "url": "https://developers.7shifts.com/reference/createbulkprojectedsalesintervaloverride.md",
+      "sha256": "81ce51c0e9d9e4ccd2d436b9c3594da1f64cb5d675a6b2ea64a16a1242bf2cee",
+      "bytes": 17107
+    },
+    {
+      "slug": "createcompletereceipt",
+      "url": "https://developers.7shifts.com/reference/createcompletereceipt.md",
+      "sha256": "9ea96701fb8277177f44e2016fa800658bb488af829c60f4706a60ba0f45b71a",
+      "bytes": 20346
+    },
+    {
+      "slug": "createdepartment",
+      "url": "https://developers.7shifts.com/reference/createdepartment.md",
+      "sha256": "fa7e9d0e92150a97be6db2e53e6cdde25a27cbe9a9e152b8828b3d3b7d80f3da",
+      "bytes": 13696
+    },
+    {
+      "slug": "createdepartmentassignment",
+      "url": "https://developers.7shifts.com/reference/createdepartmentassignment.md",
+      "sha256": "0dddc1d7c6d372c79c7c30acb1ca02f854fb363fb79e3c401d4d93ca3158b287",
+      "bytes": 17329
+    },
+    {
+      "slug": "createemploymentrecord",
+      "url": "https://developers.7shifts.com/reference/createemploymentrecord.md",
+      "sha256": "a2e7cbb890b552cda23b6563026c5fc228124969e1a5c9fee09ed79c81b4daf0",
+      "bytes": 21573
+    },
+    {
+      "slug": "createevent",
+      "url": "https://developers.7shifts.com/reference/createevent.md",
+      "sha256": "b37dccf7219439b78280b17a28c23f2109b37913566fc4977382860591216cc9",
+      "bytes": 25333
+    },
+    {
+      "slug": "createexternalusermappings",
+      "url": "https://developers.7shifts.com/reference/createexternalusermappings.md",
+      "sha256": "e0edef1ddfb09d6fb00f2d6a966c1e5621eaff443b941bc4ece5f10feefb481f",
+      "bytes": 18405
+    },
+    {
+      "slug": "createforecastoverride",
+      "url": "https://developers.7shifts.com/reference/createforecastoverride.md",
+      "sha256": "660a68ce73174fcd6706203d063998d7e10a4f7ecfb44b167f10303163d6c0e2",
+      "bytes": 18625
+    },
+    {
+      "slug": "createlocation",
+      "url": "https://developers.7shifts.com/reference/createlocation.md",
+      "sha256": "7d45d319297599258d3b07bee60213cddcba3add91e5790d4a7d04bfeec48419",
+      "bytes": 35061
+    },
+    {
+      "slug": "createlocationassignment",
+      "url": "https://developers.7shifts.com/reference/createlocationassignment.md",
+      "sha256": "62e88ea9739d422907c55e556e39b576c57a6b2f2c9f0ff77e4e396584006248",
+      "bytes": 14433
+    },
+    {
+      "slug": "createlogbookcategory",
+      "url": "https://developers.7shifts.com/reference/createlogbookcategory.md",
+      "sha256": "37f479852e4eba313fee492a03c42860be82cd2e9c9832550df749a61ab7c5dc",
+      "bytes": 15952
+    },
+    {
+      "slug": "createlogbookcomment",
+      "url": "https://developers.7shifts.com/reference/createlogbookcomment.md",
+      "sha256": "9f61a9ba417c7ce4b98fa7f5e152b3734711f0dac122efa8197a075b81947c79",
+      "bytes": 15097
+    },
+    {
+      "slug": "createlogbookpost",
+      "url": "https://developers.7shifts.com/reference/createlogbookpost.md",
+      "sha256": "e549f48dcd1cdd74c76366b9a7481587b59fb81d73c59c08b30976361ee2de33",
+      "bytes": 18287
+    },
+    {
+      "slug": "createmanyroleassignments",
+      "url": "https://developers.7shifts.com/reference/createmanyroleassignments.md",
+      "sha256": "bd46c8d7e9ddd854b7d65106336b882080e5109c2007e45dc1170b0edf9b0058",
+      "bytes": 16773
+    },
+    {
+      "slug": "createmanyusers",
+      "url": "https://developers.7shifts.com/reference/createmanyusers.md",
+      "sha256": "ec722a6e6ade8928cf1ebf569b0888b1311c3ea52e12dde2e0d379212b2568d9",
+      "bytes": 37225
+    },
+    {
+      "slug": "createprojectedsalesintervaloverride",
+      "url": "https://developers.7shifts.com/reference/createprojectedsalesintervaloverride.md",
+      "sha256": "da019bebd47088789ec41d3467699296fd8c7e85ef1c1dd8239a423262e48107",
+      "bytes": 16841
+    },
+    {
+      "slug": "createrole",
+      "url": "https://developers.7shifts.com/reference/createrole.md",
+      "sha256": "2563c98d53f977caae0dffeeced17932a480d713646b637c26adc28fad202bb5",
+      "bytes": 19421
+    },
+    {
+      "slug": "createroleassignment",
+      "url": "https://developers.7shifts.com/reference/createroleassignment.md",
+      "sha256": "03fd76d7a69c1863994a9df617e766c8790ab8e380f3f45a027f4c068320c032",
+      "bytes": 15430
+    },
+    {
+      "slug": "createtasklisttemplate",
+      "url": "https://developers.7shifts.com/reference/createtasklisttemplate.md",
+      "sha256": "aedb1d57a6162f7e88da0d1a806353bed9c9546f4e12c3b4b22d7b89f4dee7d0",
+      "bytes": 34234
+    },
+    {
+      "slug": "createtasktags",
+      "url": "https://developers.7shifts.com/reference/createtasktags.md",
+      "sha256": "f4529cc36160e89f83675482825336f6a323a9a9ffd5f72161c927a4c812df81",
+      "bytes": 15563
+    },
+    {
+      "slug": "createtimeoff",
+      "url": "https://developers.7shifts.com/reference/createtimeoff.md",
+      "sha256": "c62fee33653b5e86966210fbcb8dec3ecd2ac132a950433ca02ac913ea1ee80f",
+      "bytes": 7752
+    },
+    {
+      "slug": "createusermappingsbulk",
+      "url": "https://developers.7shifts.com/reference/createusermappingsbulk.md",
+      "sha256": "c80dff477882491247b826b4adb3a5bb5f0dea37c0652419aa0b7f0295a8e89a",
+      "bytes": 20912
+    },
+    {
+      "slug": "createuserwages",
+      "url": "https://developers.7shifts.com/reference/createuserwages.md",
+      "sha256": "8ec479007a47458b69a2cafe4198f043d4aed3b80c333468d67a770e8a4c7223",
+      "bytes": 21688
+    },
+    {
+      "slug": "createwebhook",
+      "url": "https://developers.7shifts.com/reference/createwebhook.md",
+      "sha256": "fe894dd69e238f79d73a6dafb84442448c49622d6e231ca433a522dd90b769f2",
+      "bytes": 21278
+    },
+    {
+      "slug": "deactivateuser",
+      "url": "https://developers.7shifts.com/reference/deactivateuser.md",
+      "sha256": "e6b1edfa24d896fb3c11b1ad4fbea35236e2457dad9f7ef396f3748974d45b49",
+      "bytes": 15706
+    },
+    {
+      "slug": "declinetimeoff",
+      "url": "https://developers.7shifts.com/reference/declinetimeoff.md",
+      "sha256": "292950462a357734e090651cba1e325279a3c96b472298289c47aa141bcd9a0c",
+      "bytes": 6749
+    },
+    {
+      "slug": "deleteavailability",
+      "url": "https://developers.7shifts.com/reference/deleteavailability.md",
+      "sha256": "5d831cb85f1b1f02458835984a7980eb0ed63e69be97da41524ac0eba9d08fce",
+      "bytes": 12570
+    },
+    {
+      "slug": "deleteavailabilityreason",
+      "url": "https://developers.7shifts.com/reference/deleteavailabilityreason.md",
+      "sha256": "8705fe83cec6e2b24d8313099cbadbb4df27dde53e36afd658f4f7b431ee49c9",
+      "bytes": 12607
+    },
+    {
+      "slug": "deletecompanywebhook",
+      "url": "https://developers.7shifts.com/reference/deletecompanywebhook.md",
+      "sha256": "07e2a0995511f3b3aa5637efff8aa0bb99a56fe9b97479f66973724f90095239",
+      "bytes": 12583
+    },
+    {
+      "slug": "deletedepartment",
+      "url": "https://developers.7shifts.com/reference/deletedepartment.md",
+      "sha256": "e90a30338e8da76f8b2e1928bc7afeaaae90671911e77203bd63f5e5c02efe14",
+      "bytes": 10664
+    },
+    {
+      "slug": "deletedepartmentassignment",
+      "url": "https://developers.7shifts.com/reference/deletedepartmentassignment.md",
+      "sha256": "5d57f0175a25b8c0a6d387f3c013ffe135add4c3efad2b4ef8ba511094016fd1",
+      "bytes": 12894
+    },
+    {
+      "slug": "deleteemploymentrecord",
+      "url": "https://developers.7shifts.com/reference/deleteemploymentrecord.md",
+      "sha256": "d08777382f5e207e1bd69d7ff6507b32b17cdb44333903c0c843e966f0ffca9e",
+      "bytes": 18329
+    },
+    {
+      "slug": "deleteevent",
+      "url": "https://developers.7shifts.com/reference/deleteevent.md",
+      "sha256": "7ec5a2ca63c78a0282f9cdcddda46f05110b48b2a718a44ea266774ea793c8b7",
+      "bytes": 22137
+    },
+    {
+      "slug": "deleteexternalusermappings",
+      "url": "https://developers.7shifts.com/reference/deleteexternalusermappings.md",
+      "sha256": "0343935b7f415b6e25b2e985aa3d6ae9dcb4a43d6070646ad073d7c384656f3f",
+      "bytes": 17475
+    },
+    {
+      "slug": "deleteforecastoverride",
+      "url": "https://developers.7shifts.com/reference/deleteforecastoverride.md",
+      "sha256": "1fe57871626a56918390ae39258f09d52661658056f1c2cc1f7ecd0d535efe57",
+      "bytes": 16400
+    },
+    {
+      "slug": "deletelocation",
+      "url": "https://developers.7shifts.com/reference/deletelocation.md",
+      "sha256": "1f70fb59699c23a99828a2e714c158bf4373fafeb4db67dde3c17504cb9a7282",
+      "bytes": 10324
+    },
+    {
+      "slug": "deletelocationassignment",
+      "url": "https://developers.7shifts.com/reference/deletelocationassignment.md",
+      "sha256": "1699669a2c03125f83f976101c3e2d6f0a03b5c8c2b582c73adc4acf2e547d09",
+      "bytes": 12880
+    },
+    {
+      "slug": "deletelogbookcategory",
+      "url": "https://developers.7shifts.com/reference/deletelogbookcategory.md",
+      "sha256": "3f826b68a27ea0df9d77eac93f7a7b84a0fefc94486f2b08cbe8e28332e9a4d6",
+      "bytes": 12581
+    },
+    {
+      "slug": "deletelogbookcomment-2",
+      "url": "https://developers.7shifts.com/reference/deletelogbookcomment-2.md",
+      "sha256": "2f1f3a53a2e979d554cbb6842b5acded69ea9d3677c4d678caecb0289311f302",
+      "bytes": 12584
+    },
+    {
+      "slug": "deletelogbookpost",
+      "url": "https://developers.7shifts.com/reference/deletelogbookpost.md",
+      "sha256": "5a0329a1ee8ad352115c40acb9a828211b66c1c7914ff482537d704d289e5875",
+      "bytes": 12569
+    },
+    {
+      "slug": "deleterole",
+      "url": "https://developers.7shifts.com/reference/deleterole.md",
+      "sha256": "eabb64ce5449b163271828cfcf72624389380f4d312fc879a1e59a48fcfc7065",
+      "bytes": 12489
+    },
+    {
+      "slug": "deleteroleassignment",
+      "url": "https://developers.7shifts.com/reference/deleteroleassignment.md",
+      "sha256": "55ce72777f9b79c8c02cb3708332fe6a074a4298f6a7fd056abd47154304d0d1",
+      "bytes": 10596
+    },
+    {
+      "slug": "deleteshift",
+      "url": "https://developers.7shifts.com/reference/deleteshift.md",
+      "sha256": "b5acf12b2ab2c9c128d8a1d108b03e14a4421cc34578a8c5fccd1637774c4e91",
+      "bytes": 11971
+    },
+    {
+      "slug": "deletetasklisttemplate",
+      "url": "https://developers.7shifts.com/reference/deletetasklisttemplate.md",
+      "sha256": "6cb2bd70b2e1cc9dfb36f8d47333ee6c9af1db0c5f8260322c968dcd1a6b9c48",
+      "bytes": 12509
+    },
+    {
+      "slug": "deletetasktags",
+      "url": "https://developers.7shifts.com/reference/deletetasktags.md",
+      "sha256": "ac7b61b5943f77c348dc0f3b30b44655b5fb5e5b638edc73f19d6e9ab7d5127b",
+      "bytes": 12885
+    },
+    {
+      "slug": "deletetimeoff",
+      "url": "https://developers.7shifts.com/reference/deletetimeoff.md",
+      "sha256": "56b746f5f6b7b99ee6b03152f3156b83090ad8b5acec9eb33fe624117a3e3619",
+      "bytes": 6697
+    },
+    {
+      "slug": "deletetimepunchbyid",
+      "url": "https://developers.7shifts.com/reference/deletetimepunchbyid.md",
+      "sha256": "0a154d8a7549e7089d800164cdbd2b86ad216c1c917d4a77f5394bee4ba7f766",
+      "bytes": 12609
+    },
+    {
+      "slug": "editavailability",
+      "url": "https://developers.7shifts.com/reference/editavailability.md",
+      "sha256": "f32d60a12cb33011e01dd0ab096a915f260b580a29c00948e1050c9890c116d6",
+      "bytes": 23617
+    },
+    {
+      "slug": "editavailabilityreason",
+      "url": "https://developers.7shifts.com/reference/editavailabilityreason.md",
+      "sha256": "ecac445f3e6e41d7c51b0b73af73573c85517c65d2abdfa44bc80e85d03f11e6",
+      "bytes": 17771
+    },
+    {
+      "slug": "editcompanywebhook",
+      "url": "https://developers.7shifts.com/reference/editcompanywebhook.md",
+      "sha256": "259e70d07d709bc1c87e3834f119bdb1d96393462aac6d6f18bb6726d6d0e854",
+      "bytes": 20374
+    },
+    {
+      "slug": "editevent",
+      "url": "https://developers.7shifts.com/reference/editevent.md",
+      "sha256": "e139e25186512e57799c47632d9b9e53f40028251979cb15af7003aeb24f8ae1",
+      "bytes": 27649
+    },
+    {
+      "slug": "edittasklisttemplate",
+      "url": "https://developers.7shifts.com/reference/edittasklisttemplate.md",
+      "sha256": "baff3bf62a0e2991c747132701bd7e5439ca0dfd952bc1ab759ea585fd2eb4d4",
+      "bytes": 31121
+    },
+    {
+      "slug": "edittimeoff",
+      "url": "https://developers.7shifts.com/reference/edittimeoff.md",
+      "sha256": "d039db504cf6ca61429824c4c198108a31956d014fea2e1b1c6556131f0a690f",
+      "bytes": 8235
+    },
+    {
+      "slug": "fetchtippoolmanualentry",
+      "url": "https://developers.7shifts.com/reference/fetchtippoolmanualentry.md",
+      "sha256": "485a62ee2abe8ba34a4648520c36be733ad3c30410175c832ca0a080fe089e94",
+      "bytes": 10682
+    },
+    {
+      "slug": "findbyid",
+      "url": "https://developers.7shifts.com/reference/findbyid.md",
+      "sha256": "c20c75027e66edc7ed5e8bec54f13cfcc73e68453fe0f5de471c25a0b15056a2",
+      "bytes": 9796
+    },
+    {
+      "slug": "getassignments",
+      "url": "https://developers.7shifts.com/reference/getassignments.md",
+      "sha256": "ec64fb7e069ab0b57d96be054dd0b8505b1cb25ef6c61cc8b5d57c31ad781125",
+      "bytes": 20588
+    },
+    {
+      "slug": "getavailabilitybyid",
+      "url": "https://developers.7shifts.com/reference/getavailabilitybyid.md",
+      "sha256": "c84a8613b52db62c1083a50e79637e8dfdf8e256eb708a014c32d546bcde0456",
+      "bytes": 36699
+    },
+    {
+      "slug": "getdailysalesandlabor",
+      "url": "https://developers.7shifts.com/reference/getdailysalesandlabor.md",
+      "sha256": "262e193ea6446cfe15e2b60b5396b1941b02555b1cc7296cae39fccc9f1da781",
+      "bytes": 15764
+    },
+    {
+      "slug": "getengageoverviewbylocationid",
+      "url": "https://developers.7shifts.com/reference/getengageoverviewbylocationid.md",
+      "sha256": "508b295970b3c52e114edce809e90493e06108c5d64549855054249e619a3d7b",
+      "bytes": 38343
+    },
+    {
+      "slug": "getevent",
+      "url": "https://developers.7shifts.com/reference/getevent.md",
+      "sha256": "634dd1128f381ec6beba0dff7ff6d69557b07e295a61714009700b68e5a7898f",
+      "bytes": 20206
+    },
+    {
+      "slug": "getevents",
+      "url": "https://developers.7shifts.com/reference/getevents.md",
+      "sha256": "1165e6fb1b6f390b74e1d741c81a1ed14ff25d4b7b5d025463a3aebfd61da991",
+      "bytes": 24241
+    },
+    {
+      "slug": "gethoursandwages",
+      "url": "https://developers.7shifts.com/reference/gethoursandwages.md",
+      "sha256": "5444e49a779d53161c4b6f6d02356b24620fcf2d2c3ac088ba2dcbdbf99b73f7",
+      "bytes": 69972
+    },
+    {
+      "slug": "getlocationbyid",
+      "url": "https://developers.7shifts.com/reference/getlocationbyid.md",
+      "sha256": "61f26c1829ba8022b943571d23e11684824b2473361bba0c275b0c751c55f59e",
+      "bytes": 26838
+    },
+    {
+      "slug": "getlocationlistbycompany",
+      "url": "https://developers.7shifts.com/reference/getlocationlistbycompany.md",
+      "sha256": "26da88b7eca959d202adb41c3c270f60205e2ff0856185ec92678e395b9be503",
+      "bytes": 32402
+    },
+    {
+      "slug": "getreceipt",
+      "url": "https://developers.7shifts.com/reference/getreceipt.md",
+      "sha256": "6a13fa8c18ebd3f1f53c8df83b9c2a578862e7f34e7575beb1ba67a63d415468",
+      "bytes": 25457
+    },
+    {
+      "slug": "getroleassignments",
+      "url": "https://developers.7shifts.com/reference/getroleassignments.md",
+      "sha256": "7ac069011fd22b8f006b6b014d92ab858bfc15d92e2244498a32c0c7a54215df",
+      "bytes": 13200
+    },
+    {
+      "slug": "gettasklist",
+      "url": "https://developers.7shifts.com/reference/gettasklist.md",
+      "sha256": "7e9a3009067023905ea92af36a138464634d2fbc26aeb24d5991e8f7cb37a229",
+      "bytes": 27740
+    },
+    {
+      "slug": "gettasklistdailysummary",
+      "url": "https://developers.7shifts.com/reference/gettasklistdailysummary.md",
+      "sha256": "7dc119b207ecd237041ef1788e944e77dab862cefcb7e81995c96207d8ba2666",
+      "bytes": 18912
+    },
+    {
+      "slug": "gettasklists",
+      "url": "https://developers.7shifts.com/reference/gettasklists.md",
+      "sha256": "7475344152b0a735589a787d67624f13f35a83c43276daef144aff9eddbbfd5b",
+      "bytes": 28998
+    },
+    {
+      "slug": "gettasklisttemplate",
+      "url": "https://developers.7shifts.com/reference/gettasklisttemplate.md",
+      "sha256": "de78f6c0a4967318bbeb5cf106f40df1f83a82515515d4b0a3a62d2602c93eb9",
+      "bytes": 23554
+    },
+    {
+      "slug": "gettasklisttemplates",
+      "url": "https://developers.7shifts.com/reference/gettasklisttemplates.md",
+      "sha256": "d48657bcce695a1522724071a5a339bfe5bbf95232e0bd76256350c32d6758fc",
+      "bytes": 20023
+    },
+    {
+      "slug": "gettaskmanagementsettings",
+      "url": "https://developers.7shifts.com/reference/gettaskmanagementsettings.md",
+      "sha256": "fb72b8d28889d11a7845a6bd8b6daac7c6cd350574ff68e4311f58a53582610a",
+      "bytes": 12191
+    },
+    {
+      "slug": "gettimeclockingpayrollperiod",
+      "url": "https://developers.7shifts.com/reference/gettimeclockingpayrollperiod.md",
+      "sha256": "cd66afa73c5221601e8358822586fd68fa5497483818161077d7e89360150e6b",
+      "bytes": 19982
+    },
+    {
+      "slug": "gettimeclockingpayrollperiods",
+      "url": "https://developers.7shifts.com/reference/gettimeclockingpayrollperiods.md",
+      "sha256": "53b4ac89a559e85fe66e3c8cbb07a0924cd1e332d7650a143753c509868b74a0",
+      "bytes": 15085
+    },
+    {
+      "slug": "gettimeofflist",
+      "url": "https://developers.7shifts.com/reference/gettimeofflist.md",
+      "sha256": "5c3549544ca99b64c725790317181c573a6e14d170175e08f435cd3977a47d8d",
+      "bytes": 11736
+    },
+    {
+      "slug": "gettimeoffsettings",
+      "url": "https://developers.7shifts.com/reference/gettimeoffsettings.md",
+      "sha256": "5a27b6cacc2d484f6c67a43391af31c6f869fe4e7079b858b167f962f2621781",
+      "bytes": 6486
+    },
+    {
+      "slug": "gettimepunchbyid",
+      "url": "https://developers.7shifts.com/reference/gettimepunchbyid.md",
+      "sha256": "e2b3384776e46ad9de58181e52e6cc85f446cc8ff2a471af31ea8907b1bcef29",
+      "bytes": 21561
+    },
+    {
+      "slug": "gettimepunches",
+      "url": "https://developers.7shifts.com/reference/gettimepunches.md",
+      "sha256": "6f729c92f1df3bb48f842498bb1b74ac6222642f5b2779d763a1686d195c2eab",
+      "bytes": 31551
+    },
+    {
+      "slug": "gettippoolsettings",
+      "url": "https://developers.7shifts.com/reference/gettippoolsettings.md",
+      "sha256": "5077c1d0a906d88f036bcaa2ef9db3e79d040550bed74fdb378435bcf8c5d9ed",
+      "bytes": 25376
+    },
+    {
+      "slug": "gettotalhours",
+      "url": "https://developers.7shifts.com/reference/gettotalhours.md",
+      "sha256": "4a92e8a3eb62c9a8843cc66ed5b6671c0a057d455b83d0867ad0b1ca54122eb4",
+      "bytes": 5463
+    },
+    {
+      "slug": "getuser",
+      "url": "https://developers.7shifts.com/reference/getuser.md",
+      "sha256": "c45255c6710d42881b7c38b8b9b18ad3dc12218f5221ccedd3d7a2f73824c4d7",
+      "bytes": 25033
+    },
+    {
+      "slug": "getuserwages",
+      "url": "https://developers.7shifts.com/reference/getuserwages.md",
+      "sha256": "0a905f34cbb2ef0782fb7d572986c43d6c11a25d4b538519c3b9af8f14ad0729",
+      "bytes": 25331
+    },
+    {
+      "slug": "listavailabilities",
+      "url": "https://developers.7shifts.com/reference/listavailabilities.md",
+      "sha256": "58b27b6fc6649669ddf565277e827b9f3447ad448dea7dfcf77701bc442fc1b7",
+      "bytes": 40336
+    },
+    {
+      "slug": "listavailabilityreasons",
+      "url": "https://developers.7shifts.com/reference/listavailabilityreasons.md",
+      "sha256": "6f41cb767f3eb98ec917ffed23a0b299ae1c48002143bca17c8e4f952f4cadba",
+      "bytes": 16956
+    },
+    {
+      "slug": "listcompanies",
+      "url": "https://developers.7shifts.com/reference/listcompanies.md",
+      "sha256": "1b836e0ff5e5b386df8bfe62b9507d30496234c02c389055b46ff3bb7fb83c1f",
+      "bytes": 16485
+    },
+    {
+      "slug": "listcompanywebhooks",
+      "url": "https://developers.7shifts.com/reference/listcompanywebhooks.md",
+      "sha256": "09cf01b3bee27c0d66d1f30fae6dabac241985aef88c601cdaf7f0e44a7b3e25",
+      "bytes": 18005
+    },
+    {
+      "slug": "listdepartmentassignments",
+      "url": "https://developers.7shifts.com/reference/listdepartmentassignments.md",
+      "sha256": "c09e4250e5931c3ed25afa65bfb7ec943dd90181efb66e987e027c12503731ce",
+      "bytes": 16965
+    },
+    {
+      "slug": "listdepartments",
+      "url": "https://developers.7shifts.com/reference/listdepartments.md",
+      "sha256": "28bd3c0f4c0b6291acd14277ae08bae349b42fcd27a8669893f119d625cc376c",
+      "bytes": 16684
+    },
+    {
+      "slug": "listemploymentrecord",
+      "url": "https://developers.7shifts.com/reference/listemploymentrecord.md",
+      "sha256": "f29267622bbcc64f76cade99097b111e4d1ef78805c091440c51017f3069d514",
+      "bytes": 21100
+    },
+    {
+      "slug": "listexternalusermappings",
+      "url": "https://developers.7shifts.com/reference/listexternalusermappings.md",
+      "sha256": "95ae9065aa9191c05edf35d60b9c58edc13c91c3474f3e040d2fed94f320d06b",
+      "bytes": 21027
+    },
+    {
+      "slug": "listinactivereasons",
+      "url": "https://developers.7shifts.com/reference/listinactivereasons.md",
+      "sha256": "611b02cc716d56ed613fa091146111cc2d57ef9d045bd2531302ec75d8cccba7",
+      "bytes": 11476
+    },
+    {
+      "slug": "listlocationassignments",
+      "url": "https://developers.7shifts.com/reference/listlocationassignments.md",
+      "sha256": "1da5bea4fb2278c071a008c17c6f66f8bc6efc0516d05c5fba47c76dcede5462",
+      "bytes": 14215
+    },
+    {
+      "slug": "listlogbookcategories",
+      "url": "https://developers.7shifts.com/reference/listlogbookcategories.md",
+      "sha256": "1ad19d34a3159e4278ae5982261f65f034157ee4e6284cfc352f9f5c2a890eae",
+      "bytes": 12541
+    },
+    {
+      "slug": "listlogbookcomments",
+      "url": "https://developers.7shifts.com/reference/listlogbookcomments.md",
+      "sha256": "ebffcef35f959441936111ca84c1413cd77fa095e6d9fcb03c354f6df61e17ac",
+      "bytes": 14991
+    },
+    {
+      "slug": "listlogbookposts",
+      "url": "https://developers.7shifts.com/reference/listlogbookposts.md",
+      "sha256": "d1df322d500a55bea6f4a1c6aa8257e02cb26d178a43ef45f8b3abb27c79cc74",
+      "bytes": 19092
+    },
+    {
+      "slug": "listroles",
+      "url": "https://developers.7shifts.com/reference/listroles.md",
+      "sha256": "fb9aba9e2a53d8b84a8b28413f5a69efea8f52bc79679dbb299021d1ad483401",
+      "bytes": 22593
+    },
+    {
+      "slug": "listsalesreceipts",
+      "url": "https://developers.7shifts.com/reference/listsalesreceipts.md",
+      "sha256": "4fb0b5ccd687bd0af79527fc1ec4278898b9046f8170a8bf205a51783f05ce27",
+      "bytes": 34431
+    },
+    {
+      "slug": "listscheduledshifts",
+      "url": "https://developers.7shifts.com/reference/listscheduledshifts.md",
+      "sha256": "f6b13d01bcb2b6e939dc4f2e419ff8b3612f5b1877bdaf8113b0a195e9fed2da",
+      "bytes": 19625
+    },
+    {
+      "slug": "listshift",
+      "url": "https://developers.7shifts.com/reference/listshift.md",
+      "sha256": "03016a4ebbdfb5f21e2248016c777b5176aada58565742809598224aefc62cb2",
+      "bytes": 32250
+    },
+    {
+      "slug": "listshiftfeedback",
+      "url": "https://developers.7shifts.com/reference/listshiftfeedback.md",
+      "sha256": "dc51ca053ed9acb802f6650210a9ffdae20feb685d2a24a2d7307a14e6d53518",
+      "bytes": 21960
+    },
+    {
+      "slug": "listusercontacts",
+      "url": "https://developers.7shifts.com/reference/listusercontacts.md",
+      "sha256": "1070351b68e930455cb47978d19e0e74b4b26eeff778d97ebce5178d8407dca9",
+      "bytes": 20285
+    },
+    {
+      "slug": "listusersauthorizedlocations",
+      "url": "https://developers.7shifts.com/reference/listusersauthorizedlocations.md",
+      "sha256": "4c0d6255bfb73e9c1303d690da542e0833450b510c8a3da9b1fbcc2e5e595ce1",
+      "bytes": 27634
+    },
+    {
+      "slug": "listuserslist",
+      "url": "https://developers.7shifts.com/reference/listuserslist.md",
+      "sha256": "37e1818c5c0caa558e5b87b1e66dd9ff17d8a6f150f1077e7b3d96bab683a97b",
+      "bytes": 33294
+    },
+    {
+      "slug": "oauthtoken",
+      "url": "https://developers.7shifts.com/reference/oauthtoken.md",
+      "sha256": "6f85eab87acbb1a87af84a163998cc77cf019da30b5d13938a5e393b66c8cb08",
+      "bytes": 8687
+    },
+    {
+      "slug": "partnercompanycreation",
+      "url": "https://developers.7shifts.com/reference/partnercompanycreation.md",
+      "sha256": "bbfe93c60331f587d9477587171ae84a7d99a3cdf08cb802eca995eb444044ce",
+      "bytes": 20011
+    },
+    {
+      "slug": "postshift",
+      "url": "https://developers.7shifts.com/reference/postshift.md",
+      "sha256": "605ecff4868c27d80ea50d57b60a7b867396758a1d41d95d8d195566103d62be",
+      "bytes": 28456
+    },
+    {
+      "slug": "posttimepunch",
+      "url": "https://developers.7shifts.com/reference/posttimepunch.md",
+      "sha256": "87ae1a69510ed74b76105c013ee0b54fb047dc794639d7828bae5c78d706703a",
+      "bytes": 28803
+    },
+    {
+      "slug": "postuser",
+      "url": "https://developers.7shifts.com/reference/postuser.md",
+      "sha256": "2779d96c7b37a18a6606cb0d96e2ae0eddb762b82483e6ab65eb47d0bc073281",
+      "bytes": 38291
+    },
+    {
+      "slug": "puttimepunch",
+      "url": "https://developers.7shifts.com/reference/puttimepunch.md",
+      "sha256": "a26410c8f30a3cdcefac5634f3a3c63d49ad8549819d0628be6505388369bb28",
+      "bytes": 29027
+    },
+    {
+      "slug": "putuser",
+      "url": "https://developers.7shifts.com/reference/putuser.md",
+      "sha256": "b68af44bd4c32f63ff7f767cc6baa010841f954943849032586f432669b3f82e",
+      "bytes": 37591
+    },
+    {
+      "slug": "retrievecompanylaborsettings",
+      "url": "https://developers.7shifts.com/reference/retrievecompanylaborsettings.md",
+      "sha256": "e3aa75374f2bda5e6c4f0c9332ab0d4b40a30f371d1f7c12573bfab2954082bc",
+      "bytes": 22961
+    },
+    {
+      "slug": "retrievedailystats",
+      "url": "https://developers.7shifts.com/reference/retrievedailystats.md",
+      "sha256": "04fb76d122d0d93e99d7c1002930184bdc4a9efb5ac764cfaf2cf64fa3a7077f",
+      "bytes": 23251
+    },
+    {
+      "slug": "retrievedaypartsettings",
+      "url": "https://developers.7shifts.com/reference/retrievedaypartsettings.md",
+      "sha256": "048531010fefc3c14373f6926adf983df5bb4260138f5d4d8957d5c10106f3f1",
+      "bytes": 16523
+    },
+    {
+      "slug": "retrievedepartment",
+      "url": "https://developers.7shifts.com/reference/retrievedepartment.md",
+      "sha256": "b6d5ee22783bd318898ea1e27ec5a9a741d31a262c8cc1f72740418e3a39c4fd",
+      "bytes": 13285
+    },
+    {
+      "slug": "retrieveexternalusermapping",
+      "url": "https://developers.7shifts.com/reference/retrieveexternalusermapping.md",
+      "sha256": "9a121580881eaab098cd7a04415e5e246f431d0f2f0d7f02d01621c31eea3370",
+      "bytes": 18340
+    },
+    {
+      "slug": "retrievelogbookcomment",
+      "url": "https://developers.7shifts.com/reference/retrievelogbookcomment.md",
+      "sha256": "434454a17b258d8572c41031ec61cbdf2564a8b5803fb5846d1a3b8a6708cbb1",
+      "bytes": 14585
+    },
+    {
+      "slug": "retrievelogbookpost",
+      "url": "https://developers.7shifts.com/reference/retrievelogbookpost.md",
+      "sha256": "dfd8d2d0e29e650275d42e8b6b2ce0a96d227c73eb6a768836f88be7056ce076",
+      "bytes": 16432
+    },
+    {
+      "slug": "retrievereceiptssummary",
+      "url": "https://developers.7shifts.com/reference/retrievereceiptssummary.md",
+      "sha256": "1b00d5fad0ed3fcf1d39eb2b71cd41ec27c150ebf41a32486dc364bd3715a3c6",
+      "bytes": 23827
+    },
+    {
+      "slug": "retrieverole",
+      "url": "https://developers.7shifts.com/reference/retrieverole.md",
+      "sha256": "636e3665d299fd6f5c1ecef1f01211c0e1b6efcfa552c53b587542954b43c1c4",
+      "bytes": 15793
+    },
+    {
+      "slug": "retrieveshift",
+      "url": "https://developers.7shifts.com/reference/retrieveshift.md",
+      "sha256": "4330846c55af8718794bdc3e473d02ece7d78496593b182c346135eb823102b3",
+      "bytes": 27788
+    },
+    {
+      "slug": "retrievetippooldetailedreport",
+      "url": "https://developers.7shifts.com/reference/retrievetippooldetailedreport.md",
+      "sha256": "cc0696c9b91e809a8b880ad74da4caddd55ed072ef26e1ab10249b186c05c76b",
+      "bytes": 35269
+    },
+    {
+      "slug": "retrievetippoolsummaryreport",
+      "url": "https://developers.7shifts.com/reference/retrievetippoolsummaryreport.md",
+      "sha256": "8245cbd3eb11ca0d4fce51b43a0f6f515b5c773f6b6872e1dcc65418fb93f497",
+      "bytes": 25448
+    },
+    {
+      "slug": "retrieveusercontact",
+      "url": "https://developers.7shifts.com/reference/retrieveusercontact.md",
+      "sha256": "1cce7988f3df57a3a36f51a68ebe6d662feef943b59a888ef5538aab0546370b",
+      "bytes": 17711
+    },
+    {
+      "slug": "savetimeoffsettings",
+      "url": "https://developers.7shifts.com/reference/savetimeoffsettings.md",
+      "sha256": "5009019ed24f56cca39d94c1c82fa3e0e5c385521224c8acab9cd2042d452115",
+      "bytes": 7168
+    },
+    {
+      "slug": "savetippoolmanualentry",
+      "url": "https://developers.7shifts.com/reference/savetippoolmanualentry.md",
+      "sha256": "ed374801b427e3d7f7c4f7a74afcb468a7934abf54815de99133bb22b6b60b4c",
+      "bytes": 20582
+    },
+    {
+      "slug": "syncoverriddenprojectedsalesinterval",
+      "url": "https://developers.7shifts.com/reference/syncoverriddenprojectedsalesinterval.md",
+      "sha256": "d73bf8beb54c4d2cb80a6bf7e4b88e67f05faef534f0e35b551f29b974b464ec",
+      "bytes": 16334
+    },
+    {
+      "slug": "testcompanywebhook",
+      "url": "https://developers.7shifts.com/reference/testcompanywebhook.md",
+      "sha256": "00385271448c82287a227af0f57bf440ce637e98b33d72312837731ca58a6de5",
+      "bytes": 13006
+    },
+    {
+      "slug": "updateavailabilitystatus",
+      "url": "https://developers.7shifts.com/reference/updateavailabilitystatus.md",
+      "sha256": "482832c87f813631d91d003c29c8109b7cf8cedcacf43e5ab94861376f0893ac",
+      "bytes": 15492
+    },
+    {
+      "slug": "updatecompany",
+      "url": "https://developers.7shifts.com/reference/updatecompany.md",
+      "sha256": "d94a5176776174c7061313a3f87381d5fe5a4cd5fdb46fdbf268fb7d7b6a60af",
+      "bytes": 9863
+    },
+    {
+      "slug": "updatecompletereceipt",
+      "url": "https://developers.7shifts.com/reference/updatecompletereceipt.md",
+      "sha256": "4c1807f6ec0b43c4d259c19369236825349167f342283571b05c84838e3dddaa",
+      "bytes": 19796
+    },
+    {
+      "slug": "updatedepartment",
+      "url": "https://developers.7shifts.com/reference/updatedepartment.md",
+      "sha256": "ec4603568d2ddfb5bf74608379ca529783490f1b826562656e39b917ea06ee63",
+      "bytes": 13724
+    },
+    {
+      "slug": "updateemploymentrecord",
+      "url": "https://developers.7shifts.com/reference/updateemploymentrecord.md",
+      "sha256": "c1fdc857e87abcfdd624a653827d54534cbc38d23a62521a1862ae2baa69b73e",
+      "bytes": 21651
+    },
+    {
+      "slug": "updateexternalusermappings",
+      "url": "https://developers.7shifts.com/reference/updateexternalusermappings.md",
+      "sha256": "5adbf9f38fa6142cd3cc347f40283acccbd793a601c7f08dbfcaee615b6979bd",
+      "bytes": 21212
+    },
+    {
+      "slug": "updatelocation",
+      "url": "https://developers.7shifts.com/reference/updatelocation.md",
+      "sha256": "46d57e241535abd9730dab10b86ee1439d4bb5508cca9066fc85dda5867423ec",
+      "bytes": 37600
+    },
+    {
+      "slug": "updatelogbookcategory",
+      "url": "https://developers.7shifts.com/reference/updatelogbookcategory.md",
+      "sha256": "4a37050714fe8b415dcb7b80ad4e82e25a065e3fbb9a03b09f7eb29ddac75944",
+      "bytes": 16323
+    },
+    {
+      "slug": "updaterole",
+      "url": "https://developers.7shifts.com/reference/updaterole.md",
+      "sha256": "cc175a89c76dfb78e90d145f1281664d66e489402608ef7e3e6a906a9b05b70f",
+      "bytes": 21972
+    },
+    {
+      "slug": "updateroleassignment",
+      "url": "https://developers.7shifts.com/reference/updateroleassignment.md",
+      "sha256": "23d764c2a210d1744371322f6a7d9647099221bad3011b4aed56a58a6512f796",
+      "bytes": 15773
+    },
+    {
+      "slug": "updateshift",
+      "url": "https://developers.7shifts.com/reference/updateshift.md",
+      "sha256": "04aaad93a0ef03eb21908b062bdfcf3bbe44cb5e332d2cad461af6af0d930697",
+      "bytes": 32887
+    },
+    {
+      "slug": "upsertbulkemploymentrecords",
+      "url": "https://developers.7shifts.com/reference/upsertbulkemploymentrecords.md",
+      "sha256": "885fbd86884254d5f839aa9c28d9e885a1423586def08240900e9603021a814f",
+      "bytes": 21822
+    },
+    {
+      "slug": "viewcompany",
+      "url": "https://developers.7shifts.com/reference/viewcompany.md",
+      "sha256": "0f652921dc15441b287187e89da0f71fbcf90f10e3c22895c1f346f4ac901d48",
+      "bytes": 10391
+    },
+    {
+      "slug": "whoami",
+      "url": "https://developers.7shifts.com/reference/whoami.md",
+      "sha256": "daef5ad572eeb7229003d9ca3d01467a22922a80b1b72d30bc54afe6eae5d336",
+      "bytes": 23966
+    }
+  ]
+}
