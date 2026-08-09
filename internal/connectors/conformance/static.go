@@ -68,6 +68,7 @@ var surfaceCategories = map[string]bool{
 var surfaceOperationModels = map[string]bool{
 	"direct_read":           true,
 	"binary_read":           true,
+	"websocket_session":     true,
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
 	"destructive_action":    true,
@@ -318,6 +319,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	}
 	directReads := map[string]bool{}
 	directWrites := map[string]bool{}
+	webSocketSessions := map[string]bool{}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
 			// binary_download commands consume an api_surface endpoint the same
@@ -330,6 +332,9 @@ func checkSurfaceComplete(b engine.Bundle) error {
 			if cmd.Intent == "direct_write" && cmd.Availability == "implemented" {
 				directWrites[cmd.Path] = true
 			}
+			if cmd.Intent == "websocket_session" && cmd.Availability == "implemented" && cmd.Operation != "" {
+				webSocketSessions[cmd.Operation] = true
+			}
 		}
 	}
 
@@ -340,7 +345,7 @@ func checkSurfaceComplete(b engine.Bundle) error {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(coveredDirectWriteTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(coveredDirectWriteTargets(ep.CoveredBy)) > 0 || ep.CoveredBy.WebSocketSession != "")
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -387,6 +392,14 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				method := strings.ToUpper(strings.TrimSpace(ep.Method))
 				if !mutationMethods[method] {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_write must use POST, PUT, PATCH, or DELETE", i, ep.Method, ep.Path)
+				}
+			}
+			if webSocketSession := ep.CoveredBy.WebSocketSession; webSocketSession != "" {
+				if !webSocketSessions[webSocketSession] {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.websocket_session %q is not an implemented websocket_session operation", i, ep.Method, ep.Path, webSocketSession)
+				}
+				if method := strings.ToUpper(strings.TrimSpace(ep.Method)); method != "GET" {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.websocket_session must use GET", i, ep.Method, ep.Path)
 				}
 			}
 			if strings.EqualFold(ep.Method, "GET") {

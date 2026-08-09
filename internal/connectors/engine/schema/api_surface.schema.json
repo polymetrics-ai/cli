@@ -58,7 +58,8 @@
               "direct_writes": {
                 "type": "array",
                 "items": { "type": "string" }
-              }
+              },
+              "websocket_session": { "type": "string" }
             }
           },
           "excluded": {
@@ -90,6 +91,7 @@
                 "enum": [
                   "direct_read",
                   "binary_read",
+                  "websocket_session",
                   "sensitive_reverse_etl",
                   "admin_reverse_etl",
                   "destructive_action",

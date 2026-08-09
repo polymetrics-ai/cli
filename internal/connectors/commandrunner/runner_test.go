@@ -22,33 +22,39 @@ import (
 )
 
 type fakeConnector struct {
-	surface                    *connectors.CommandSurface
-	manifest                   connectors.Manifest
-	readReq                    connectors.ReadRequest
-	directReadReq              connectors.DirectReadRequest
-	operationDirectReadReq     connectors.OperationDirectReadRequest
-	operationReadPreflight     operationDirectReadPreflightCall
-	operationReadPreflightErr  error
-	operationWritePreflight    operationDirectWritePreflightCall
-	operationWritePreflightErr error
-	operationDirectWriteReq    connectors.OperationDirectWriteRequest
-	directWriteMetadata        connectors.OperationDirectWriteMetadata
-	binaryDownloadReq          connectors.OperationBinaryDownloadRequest
-	directReadErr              error
-	ignoresPageNavigation      bool
-	operationDirectReadErr     error
-	binaryDownloadErr          error
-	validateReq                connectors.WriteRequest
-	dryRunReq                  connectors.WriteRequest
-	writeReq                   connectors.WriteRequest
-	writeRecords               []connectors.Record
-	validateErr                error
-	dryRunErr                  error
-	readErr                    error
-	writeErr                   error
-	readRecords                []connectors.Record
-	preview                    connectors.WritePreview
-	writeResult                connectors.WriteResult
+	surface                      *connectors.CommandSurface
+	manifest                     connectors.Manifest
+	readReq                      connectors.ReadRequest
+	directReadReq                connectors.DirectReadRequest
+	operationDirectReadReq       connectors.OperationDirectReadRequest
+	operationReadPreflight       operationDirectReadPreflightCall
+	operationReadPreflightErr    error
+	operationWritePreflight      operationDirectWritePreflightCall
+	operationWritePreflightErr   error
+	operationDirectWriteReq      connectors.OperationDirectWriteRequest
+	directWriteMetadata          connectors.OperationDirectWriteMetadata
+	webSocketSessionReq          connectors.OperationWebSocketSessionRequest
+	webSocketSessionPreflight    operationWebSocketSessionPreflightCall
+	webSocketSessionMetadata     connectors.OperationWebSocketSessionMetadata
+	webSocketSessionErr          error
+	webSocketSessionPreflightErr error
+	webSocketSessionMetadataErr  error
+	binaryDownloadReq            connectors.OperationBinaryDownloadRequest
+	directReadErr                error
+	ignoresPageNavigation        bool
+	operationDirectReadErr       error
+	binaryDownloadErr            error
+	validateReq                  connectors.WriteRequest
+	dryRunReq                    connectors.WriteRequest
+	writeReq                     connectors.WriteRequest
+	writeRecords                 []connectors.Record
+	validateErr                  error
+	dryRunErr                    error
+	readErr                      error
+	writeErr                     error
+	readRecords                  []connectors.Record
+	preview                      connectors.WritePreview
+	writeResult                  connectors.WriteResult
 }
 
 type operationDirectReadPreflightCall struct {
@@ -60,6 +66,13 @@ type operationDirectReadPreflightCall struct {
 }
 
 type operationDirectWritePreflightCall struct {
+	operation    string
+	method       string
+	path         string
+	outputPolicy string
+}
+
+type operationWebSocketSessionPreflightCall struct {
 	operation    string
 	method       string
 	path         string
@@ -174,6 +187,45 @@ func (f *fakeConnector) OperationDirectWriteMetadata(operation string) (connecto
 	}
 	if metadata.OutputPolicy == "" {
 		metadata.OutputPolicy = "json_redacted"
+	}
+	return metadata, nil
+}
+func (f *fakeConnector) OperationWebSocketSession(_ context.Context, req connectors.OperationWebSocketSessionRequest) (connectors.OperationWebSocketSessionResult, error) {
+	f.webSocketSessionReq = req
+	if f.webSocketSessionErr != nil {
+		return connectors.OperationWebSocketSessionResult{}, f.webSocketSessionErr
+	}
+	return connectors.OperationWebSocketSessionResult{
+		Connector: "github",
+		Operation: req.Operation,
+		Method:    http.MethodGet,
+		Path:      "/live",
+		Status:    http.StatusSwitchingProtocols,
+		Events:    []any{},
+	}, nil
+}
+func (f *fakeConnector) PreflightOperationWebSocketSession(operation, method, path, outputPolicy string) error {
+	f.webSocketSessionPreflight = operationWebSocketSessionPreflightCall{
+		operation:    operation,
+		method:       method,
+		path:         path,
+		outputPolicy: outputPolicy,
+	}
+	return f.webSocketSessionPreflightErr
+}
+func (f *fakeConnector) OperationWebSocketSessionMetadata(operation string) (connectors.OperationWebSocketSessionMetadata, error) {
+	if f.webSocketSessionMetadataErr != nil {
+		return connectors.OperationWebSocketSessionMetadata{}, f.webSocketSessionMetadataErr
+	}
+	metadata := f.webSocketSessionMetadata
+	if metadata.Operation == "" {
+		metadata.Operation = operation
+	}
+	if metadata.OutputPolicy == "" {
+		metadata.OutputPolicy = "json_redacted"
+	}
+	if metadata.MaxInputBytes == 0 {
+		metadata.MaxInputBytes = 1024
 	}
 	return metadata, nil
 }
@@ -1834,6 +1886,126 @@ func TestPreflightOperationDirectReadRejectsNonExecutableOperationMetadata(t *te
 	}
 	if connector.operationDirectReadReq.Operation != "" {
 		t.Fatalf("OperationDirectRead dispatched during preflight: %+v", connector.operationDirectReadReq)
+	}
+}
+
+// TestRunImplementedWebSocketSessionCommand is the command-boundary RED
+// contract. A declared session can consume only a closed JSON session update
+// and one project-confined PCM16 file; it must not expose a URL, protocol, or
+// raw-frame control as a flag.
+func TestRunImplementedWebSocketSessionCommand(t *testing.T) {
+	projectDir := t.TempDir()
+	audio := []byte{0x00, 0x00, 0x01, 0x80}
+	if err := os.WriteFile(filepath.Join(projectDir, "fixture.pcm"), audio, 0o600); err != nil {
+		t.Fatalf("write fixture PCM16: %v", err)
+	}
+
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "live scribe",
+		Intent:       "websocket_session",
+		Availability: "implemented",
+		Operation:    "acme.live_scribe",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{
+			Method: http.MethodGet,
+			Path:   "/live",
+		}},
+		OutputPolicy: "json_redacted",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "session-update", Type: "json_object", MapsTo: "body", Required: true},
+			{Name: "audio-file", Type: "string", MapsTo: "input.pcm16_file", Required: true},
+		},
+	}}}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path: []string{"live", "scribe"},
+		Flags: map[string][]string{
+			"session-update": {`{"type":"session.update","input_audio_format":"pcm16"}`},
+			"audio-file":     {"fixture.pcm"},
+		},
+		Config: connectors.RuntimeConfig{ProjectDir: projectDir},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for websocket session command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.WebSocketSession == nil {
+		t.Fatal("Run result carries no websocket session")
+	}
+	if got := connector.webSocketSessionReq.Operation; got != "acme.live_scribe" {
+		t.Fatalf("operation = %q, want acme.live_scribe", got)
+	}
+	if !bytes.Equal(connector.webSocketSessionReq.PCM16, audio) {
+		t.Fatalf("PCM16 = %v, want bounded fixture bytes", connector.webSocketSessionReq.PCM16)
+	}
+	if got := connector.webSocketSessionReq.SessionUpdate["type"]; got != "session.update" {
+		t.Fatalf("session update = %#v, want typed object", connector.webSocketSessionReq.SessionUpdate)
+	}
+	if got, want := connector.webSocketSessionPreflight, (operationWebSocketSessionPreflightCall{
+		operation:    "acme.live_scribe",
+		method:       http.MethodGet,
+		path:         "/live",
+		outputPolicy: "json_redacted",
+	}); got != want {
+		t.Fatalf("websocket session preflight = %#v, want %#v", got, want)
+	}
+
+	_, err = Run(context.Background(), connector, Request{
+		Path: []string{"live", "scribe"},
+		Flags: map[string][]string{
+			"session-update": {`{"type":"session.update","input_audio_format":"pcm16"}`},
+			"audio-file":     {"fixture.pcm"},
+			"subprotocol":    {"caller-selected"},
+		},
+		Config: connectors.RuntimeConfig{ProjectDir: projectDir},
+	}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "unknown flag --subprotocol") {
+		t.Fatalf("caller-selected protocol error = %v, want unknown flag refusal", err)
+	}
+}
+
+// TestRunImplementedWebSocketSessionCommandRejectsReservedControls ensures a
+// closed session cannot accept CLI options that belong to other executor
+// kinds. In particular, an explicitly supplied --limit must not silently
+// become the ETL default and then disappear before the session is dispatched.
+func TestRunImplementedWebSocketSessionCommandRejectsReservedControls(t *testing.T) {
+	projectDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(projectDir, "fixture.pcm"), []byte{0x00, 0x00}, 0o600); err != nil {
+		t.Fatalf("write fixture PCM16: %v", err)
+	}
+
+	for _, reserved := range []string{"limit", "max-bytes", "page", "page-cursor", "plan", "preview", "dest-root", "file-name", "approve", "confirm", "plan-name"} {
+		t.Run(reserved, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+				Path:         "live scribe",
+				Intent:       "websocket_session",
+				Availability: "implemented",
+				Operation:    "acme.live_scribe",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/live"}},
+				OutputPolicy: "json_redacted",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "session-update", Type: "json_object", MapsTo: "body", Required: true},
+					{Name: "audio-file", Type: "string", MapsTo: "input.pcm16_file", Required: true},
+				},
+			}}}}
+
+			_, err := Run(context.Background(), connector, Request{
+				Path: []string{"live", "scribe"},
+				Flags: map[string][]string{
+					"session-update": {`{"type":"session.update","input_audio_format":"pcm16"}`},
+					"audio-file":     {"fixture.pcm"},
+				},
+				Config:                connectors.RuntimeConfig{ProjectDir: projectDir},
+				ExplicitReservedFlags: map[string]bool{reserved: true},
+			}, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), "websocket_session commands do not accept --"+reserved) {
+				t.Fatalf("reserved --%s error = %v, want closed-session refusal", reserved, err)
+			}
+			if connector.webSocketSessionReq.Operation != "" {
+				t.Fatalf("reserved --%s dispatched websocket session: %+v", reserved, connector.webSocketSessionReq)
+			}
+		})
 	}
 }
 

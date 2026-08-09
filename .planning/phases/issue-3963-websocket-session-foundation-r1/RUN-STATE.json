@@ -1,0 +1,38 @@
+{
+  "phase": "issue-3963-websocket-session-foundation-r1",
+  "issue": 3963,
+  "parent_issue": 3915,
+  "consumer_issue": 3935,
+  "status": "code-review-green",
+  "lifecycle": {
+    "mode": "inline-manual-gsd-fallback",
+    "reason": "The official phase runtime has no registered issue-3963 phase and the parent contract forbids role spawning.",
+    "sources_resolved": ["discuss-phase", "plan-phase", "execute-phase", "verify-work", "code-review"],
+    "prompts_generated_at": "2026-08-09"
+  },
+  "source_artifact": {
+    "url": "https://developers.zoom.us/docs/api/ai-services.md",
+    "retrieved_at": "2026-08-09T20:57:31Z",
+    "http_status": 200,
+    "bytes": 87750,
+    "sha256": "154631ef97c292468c81a79dc50cd51ea142d18f1f9fab060622215ddf3ba367"
+  },
+  "rebase": {
+    "main": "f96a47e801b89f25386c33951a53a93d1a4c7c8d",
+    "parent": "3212be75566c5ffd3a987e5fde7209b9a3feeedc",
+    "date": "2026-08-10",
+    "generated_artifacts": "parent regenerated docs, website catalog, and golden transcripts; this foundation regeneration was clean"
+  },
+  "red_predecessor": "ae43c153c",
+  "red": "captured: closed operations schema rejects the fixed websocket block as an additional property",
+  "scope": "shared engine/schema/commandrunner foundation only",
+  "green": "2026-08-10: closed schema/loader, authenticated 101 upgrade transport, bounded PCM16 frame/session executor, closed command/generator boundary, and generic CLI-control refusal are green; consumer handoff remains pending",
+  "command_boundary_red": "2026-08-10: typed session capability, closed command route, generator derivation, and min-close-frame validation are absent; focused red output is recorded in TDD-LEDGER.md",
+  "command_boundary_green": "2026-08-10: focused engine, connsdk, commandrunner, conformance, connectorgen, and full internal/cli tests pass after the f96a47e80 rebase and regenerated parent golden baseline",
+  "reserved_controls_and_conformance_red": "2026-08-10: commandrunner lacks an explicit-reserved-flag channel, CLI lacks its preservation helper, and static conformance treats covered_by.websocket_session as unclassified; exact RED output is recorded in TDD-LEDGER.md",
+  "reserved_controls_and_conformance_green": "2026-08-10: CLI preserves selected generic controls, websocket_session rejects them before dispatch, and static conformance validates covered_by.websocket_session against an implemented GET session command",
+  "review_lifetime_red": "2026-08-10: loader rejects newly required websocket.max_session_seconds; exact RED output is recorded in TDD-LEDGER.md",
+  "review_lifetime_green": "2026-08-10: required positive capped max_session_seconds derives a child runtime deadline; loopback server withholding close returns at the declaration-owned deadline",
+  "verification": "green: post-rebase plus lifetime-remediation scoped engine/connsdk/commandrunner/conformance/connectorgen/internal-cli tests, go vet, pm build, connectorgen validate, surface-sync --check, and clean docs/website regeneration passed; consumer built-binary proof remains",
+  "review": "2026-08-10 inline-manual code review green; REVIEW.md records the bounded-lifetime finding and its red/green remediation"
+}

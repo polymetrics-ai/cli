@@ -80,6 +80,7 @@
               "direct_read",
               "direct_write",
               "binary_download",
+              "websocket_session",
               "local_workflow",
               "auth",
               "config",

@@ -99,6 +99,7 @@ var surfaceCategories = map[string]bool{
 var surfaceOperationModels = map[string]bool{
 	"direct_read":           true,
 	"binary_read":           true,
+	"websocket_session":     true,
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
 	"destructive_action":    true,
@@ -625,6 +626,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	}
 	directReads := map[string]bool{}
 	directWrites := map[string]bool{}
+	webSocketSessions := map[string]bool{}
 	if b.CLISurface != nil {
 		for _, cmd := range b.CLISurface.Commands {
 			// binary_download commands consume an api_surface endpoint the same
@@ -637,6 +639,9 @@ func checkAPISurface(b engine.Bundle) []Finding {
 			if cmd.Intent == "direct_write" && cmd.Availability == "implemented" {
 				directWrites[cmd.Path] = true
 			}
+			if cmd.Intent == "websocket_session" && cmd.Availability == "implemented" && cmd.Operation != "" {
+				webSocketSessions[cmd.Operation] = true
+			}
 		}
 	}
 
@@ -647,7 +652,7 @@ func checkAPISurface(b engine.Bundle) []Finding {
 	ledgerMode := b.Surface.OperationLedgerVersion > 0
 
 	for i, ep := range b.Surface.Endpoints {
-		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(coveredDirectWriteTargets(ep.CoveredBy)) > 0)
+		hasCovered := ep.CoveredBy != nil && (ep.CoveredBy.Stream != "" || len(ep.CoveredBy.WriteTargets()) > 0 || len(coveredDirectReadTargets(ep.CoveredBy)) > 0 || len(coveredDirectWriteTargets(ep.CoveredBy)) > 0 || ep.CoveredBy.WebSocketSession != "")
 		hasExcluded := ep.Excluded != nil
 		hasOperation := ep.Operation != nil
 
@@ -728,6 +733,20 @@ func checkAPISurface(b engine.Bundle) []Finding {
 					findings = append(findings, Finding{
 						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
 						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.direct_write must use POST, PUT, PATCH, or DELETE", i, ep.Method, ep.Path),
+					})
+				}
+			}
+			if webSocketSession := ep.CoveredBy.WebSocketSession; webSocketSession != "" {
+				if !webSocketSessions[webSocketSession] {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceUnknownTarget,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.websocket_session %q is not an implemented websocket_session operation", i, ep.Method, ep.Path, webSocketSession),
+					})
+				}
+				if method := strings.ToUpper(strings.TrimSpace(ep.Method)); method != "GET" {
+					findings = append(findings, Finding{
+						Connector: b.Name, File: "api_surface.json", Rule: ruleSurfaceCoverage,
+						Message: fmt.Sprintf("endpoint %d (%s %s) covered_by.websocket_session must use GET", i, ep.Method, ep.Path),
 					})
 				}
 			}
@@ -938,6 +957,9 @@ func checkCLISurfaceOperationSafety(
 	if cmd.Intent == "direct_write" {
 		return checkCLISurfaceDirectWriteOperationSafety(b, i, cmd, op)
 	}
+	if cmd.Intent == "websocket_session" {
+		return checkCLISurfaceWebSocketSessionOperationSafety(b, i, cmd, op)
+	}
 	if cmd.Intent != "direct_read" {
 		return []Finding{{
 			Connector: b.Name,
@@ -1071,6 +1093,60 @@ func checkCLISurfaceDirectWriteOperationSafety(
 	}
 	if len(op.REST.BodySchema) > 0 {
 		findings = append(findings, checkCLISurfaceOperationBodyMappingsForIntent(b, i, cmd, op, "direct write")...)
+	}
+	return findings
+}
+
+// checkCLISurfaceWebSocketSessionOperationSafety mirrors the closed
+// commandrunner admission contract. The loader already validates the nested
+// session declaration; this checker makes the command-to-operation binding and
+// the two non-generic inputs explicit before a bundle can claim implemented.
+func checkCLISurfaceWebSocketSessionOperationSafety(
+	b engine.Bundle,
+	i int,
+	cmd engine.CLICommand,
+	op engine.OperationSpec,
+) []Finding {
+	if op.Kind != "websocket_session" || op.WebSocket == nil {
+		return []Finding{{
+			Connector: b.Name,
+			File:      "cli_surface.json",
+			Rule:      ruleCLISurfaceSafety,
+			Message:   fmt.Sprintf("implemented websocket session command %d (%q) operation %q must be websocket_session", i, cmd.Path, cmd.Operation),
+		}}
+	}
+	var findings []Finding
+	if method := strings.ToUpper(strings.TrimSpace(op.WebSocket.Method)); method != "GET" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented websocket session command %d (%q) operation %q must use GET, got %s", i, cmd.Path, cmd.Operation, method)})
+	}
+	if isAbsoluteHTTPURL(op.WebSocket.Path) {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented websocket session command %d (%q) operation %q must use connector-relative path", i, cmd.Path, cmd.Operation)})
+	}
+	if op.WebSocket.MaxInputBytes <= 0 {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented websocket session command %d (%q) operation %q must declare positive websocket.max_input_bytes", i, cmd.Path, cmd.Operation)})
+	}
+	if cmd.OutputPolicy != "json_redacted" {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented websocket session command %d (%q) requires json_redacted output_policy", i, cmd.Path)})
+	} else if cmd.OutputPolicy != op.OutputPolicy {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented websocket session command %d (%q) output_policy %q must match operation policy %q", i, cmd.Path, cmd.OutputPolicy, op.OutputPolicy)})
+	}
+
+	if len(cmd.Flags) != 2 {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented websocket session command %d (%q) requires exactly --session-update and --audio-file flags", i, cmd.Path)})
+		return findings
+	}
+	flags := map[string]engine.CLIFlag{}
+	for _, flag := range cmd.Flags {
+		if _, exists := flags[flag.Name]; exists {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented websocket session command %d (%q) declares --%s more than once", i, cmd.Path, flag.Name)})
+		}
+		flags[flag.Name] = flag
+	}
+	if flag, ok := flags["session-update"]; !ok || flag.Type != "json_object" || flag.MapsTo != "body" || !flag.Required {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented websocket session command %d (%q) requires --session-update as a required json_object body", i, cmd.Path)})
+	}
+	if flag, ok := flags["audio-file"]; !ok || flag.Type != "string" || flag.MapsTo != "input.pcm16_file" || !flag.Required {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented websocket session command %d (%q) requires --audio-file as a required PCM16 project file", i, cmd.Path)})
 	}
 	return findings
 }
@@ -1225,8 +1301,8 @@ func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CL
 		if mapsTo == "body" && flag.Type != "json_object" && flag.Type != "json_array" {
 			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s root body mapping requires json_object or json_array type", i, cmd.Path, flag.Name)})
 		}
-		if mapsTo == "body" && cmd.Intent != "direct_write" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s root body mapping is supported only for direct_write", i, cmd.Path, flag.Name)})
+		if mapsTo == "body" && cmd.Intent != "direct_write" && cmd.Intent != "websocket_session" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s root body mapping is supported only for direct_write or websocket_session", i, cmd.Path, flag.Name)})
 		}
 		// The meta-schema dialect has no "minimum", so these bounds are checked
 		// here instead of being declarable in cli_surface.schema.json.
@@ -1726,6 +1802,58 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 		if len(findings) > 0 {
 			return findings
 		}
+	case "websocket_session":
+		// Mirrors commandrunner.validateOperationWebSocketSessionCommand. The
+		// operation-specific checker below verifies the fixed two-flag shape;
+		// this branch keeps the endpoint and output-policy admission visibly
+		// aligned with the runtime preflight.
+		var findings []Finding
+		if cmd.Operation == "" {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented websocket session command %d (%q) must reference an operation", i, cmd.Path),
+			})
+		}
+		if len(cmd.APISurface) != 1 {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceMissingMapping,
+				Message:   fmt.Sprintf("implemented websocket session command %d (%q) must reference exactly one api_surface endpoint", i, cmd.Path),
+			})
+		}
+		for _, ep := range cmd.APISurface {
+			method := strings.ToUpper(strings.TrimSpace(ep.Method))
+			if method != "GET" {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented websocket session command %d (%q) must reference a GET api_surface endpoint, got %s", i, cmd.Path, method),
+				})
+			}
+			if isAbsoluteHTTPURL(ep.Path) {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented websocket session command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path),
+				})
+			}
+		}
+		if cmd.OutputPolicy != "json_redacted" {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("implemented websocket session command %d (%q) must declare json_redacted output_policy", i, cmd.Path),
+			})
+		}
+		if len(findings) > 0 {
+			return findings
+		}
 	case "direct_write":
 		// Mirrors commandrunner.validateOperationDirectWriteCommand. Direct
 		// execution still remains blocked there; satisfying this contract only
@@ -1904,6 +2032,9 @@ func checkCLISurfaceEndpointCoverage(
 				continue
 			}
 			if cmd.Intent == "direct_write" && directWriteCoverageMatches(state.coveredBy, cmd.Path) {
+				continue
+			}
+			if cmd.Intent == "websocket_session" && state.coveredBy != nil && state.coveredBy.WebSocketSession == cmd.Operation {
 				continue
 			}
 			findings = append(findings, Finding{
