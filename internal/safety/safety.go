@@ -105,7 +105,7 @@ func ValidateIdentifier(value, field string) error {
 			return fmt.Errorf("%s contains invalid character %q", field, r)
 		}
 	}
-	if strings.Contains(value, "..") {
+	if value == "." || strings.Contains(value, "..") {
 		return fmt.Errorf("%s must not contain path traversal", field)
 	}
 	return nil
@@ -137,7 +137,7 @@ func ValidateURLPathSegment(value, field string) error {
 			return fmt.Errorf("%s contains invalid path-segment character %q", field, r)
 		}
 	}
-	if strings.Contains(value, "..") {
+	if value == "." || strings.Contains(value, "..") {
 		return fmt.Errorf("%s must not contain path traversal", field)
 	}
 	return nil

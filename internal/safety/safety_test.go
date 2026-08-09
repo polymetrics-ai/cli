@@ -23,6 +23,7 @@ func TestSanitizeTerminalStripsControlAndDangerousUnicode(t *testing.T) {
 func TestValidateIdentifierRejectsAgentUnsafeValues(t *testing.T) {
 	tests := []string{
 		"",
+		".",
 		"../secret",
 		"table name",
 		"bad\x1b[31m",
@@ -62,6 +63,7 @@ func TestValidateURLPathSegment(t *testing.T) {
 
 	invalid := []string{
 		"",
+		".",
 		"../secret",
 		"one/two",
 		"one\\two",

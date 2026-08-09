@@ -29,6 +29,7 @@ Reads public Docker Hub repositories and image tags for a configured target name
 ## Configuration
 
 - auth_type
+- auth_url
 - base_url
 - docker_username (required)
 - namespace (required)

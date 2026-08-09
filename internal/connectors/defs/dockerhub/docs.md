@@ -23,6 +23,10 @@ Connection fields:
 
 - `base_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`; Docker Hub
   registry API base URL override for tests or self-hosted proxies.
+- `auth_url` (optional, string); default `https://hub.docker.com/v2/users/login`; format `uri`;
+  Docker Hub PAT session-exchange endpoint. It is intentionally independent of `base_url` so a
+  data API proxy cannot receive `docker_pat`; override it only for a trusted HTTPS test or
+  self-hosted authentication proxy.
 - `docker_username` (required, string); Docker Hub username used to authenticate `docker_pat`.
   Lowercase alphanumerics, underscores, and hyphens only.
 - `namespace` (required, string); Docker Hub user or organization namespace whose repositories and
@@ -58,7 +62,8 @@ Connection fields:
 - `tag` (optional, string); Tag name the 'tag_detail' stream reads a single tag record for (e.g.
   'latest'). Required only when reading the 'tag_detail' stream.
 
-Default configuration values: `base_url=https://hub.docker.com/v2`, `page_size=100`, `tier=free`,
+Default configuration values: `base_url=https://hub.docker.com/v2`,
+`auth_url=https://hub.docker.com/v2/users/login`, `page_size=100`, `tier=free`,
 `auth_type=unauthenticated`.
 
 Authentication behavior:
@@ -67,10 +72,10 @@ Authentication behavior:
   writes) — only the 4 public-read streams and the 3 status-only existence checks are usable.
 - `docker_pat` configured: every non-SCIM request authenticates via a `dockerhub` AuthHook
   (`internal/connectors/hooks/dockerhub`) that exchanges `docker_username`/`docker_pat` for a
-  short-lived session bearer JWT through Docker Hub's own `POST /v2/users/login`, caches it until
-  60s before the JWT's own `exp` claim (a conservative 4-minute cache is used if `exp` cannot be
-  parsed), and sends it as `Authorization: Bearer <jwt>` on every subsequent request. The
-  long-lived PAT itself is never sent as a static bearer token and never logged.
+  short-lived session bearer JWT through Docker Hub's own `POST /v2/users/login` at `auth_url`,
+  caches it until 60s before the JWT's own `exp` claim (a conservative 4-minute cache is used if
+  `exp` cannot be parsed), and sends it as `Authorization: Bearer <jwt>` on every subsequent
+  request. The long-lived PAT itself is never sent as a static bearer token and never logged.
 - `scim_bearer_token` configured: every `/v2/scim/2.0/**` request instead sends
   `Authorization: Bearer <scim_bearer_token>` — the same AuthHook routes by request path
   (`dualAuth`) and never substitutes one credential for the other. A SCIM command with no

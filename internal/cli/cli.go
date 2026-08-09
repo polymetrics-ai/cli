@@ -1433,6 +1433,39 @@ func commandRetainsSensitiveInputs(cmd connectors.CommandSurfaceCommand) bool {
 	return cmd.Intent == "direct_write" && cmd.AcceptsSecretInput && len(cmd.RedactFields) > 0
 }
 
+func rejectPlanSensitiveInputs(cmd connectors.CommandSurfaceCommand, flags parsedFlags) error {
+	if len(flags.values["from-env"]) == 0 && len(flags.values["value-stdin"]) == 0 {
+		return nil
+	}
+	if len(flags.values["value-stdin"]) > 0 {
+		return usageErrorf("--from-env and --value-stdin cannot be used with --plan")
+	}
+	envOnly := map[string]bool{}
+	for _, flag := range cmd.Flags {
+		if flag.EnvOnly {
+			envOnly[flag.Name] = true
+		}
+	}
+	sensitive := sensitiveCommandFlagLookup(cmd)
+	for _, assignment := range flags.values["from-env"] {
+		field, _, ok := strings.Cut(assignment, "=")
+		if !ok || strings.TrimSpace(field) == "" {
+			continue // The environment-only resolver names malformed assignments.
+		}
+		field = strings.TrimSpace(field)
+		if envOnly[field] {
+			continue
+		}
+		if commandRetainsSensitiveInputs(cmd) {
+			if _, ok := sensitive[field]; ok {
+				return usageErrorf("--from-env and --value-stdin cannot be used with --plan")
+			}
+		}
+		return validationErrorf("--from-env %s is not declared for connector command %q", field, cmd.Path)
+	}
+	return nil
+}
+
 const sensitiveCommandInputWarning = "Warning: supplied credential values are written to plaintext local project state and retained for this command plan."
 
 func applySensitiveCommandInputs(commandFlags map[string][]string, flags parsedFlags, cmd connectors.CommandSurfaceCommand) (map[string][]string, error) {
@@ -1652,6 +1685,13 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return fmt.Errorf("connector %q has no command surface", connectorName)
+	}
+	cmd, err := connectorCommandSurfaceCommand(connector, path)
+	if err != nil {
+		return err
+	}
+	if err := rejectPlanSensitiveInputs(cmd, flags); err != nil {
+		return err
 	}
 	resolvedFlags, err := resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), path, flags.values)
 	if err != nil {

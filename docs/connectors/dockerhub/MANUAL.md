@@ -28,6 +28,7 @@ AUTHENTICATION
 
 CONFIGURATION
   auth_type
+  auth_url
   base_url
   docker_username (required)
   namespace (required)

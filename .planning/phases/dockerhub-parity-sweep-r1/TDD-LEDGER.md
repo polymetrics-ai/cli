@@ -522,6 +522,30 @@ go run ./cmd/connectorgen surface-sync --check
 connectorgen surface-sync: 551 connector(s) scanned, 0 field(s) filled and 0 field(s) corrected across 0 connector(s)
 ```
 
+## Review repair — sealed plans and PAT targeting (2026-08-10)
+
+Red: review traced `runConnectorCommand` and found that it removed `--from-env` and
+`--value-stdin` from the working flag map before returning through `--plan`, so neither input was
+read nor rejected and an approved plan could silently execute its retained password. The same
+review found that `ValidateURLPathSegment` allowed a standalone `.` even though URL escaping
+preserves it, and that Docker Hub's custom auth spec built `token_url` by appending
+`/users/login` to `config.base_url`, allowing a data-proxy override to select the host receiving
+`docker_pat`.
+
+Green: `runConnectorCommand` rejects replacement secret-input flags before any plan lookup or
+execution; `ValidateURLPathSegment` rejects both `.` and `..` traversal forms; and Docker Hub
+materializes a separate `auth_url` default of `https://hub.docker.com/v2/users/login`. The
+dedicated Docker Hub regression uses separate TLS data and auth servers, proves the configured PAT
+reaches only the explicit `auth_url`, and proves a foreign HTTPS `base_url` receives exactly its
+data request and zero login requests. The focused gate is:
+
+```text
+go test -timeout 20m ./internal/cli ./internal/safety ./internal/connectors/defs/dockerhub -run '^(TestDockerHubAuthLoginAcceptsEnvironmentCredentialInputAndRedactsPlanOutput|TestDockerHubAuthPlanRejectsReplacementSensitiveInputs|TestDocsGenerateAndValidateConnectorDocs|TestValidateURLPathSegment|TestDockerhubPATExchangeUsesDedicatedAuthURL)$' -count=1
+```
+
+PR handoff: the outer executor must identify this as a security fix preventing stored Docker PAT
+exfiltration to attacker-controlled `base_url` hosts.
+
 `TestDockerHubRegistryPullPolicyBlocksBeforeTransport` loads the production Docker
 Hub bundle, injects a two-request test budget, sends the two allowed requests to a
 local transport, then observes the third blocked in admission for the documented

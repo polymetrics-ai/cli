@@ -236,6 +236,62 @@ func TestDockerHubAuthLoginAcceptsEnvironmentCredentialInputAndRedactsPlanOutput
 	}
 }
 
+func TestDockerHubAuthPlanRejectsReplacementSensitiveInputs(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	runCLI(t, []string{
+		"credentials", "add", "dockerhub-auth-local",
+		"--connector", "dockerhub",
+		"--config", "namespace=fixture",
+		"--config", "base_url=https://example.test",
+		"--root", root,
+		"--json",
+	})
+	t.Setenv("PM_TEST_DOCKERHUB_AUTH_PASSWORD", "fixture-password")
+
+	stdout, _ := runCLI(t, []string{
+		"dockerhub", "auth", "login", "create",
+		"--credential", "dockerhub-auth-local",
+		"--username", "fixture-user",
+		"--from-env", "password=PM_TEST_DOCKERHUB_AUTH_PASSWORD",
+		"--root", root,
+		"--json",
+	})
+	var plan struct {
+		Plan struct {
+			ID string `json:"id"`
+		} `json:"plan"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &plan); err != nil {
+		t.Fatalf("decode plan JSON: %v\n%s", err, stdout)
+	}
+	if plan.Plan.ID == "" {
+		t.Fatal("plan ID is empty")
+	}
+
+	for _, supplied := range [][]string{
+		{"--from-env", "password=PM_TEST_DOCKERHUB_AUTH_PASSWORD"},
+		{"--value-stdin", "password"},
+	} {
+		args := append([]string{
+			"dockerhub", "auth", "login", "create",
+			"--plan", plan.Plan.ID,
+			"--preview",
+			"--root", root,
+			"--json",
+		}, supplied...)
+		var out, errOut bytes.Buffer
+		code := cli.Run(args, &out, &errOut)
+		combined := out.String() + errOut.String()
+		if code != 2 || !strings.Contains(combined, "cannot be used with --plan") {
+			t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", args, code, out.String(), errOut.String())
+		}
+		if strings.Contains(combined, "fixture-password") {
+			t.Fatalf("Run(%v) leaked supplied credential: stdout=%s stderr=%s", args, out.String(), errOut.String())
+		}
+	}
+}
+
 func TestGongCallsListHelpDocumentsDateFlagsAndLimitOutputCap(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"gong", "calls", "list", "--help"}, &stdout, &stderr)
