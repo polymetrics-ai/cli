@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 
 	"polymetrics.ai/internal/app"
@@ -777,6 +778,123 @@ func TestDockerHubAuthFailureRedactsProviderBody(t *testing.T) {
 	}
 	if strings.Contains(string(stateBytes), providerBodyMarker) {
 		t.Fatal("state retained the provider body")
+	}
+}
+
+func TestDockerHubAccessTokenShowTokenRejectsMultipleRecordsBeforeApproval(t *testing.T) {
+	ctx := context.Background()
+	var mu sync.Mutex
+	authCalls := 0
+	writeCalls := 0
+	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mu.Lock()
+		defer mu.Unlock()
+		switch r.URL.Path {
+		case "/v2/users/login":
+			authCalls++
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"token":"fixture-session"}`))
+		case "/v2/access-tokens":
+			writeCalls++
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"token":"fixture-one-time-token"}`))
+		default:
+			t.Fatalf("request path = %s, want Docker Hub auth or access-token endpoint", r.URL.Path)
+		}
+	}))
+	t.Cleanup(server.Close)
+	trustDefaultTransportForTLSServers(t, server)
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "dockerhub-access-token-local",
+		Connector: "dockerhub",
+		Config: map[string]string{
+			"namespace":       "fixture",
+			"docker_username": "fixture-user",
+			"base_url":        server.URL + "/v2",
+			"auth_url":        server.URL + "/v2",
+		},
+		Secrets: map[string]string{"docker_pat": "fixture-pat"},
+	}); err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+	seedWarehouseTableRows(t, root, "dockerhub_access_token_rows",
+		`{"token_label":"first-token","scopes":["repo:read"]}`,
+		`{"token_label":"second-token","scopes":["repo:read"]}`,
+	)
+
+	plan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "dockerhub_access_tokens",
+		SourceTable:           "dockerhub_access_token_rows",
+		DestinationConnector:  "dockerhub",
+		DestinationCredential: "dockerhub-access-token-local",
+		Action:                "create_access_token",
+		Mappings:              map[string]string{"token_label": "token_label", "scopes": "scopes"},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL: %v", err)
+	}
+	if plan.RecordCount != 2 {
+		t.Fatalf("plan RecordCount = %d, want 2", plan.RecordCount)
+	}
+	statePath := filepath.Join(a.ProjectDir(), "state", "state.json")
+	before, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state before rejected capture: %v", err)
+	}
+
+	_, err = a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:                  plan.ID,
+		ApprovalToken:           plan.ApprovalToken,
+		RevealSensitiveResponse: true,
+	})
+	if err == nil || !strings.Contains(err.Error(), "requires exactly one record") {
+		t.Fatalf("RunReverseETL(show token) error = %v, want a single-record rejection", err)
+	}
+	mu.Lock()
+	rejectedAuthCalls, rejectedWriteCalls := authCalls, writeCalls
+	mu.Unlock()
+	if rejectedAuthCalls != 0 || rejectedWriteCalls != 0 {
+		t.Fatalf("rejected capture dispatched auth=%d writes=%d, want zero", rejectedAuthCalls, rejectedWriteCalls)
+	}
+	after, err := os.ReadFile(statePath)
+	if err != nil {
+		t.Fatalf("read state after rejected capture: %v", err)
+	}
+	if string(after) != string(before) {
+		t.Fatal("rejected capture consumed approval state")
+	}
+	stored, err := a.GetReversePlan(plan.ID)
+	if err != nil {
+		t.Fatalf("GetReversePlan: %v", err)
+	}
+	if stored.ApprovalTokenHash == "" {
+		t.Fatal("rejected capture consumed the approval token")
+	}
+
+	run, err := a.RunReverseETL(ctx, app.RunReverseETLRequest{
+		PlanID:        plan.ID,
+		ApprovalToken: plan.ApprovalToken,
+	})
+	if err != nil {
+		t.Fatalf("RunReverseETL(default capture) error = %v", err)
+	}
+	if run.Status != "completed" || run.RecordsSucceeded != 2 || run.SensitiveWriteResponse != nil {
+		t.Fatalf("default multi-record run = %+v, want two writes without a captured response", run)
+	}
+	mu.Lock()
+	completedAuthCalls, completedWriteCalls := authCalls, writeCalls
+	mu.Unlock()
+	if completedAuthCalls != 1 || completedWriteCalls != 2 {
+		t.Fatalf("default run dispatched auth=%d writes=%d, want 1 and 2", completedAuthCalls, completedWriteCalls)
 	}
 }
 

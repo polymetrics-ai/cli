@@ -2199,7 +2199,7 @@ func (a *App) runBulkReversePlan(ctx context.Context, plan ReversePlan, req RunR
 	if err != nil {
 		return ReverseRun{}, err
 	}
-	if err := validateSensitiveWriteResponseRequest(writer, plan.Action, req.RevealSensitiveResponse); err != nil {
+	if err := validateSensitiveWriteResponseRequest(writer, plan.Action, req.RevealSensitiveResponse, len(mappedForHash)); err != nil {
 		return ReverseRun{}, err
 	}
 	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mappedForHash)
@@ -2270,7 +2270,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, plan ReversePlan, req
 		return ReverseRun{}, errors.New("sensitive response delivery is only supported for write actions")
 	}
 	if plan.ConnectorCommandOperation == "" {
-		if err := validateSensitiveWriteResponseRequest(writer, plan.Action, req.RevealSensitiveResponse); err != nil {
+		if err := validateSensitiveWriteResponseRequest(writer, plan.Action, req.RevealSensitiveResponse, 1); err != nil {
 			return ReverseRun{}, err
 		}
 	}
@@ -2358,7 +2358,7 @@ func validateOperationDirectWritePreview(ctx context.Context, writer connectors.
 	return preview, nil
 }
 
-func validateSensitiveWriteResponseRequest(writer connectors.Connector, action string, reveal bool) error {
+func validateSensitiveWriteResponseRequest(writer connectors.Connector, action string, reveal bool, recordCount int) error {
 	if !reveal {
 		return nil
 	}
@@ -2366,7 +2366,13 @@ func validateSensitiveWriteResponseRequest(writer connectors.Connector, action s
 	if !ok {
 		return fmt.Errorf("connector %q does not support sensitive response capture", writer.Name())
 	}
-	return preflighter.PreflightSensitiveWriteResponse(action)
+	if err := preflighter.PreflightSensitiveWriteResponse(action); err != nil {
+		return err
+	}
+	if recordCount != 1 {
+		return errors.New("sensitive write response capture requires exactly one record")
+	}
+	return nil
 }
 
 func (a *App) loadReversePlan(id string) (ReversePlan, error) {

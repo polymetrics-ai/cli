@@ -1325,3 +1325,28 @@ executor retains GSD lifecycle ownership.
 go test -timeout 20m ./internal/app ./internal/cli ./internal/connectors/engine ./internal/connectors/hooks/dockerhub ./internal/connectors/defs/dockerhub -run '^(TestDockerHubCredentialAdmissionRejectsAuthURLUserinfoBeforePersistence|TestDockerHubStoredPATAuthURLRejectedBeforePlanPersistence|TestDockerHubAccessTokenOutputRequiresExplicitShowToken|TestDockerHubAccessTokenHelpDocumentsExplicitResponseDisclosure|TestWriteCapturesSensitiveResponseOnlyWhenRequested|TestWriteRedactsResponseSensitiveProviderFailure|TestValidateHTTPSURLRejectsMalformedInputWithoutEchoingIt|TestValidateHTTPSURLRejectsSchemeWithoutEchoingIt)$' -count=1
 exit 0
 ```
+
+## Review repair — scoped catalog output and token-capture approval (2026-08-10)
+
+Manual-GSD fallback: this is a gate-owned no-mistakes review step. The outer executor owns the
+active lifecycle, so this repair records its Red/Green evidence here and does not invoke pipeline
+control commands.
+
+Red: catalog regeneration refreshed the stale Warehouse description even though this change is
+Docker Hub-only. A two-record Docker Hub access-token plan with `--show-token` also reached the
+engine's single-record rejection only after its approval token had been consumed.
+
+Green: the generated catalog is structurally filtered to retain its base Warehouse entry while
+preserving only Docker Hub catalog changes. Sensitive response capture now validates the staged
+record count in the shared pre-approval request boundary, so the rejected multi-record request
+does not dispatch or mutate approval state; the same approval still executes the default two-record
+write without retaining a sensitive response.
+
+This gate-owned review uses golang-how-to, golang-cli, golang-design-patterns,
+golang-structs-interfaces, golang-security, golang-safety, golang-error-handling, golang-lint,
+golang-testing, and golang-documentation, plus CLI help/docs/website parity guidance. The outer
+executor retains GSD lifecycle ownership.
+
+```text
+go test -timeout 20m ./internal/app -run '^TestDockerHubAccessTokenShowTokenRejectsMultipleRecordsBeforeApproval$' -count=1
+```
