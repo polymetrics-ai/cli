@@ -1,6 +1,7 @@
 package agentcontract
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -70,6 +71,57 @@ func TestCertificationGateBindingCriteriaYieldExactCellIDs(t *testing.T) {
 	}
 }
 
+func TestCertificationGatePreservesCoordinatesAcrossWorkflowSyncAndFlowCells(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	tests := []struct {
+		name   string
+		mutate func(*testing.T, string)
+		want   string
+	}{
+		{
+			name: "workflow",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["workflows"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)["live_evidence"] = []any{}
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+			want: "workflow/github/etl/live_evidence",
+		},
+		{
+			name: "sync mode",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["sync_mode_cells"].([]any)[0].(map[string]any)["cells"].([]any)[0].(map[string]any)["live_evidence"] = []any{}
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+			want: "sync_mode/github/full_overwrite/api_read_into_warehouse/live_evidence",
+		},
+		{
+			name: "flow pair",
+			mutate: func(t *testing.T, root string) {
+				matrix := readCertificationFixtureObject(t, root, "internal/connectors/certifications/flow-matrix.json")
+				matrix["pair_sets"].([]any)[0].(map[string]any)["cell"].(map[string]any)["live_evidence"] = []any{}
+				writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/flow-matrix.json", matrix)
+			},
+			want: "flow/api_to_api/github/github/live_evidence",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := writeGreenCertificationFixture(t)
+			test.mutate(t, root)
+			verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if verdict.Decision != CertificationGateRetry {
+				t.Fatalf("decision = %#v, want RETRY", verdict)
+			}
+			assertCertificationFailureID(t, verdict, test.want)
+		})
+	}
+}
+
 func TestCertificationGateDoesNotPromoteReachabilityOrImplementedWithoutLiveEvidence(t *testing.T) {
 	contract := loadRepositoryContract(t, repositoryRoot(t))
 	root := writeGreenCertificationFixture(t)
@@ -121,6 +173,50 @@ func TestCertificationGateHaltCarriesExactCellAndEvidenceCoordinates(t *testing.
 		failure.CellID != "capability/github/capability:check" ||
 		failure.EvidenceID != "internal/connectors/certifications/evidence/capability.json" {
 		t.Fatalf("failure coordinates = %#v, want exact cell and evidence identifiers", failure)
+	}
+}
+
+func TestCertificationGateMatchesSemanticallyEquivalentEvidenceProof(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := writeGreenCertificationFixture(t)
+	path := filepath.Join(root, "internal", "connectors", "certifications", "evidence", "capability.json")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	formatted := bytes.Replace(raw, []byte(`"value":{}`), []byte(`"value": { }`), 1)
+	if bytes.Equal(formatted, raw) {
+		t.Fatal("fixture did not produce a semantically equivalent proof formatting change")
+	}
+	if err := os.WriteFile(path, formatted, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if verdict.Decision != CertificationGateProceed {
+		t.Fatalf("equivalent proof formatting decision = %#v, want PROCEED", verdict)
+	}
+}
+
+func TestCertificationGateRejectsUnredactedProofBody(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := writeGreenCertificationFixture(t)
+	evidence := readCertificationFixtureObject(t, root, "internal/connectors/certifications/evidence/capability.json")
+	proof := evidence["proof"].(map[string]any)
+	exchange := proof["http_exchanges"].([]any)[0].(map[string]any)
+	request := exchange["request"].(map[string]any)
+	body := request["body"].(map[string]any)
+	body["value"] = map[string]any{"token": "redacted-but-not-a-fingerprint"}
+	writeCertificationFixtureJSON(t, root, "internal/connectors/certifications/evidence/capability.json", evidence)
+
+	verdict, err := EvaluateCertificationGate(root, contract, certificationGateRequest("integrate_sub_pr"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if verdict.Decision != CertificationGateHalt {
+		t.Fatalf("unredacted proof decision = %#v, want HALT", verdict)
 	}
 }
 

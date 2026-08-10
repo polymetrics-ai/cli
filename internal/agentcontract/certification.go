@@ -33,7 +33,6 @@ const (
 var (
 	safeCertificationIdentifier = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9._:-]*$`)
 	sha256Digest                = regexp.MustCompile(`^[a-f0-9]{64}$`)
-	fingerprint                 = regexp.MustCompile(`^\{\{pmcertfp:v1:[a-f0-9]{64}\}\}$`)
 )
 
 // CertificationGateDecision is deliberately closed. A caller may continue a protected
@@ -1044,7 +1043,7 @@ func validateEvidenceIdentity(provider, executedAt, runID, credentialScope, cred
 }
 
 func validateEvidenceProof(proof certificationEvidenceProof, gate ConnectorCertificationGate) error {
-	if proof.RedactionStrategy != gate.ProofRedactionStrategy || !sha256Digest.MatchString(proof.PMBinarySHA256) || !fingerprint.MatchString(proof.PMCommandFingerprint) {
+	if proof.RedactionStrategy != gate.ProofRedactionStrategy || !sha256Digest.MatchString(proof.PMBinarySHA256) || !certificationFingerprintSequence(proof.PMCommandFingerprint) {
 		return errors.New("evidence proof version or fingerprints are invalid")
 	}
 	if len(proof.CredentialFingerprints) == 0 || !sortedUniqueFingerprints(proof.CredentialFingerprints) {
@@ -1056,7 +1055,7 @@ func validateEvidenceProof(proof certificationEvidenceProof, gate ConnectorCerti
 	operations := make(map[string]bool, len(proof.HTTPExchanges)+len(proof.DatabaseExchanges))
 	for index, exchange := range proof.HTTPExchanges {
 		if !safeCertificationID(exchange.Operation) || operations[exchange.Operation] ||
-			!safeHTTPMethod(exchange.Request.Method) || !fingerprint.MatchString(exchange.Request.Target) ||
+			!safeHTTPMethod(exchange.Request.Method) || !certificationFingerprintSequence(exchange.Request.Target) ||
 			exchange.Response.Status < 100 || exchange.Response.Status > 599 {
 			return fmt.Errorf("http_exchanges[%d] is invalid", index)
 		}
@@ -1079,11 +1078,11 @@ func validateEvidenceProof(proof certificationEvidenceProof, gate ConnectorCerti
 	}
 	for index, exchange := range proof.DatabaseExchanges {
 		if !safeCertificationID(exchange.Operation) || operations[exchange.Operation] || !safeCertificationID(exchange.Protocol) ||
-			!fingerprint.MatchString(exchange.Request.Statement) || !safeCertificationID(exchange.Response.Status) {
+			!certificationFingerprintSequence(exchange.Request.Statement) || !safeCertificationID(exchange.Response.Status) {
 			return fmt.Errorf("database_exchanges[%d] is invalid", index)
 		}
 		for _, parameter := range exchange.Request.Parameters {
-			if !fingerprint.MatchString(parameter) {
+			if !certificationFingerprintSequence(parameter) {
 				return fmt.Errorf("database_exchanges[%d] has an invalid parameter fingerprint", index)
 			}
 		}
@@ -1094,7 +1093,7 @@ func validateEvidenceProof(proof certificationEvidenceProof, gate ConnectorCerti
 	}
 	if proof.Flow != nil {
 		flow := proof.Flow
-		if !fingerprint.MatchString(flow.PMCommandFingerprint) || flow.Mediator != localParquetWarehouse ||
+		if !certificationFingerprintSequence(flow.PMCommandFingerprint) || flow.Mediator != localParquetWarehouse ||
 			!operations[flow.WarehouseReadbackOperation] || !operations[flow.DestinationReadbackOperation] ||
 			flow.WarehouseReadbackOperation == flow.DestinationReadbackOperation {
 			return errors.New("flow proof lacks independent warehouse and destination readback exchanges")
@@ -1113,7 +1112,7 @@ func validateEvidenceProof(proof certificationEvidenceProof, gate ConnectorCerti
 
 func validateHTTPFields(fields []certificationHTTPField) error {
 	for _, field := range fields {
-		if !safeCertificationID(field.Name) || !fingerprint.MatchString(field.Value) {
+		if (!safeProofFieldName(field.Name) && !certificationFingerprintSequence(field.Name)) || !certificationFingerprintSequence(field.Value) {
 			return errors.New("field name or fingerprint is invalid")
 		}
 	}
@@ -1122,7 +1121,7 @@ func validateHTTPFields(fields []certificationHTTPField) error {
 
 func validateQueries(queries []certificationQuery) error {
 	for _, query := range queries {
-		if !safeCertificationID(query.Name) || !fingerprint.MatchString(query.Value) {
+		if !safeProofFieldName(query.Name) || !certificationFingerprintSequence(query.Value) {
 			return errors.New("query name or fingerprint is invalid")
 		}
 	}
@@ -1130,10 +1129,38 @@ func validateQueries(queries []certificationQuery) error {
 }
 
 func validateHTTPBody(body certificationHTTPBody) error {
-	if strings.TrimSpace(body.Encoding) == "" || body.OriginalBytes < 0 || !json.Valid(body.Value) {
-		return errors.New("body encoding, value, or length is invalid")
+	if body.OriginalBytes < 0 {
+		return errors.New("body length is invalid")
 	}
-	return nil
+	switch body.Encoding {
+	case "none":
+		if string(body.Value) != "null" || body.OriginalBytes != 0 || body.Truncated {
+			return errors.New("none body is invalid")
+		}
+		return nil
+	case "opaque":
+		var value string
+		if err := decodeCertificationJSON(body.Value, &value); err != nil || !certificationFingerprintSequence(value) {
+			return errors.New("opaque body contains an unproved value")
+		}
+		return nil
+	case "json":
+		decoder := json.NewDecoder(bytes.NewReader(body.Value))
+		decoder.UseNumber()
+		var value any
+		if err := decoder.Decode(&value); err != nil {
+			return errors.New("json body is invalid")
+		}
+		if err := decoder.Decode(&struct{}{}); err != io.EOF {
+			return errors.New("json body is invalid")
+		}
+		if !sanitizedProofJSONValue(value) {
+			return errors.New("json body contains an unproved value")
+		}
+		return nil
+	default:
+		return fmt.Errorf("body encoding %q is unsupported", body.Encoding)
+	}
 }
 
 func sortedUniqueFingerprints(values []string) bool {
@@ -1141,7 +1168,7 @@ func sortedUniqueFingerprints(values []string) bool {
 		return false
 	}
 	for index, value := range values {
-		if !fingerprint.MatchString(value) || index > 0 && values[index-1] >= value {
+		if !certificationFingerprintSequence(value) || index > 0 && values[index-1] >= value {
 			return false
 		}
 	}
@@ -1158,7 +1185,67 @@ func safeHTTPMethod(method string) bool {
 }
 
 func safeCertificationID(value string) bool {
-	return safeCertificationIdentifier.MatchString(value) && strings.IndexFunc(value, unicode.IsControl) < 0
+	return len(value) <= 200 && safeCertificationIdentifier.MatchString(value) && strings.IndexFunc(value, unicode.IsControl) < 0
+}
+
+func safeProofFieldName(value string) bool {
+	if value == "" || len(value) > 200 {
+		return false
+	}
+	for _, character := range value {
+		if (character >= 'a' && character <= 'z') || (character >= 'A' && character <= 'Z') ||
+			(character >= '0' && character <= '9') || character == '-' || character == '_' || character == '.' {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func certificationFingerprintSequence(value string) bool {
+	for value != "" {
+		if !strings.HasPrefix(value, "{{pmcertfp:v1:") {
+			return false
+		}
+		end := strings.Index(value[len("{{pmcertfp:v1:"):], "}}")
+		if end < 0 {
+			return false
+		}
+		digest := value[len("{{pmcertfp:v1:") : len("{{pmcertfp:v1:")+end]
+		if !sha256Digest.MatchString(digest) {
+			return false
+		}
+		value = value[len("{{pmcertfp:v1:")+end+len("}}"):]
+	}
+	return true
+}
+
+func sanitizedProofJSONValue(value any) bool {
+	switch typed := value.(type) {
+	case map[string]any:
+		for key, child := range typed {
+			if !safeProofFieldName(key) && !certificationFingerprintSequence(key) {
+				return false
+			}
+			if !sanitizedProofJSONValue(child) {
+				return false
+			}
+		}
+		return true
+	case []any:
+		for _, child := range typed {
+			if !sanitizedProofJSONValue(child) {
+				return false
+			}
+		}
+		return true
+	case nil:
+		return true
+	case string:
+		return certificationFingerprintSequence(typed)
+	default:
+		return false
+	}
 }
 
 func safeEvidenceRecordPath(record, directory string) bool {
@@ -1171,7 +1258,13 @@ func safeEvidenceRecordPath(record, directory string) bool {
 func evidencePointerMatchesRecord(pointer certificationEvidencePointer, record certificationAcceptedEvidence) bool {
 	return pointer.Provider == record.Provider && pointer.ExecutedAt == record.ExecutedAt &&
 		pointer.RunID == record.RunID && pointer.CredentialScope == record.CredentialScope &&
-		pointer.CredentialNote == record.CredentialNote && reflect.DeepEqual(pointer.Proof, record.Proof)
+		pointer.CredentialNote == record.CredentialNote && certificationProofEqual(pointer.Proof, record.Proof)
+}
+
+func certificationProofEqual(left, right certificationEvidenceProof) bool {
+	leftJSON, leftErr := json.Marshal(left)
+	rightJSON, rightErr := json.Marshal(right)
+	return leftErr == nil && rightErr == nil && bytes.Equal(leftJSON, rightJSON)
 }
 
 type certificationEvidenceBinding struct {

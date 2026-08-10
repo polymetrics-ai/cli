@@ -14,7 +14,7 @@
     "verify_work": "pending",
     "code_review": "pending"
   },
-  "correction_rounds": 0,
+  "correction_rounds": 1,
   "dependencies": {
     "3984": {
       "status": "merged",
