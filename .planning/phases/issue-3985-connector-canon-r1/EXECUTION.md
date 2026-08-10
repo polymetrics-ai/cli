@@ -10,9 +10,10 @@ fallback. The task also required autonomous completion and prohibited connector 
 
 1. Imported source reports/captain rulings with SHA-256 pins; built the canon index, procedure,
    remote-reproducibility report, and recoverable archive entry points.
-2. Added the real commandrunner preflight sweep as `make connector-runtime-preflight` and made it a
-   `make verify`/`verify-parallel` gate. Added `make connector-canon-check` to check the source pins,
-   archive location, current procedure, corrections, and public status wording.
+2. Added the real commandrunner preflight sweep as `make connector-runtime-preflight`; `test` covers
+   the same sweep once in each `make verify` and `make verify-parallel` run. Added
+   `make connector-canon-check` to check the source pins, archive location, current procedure,
+   corrections, and public status wording.
 3. Reconciled the branch onto `origin/main` at `4df0b0416`, preserving its source-pinned GitHub
    parity artifacts and distinguishing those current generated counts from the void wrong-branch
    historical gap map.
@@ -26,8 +27,9 @@ fallback. The task also required autonomous completion and prohibited connector 
 
 - **Red:** `make connector-runtime-preflight` and `make connector-canon-check` initially failed
   because neither target existed.
-- **Green:** both targets pass and are wired into `make verify`; the runtime target calls the real
-  `TestEveryImplementedCommandPassesRuntimePreflight` sweep rather than a copied validator.
+- **Green:** both targets pass; aggregate verification reaches the real
+  `TestEveryImplementedCommandPassesRuntimePreflight` sweep once through `test`, rather than a
+  copied validator.
 - **Captain addendum red:** the live r1 parent had 11 children and no owner for a warehouse-only
   four-flow/seven-mode contract.
 - **Green:** #3987 exists as child 12, #3978 depends on it, and the pinned r2 report plus canon check

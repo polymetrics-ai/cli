@@ -26,8 +26,8 @@ make a false `availability: implemented` claim visibly fail local and CI verific
   - `IMPLEMENTATION-PROCEDURE.md` defines the end-to-end procedure and foundation check.
   - `REMOTE-REPRODUCIBILITY.md` names clean-machine requirements and unavailable proof.
   - `archive/` preserves retired local planning/GSD material and external report snapshots.
-- Add `make connector-runtime-preflight`, invoking the real commandrunner sweep, and run it from
-  `make verify`.
+- Add `make connector-runtime-preflight`, invoking the real commandrunner sweep as a standalone
+  target; `make verify` and `make verify-parallel` each cover the same sweep once through `test`.
 - Add `make connector-canon-check`, validating the tracked source/archive/procedure contract.
 - Update README, `docs/connectors/CANON.md`, generated connector documentation, and website
   documentation to link the canon and state zero accepted certifications plainly.
@@ -49,7 +49,8 @@ make a false `availability: implemented` claim visibly fail local and CI verific
 
 1. **Red — visible executable-command gate.** Run `make connector-runtime-preflight`; it must
    fail because no named target exists. **Green:** add a target running the real
-   `TestEveryImplementedCommandPassesRuntimePreflight` and add it to `make verify`; rerun it.
+   `TestEveryImplementedCommandPassesRuntimePreflight`; aggregate verification covers the same
+   sweep once through `test`. Rerun the focused target.
 2. **Red — canon integrity gate.** Run `make connector-canon-check`; it must fail because no
    target/canon exists. **Green:** add the canon files and deterministic check script, then run it.
 3. **Archive preservation.** Copy original superseded material before replacing entry-point files

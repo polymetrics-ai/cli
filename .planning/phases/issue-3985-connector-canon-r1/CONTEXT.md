@@ -33,8 +33,9 @@ foundation; it does not implement PostgreSQL, GitHub, or any other connector.
   database, database -> warehouse -> API, and database -> warehouse -> database. A connector may
   be both ends of the API flow; direct source-to-destination delivery is not an alternative path.
 - `TestEveryImplementedCommandPassesRuntimePreflight` is the real no-network admission sweep.
-  It gets a dedicated `make connector-runtime-preflight` target and becomes an explicit
-  `make verify` step. It is admission/reachability evidence, not fixture or live correctness.
+  It gets a dedicated `make connector-runtime-preflight` target; both aggregate verification
+  targets cover the same sweep once through `test`. It is admission/reachability evidence, not
+  fixture or live correctness.
 - The mandatory FOUNDATION CHECK is explicit: an implementation may declare a capability only after
   its prerequisite runtime, executor, conformance, and proof exist and execute. A missing
   foundation is a separately filed issue; it is never worked around or relabelled implemented.
