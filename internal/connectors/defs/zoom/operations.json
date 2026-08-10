@@ -8253,6 +8253,1529 @@
         },
         "max_bytes": 1048576
       }
+    },
+    {
+      "id": "zoom.list_ai_services_scribe_jobs",
+      "kind": "rest_read",
+      "summary": "List AI Services Scribe batch jobs",
+      "description": "Bounded read of the documented AI Services Scribe batch-job collection.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "file_id",
+          "job_id",
+          "reference_id",
+          "transcript",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/scribe/jobs",
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "QUEUED",
+              "PROCESSING",
+              "SUCCEEDED",
+              "PARTIAL",
+              "FAILED",
+              "CANCELED"
+            ],
+            "summary": "This field filters jobs by processing state. Omit to return jobs in all states."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.submit_ai_services_scribe_job",
+      "kind": "rest_write",
+      "summary": "Submit an AI Services Scribe batch job",
+      "description": "Approval-gated submission of one documented Scribe batch job with a closed provider request object.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "access_key_id",
+          "file_id",
+          "input",
+          "job_id",
+          "notifications",
+          "output",
+          "reference_id",
+          "secret",
+          "secret_access_key",
+          "session_token",
+          "uri",
+          "webhook_url"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/aiservices/scribe/jobs",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "config",
+            "input",
+            "output"
+          ],
+          "properties": {
+            "input": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "source"
+              ],
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "SINGLE",
+                    "PREFIX",
+                    "MANIFEST"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "S3"
+                  ]
+                },
+                "uri": {
+                  "type": "string"
+                },
+                "manifest": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1000,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "filters": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "include_globs": {
+                      "type": "array",
+                      "maxItems": 10,
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "exclude_globs": {
+                      "type": "array",
+                      "maxItems": 10,
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "auth": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "aws": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "access_key_id",
+                        "secret_access_key",
+                        "session_token"
+                      ],
+                      "properties": {
+                        "access_key_id": {
+                          "type": "string"
+                        },
+                        "secret_access_key": {
+                          "type": "string"
+                        },
+                        "session_token": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "output": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "destination",
+                "uri"
+              ],
+              "properties": {
+                "destination": {
+                  "type": "string",
+                  "enum": [
+                    "S3"
+                  ]
+                },
+                "uri": {
+                  "type": "string"
+                },
+                "layout": {
+                  "type": "string",
+                  "enum": [
+                    "SINGLE",
+                    "PREFIX",
+                    "ADJACENT"
+                  ]
+                },
+                "auth": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "aws": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "access_key_id",
+                        "secret_access_key",
+                        "session_token"
+                      ],
+                      "properties": {
+                        "access_key_id": {
+                          "type": "string"
+                        },
+                        "secret_access_key": {
+                          "type": "string"
+                        },
+                        "session_token": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "language": {
+                  "type": "string"
+                },
+                "word_time_offsets": {
+                  "type": "boolean"
+                },
+                "channel_separation": {
+                  "type": "boolean"
+                },
+                "diarization": {
+                  "type": "boolean"
+                },
+                "profanity_filter": {
+                  "type": "boolean"
+                },
+                "output_format": {
+                  "type": "string"
+                },
+                "segmentation_mode": {
+                  "type": "string",
+                  "enum": [
+                    "auto",
+                    "none"
+                  ]
+                }
+              }
+            },
+            "reference_id": {
+              "type": "string"
+            },
+            "notifications": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "webhook_url"
+              ],
+              "properties": {
+                "webhook_url": {
+                  "type": "string"
+                },
+                "secret": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_ai_services_scribe_job",
+      "kind": "rest_read",
+      "summary": "Get an AI Services Scribe batch job",
+      "description": "Bounded read of one documented Scribe batch-job status.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "job_id",
+          "reference_id",
+          "transcript",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/scribe/jobs/{jobId}",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The unique identifier for the batch transcription job."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.cancel_ai_services_scribe_job",
+      "kind": "rest_write",
+      "summary": "Cancel an AI Services Scribe batch job",
+      "description": "Destructive, status-only cancellation of one documented Scribe batch job.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "jobId",
+          "job_id"
+        ]
+      },
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/aiservices/scribe/jobs/{jobId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_ai_services_scribe_job_files",
+      "kind": "rest_read",
+      "summary": "List AI Services Scribe batch-job files",
+      "description": "Bounded read of the files for one documented Scribe batch job.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "file_id",
+          "job_id",
+          "transcript",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/scribe/jobs/{jobId}/files",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The unique identifier for the batch transcription job."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_ai_services_scribe_job_file",
+      "kind": "rest_read",
+      "summary": "Get an AI Services Scribe batch-job file",
+      "description": "Bounded read of one documented Scribe batch-job result file.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "file_id",
+          "job_id",
+          "text",
+          "transcript",
+          "uri",
+          "words"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/scribe/jobs/{jobId}/files/{fileId}",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The unique identifier of the file within the job."
+          },
+          {
+            "name": "jobId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The unique identifier of the batch Scribe job."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.live_ai_services_scribe",
+      "kind": "websocket_session",
+      "summary": "Run a closed AI Services Live Scribe session",
+      "description": "Fixed live-asr WebSocket session for documented PCM16 16 kHz mono transcription. The endpoint, subprotocol, frame sequence, and bounded lifetime are declaration-owned.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "websocket": {
+        "method": "GET",
+        "path": "/v2/aiservices/scribe/live",
+        "subprotocol": "live-asr",
+        "max_input_bytes": 2097152,
+        "max_output_bytes": 2097152,
+        "max_frame_bytes": 65536,
+        "max_session_seconds": 60,
+        "session_update_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "session.update"
+              ]
+            },
+            "input_audio_format": {
+              "type": "string",
+              "enum": [
+                "pcm16"
+              ]
+            },
+            "language": {
+              "type": "string"
+            },
+            "turn_detection": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "threshold": {
+                  "type": "number"
+                },
+                "prefix_padding_ms": {
+                  "type": "integer"
+                },
+                "silence_duration_ms": {
+                  "type": "integer"
+                },
+                "min_pause_duration_ms": {
+                  "type": "integer"
+                }
+              }
+            },
+            "transcription": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "phrase_list": {
+                  "type": "array",
+                  "maxItems": 128,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "enable_partial_results": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "zoom.scribe_ai_services_transcribe",
+      "kind": "rest_write",
+      "summary": "Transcribe audio with AI Services Scribe",
+      "description": "Approval-gated synchronous Scribe request with a closed provider request object.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "config",
+          "file",
+          "request_id",
+          "segments",
+          "text",
+          "text_display",
+          "text_lexical",
+          "transcript",
+          "words"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/aiservices/scribe/transcribe",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "config",
+            "file"
+          ],
+          "properties": {
+            "file": {
+              "type": "string"
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "language": {
+                  "type": "string"
+                },
+                "timestamps": {
+                  "type": "boolean"
+                },
+                "word_time_offsets": {
+                  "type": "boolean"
+                },
+                "channel_separation": {
+                  "type": "boolean"
+                },
+                "diarization": {
+                  "type": "boolean"
+                },
+                "profanity_filter": {
+                  "type": "boolean"
+                },
+                "output_format": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_ai_services_summarizer_jobs",
+      "kind": "rest_read",
+      "summary": "List AI Services Summarizer batch jobs",
+      "description": "Bounded read of the documented AI Services Summarizer batch-job collection.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "file_id",
+          "job_id",
+          "reference_id",
+          "summary",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/summarizer/jobs",
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "QUEUED",
+              "PROCESSING",
+              "SUCCEEDED",
+              "PARTIAL",
+              "FAILED",
+              "CANCELED"
+            ],
+            "summary": "Filter jobs by processing state. Omit to return jobs in all states."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.submit_ai_services_summarizer_job",
+      "kind": "rest_write",
+      "summary": "Submit an AI Services Summarizer batch job",
+      "description": "Approval-gated submission of one documented Summarizer batch job with a closed provider request object.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "access_key_id",
+          "file_id",
+          "input",
+          "job_id",
+          "limits",
+          "notifications",
+          "output",
+          "reference_id",
+          "secret",
+          "secret_access_key",
+          "session_token",
+          "summary",
+          "uri",
+          "webhook_url"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/aiservices/summarizer/jobs",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "input",
+            "output"
+          ],
+          "properties": {
+            "input": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "source"
+              ],
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "SINGLE",
+                    "PREFIX",
+                    "MANIFEST"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "S3"
+                  ]
+                },
+                "uri": {
+                  "type": "string"
+                },
+                "manifest": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1000,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "filters": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "include_globs": {
+                      "type": "array",
+                      "maxItems": 10,
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "exclude_globs": {
+                      "type": "array",
+                      "maxItems": 10,
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "auth": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "aws": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "access_key_id",
+                        "secret_access_key",
+                        "session_token"
+                      ],
+                      "properties": {
+                        "access_key_id": {
+                          "type": "string"
+                        },
+                        "secret_access_key": {
+                          "type": "string"
+                        },
+                        "session_token": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "output": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "destination",
+                "uri"
+              ],
+              "properties": {
+                "destination": {
+                  "type": "string",
+                  "enum": [
+                    "S3"
+                  ]
+                },
+                "uri": {
+                  "type": "string"
+                },
+                "layout": {
+                  "type": "string",
+                  "enum": [
+                    "ADJACENT",
+                    "PREFIX"
+                  ]
+                },
+                "overwrite": {
+                  "type": "boolean"
+                },
+                "auth": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "aws": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "access_key_id",
+                        "secret_access_key",
+                        "session_token"
+                      ],
+                      "properties": {
+                        "access_key_id": {
+                          "type": "string"
+                        },
+                        "secret_access_key": {
+                          "type": "string"
+                        },
+                        "session_token": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "summary_type": {
+                  "type": "string",
+                  "enum": [
+                    "CONVERSATION"
+                  ]
+                },
+                "task": {
+                  "type": "string",
+                  "enum": [
+                    "full_summary",
+                    "recap",
+                    "action_items",
+                    "summary"
+                  ]
+                },
+                "language": {
+                  "type": "string"
+                },
+                "output_format": {
+                  "type": "string",
+                  "enum": [
+                    "text"
+                  ]
+                }
+              }
+            },
+            "reference_id": {
+              "type": "string"
+            },
+            "notifications": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "webhook_url": {
+                  "type": "string"
+                },
+                "secret": {
+                  "type": "string"
+                },
+                "security_type": {
+                  "type": "string",
+                  "enum": [
+                    "WEBHOOK_SECURITY_HMAC",
+                    "WEBHOOK_SECURITY_JWT"
+                  ]
+                },
+                "audience": {
+                  "type": "string"
+                }
+              }
+            },
+            "limits": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "max_files": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_ai_services_summarizer_job",
+      "kind": "rest_read",
+      "summary": "Get an AI Services Summarizer batch job",
+      "description": "Bounded read of one documented Summarizer batch-job status.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "job_id",
+          "reference_id",
+          "summary",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/summarizer/jobs/{jobId}",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The unique identifier of the batch summarization job."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.cancel_ai_services_summarizer_job",
+      "kind": "rest_write",
+      "summary": "Cancel an AI Services Summarizer batch job",
+      "description": "Destructive, status-only cancellation of one documented Summarizer batch job.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "jobId",
+          "job_id"
+        ]
+      },
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/aiservices/summarizer/jobs/{jobId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_ai_services_summarizer_job_files",
+      "kind": "rest_read",
+      "summary": "List AI Services Summarizer batch-job files",
+      "description": "Bounded read of the files for one documented Summarizer batch job.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "file_id",
+          "job_id",
+          "summary",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/summarizer/jobs/{jobId}/files",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The unique identifier of the batch summarization job."
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "FILE_QUEUED",
+              "FILE_PROCESSING",
+              "FILE_SUCCEEDED",
+              "FILE_FAILED",
+              "FILE_CANCELED",
+              "FILE_SKIPPED"
+            ],
+            "summary": "This field enables you to filter files by processing state. If you omit this parameter, the API returns files in all states."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_ai_services_summarizer_job_file",
+      "kind": "rest_read",
+      "summary": "Get an AI Services Summarizer batch-job file",
+      "description": "Bounded read of one documented Summarizer batch-job result file.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "file_id",
+          "job_id",
+          "summary",
+          "text",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/summarizer/jobs/{jobId}/files/{fileId}",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The unique identifier of the file within the job."
+          },
+          {
+            "name": "jobId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The unique identifier of the batch summarization job."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.summarize_ai_services",
+      "kind": "rest_write",
+      "summary": "Summarize text with AI Services",
+      "description": "Approval-gated synchronous AI Services summarization with a closed provider request object.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "input",
+          "summary",
+          "text"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/aiservices/summarizer/summarize",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "input"
+          ],
+          "properties": {
+            "input": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "text"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              }
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "summary_type": {
+                  "type": "string",
+                  "enum": [
+                    "CONVERSATION"
+                  ]
+                },
+                "task": {
+                  "type": "string",
+                  "enum": [
+                    "full_summary",
+                    "recap",
+                    "action_items",
+                    "summary"
+                  ]
+                },
+                "language": {
+                  "type": "string"
+                },
+                "output_format": {
+                  "type": "string",
+                  "enum": [
+                    "text"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_ai_services_translator_jobs",
+      "kind": "rest_read",
+      "summary": "List AI Services Translator batch jobs",
+      "description": "Bounded read of the documented AI Services Translator batch-job collection.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "file_id",
+          "job_id",
+          "reference_id",
+          "translations",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/translator/jobs",
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "QUEUED",
+              "PROCESSING",
+              "SUCCEEDED",
+              "PARTIAL",
+              "FAILED",
+              "CANCELED"
+            ],
+            "summary": "Filter jobs by processing state. Omit to return jobs in all states."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.submit_ai_services_translator_job",
+      "kind": "rest_write",
+      "summary": "Submit an AI Services Translator batch job",
+      "description": "Approval-gated submission of one documented Translator batch job with a closed provider request object.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "access_key_id",
+          "file_id",
+          "input",
+          "job_id",
+          "limits",
+          "notifications",
+          "output",
+          "reference_id",
+          "secret",
+          "secret_access_key",
+          "session_token",
+          "translations",
+          "uri",
+          "webhook_url"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/aiservices/translator/jobs",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "input",
+            "output"
+          ],
+          "properties": {
+            "input": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "source"
+              ],
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "SINGLE",
+                    "PREFIX",
+                    "MANIFEST"
+                  ]
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "S3"
+                  ]
+                },
+                "uri": {
+                  "type": "string"
+                },
+                "manifest": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1000,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "filters": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "include_globs": {
+                      "type": "array",
+                      "maxItems": 10,
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "exclude_globs": {
+                      "type": "array",
+                      "maxItems": 10,
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "auth": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "aws": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "access_key_id",
+                        "secret_access_key",
+                        "session_token"
+                      ],
+                      "properties": {
+                        "access_key_id": {
+                          "type": "string"
+                        },
+                        "secret_access_key": {
+                          "type": "string"
+                        },
+                        "session_token": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "output": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "destination",
+                "uri"
+              ],
+              "properties": {
+                "destination": {
+                  "type": "string",
+                  "enum": [
+                    "S3"
+                  ]
+                },
+                "uri": {
+                  "type": "string"
+                },
+                "layout": {
+                  "type": "string",
+                  "enum": [
+                    "ADJACENT",
+                    "PREFIX"
+                  ]
+                },
+                "overwrite": {
+                  "type": "boolean"
+                },
+                "auth": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "aws": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "access_key_id",
+                        "secret_access_key",
+                        "session_token"
+                      ],
+                      "properties": {
+                        "access_key_id": {
+                          "type": "string"
+                        },
+                        "secret_access_key": {
+                          "type": "string"
+                        },
+                        "session_token": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "source_language": {
+                  "type": "string"
+                },
+                "target_languages": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "reference_id": {
+              "type": "string"
+            },
+            "notifications": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "webhook_url": {
+                  "type": "string"
+                },
+                "secret": {
+                  "type": "string"
+                },
+                "security_type": {
+                  "type": "string",
+                  "enum": [
+                    "WEBHOOK_SECURITY_HMAC",
+                    "WEBHOOK_SECURITY_JWT"
+                  ]
+                },
+                "audience": {
+                  "type": "string"
+                }
+              }
+            },
+            "limits": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "max_files": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_ai_services_translator_job",
+      "kind": "rest_read",
+      "summary": "Get an AI Services Translator batch job",
+      "description": "Bounded read of one documented Translator batch-job status.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "job_id",
+          "reference_id",
+          "translations",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/translator/jobs/{jobId}",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The unique identifier of the batch translation job."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.cancel_ai_services_translator_job",
+      "kind": "rest_write",
+      "summary": "Cancel an AI Services Translator batch job",
+      "description": "Destructive, status-only cancellation of one documented Translator batch job.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "none",
+      "mutation_class": "delete",
+      "destructive": true,
+      "confirmation": {
+        "kind": "destructive"
+      },
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "jobId",
+          "job_id"
+        ]
+      },
+      "rest": {
+        "method": "DELETE",
+        "path": "/v2/aiservices/translator/jobs/{jobId}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.list_ai_services_translator_job_files",
+      "kind": "rest_read",
+      "summary": "List AI Services Translator batch-job files",
+      "description": "Bounded read of the files for one documented Translator batch job.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "file_id",
+          "job_id",
+          "translations",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/translator/jobs/{jobId}/files",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Unique identifier of the batch translation job."
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "FILE_QUEUED",
+              "FILE_PROCESSING",
+              "FILE_SUCCEEDED",
+              "FILE_FAILED",
+              "FILE_CANCELED",
+              "FILE_SKIPPED"
+            ],
+            "summary": "Filter files by processing state. Omit to return files in all states."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.get_ai_services_translator_job_file",
+      "kind": "rest_read",
+      "summary": "Get an AI Services Translator batch-job file",
+      "description": "Bounded read of one documented Translator batch-job result file.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "medium",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "sensitive_policy": {
+        "redact_fields": [
+          "file_id",
+          "job_id",
+          "text",
+          "translations",
+          "uri"
+        ]
+      },
+      "rest": {
+        "method": "GET",
+        "path": "/v2/aiservices/translator/jobs/{jobId}/files/{fileId}",
+        "parameters": [
+          {
+            "name": "fileId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Unique identifier of the file within the job."
+          },
+          {
+            "name": "jobId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Unique identifier of the batch translation job."
+          }
+        ],
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "zoom.translate_ai_services",
+      "kind": "rest_write",
+      "summary": "Translate text with AI Services",
+      "description": "Approval-gated synchronous AI Services translation with a closed provider request object.",
+      "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+      "risk": "high",
+      "approval": "plan-preview-confirm-execute",
+      "output_policy": "json_redacted",
+      "mutation_class": "create",
+      "batchable": false,
+      "sensitive_policy": {
+        "redact_fields": [
+          "text",
+          "translations"
+        ]
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/aiservices/translator/translate",
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "source_language": {
+                  "type": "string"
+                },
+                "target_languages": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "max_bytes": 1048576
+      }
     }
   ]
 }

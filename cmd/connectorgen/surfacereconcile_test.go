@@ -69,6 +69,31 @@ func TestRunSurfaceReconcileCoversSensitiveDirectWriteWithRuntimePreflight(t *te
 	}
 }
 
+// TestRunSurfaceReconcileCoversWebSocketSessionWithRuntimePreflight proves
+// that a newly authored closed session can transition from its source-ledger
+// operation row to generated coverage. The reconciler intentionally uses the
+// real commandrunner preflight, so endpoint coverage cannot be a bootstrap
+// prerequisite for deriving that same coverage.
+func TestRunSurfaceReconcileCoversWebSocketSessionWithRuntimePreflight(t *testing.T) {
+	root, surfacePath := writeSurfaceReconcileWebSocketFixture(t)
+
+	stats, err := reconcileBundle(filepath.Join(root, "zoom"), false, "", "provider_module=ai-services")
+	if err != nil {
+		t.Fatalf("reconcileBundle: %v", err)
+	}
+	if stats.Covered != 1 || stats.Blocked != 0 || stats.Refused != 0 {
+		t.Fatalf("stats = %+v, want one runtime-covered websocket session", stats)
+	}
+
+	endpoint := readSurfaceReconcileEndpointAt(t, surfacePath, "GET", "/v2/aiservices/scribe/live")
+	if endpoint.Operation != nil {
+		t.Fatalf("reconciled websocket endpoint still has operation = %+v", endpoint.Operation)
+	}
+	if endpoint.CoveredBy == nil || endpoint.CoveredBy.WebSocketSession != "zoom.live_ai_services_scribe" {
+		t.Fatalf("reconciled covered_by = %+v, want runtime-reachable websocket_session operation", endpoint.CoveredBy)
+	}
+}
+
 // TestRunSurfaceReconcileCoversBinaryDownloadWithRuntimePreflight keeps binary
 // coverage accountable to the actual executor admission check. The fixture
 // turns YouTube's already implemented bounded download into one blocked
@@ -189,8 +214,9 @@ type reconcileFixtureEndpoint struct {
 		Reason string `json:"reason"`
 	} `json:"operation"`
 	CoveredBy *struct {
-		DirectRead  string `json:"direct_read"`
-		DirectWrite string `json:"direct_write"`
+		DirectRead       string `json:"direct_read"`
+		DirectWrite      string `json:"direct_write"`
+		WebSocketSession string `json:"websocket_session"`
 	} `json:"covered_by"`
 }
 
@@ -316,6 +342,59 @@ func writeSurfaceReconcileBinaryDownloadFixture(t *testing.T) (string, string) {
 	}
 	if !found {
 		t.Fatal("YouTube Analytics fixture lacks binary report download endpoint")
+	}
+	writeSurfaceReconcileJSON(t, surfacePath, surface)
+	return root, surfacePath
+}
+
+func writeSurfaceReconcileWebSocketFixture(t *testing.T) (string, string) {
+	t.Helper()
+	root := t.TempDir()
+	sourceRoot, err := repoRoot()
+	if err != nil {
+		t.Fatalf("repoRoot: %v", err)
+	}
+	source := filepath.Join(sourceRoot, "internal", "connectors", "defs", "zoom")
+	target := filepath.Join(root, "zoom")
+	if err := copySurfaceReconcileTree(source, target); err != nil {
+		t.Fatalf("copy Zoom fixture: %v", err)
+	}
+
+	surfacePath := filepath.Join(target, "api_surface.json")
+	var surface map[string]any
+	raw, err := os.ReadFile(surfacePath)
+	if err != nil {
+		t.Fatalf("read fixture api surface: %v", err)
+	}
+	if err := json.Unmarshal(raw, &surface); err != nil {
+		t.Fatalf("decode fixture api surface: %v", err)
+	}
+	endpoints, ok := surface["endpoints"].([]any)
+	if !ok {
+		t.Fatal("fixture api surface endpoints are not an array")
+	}
+	found := false
+	for _, rawEndpoint := range endpoints {
+		endpoint, ok := rawEndpoint.(map[string]any)
+		if !ok {
+			t.Fatal("fixture api surface endpoint is not an object")
+		}
+		if endpoint["method"] != "GET" || endpoint["path"] != "/v2/aiservices/scribe/live" {
+			continue
+		}
+		delete(endpoint, "covered_by")
+		endpoint["operation"] = map[string]any{
+			"model":              "websocket_session",
+			"status":             "blocked",
+			"risk":               "medium",
+			"blocked_by_default": true,
+			"reason":             "Missing runtime-proven closed websocket-session coverage.",
+			"notes":              "provider_module=ai-services",
+		}
+		found = true
+	}
+	if !found {
+		t.Fatal("Zoom fixture lacks Live Scribe WebSocket endpoint")
 	}
 	writeSurfaceReconcileJSON(t, surfacePath, surface)
 	return root, surfacePath

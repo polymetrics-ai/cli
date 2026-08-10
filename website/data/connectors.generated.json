@@ -383566,6 +383566,13 @@
           "commands": [
             "crc"
           ]
+        },
+        {
+          "id": "ai-services",
+          "title": "AI Services",
+          "commands": [
+            "ai-services"
+          ]
         }
       ],
       "global_flags": [
@@ -389377,6 +389384,827 @@
           "risk": "Changes a provider-defined CRC room template.",
           "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
           "notes": "The named room-template object is closed to documented update members; its 204 response is status-only success."
+        },
+        {
+          "path": "ai-services scribe jobs list",
+          "summary": "List AI Services Scribe batch jobs.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_ai_services_scribe_jobs",
+          "source_cli_path": "GET /v2/aiservices/scribe/jobs",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "state",
+              "type": "enum",
+              "summary": "This field filters jobs by processing state. Omit to return jobs in all states.",
+              "values": [
+                "QUEUED",
+                "PROCESSING",
+                "SUCCEEDED",
+                "PARTIAL",
+                "FAILED",
+                "CANCELED"
+              ],
+              "maps_to": "query.state"
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services scribe jobs submit",
+          "summary": "Submit one AI Services Scribe batch job.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.submit_ai_services_scribe_job",
+          "source_cli_path": "POST /v2/aiservices/scribe/jobs",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "scribe-job",
+              "type": "json_object",
+              "summary": "Closed documented AI Services Scribe batch-job request.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "Submits a documented Scribe batch job to Zoom for processing the supplied media.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": ""
+        },
+        {
+          "path": "ai-services scribe jobs get",
+          "summary": "Get one AI Services Scribe batch job.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_ai_services_scribe_job",
+          "source_cli_path": "GET /v2/aiservices/scribe/jobs/{jobId}",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "jobId",
+              "type": "string",
+              "summary": "The unique identifier for the batch transcription job.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services scribe jobs cancel",
+          "summary": "Cancel one AI Services Scribe batch job.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.cancel_ai_services_scribe_job",
+          "source_cli_path": "DELETE /v2/aiservices/scribe/jobs/{jobId}",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "job-id",
+              "type": "string",
+              "summary": "AI Services Scribe batch-job identifier.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "none",
+          "risk": "Cancels a documented Scribe batch job, which may stop provider-side processing.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": ""
+        },
+        {
+          "path": "ai-services scribe jobs files list",
+          "summary": "List files for one AI Services Scribe batch job.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_ai_services_scribe_job_files",
+          "source_cli_path": "GET /v2/aiservices/scribe/jobs/{jobId}/files",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "jobId",
+              "type": "string",
+              "summary": "The unique identifier for the batch transcription job.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services scribe jobs files get",
+          "summary": "Get one AI Services Scribe batch-job file.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_ai_services_scribe_job_file",
+          "source_cli_path": "GET /v2/aiservices/scribe/jobs/{jobId}/files/{fileId}",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "fileId",
+              "type": "string",
+              "summary": "The unique identifier of the file within the job.",
+              "values": [],
+              "maps_to": "path.fileId",
+              "required": true
+            },
+            {
+              "name": "jobId",
+              "type": "string",
+              "summary": "The unique identifier of the batch Scribe job.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services scribe live",
+          "summary": "Run one closed AI Services Live Scribe session.",
+          "intent": "websocket_session",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.live_ai_services_scribe",
+          "source_cli_path": "GET /v2/aiservices/scribe/live",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "session-update",
+              "type": "json_object",
+              "summary": "",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            },
+            {
+              "name": "audio-file",
+              "type": "string",
+              "summary": "",
+              "values": [],
+              "maps_to": "input.pcm16_file",
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services scribe transcribe",
+          "summary": "Transcribe one audio request with AI Services Scribe.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.scribe_ai_services_transcribe",
+          "source_cli_path": "POST /v2/aiservices/scribe/transcribe",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "transcription-request",
+              "type": "json_object",
+              "summary": "Closed documented synchronous Scribe request.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "Submits a bounded audio transcription request to Zoom AI Services.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": ""
+        },
+        {
+          "path": "ai-services summarizer jobs list",
+          "summary": "List AI Services Summarizer batch jobs.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_ai_services_summarizer_jobs",
+          "source_cli_path": "GET /v2/aiservices/summarizer/jobs",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "state",
+              "type": "enum",
+              "summary": "Filter jobs by processing state. Omit to return jobs in all states.",
+              "values": [
+                "QUEUED",
+                "PROCESSING",
+                "SUCCEEDED",
+                "PARTIAL",
+                "FAILED",
+                "CANCELED"
+              ],
+              "maps_to": "query.state"
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services summarizer jobs submit",
+          "summary": "Submit one AI Services Summarizer batch job.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.submit_ai_services_summarizer_job",
+          "source_cli_path": "POST /v2/aiservices/summarizer/jobs",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "summarizer-job",
+              "type": "json_object",
+              "summary": "Closed documented AI Services Summarizer batch-job request.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "Submits a documented Summarizer batch job to Zoom for processing the supplied input.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": ""
+        },
+        {
+          "path": "ai-services summarizer jobs get",
+          "summary": "Get one AI Services Summarizer batch job.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_ai_services_summarizer_job",
+          "source_cli_path": "GET /v2/aiservices/summarizer/jobs/{jobId}",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "jobId",
+              "type": "string",
+              "summary": "The unique identifier of the batch summarization job.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services summarizer jobs cancel",
+          "summary": "Cancel one AI Services Summarizer batch job.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.cancel_ai_services_summarizer_job",
+          "source_cli_path": "DELETE /v2/aiservices/summarizer/jobs/{jobId}",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "job-id",
+              "type": "string",
+              "summary": "AI Services Summarizer batch-job identifier.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "none",
+          "risk": "Cancels a documented Summarizer batch job, which may stop provider-side processing.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": ""
+        },
+        {
+          "path": "ai-services summarizer jobs files list",
+          "summary": "List files for one AI Services Summarizer batch job.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_ai_services_summarizer_job_files",
+          "source_cli_path": "GET /v2/aiservices/summarizer/jobs/{jobId}/files",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "jobId",
+              "type": "string",
+              "summary": "The unique identifier of the batch summarization job.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "required": true
+            },
+            {
+              "name": "state",
+              "type": "enum",
+              "summary": "This field enables you to filter files by processing state. If you omit this parameter, the API returns files in all states.",
+              "values": [
+                "FILE_QUEUED",
+                "FILE_PROCESSING",
+                "FILE_SUCCEEDED",
+                "FILE_FAILED",
+                "FILE_CANCELED",
+                "FILE_SKIPPED"
+              ],
+              "maps_to": "query.state"
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services summarizer jobs files get",
+          "summary": "Get one AI Services Summarizer batch-job file.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_ai_services_summarizer_job_file",
+          "source_cli_path": "GET /v2/aiservices/summarizer/jobs/{jobId}/files/{fileId}",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "fileId",
+              "type": "string",
+              "summary": "The unique identifier of the file within the job.",
+              "values": [],
+              "maps_to": "path.fileId",
+              "required": true
+            },
+            {
+              "name": "jobId",
+              "type": "string",
+              "summary": "The unique identifier of the batch summarization job.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services summarizer summarize",
+          "summary": "Summarize one text request with AI Services.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.summarize_ai_services",
+          "source_cli_path": "POST /v2/aiservices/summarizer/summarize",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "summary-request",
+              "type": "json_object",
+              "summary": "Closed documented synchronous Summarizer request.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "Submits a bounded text summarization request to Zoom AI Services.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": ""
+        },
+        {
+          "path": "ai-services translator jobs list",
+          "summary": "List AI Services Translator batch jobs.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_ai_services_translator_jobs",
+          "source_cli_path": "GET /v2/aiservices/translator/jobs",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "state",
+              "type": "enum",
+              "summary": "Filter jobs by processing state. Omit to return jobs in all states.",
+              "values": [
+                "QUEUED",
+                "PROCESSING",
+                "SUCCEEDED",
+                "PARTIAL",
+                "FAILED",
+                "CANCELED"
+              ],
+              "maps_to": "query.state"
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services translator jobs submit",
+          "summary": "Submit one AI Services Translator batch job.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.submit_ai_services_translator_job",
+          "source_cli_path": "POST /v2/aiservices/translator/jobs",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "translator-job",
+              "type": "json_object",
+              "summary": "Closed documented AI Services Translator batch-job request.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "Submits a documented Translator batch job to Zoom for processing the supplied input.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": ""
+        },
+        {
+          "path": "ai-services translator jobs get",
+          "summary": "Get one AI Services Translator batch job.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_ai_services_translator_job",
+          "source_cli_path": "GET /v2/aiservices/translator/jobs/{jobId}",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "jobId",
+              "type": "string",
+              "summary": "The unique identifier of the batch translation job.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services translator jobs cancel",
+          "summary": "Cancel one AI Services Translator batch job.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.cancel_ai_services_translator_job",
+          "source_cli_path": "DELETE /v2/aiservices/translator/jobs/{jobId}",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "job-id",
+              "type": "string",
+              "summary": "AI Services Translator batch-job identifier.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "allow_empty": false,
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "none",
+          "risk": "Cancels a documented Translator batch job, which may stop provider-side processing.",
+          "approval": "Requires plan, no-network preview, explicit single-use approval, and destructive typed confirmation before execute.",
+          "notes": ""
+        },
+        {
+          "path": "ai-services translator jobs files list",
+          "summary": "List files for one AI Services Translator batch job.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.list_ai_services_translator_job_files",
+          "source_cli_path": "GET /v2/aiservices/translator/jobs/{jobId}/files",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "jobId",
+              "type": "string",
+              "summary": "Unique identifier of the batch translation job.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "required": true
+            },
+            {
+              "name": "state",
+              "type": "enum",
+              "summary": "Filter files by processing state. Omit to return files in all states.",
+              "values": [
+                "FILE_QUEUED",
+                "FILE_PROCESSING",
+                "FILE_SUCCEEDED",
+                "FILE_FAILED",
+                "FILE_CANCELED",
+                "FILE_SKIPPED"
+              ],
+              "maps_to": "query.state"
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services translator jobs files get",
+          "summary": "Get one AI Services Translator batch-job file.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.get_ai_services_translator_job_file",
+          "source_cli_path": "GET /v2/aiservices/translator/jobs/{jobId}/files/{fileId}",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "fileId",
+              "type": "string",
+              "summary": "Unique identifier of the file within the job.",
+              "values": [],
+              "maps_to": "path.fileId",
+              "required": true
+            },
+            {
+              "name": "jobId",
+              "type": "string",
+              "summary": "Unique identifier of the batch translation job.",
+              "values": [],
+              "maps_to": "path.jobId",
+              "required": true
+            },
+            {
+              "name": "page",
+              "type": "integer",
+              "summary": "Page number to return. Only for connectors whose declared pagination addresses pages by number (page_number, offset_limit); defaults to the first page.",
+              "values": [],
+              "maps_to": ""
+            },
+            {
+              "name": "page-cursor",
+              "type": "string",
+              "summary": "Continuation token to return the next page. Use the next_cursor value from a previous page, for connectors whose declared pagination addresses pages by token (cursor, next_url, link_header).",
+              "values": [],
+              "maps_to": ""
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "ai-services translator translate",
+          "summary": "Translate one text request with AI Services.",
+          "intent": "direct_write",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "operation": "zoom.translate_ai_services",
+          "source_cli_path": "POST /v2/aiservices/translator/translate",
+          "source_url": "https://developers.zoom.us/docs/api/ai-services.md",
+          "flags": [
+            {
+              "name": "translation-request",
+              "type": "json_object",
+              "summary": "Closed documented synchronous Translator request.",
+              "values": [],
+              "maps_to": "body",
+              "required": true
+            }
+          ],
+          "examples": [],
+          "output_policy": "json_redacted",
+          "risk": "Submits a bounded text translation request to Zoom AI Services.",
+          "approval": "Requires plan, no-network preview, and explicit single-use approval before execute.",
+          "notes": ""
         }
       ],
       "help_topics": [
