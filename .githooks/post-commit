@@ -11,9 +11,8 @@ hook_dir="$(CDPATH='' cd "$(dirname "$0")" 2>/dev/null && pwd)" || exit 0
 . "$hook_dir/pm-autopush-operation-state" 2>/dev/null || exit 0
 scheduled_oid="$(git rev-parse --verify HEAD 2>/dev/null)" || exit 0
 worktree_git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)" || exit 0
-operation_file="$worktree_git_dir/pm-autopush-operation"
-if [ -f "$operation_file" ]; then
-  rm -f "$operation_file" 2>/dev/null || :
+operation_marker_dir="$worktree_git_dir/pm-autopush-operations"
+if pm_autopush_operation_commit_is_marked "$operation_marker_dir" "$scheduled_oid"; then
   exit 0
 fi
 
@@ -90,6 +89,12 @@ fi
 nohup sh -c '
   # shellcheck disable=SC1091
   . "$5" 2>/dev/null || exit 0
+  operation_git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)" || exit 0
+  operation_marker_dir="$operation_git_dir/pm-autopush-operations"
+  if pm_autopush_operation_commit_is_marked "$operation_marker_dir" "$4"; then
+    printf "%s\n" "pm autopush: operation commit for $2 (ignored)" >> "$3"
+    exit 0
+  fi
   if pm_autopush_operation_in_progress; then
     printf "%s\n" "pm autopush: operation in progress for $2 (ignored)" >> "$3"
     exit 0

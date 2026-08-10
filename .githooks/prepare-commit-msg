@@ -4,18 +4,22 @@ hook_dir="$(CDPATH='' cd "$(dirname "$0")" 2>/dev/null && pwd)" || exit 0
 # shellcheck disable=SC1091
 . "$hook_dir/pm-autopush-operation-state" 2>/dev/null || exit 0
 worktree_git_dir="$(git rev-parse --path-format=absolute --git-dir 2>/dev/null)" || exit 0
-operation_file="$worktree_git_dir/pm-autopush-operation"
-operation_dir="$(dirname "$operation_file")" || exit 0
+operation_dir="$worktree_git_dir/pm-autopush-operations"
 
 if ! pm_autopush_operation_in_progress; then
-  rm -f "$operation_file" 2>/dev/null || :
   exit 0
 fi
 
+operation_base="$(git rev-parse --verify HEAD 2>/dev/null || printf '%s\n' unborn)"
+operation_base_parents=""
+if [ "$operation_base" != "unborn" ]; then
+  operation_base_parents="$(git show -s --format=%P "$operation_base" 2>/dev/null)" || exit 0
+fi
 umask 077
 mkdir -p "$operation_dir" 2>/dev/null || exit 0
+operation_file="$operation_dir/$operation_base"
 operation_temp="$operation_file.$$.tmp"
-if ! : > "$operation_temp" 2>/dev/null; then
+if ! printf '%s\n%s\n' "$operation_base" "$operation_base_parents" > "$operation_temp" 2>/dev/null; then
   rm -f "$operation_temp" 2>/dev/null || :
   exit 0
 fi

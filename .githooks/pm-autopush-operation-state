@@ -16,3 +16,37 @@ pm_autopush_operation_in_progress() {
   done
   return 1
 }
+
+pm_autopush_operation_commit_is_marked() {
+  operation_marker_dir=$1
+  operation_commit=$2
+
+  [ -d "$operation_marker_dir" ] || return 1
+  operation_commit="$(git rev-parse --verify "${operation_commit}^{commit}" 2>/dev/null)" || return 1
+  operation_commit_parents="$(git show -s --format=%P "$operation_commit" 2>/dev/null)" || return 1
+  operation_first_parent=${operation_commit_parents%% *}
+
+  for operation_marker in "$operation_marker_dir"/*; do
+    [ -f "$operation_marker" ] || continue
+    operation_base=""
+    operation_base_parents=""
+    {
+      IFS= read -r operation_base || :
+      IFS= read -r operation_base_parents || :
+    } < "$operation_marker"
+
+    if [ "$operation_base" = "unborn" ]; then
+      [ -z "$operation_commit_parents" ] && return 0
+      continue
+    fi
+    case "$operation_base" in
+      ""|*[!0123456789abcdefABCDEF]*) continue ;;
+    esac
+    operation_base="$(git rev-parse --verify "${operation_base}^{commit}" 2>/dev/null)" || continue
+    if [ "$operation_first_parent" = "$operation_base" ] || [ "$operation_commit_parents" = "$operation_base_parents" ]; then
+      return 0
+    fi
+  done
+
+  return 1
+}

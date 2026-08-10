@@ -20,8 +20,8 @@ shellcheck passed.
 
 - R1 was legitimate: Git can remove a manual merge, cherry-pick, or revert
   marker before `post-commit`. A tracked `prepare-commit-msg` companion now
-  records a commit-scoped Git-resolved operation marker in the worktree Git
-  directory, and `post-commit` consumes it before scheduling.
+  records Git-resolved operation transitions in the worktree Git directory, and
+  parent and child match their candidate commit against those records.
 - R2 was legitimate: a local remote `HEAD` symref can be absent or stale. The
   detached child resolves the remote's live symbolic `HEAD`, logs an unavailable
   or matching default branch, and returns without push.
@@ -51,11 +51,17 @@ shellcheck passed.
   push destination settings. It now resolves branch-specific, global, and
   tracking remotes in Git's push precedence order.
 - R11 was legitimate: an amended operation completion replaces the old tip, so
-  it cannot be recognized from the new commit's parent. The operation marker is
-  now consumed independent of commit topology.
+  it cannot be recognized from the new commit's direct parent. Each transition
+  record includes the old tip's full parent list, which identifies amended
+  completions without relying on that direct-parent relationship.
+- R12 was legitimate: a delayed ordinary post hook can observe another commit's
+  worktree-wide marker and consume it first. Transition records are durable and
+  are matched only against a candidate's direct parent or full amended-parent
+  list in both the parent and detached child paths.
 
-The focused executable harness covers each follow-up, including clean squash,
-amended squash, cherry-pick, and revert paths, concurrent expired-rate
-compare-and-swap, delayed children during and after a manual merge, mixed
-safe/default push URLs, and branch-specific/global/tracking remote selection,
-alongside the original non-force rejection and detached-push behavior.
+The focused executable harness covers each follow-up, including clean and
+amended squash, cherry-pick, and revert paths, an interleaved ordinary/squash
+post-hook race, concurrent expired-rate compare-and-swap, delayed children during
+and after a manual merge, mixed safe/default push URLs, and branch-specific/global/
+tracking remote selection, alongside the original non-force rejection and
+detached-push behavior.

@@ -1,4 +1,5 @@
-$ shellcheck -s sh .githooks/post-commit scripts/tests/post-commit-autopush.sh
+$ git diff --check
+$ shellcheck -s sh .githooks/pm-autopush-operation-state .githooks/prepare-commit-msg .githooks/post-commit scripts/tests/post-commit-autopush.sh
 $ sh scripts/tests/post-commit-autopush.sh
 Rebasing (1/2)
 Rebasing (2/2)

@@ -10,10 +10,10 @@
 - Kept status state below the shared common Git directory and recorded the rate
   timestamp behind a per-branch Git ref, so `git update-ref` makes linked
   worktree rate decisions atomic without a stale lease.
-- Added a worktree-local `prepare-commit-msg` companion that records a
-  commit-scoped Git-resolved operation marker before cleanup, using a shared
-  operation helper so `post-commit` also refuses amended squash and clean
-  no-commit completions.
+- Added a worktree-local `prepare-commit-msg` companion that records each
+  Git-resolved operation's pre-transition OID and parent list before cleanup.
+  The shared helper matches that durable record to normal and amended candidates,
+  so concurrent post hooks cannot erase another operation's refusal record.
 - Detached the push from the commit terminal, recorded failed/rejected pushes as
   one local line, supplied no force or force-with-lease path, and bound each
   detached child to the HEAD that scheduled it after it rechecks Git operation
@@ -32,6 +32,6 @@
 The harness covers live, stale, and pushurl-specific remote defaults, detached
 HEAD, opt-out, rate window and catch-up, concurrent linked-worktree rate-ref
 compare-and-swap, a receive-delayed asynchronous push, delayed children during
-and after a manual merge, a real two-commit rebase, manual, clean, and amended
-squash/cherry-pick/revert completion, configured push-target precedence, and a
+and after a manual merge, a real two-commit rebase, manual, clean, amended, and
+interleaved ordinary/squash completion, configured push-target precedence, and a
 real non-fast-forward rejected push.

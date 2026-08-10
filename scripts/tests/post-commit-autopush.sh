@@ -59,8 +59,21 @@ install_hook() {
     'if [ -n "${PM_TEST_HOOK_LOG:-}" ]; then' \
     '  printf "%s\n" post-commit >> "$PM_TEST_HOOK_LOG"' \
     'fi' \
-    'if [ -n "${PM_TEST_OPERATION_LOG:-}" ] && [ -f "$(git rev-parse --path-format=absolute --git-dir)/pm-autopush-operation" ]; then' \
-    '  printf "%s\n" operation-snapshot >> "$PM_TEST_OPERATION_LOG"' \
+    'if [ -n "${PM_TEST_OPERATION_LOG:-}" ]; then' \
+    '  operation_marker_dir="$(git rev-parse --path-format=absolute --git-dir)/pm-autopush-operations"' \
+    '  for operation_marker in "$operation_marker_dir"/*; do' \
+    '    [ -f "$operation_marker" ] || continue' \
+    '    printf "%s\n" operation-snapshot >> "$PM_TEST_OPERATION_LOG"' \
+    '    break' \
+    '  done' \
+    'fi' \
+    'if [ -n "${PM_TEST_POST_COMMIT_READY:-}" ] && [ -n "${PM_TEST_POST_COMMIT_RELEASE:-}" ]; then' \
+    '  : > "$PM_TEST_POST_COMMIT_READY"' \
+    '  post_commit_wait=0' \
+    '  while [ ! -f "$PM_TEST_POST_COMMIT_RELEASE" ] && [ "$post_commit_wait" -lt 10 ]; do' \
+    '    sleep 1' \
+    '    post_commit_wait=$((post_commit_wait + 1))' \
+    '  done' \
     'fi' \
     'exec "$PM_TEST_HOOK_SOURCE"' > "$hook_dir/post-commit"
   printf '%s\n' \
@@ -119,8 +132,21 @@ git_path() {
   git -C "$1" rev-parse --path-format=absolute --git-path "$2"
 }
 
-operation_file() {
-  git_path "$1" pm-autopush-operation
+operation_marker_dir() {
+  git_path "$1" pm-autopush-operations
+}
+
+operation_marks_commit() {
+  marker_repo=$1
+  marker_commit=$2
+  marker_dir="$(operation_marker_dir "$marker_repo")"
+
+  (
+    cd "$marker_repo" || exit 1
+    # shellcheck disable=SC1090
+    . "$OPERATION_HELPER" || exit 1
+    pm_autopush_operation_commit_is_marked "$marker_dir" "$marker_commit"
+  )
 }
 
 install_receive_delay() {
@@ -223,12 +249,12 @@ assert_manual_operation_refusal() {
   operation_remote=$2
   operation_branch=$3
   operation_rate_ref="$(rate_ref "$operation_branch")"
-  operation_snapshot="$(operation_file "$operation_repo")"
+  operation_commit="$(git -C "$operation_repo" rev-parse HEAD)"
 
   if git -C "$operation_repo" rev-parse --verify -q "$operation_rate_ref" >/dev/null; then
     fail "manual operation recorded an auto-push attempt"
   fi
-  [ ! -f "$operation_snapshot" ] || fail "manual operation snapshot was not consumed"
+  operation_marks_commit "$operation_repo" "$operation_commit" || fail "manual operation transition was not retained"
   if git --git-dir="$operation_remote" rev-parse --verify -q "refs/heads/$operation_branch" >/dev/null; then
     fail "manual operation reached the remote"
   fi
@@ -830,6 +856,61 @@ test_amended_revert_no_commit_refusal() {
   assert_manual_operation_refusal "$TEST_REPO" "$TEST_REMOTE" feature
 }
 
+test_concurrent_operation_transition_refusal() {
+  case_dir="$TMP_DIR/concurrent-operation-transition"
+  ready_file="$case_dir/post-commit-ready"
+  release_file="$case_dir/post-commit-release"
+  mkdir -p "$case_dir"
+  new_repo "$case_dir"
+  git -C "$TEST_REPO" checkout -qb feature
+  git -C "$TEST_REPO" checkout -qb squash-source
+  printf 'concurrent squash source\n' > "$TEST_REPO/squash-source"
+  git -C "$TEST_REPO" add squash-source
+  git -C "$TEST_REPO" commit -qm "test: concurrent squash source"
+  git -C "$TEST_REPO" checkout -q feature
+  install_hook "$TEST_REPO"
+  CURRENT_HOOK_LOG="$case_dir/hook.log"
+  CURRENT_OPERATION_LOG="$case_dir/operation.log"
+  : > "$CURRENT_HOOK_LOG"
+  : > "$CURRENT_OPERATION_LOG"
+
+  record_change "$TEST_REPO" concurrent-normal
+  PM_TEST_HOOK_LOG="$CURRENT_HOOK_LOG" \
+    PM_TEST_OPERATION_LOG="$CURRENT_OPERATION_LOG" \
+    PM_TEST_POST_COMMIT_READY="$ready_file" \
+    PM_TEST_POST_COMMIT_RELEASE="$release_file" \
+    git -C "$TEST_REPO" commit -qm "test: concurrent normal" &
+  normal_commit_pid=$!
+  wait_for_file "$ready_file"
+
+  if ! run_hooked git -C "$TEST_REPO" merge --squash squash-source; then
+    fail "concurrent squash merge setup should succeed"
+  fi
+  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: concurrent squash completion"; then
+    fail "concurrent squash completion should succeed"
+  fi
+  operation_tip="$(git -C "$TEST_REPO" rev-parse HEAD)"
+  operation_marks_commit "$TEST_REPO" "$operation_tip" || fail "concurrent squash did not retain a matching transition"
+  if git -C "$TEST_REPO" rev-parse --verify -q "$(rate_ref feature)" >/dev/null; then
+    fail "concurrent operation recorded an auto-push attempt"
+  fi
+
+  : > "$release_file"
+  if ! wait "$normal_commit_pid"; then
+    fail "blocked normal commit should succeed"
+  fi
+  sleep 1
+  if git --git-dir="$TEST_REMOTE" rev-parse --verify -q refs/heads/feature >/dev/null; then
+    fail "concurrent operation transition reached the remote"
+  fi
+
+  record_change "$TEST_REPO" concurrent-catch-up
+  if ! run_hooked git -C "$TEST_REPO" commit -qm "test: concurrent operation catch-up"; then
+    fail "post-operation ordinary commit should succeed"
+  fi
+  wait_for_ref "$TEST_REMOTE" refs/heads/feature "$(git -C "$TEST_REPO" rev-parse HEAD)"
+}
+
 test_delayed_child_refuses_operation_tip() {
   case_dir="$TMP_DIR/delayed-child"
   wrapper_dir="$case_dir/wrappers"
@@ -970,6 +1051,7 @@ test_clean_cherry_pick_no_commit_refusal
 test_amended_cherry_pick_no_commit_refusal
 test_clean_revert_no_edit_refusal
 test_amended_revert_no_commit_refusal
+test_concurrent_operation_transition_refusal
 test_delayed_child_refuses_operation_tip
 test_delayed_child_refuses_active_operation
 test_rejected_push_is_swallowed_without_force
