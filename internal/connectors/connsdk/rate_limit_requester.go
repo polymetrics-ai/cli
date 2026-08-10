@@ -30,6 +30,16 @@ type RateLimitAdmission interface {
 	Admit(ctx context.Context, request RateLimitRequest) error
 }
 
+// RateLimitLeaseAdmission is the batch-aware counterpart of RateLimitAdmission.
+// A successful Admit returns one opaque lease for the whole selected policy
+// batch; Requester finishes that lease after the logical send has either
+// received a response or failed in transport. Implementations must be safe
+// when Finish is repeated after redirect or transport-error cleanup.
+type RateLimitLeaseAdmission interface {
+	Admit(ctx context.Context, request RateLimitRequest) (RateBudgetLease, error)
+	Finish(ctx context.Context, lease RateBudgetLease, observation CompletionObservation) error
+}
+
 // RateLimitObserver receives parsed, secret-free rate-limit facts from a
 // provider response. It is called synchronously before a retry is scheduled
 // so attached policies can tighten their next admissions. It is not an operator

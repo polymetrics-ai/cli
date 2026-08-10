@@ -19,6 +19,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"polymetrics.ai/internal/connectors/transportpolicy"
@@ -177,6 +178,10 @@ type Requester struct {
 	// inside net/http without another admission. The engine attaches a
 	// declaration-aware implementation where a policy matches.
 	Admission RateLimitAdmission
+	// LeaseAdmission atomically reserves every matching policy through a
+	// BudgetCoordinator. When present, it supersedes Admission for sends while
+	// keeping the legacy seam available to existing dependency-free callers.
+	LeaseAdmission RateLimitLeaseAdmission
 	// Observer receives parsed response rate-limit facts synchronously. It is
 	// deliberately not an output hook; #3755 owns operator-visible events.
 	Observer RateLimitObserver
@@ -298,7 +303,7 @@ func (r *Requester) admit(ctx context.Context, method string, attempt int) error
 
 func (r *Requester) observeRateLimit(ctx context.Context, status int, header http.Header, attempt int) RateLimitObservation {
 	observation, ok := rateLimitObservation(status, header, attempt, r.now(), r.RateLimitCostHeader)
-	if ok && r.Observer != nil {
+	if ok && r.Observer != nil && r.LeaseAdmission == nil {
 		r.Observer.Observe(ctx, observation)
 	}
 	return observation
@@ -316,17 +321,24 @@ func (e *rateLimitAdmissionError) Unwrap() error {
 	return e.err
 }
 
-func (r *Requester) admitRequesterSend(ctx context.Context, method string, requesterAttempt *int) error {
+func (r *Requester) admitRequesterSend(ctx context.Context, method string, requesterAttempt *int, leases *rateLimitLeaseTracker) error {
 	nextAttempt := *requesterAttempt + 1
-	if err := r.admit(ctx, method, nextAttempt); err != nil {
+	request := RateLimitRequest{Method: method, Attempt: nextAttempt}
+	if r.LeaseAdmission != nil {
+		lease, err := r.LeaseAdmission.Admit(ctx, request)
+		if err != nil {
+			return &rateLimitAdmissionError{err: err}
+		}
+		leases.add(lease)
+	} else if err := r.admit(ctx, method, nextAttempt); err != nil {
 		return &rateLimitAdmissionError{err: err}
 	}
 	*requesterAttempt = nextAttempt
 	return nil
 }
 
-func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int) *http.Client {
-	if r.Admission == nil && r.Observer == nil {
+func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterAttempt *int, leases *rateLimitLeaseTracker) *http.Client {
+	if r.Admission == nil && r.LeaseAdmission == nil && r.Observer == nil {
 		return client
 	}
 	clone := *client
@@ -339,9 +351,60 @@ func (r *Requester) clientWithRateLimitAdmission(client *http.Client, requesterA
 		} else if len(via) >= maxRedirects {
 			return fmt.Errorf("stopped after %d redirects", maxRedirects)
 		}
-		return r.admitRequesterSend(req.Context(), req.Method, requesterAttempt)
+		return r.admitRequesterSend(req.Context(), req.Method, requesterAttempt, leases)
 	}
 	return &clone
+}
+
+// rateLimitLeaseTracker owns the leases admitted during one http.Client.Do
+// call, including permitted redirect hops. It finishes every lease exactly
+// once after that logical call completes; using the final safe observation for
+// redirect hops can only tighten their shared policies and avoids retaining a
+// response body or headers.
+type rateLimitLeaseTracker struct {
+	admission RateLimitLeaseAdmission
+	mu        sync.Mutex
+	leases    []RateBudgetLease
+}
+
+func newRateLimitLeaseTracker(admission RateLimitLeaseAdmission) *rateLimitLeaseTracker {
+	if admission == nil {
+		return nil
+	}
+	return &rateLimitLeaseTracker{admission: admission}
+}
+
+func (t *rateLimitLeaseTracker) add(lease RateBudgetLease) {
+	if t == nil || lease == "" {
+		return
+	}
+	t.mu.Lock()
+	t.leases = append(t.leases, lease)
+	t.mu.Unlock()
+}
+
+func (t *rateLimitLeaseTracker) finish(observation CompletionObservation) {
+	if t == nil || t.admission == nil {
+		return
+	}
+	t.mu.Lock()
+	leases := t.leases
+	t.leases = nil
+	t.mu.Unlock()
+	if len(leases) == 0 {
+		return
+	}
+	if !observation.Attempted {
+		observation.Attempted = true
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	for _, lease := range leases {
+		// The request has already reached an indeterminate or completed state;
+		// an owner-loss error cannot justify treating its consumptive charge as
+		// unspent. Lease TTL supplies conservative concurrency recovery.
+		_ = t.admission.Finish(ctx, lease, observation)
+	}
 }
 
 func isRateLimitAdmissionError(err error) bool {
@@ -853,7 +916,6 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 	if strictWrite {
 		baseClient = noReplayClient(baseClient)
 	}
-	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt)
 	for attempt := 0; attempt < attempts; attempt++ {
 		if err := ctx.Err(); err != nil {
 			return nil, err
@@ -884,13 +946,16 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
-		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
+		leases := newRateLimitLeaseTracker(r.LeaseAdmission)
+		if err := r.admitRequesterSend(ctx, method, &requesterAttempt, leases); err != nil {
 			_ = cleanupRequestBody(body)
 			return nil, err
 		}
+		client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt, leases)
 
 		resp, err := client.Do(req)
 		if err != nil {
+			leases.finish(CompletionObservation{Attempted: true})
 			bodyErr := cleanupRequestBody(body)
 			lastErr = fmt.Errorf("send request: %w", err)
 			if bodyErr != nil {
@@ -911,6 +976,7 @@ func (r *Requester) doWithBody(ctx context.Context, method, path string, query u
 			return nil, lastErr
 		}
 		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, requesterAttempt)
+		leases.finish(observation)
 		bodyErr := cleanupRequestBody(body)
 		if bodyErr != nil {
 			resp.Body.Close()

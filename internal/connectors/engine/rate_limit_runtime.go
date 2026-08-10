@@ -2,9 +2,11 @@ package engine
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"sync"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -48,19 +50,41 @@ type rateLimitResolver struct {
 	coordinationIdentity connectors.CoordinationIdentity
 	policies             []connsdk.RateLimitPolicy
 	registry             *coordination.RateLimitRegistry
+	coordinator          connsdk.BudgetCoordinator
+	sleep                func(context.Context, time.Duration) error
 }
 
 func newRateLimitResolver(b Bundle, cfg connectors.RuntimeConfig) *rateLimitResolver {
 	if b.RateLimits == nil || b.RateLimits.State != connsdk.RateLimitStateDeclared || len(b.RateLimits.Policies) == 0 {
 		return nil
 	}
-	return &rateLimitResolver{
+	resolver := &rateLimitResolver{
 		connector:            b.Name,
 		config:               cfg.Config,
 		coordinationIdentity: cfg.CoordinationIdentity,
 		policies:             b.RateLimits.Policies,
-		registry:             currentRateLimitRegistry(),
 	}
+	switch cfg.RateBudgetBackend {
+	case "", connsdk.RateBudgetBackendProcessLocal:
+		resolver.registry = currentRateLimitRegistry()
+		if resolver.registry == nil {
+			resolver.coordinator = unavailableRateBudgetCoordinator{}
+			return resolver
+		}
+		resolver.coordinator = resolver.registry
+		resolver.sleep = resolver.registry.Sleep
+	case connsdk.RateBudgetBackendRequireShared:
+		if cfg.BudgetCoordinator == nil {
+			resolver.coordinator = unavailableRateBudgetCoordinator{}
+		} else {
+			resolver.coordinator = cfg.BudgetCoordinator
+		}
+		resolver.sleep = sleepRateBudget
+	default:
+		// An unknown mode is not an invitation to silently choose local state.
+		resolver.coordinator = unavailableRateBudgetCoordinator{}
+	}
+	return resolver
 }
 
 func (r *rateLimitResolver) requesterFor(base *connsdk.Requester, method, path string) (*connsdk.Requester, error) {
@@ -93,11 +117,7 @@ func (r *rateLimitResolver) requesterFor(base *connsdk.Requester, method, path s
 		costHeader = match.costHeader
 	}
 
-	clone := *base
-	clone.Admission = resolvedRateLimitAdmission(matched)
-	clone.Observer = resolvedRateLimitObserver(matched)
-	clone.RateLimitCostHeader = costHeader
-	return &clone, nil
+	return r.withResolvedPolicies(base, matched, costHeader), nil
 }
 
 // defaultRequester attaches policies that do not need endpoint matching. Hooks
@@ -131,16 +151,33 @@ func (r *rateLimitResolver) defaultRequester(base *connsdk.Requester) (*connsdk.
 		}
 		costHeader = match.costHeader
 	}
+	return r.withResolvedPolicies(base, matched, costHeader), nil
+}
+
+func (r *rateLimitResolver) withResolvedPolicies(base *connsdk.Requester, matched []resolvedRateLimitPolicy, costHeader string) *connsdk.Requester {
 	clone := *base
-	clone.Admission = resolvedRateLimitAdmission(matched)
-	clone.Observer = resolvedRateLimitObserver(matched)
+	clone.LeaseAdmission = resolvedRateBudgetAdmission{
+		coordinator: r.coordinator,
+		batch: connsdk.ReservationBatch{
+			Policies: resolvedReservationPolicies(matched),
+		},
+		sleep: r.sleep,
+	}
+	// Preserve the existing local seam for callers and tests that inspect it.
+	// Requester gives LeaseAdmission precedence, so these compatibility hooks do
+	// not double-charge a batch or apply observations twice.
+	if r.registry != nil {
+		clone.Admission = resolvedRateLimitAdmission(matched)
+		clone.Observer = resolvedRateLimitObserver(matched)
+	}
 	clone.RateLimitCostHeader = costHeader
-	return &clone, nil
+	return &clone
 }
 
 type resolvedRateLimitPolicy struct {
-	limiter    *coordination.RateLimiter
-	costHeader string
+	limiter     *coordination.RateLimiter
+	reservation connsdk.ReservationPolicy
+	costHeader  string
 }
 
 func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRateLimitPolicy, error) {
@@ -160,17 +197,28 @@ func (r *rateLimitResolver) resolve(policy connsdk.RateLimitPolicy) (resolvedRat
 	if err != nil {
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q scope identity: %w", policy.ID, err)
 	}
-	if r.registry == nil {
-		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q local registry is unavailable", policy.ID)
-	}
 	costHeader, err := rateLimitCostHeader(policy)
 	if err != nil {
 		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q: %w", policy.ID, err)
 	}
-	return resolvedRateLimitPolicy{
-		limiter:    r.registry.Limiter(coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}, policy.Budgets),
+	fingerprint, err := coordination.RateBudgetPolicyFingerprint(r.connector, policy.ID, policy.Budgets)
+	if err != nil {
+		return resolvedRateLimitPolicy{}, fmt.Errorf("rate-limit policy %q fingerprint: %w", policy.ID, err)
+	}
+	resolved := resolvedRateLimitPolicy{
+		reservation: connsdk.ReservationPolicy{
+			Key: connsdk.ReservationKey{
+				PolicyFingerprint: fingerprint,
+				Scope:             string(scope),
+			},
+			Budgets: policy.Budgets,
+		},
 		costHeader: costHeader,
-	}, nil
+	}
+	if r.registry != nil {
+		resolved.limiter = r.registry.Limiter(coordination.RateLimitKey{Connector: r.connector, PolicyID: policy.ID, Scope: scope}, policy.Budgets)
+	}
+	return resolved, nil
 }
 
 func coordinationRateScopeKind(subject connsdk.RateLimitScopeSubjectKind) (connectors.RateScopeKind, error) {
@@ -242,6 +290,118 @@ type resolvedRateLimitObserver []resolvedRateLimitPolicy
 func (o resolvedRateLimitObserver) Observe(ctx context.Context, observation connsdk.RateLimitObservation) {
 	for _, policy := range o {
 		policy.limiter.Observe(ctx, observation)
+	}
+}
+
+func resolvedReservationPolicies(policies []resolvedRateLimitPolicy) []connsdk.ReservationPolicy {
+	reservations := make([]connsdk.ReservationPolicy, 0, len(policies))
+	for _, policy := range policies {
+		reservations = append(reservations, policy.reservation)
+	}
+	return reservations
+}
+
+// resolvedRateBudgetAdmission turns one declaration-level policy match into a
+// complete atomic coordinator batch. It is intentionally the only requester
+// route that calls Decide, so a matching policy can never be charged ahead of
+// another policy in the same logical send.
+type resolvedRateBudgetAdmission struct {
+	coordinator connsdk.BudgetCoordinator
+	batch       connsdk.ReservationBatch
+	sleep       func(context.Context, time.Duration) error
+}
+
+var _ connsdk.RateLimitLeaseAdmission = resolvedRateBudgetAdmission{}
+
+func (a resolvedRateBudgetAdmission) Admit(ctx context.Context, _ connsdk.RateLimitRequest) (connsdk.RateBudgetLease, error) {
+	if a.coordinator == nil {
+		return "", &connsdk.RateBudgetRefusalError{Reason: connsdk.RateBudgetRefusalSharedCoordinatorUnavailable}
+	}
+	for {
+		decision, err := a.coordinator.Decide(ctx, a.batch)
+		if err != nil {
+			return "", normalizeRateBudgetCoordinatorError(err)
+		}
+		if decision.Granted {
+			if decision.Lease == "" {
+				return "", &connsdk.RateBudgetRefusalError{Reason: connsdk.RateBudgetRefusalSharedCoordinatorUnavailable}
+			}
+			return decision.Lease, nil
+		}
+		wait := decision.Wait
+		if wait <= 0 && !decision.NotBefore.IsZero() {
+			wait = time.Until(decision.NotBefore)
+		}
+		if wait <= 0 {
+			return "", &connsdk.RateBudgetRefusalError{
+				Reason:    connsdk.RateBudgetRefusalNotBefore,
+				NotBefore: decision.NotBefore,
+			}
+		}
+		if deadline, ok := ctx.Deadline(); ok && !deadline.After(time.Now().Add(wait)) {
+			return "", &connsdk.RateBudgetRefusalError{
+				Reason:    connsdk.RateBudgetRefusalDeadlineTooShort,
+				NotBefore: decision.NotBefore,
+			}
+		}
+		sleep := a.sleep
+		if sleep == nil {
+			sleep = sleepRateBudget
+		}
+		if err := sleep(ctx, wait); err != nil {
+			if errors.Is(err, context.DeadlineExceeded) || errors.Is(ctx.Err(), context.DeadlineExceeded) {
+				return "", &connsdk.RateBudgetRefusalError{
+					Reason:    connsdk.RateBudgetRefusalDeadlineTooShort,
+					NotBefore: decision.NotBefore,
+				}
+			}
+			return "", err
+		}
+	}
+}
+
+func (a resolvedRateBudgetAdmission) Finish(ctx context.Context, lease connsdk.RateBudgetLease, observation connsdk.CompletionObservation) error {
+	if a.coordinator == nil {
+		return &connsdk.RateBudgetRefusalError{Reason: connsdk.RateBudgetRefusalSharedCoordinatorUnavailable}
+	}
+	return normalizeRateBudgetCoordinatorError(a.coordinator.Finish(ctx, lease, observation))
+}
+
+type unavailableRateBudgetCoordinator struct{}
+
+func (unavailableRateBudgetCoordinator) Decide(context.Context, connsdk.ReservationBatch) (connsdk.AdmissionDecision, error) {
+	return connsdk.AdmissionDecision{}, &connsdk.RateBudgetRefusalError{Reason: connsdk.RateBudgetRefusalSharedCoordinatorUnavailable}
+}
+
+func (unavailableRateBudgetCoordinator) Finish(context.Context, connsdk.RateBudgetLease, connsdk.CompletionObservation) error {
+	return &connsdk.RateBudgetRefusalError{Reason: connsdk.RateBudgetRefusalSharedCoordinatorUnavailable}
+}
+
+func normalizeRateBudgetCoordinatorError(err error) error {
+	if err == nil {
+		return nil
+	}
+	var refusal *connsdk.RateBudgetRefusalError
+	if errors.As(err, &refusal) {
+		return err
+	}
+	if coordination.IsSharedCoordinatorUnavailable(err) || coordination.IsSharedCoordinatorEpochMismatch(err) {
+		return &connsdk.RateBudgetRefusalError{Reason: connsdk.RateBudgetRefusalSharedCoordinatorUnavailable}
+	}
+	return err
+}
+
+func sleepRateBudget(ctx context.Context, wait time.Duration) error {
+	if wait <= 0 {
+		return ctx.Err()
+	}
+	timer := time.NewTimer(wait)
+	defer timer.Stop()
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-timer.C:
+		return nil
 	}
 }
 

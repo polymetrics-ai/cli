@@ -14,12 +14,12 @@ Loaded before planning: `golang-how-to`, `golang-design-patterns`,
 
 | Contract | RED command / expected missing behavior | GREEN command / proof | Status |
 | --- | --- | --- | --- |
-| `TestRateBudgetReserveBatchAllOrNothing` | Focused coordination test fails because no atomic `BudgetCoordinator.Decide` batch exists. | Same test proves a blocked later policy consumes neither an earlier policy nor its shared lease. | Red — missing API |
-| `TestUnixRateBudgetCoordinatorMultiProcessTinyBudget` | Focused coordination test fails because there is no UDS owner/client/helper protocol. | Eight real barrier-released helpers produce exactly 3 grants and 5 typed blocks; process-local control produces 8 grants. | Red — missing API |
-| `TestRequireSharedRefusesWithoutCoordinatorBeforeSend` | Focused engine test fails because backend selection is implicit local-only. | Missing `require_shared` coordinator unwraps a typed refusal and the test transport records 0 hits. | Red — missing API |
-| `TestSharedRateBudgetScopesRemainIndependent` | Focused coordination test fails because no shared scope owner exists. | Same opaque scope shares a budget across clients while a distinct opaque scope grants independently. | Red — missing API |
-| `TestSharedRateBudgetDeadlineTooShortDoesNotSend` | Focused engine test fails because no owner decision/deadline refusal exists. | A known wait beyond caller deadline unwraps typed deadline refusal with 0 transport hits. | Red — missing API |
-| `TestSharedRateBudgetOwnerCrashFailsClosed` | Focused coordination test fails because no run epoch/owner lifecycle exists. | Owner loss returns a typed closed failure; an old epoch is refused by a fresh owner. | Red — missing API |
+| `TestRateBudgetReserveBatchAllOrNothing` | Focused coordination test fails because no atomic `BudgetCoordinator.Decide` batch exists. | Same test proves a blocked later policy consumes neither an earlier policy nor its shared lease. | Green |
+| `TestUnixRateBudgetCoordinatorMultiProcessTinyBudget` | Focused coordination test fails because there is no UDS owner/client/helper protocol. | Eight real barrier-released helpers produce exactly 3 grants and 5 typed blocks; process-local control produces 8 grants. | Green |
+| `TestRequireSharedRefusesWithoutCoordinatorBeforeSend` | Focused engine test fails because backend selection is implicit local-only. | Missing `require_shared` coordinator unwraps a typed refusal and the test transport records 0 hits. | Green |
+| `TestSharedRateBudgetScopesRemainIndependent` | Focused coordination test fails because no shared scope owner exists. | Same opaque scope shares a budget across clients while a distinct opaque scope grants independently. | Green |
+| `TestSharedRateBudgetDeadlineTooShortDoesNotSend` | Focused engine test fails because no owner decision/deadline refusal exists. | A known wait beyond caller deadline unwraps typed deadline refusal with 0 transport hits. | Green |
+| `TestSharedRateBudgetOwnerCrashFailsClosed` | Focused coordination test fails because no run epoch/owner lifecycle exists. | Owner loss returns a typed closed failure; an old epoch is refused by a fresh owner. | Green |
 
 ## Initial RED command
 
@@ -41,6 +41,26 @@ reported the missing explicit backend/configuration and UDS contract:
 `coordination.UnixRateBudgetCoordinatorOptions` were undefined. No test ran
 because both packages stopped at the intended missing-production-API compile
 boundary.
+
+**GREEN result (2026-08-11):** the same focused command exited 0 after the
+batch coordinator, UDS owner/client, and leased requester seam landed. The
+coordination package executed the actual eight-helper local-process proof;
+the engine package executed both zero-transport-hit refusal contracts. Follow
+up coverage also passed:
+
+```text
+go test -count=1 -timeout 20m ./internal/coordination
+go test -count=1 -timeout 20m ./internal/connectors/connsdk
+go test -count=1 -timeout 20m ./internal/connectors/engine
+go test -race -count=1 -timeout 20m ./internal/coordination
+go vet ./internal/coordination ./internal/connectors/connsdk ./internal/connectors/engine ./internal/connectors
+go build ./cmd/pm
+```
+
+The coordinator tests additionally prove directory `0700` and socket `0600`
+permissions, normal-close absence of both paths, idempotent Finish,
+concurrency TTL release without a budget refund, late stricter observation
+application, and mismatch rejection for a registered policy fingerprint.
 
 ## Green and refactor commands
 

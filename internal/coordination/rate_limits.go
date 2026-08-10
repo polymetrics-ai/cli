@@ -4,9 +4,15 @@ package coordination
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"math"
 	"net/http"
+	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -45,22 +51,106 @@ type RateLimitKey struct {
 	Scope     connectors.RateLimitScopeKey
 }
 
+const maxRateBudgetReservationPolicies = 64
+
 // RateLimitRegistry coordinates process-local policy budgets. It is
 // intentionally ephemeral: cross-process coordination remains a separate
 // capability and no local state claims account-wide protection.
 type RateLimitRegistry struct {
-	clock RateLimitClock
-	mu    sync.Mutex
-	sets  map[RateLimitKey]*rateLimitSet
+	clock       RateLimitClock
+	mu          sync.Mutex
+	sets        map[RateLimitKey]*rateLimitSet
+	budgetSets  map[rateBudgetKey]rateBudgetSet
+	leases      map[connsdk.RateBudgetLease]rateBudgetLease
+	maxInFlight int
+	leaseTTL    time.Duration
 }
+
+// rateBudgetKey is private owner state for the batch seam. It contains only a
+// policy fingerprint and the opaque #3863 scope key, never connector/policy
+// names or any raw credential/account material.
+type rateBudgetKey struct {
+	policyFingerprint string
+	scope             string
+}
+
+type rateBudgetSet struct {
+	contractFingerprint string
+	set                 *rateLimitSet
+}
+
+type rateBudgetLease struct {
+	expiresAt   time.Time
+	retainUntil time.Time
+	active      bool
+	sets        []*rateLimitSet
+}
+
+// RateBudgetCoordinatorOptions bounds only the optional batch-decision seam.
+// A non-positive MaxInFlight leaves the process-local registry's historic
+// unlimited-concurrency behavior intact. LeaseTTL is deliberately short: a
+// crashed or disconnected caller remains conservatively charged, but cannot
+// hold the in-flight lease forever.
+type RateBudgetCoordinatorOptions struct {
+	MaxInFlight int
+	LeaseTTL    time.Duration
+}
+
+// RateBudgetCoordinator is the injectable decision/finish seam used by the
+// Unix owner and focused tests. The ordinary local registry remains usable via
+// Limiter without any socket or external dependency.
+type RateBudgetCoordinator struct {
+	registry *RateLimitRegistry
+}
+
+var _ connsdk.BudgetCoordinator = (*RateLimitRegistry)(nil)
+var _ connsdk.BudgetCoordinator = (*RateBudgetCoordinator)(nil)
 
 // NewRateLimitRegistry creates a local registry. A nil clock uses a
 // context-aware wall clock; tests should inject a deterministic clock.
 func NewRateLimitRegistry(clock RateLimitClock) *RateLimitRegistry {
+	return newRateLimitRegistry(clock, RateBudgetCoordinatorOptions{})
+}
+
+func newRateLimitRegistry(clock RateLimitClock, options RateBudgetCoordinatorOptions) *RateLimitRegistry {
 	if clock == nil {
 		clock = wallRateLimitClock{}
 	}
-	return &RateLimitRegistry{clock: clock, sets: make(map[RateLimitKey]*rateLimitSet)}
+	if options.LeaseTTL <= 0 {
+		options.LeaseTTL = 30 * time.Second
+	}
+	if options.MaxInFlight < 0 {
+		options.MaxInFlight = 0
+	}
+	return &RateLimitRegistry{
+		clock:       clock,
+		sets:        make(map[RateLimitKey]*rateLimitSet),
+		budgetSets:  make(map[rateBudgetKey]rateBudgetSet),
+		leases:      make(map[connsdk.RateBudgetLease]rateBudgetLease),
+		maxInFlight: options.MaxInFlight,
+		leaseTTL:    options.LeaseTTL,
+	}
+}
+
+// NewRateBudgetCoordinator creates a local decision/finish coordinator. It
+// is useful for tests and for an injected same-host owner; callers selecting
+// the ordinary CLI backend continue to use NewRateLimitRegistry.
+func NewRateBudgetCoordinator(clock RateLimitClock, options RateBudgetCoordinatorOptions) *RateBudgetCoordinator {
+	return &RateBudgetCoordinator{registry: newRateLimitRegistry(clock, options)}
+}
+
+func (c *RateBudgetCoordinator) Decide(ctx context.Context, batch connsdk.ReservationBatch) (connsdk.AdmissionDecision, error) {
+	if c == nil || c.registry == nil {
+		return connsdk.AdmissionDecision{}, errors.New("rate-budget coordinator is unavailable")
+	}
+	return c.registry.Decide(ctx, batch)
+}
+
+func (c *RateBudgetCoordinator) Finish(ctx context.Context, lease connsdk.RateBudgetLease, observation connsdk.CompletionObservation) error {
+	if c == nil || c.registry == nil {
+		return errors.New("rate-budget coordinator is unavailable")
+	}
+	return c.registry.Finish(ctx, lease, observation)
 }
 
 // Limiter returns the stable local limiter for key. Declaration validation
@@ -78,6 +168,257 @@ func (r *RateLimitRegistry) Limiter(key RateLimitKey, budgets []connsdk.RateLimi
 		r.sets[key] = set
 	}
 	return &RateLimiter{clock: r.clock, set: set}
+}
+
+// RateBudgetPolicyFingerprint is a stable, secret-free commitment to one
+// declared policy's consumptive shape. It deliberately excludes policy source,
+// selector, scope preimages, credentials, URLs, headers, and request data.
+func RateBudgetPolicyFingerprint(connector, policyID string, budgets []connsdk.RateLimitBudget) (string, error) {
+	if strings.TrimSpace(connector) == "" || strings.TrimSpace(policyID) == "" || len(budgets) == 0 {
+		return "", errors.New("rate-budget policy fingerprint requires a declared policy")
+	}
+	payload, err := json.Marshal(struct {
+		Version   int                       `json:"version"`
+		Connector string                    `json:"connector"`
+		PolicyID  string                    `json:"policy_id"`
+		Budgets   []connsdk.RateLimitBudget `json:"budgets"`
+	}{
+		Version:   1,
+		Connector: connector,
+		PolicyID:  policyID,
+		Budgets:   budgets,
+	})
+	if err != nil {
+		return "", errors.New("rate-budget policy fingerprint could not be encoded")
+	}
+	sum := sha256.Sum256(payload)
+	return hex.EncodeToString(sum[:]), nil
+}
+
+func rateBudgetContractFingerprint(budgets []connsdk.RateLimitBudget) (string, error) {
+	if len(budgets) == 0 {
+		return "", errors.New("rate-budget contract fingerprint requires a budget")
+	}
+	payload, err := json.Marshal(struct {
+		Version int                       `json:"version"`
+		Budgets []connsdk.RateLimitBudget `json:"budgets"`
+	}{Version: 1, Budgets: budgets})
+	if err != nil {
+		return "", errors.New("rate-budget contract fingerprint could not be encoded")
+	}
+	sum := sha256.Sum256(payload)
+	return hex.EncodeToString(sum[:]), nil
+}
+
+// Decide atomically evaluates every selected consumptive policy and reserves
+// all of them plus one shared in-flight lease. A non-grant has no lease and
+// consumes nothing; callers decide whether their own deadline can safely wait
+// until NotBefore.
+func (r *RateLimitRegistry) Decide(ctx context.Context, batch connsdk.ReservationBatch) (connsdk.AdmissionDecision, error) {
+	if err := ctx.Err(); err != nil {
+		return connsdk.AdmissionDecision{}, err
+	}
+	if r == nil || r.clock == nil {
+		return connsdk.AdmissionDecision{}, errors.New("rate-budget coordinator is unavailable")
+	}
+	if len(batch.Policies) == 0 || len(batch.Policies) > maxRateBudgetReservationPolicies {
+		return connsdk.AdmissionDecision{}, errors.New("rate-budget reservation batch is invalid")
+	}
+
+	type entry struct {
+		key                 rateBudgetKey
+		contractFingerprint string
+		budgets             []connsdk.RateLimitBudget
+		set                 *rateLimitSet
+		new                 bool
+	}
+
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	now := r.clock.Now()
+	r.expireLeasesLocked(now)
+
+	entries := make([]entry, 0, len(batch.Policies))
+	seen := make(map[rateBudgetKey]struct{}, len(batch.Policies))
+	for _, policy := range batch.Policies {
+		if strings.TrimSpace(policy.Key.PolicyFingerprint) == "" || strings.TrimSpace(policy.Key.Scope) == "" || len(policy.Budgets) == 0 {
+			return connsdk.AdmissionDecision{}, errors.New("rate-budget reservation policy is invalid")
+		}
+		key := rateBudgetKey{
+			policyFingerprint: policy.Key.PolicyFingerprint,
+			scope:             policy.Key.Scope,
+		}
+		contractFingerprint, err := rateBudgetContractFingerprint(policy.Budgets)
+		if err != nil {
+			return connsdk.AdmissionDecision{}, err
+		}
+		if _, duplicate := seen[key]; duplicate {
+			return connsdk.AdmissionDecision{}, errors.New("rate-budget reservation batch repeats a policy")
+		}
+		seen[key] = struct{}{}
+		existing, exists := r.budgetSets[key]
+		if exists && existing.contractFingerprint != contractFingerprint {
+			return connsdk.AdmissionDecision{}, errors.New("rate-budget policy fingerprint does not match registered contract")
+		}
+		entries = append(entries, entry{
+			key:                 key,
+			contractFingerprint: contractFingerprint,
+			budgets:             policy.Budgets,
+			set:                 existing.set,
+			new:                 !exists,
+		})
+	}
+
+	sort.Slice(entries, func(i, j int) bool {
+		if entries[i].key.policyFingerprint != entries[j].key.policyFingerprint {
+			return entries[i].key.policyFingerprint < entries[j].key.policyFingerprint
+		}
+		return entries[i].key.scope < entries[j].key.scope
+	})
+	for i := range entries {
+		if entries[i].new {
+			entries[i].set = newRateLimitSet(entries[i].budgets)
+		}
+		entries[i].set.mu.Lock()
+	}
+
+	wait := r.inFlightWaitLocked(now)
+	var decisionErr error
+	for i := range entries {
+		candidate, err := entries[i].set.waitLocked(now)
+		if err != nil {
+			decisionErr = err
+			break
+		}
+		if candidate > wait {
+			wait = candidate
+		}
+	}
+	if decisionErr != nil || wait > 0 {
+		for i := len(entries) - 1; i >= 0; i-- {
+			entries[i].set.mu.Unlock()
+		}
+		if decisionErr != nil {
+			return connsdk.AdmissionDecision{}, decisionErr
+		}
+		return connsdk.AdmissionDecision{
+			NotBefore: now.Add(wait),
+			Wait:      wait,
+		}, nil
+	}
+
+	lease, err := newRateBudgetLease()
+	if err != nil {
+		for i := len(entries) - 1; i >= 0; i-- {
+			entries[i].set.mu.Unlock()
+		}
+		return connsdk.AdmissionDecision{}, err
+	}
+	sets := make([]*rateLimitSet, 0, len(entries))
+	for i := range entries {
+		if entries[i].new {
+			r.budgetSets[entries[i].key] = rateBudgetSet{
+				contractFingerprint: entries[i].contractFingerprint,
+				set:                 entries[i].set,
+			}
+		}
+		entries[i].set.consumeLocked(now)
+		sets = append(sets, entries[i].set)
+	}
+	for i := len(entries) - 1; i >= 0; i-- {
+		entries[i].set.mu.Unlock()
+	}
+	expiresAt := now.Add(r.leaseTTL)
+	r.leases[lease] = rateBudgetLease{
+		expiresAt:   expiresAt,
+		retainUntil: expiresAt.Add(r.leaseTTL),
+		active:      true,
+		sets:        sets,
+	}
+	return connsdk.AdmissionDecision{Granted: true, Lease: lease}, nil
+}
+
+// Finish releases the in-flight lease exactly once and applies only the
+// already-parsed stricter response facts. Expired leases remain briefly
+// finishable for a late response while no longer occupying concurrency; a
+// missing or fully retired lease is an idempotent no-op and its uncertain
+// consumptive reservation remains charged.
+func (r *RateLimitRegistry) Finish(_ context.Context, lease connsdk.RateBudgetLease, observation connsdk.CompletionObservation) error {
+	if r == nil || r.clock == nil {
+		return errors.New("rate-budget coordinator is unavailable")
+	}
+	if lease == "" {
+		return nil
+	}
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.expireLeasesLocked(r.clock.Now())
+	record, ok := r.leases[lease]
+	if !ok {
+		return nil
+	}
+	delete(r.leases, lease)
+	if !observation.Attempted {
+		return nil
+	}
+	for _, set := range record.sets {
+		set.observe(r.clock.Now(), observation)
+	}
+	return nil
+}
+
+// Sleep exposes the registry's context-aware clock to the process-local
+// adapter. Shared clients use their owner-provided wait with a wall-clock
+// timer, while deterministic local tests retain their injected clock.
+func (r *RateLimitRegistry) Sleep(ctx context.Context, wait time.Duration) error {
+	if r == nil || r.clock == nil {
+		return errors.New("rate-budget coordinator is unavailable")
+	}
+	return r.clock.Sleep(ctx, wait)
+}
+
+func (r *RateLimitRegistry) expireLeasesLocked(now time.Time) {
+	for lease, record := range r.leases {
+		if record.active && !record.expiresAt.After(now) {
+			record.active = false
+			r.leases[lease] = record
+		}
+		if !record.active && !record.retainUntil.After(now) {
+			delete(r.leases, lease)
+		}
+	}
+}
+
+func (r *RateLimitRegistry) inFlightWaitLocked(now time.Time) time.Duration {
+	if r.maxInFlight <= 0 {
+		return 0
+	}
+	active := 0
+	var earliest time.Time
+	for _, record := range r.leases {
+		if !record.active {
+			continue
+		}
+		active++
+		if earliest.IsZero() || record.expiresAt.Before(earliest) {
+			earliest = record.expiresAt
+		}
+	}
+	if active < r.maxInFlight {
+		return 0
+	}
+	if earliest.After(now) {
+		return earliest.Sub(now)
+	}
+	return 0
+}
+
+func newRateBudgetLease() (connsdk.RateBudgetLease, error) {
+	var bytes [24]byte
+	if _, err := rand.Read(bytes[:]); err != nil {
+		return "", errors.New("rate-budget lease could not be created")
+	}
+	return connsdk.RateBudgetLease(hex.EncodeToString(bytes[:])), nil
 }
 
 // RateLimiter implements connsdk's admission and observation seams for one
@@ -141,6 +482,15 @@ func newRateLimitSet(specs []connsdk.RateLimitBudget) *rateLimitSet {
 func (s *rateLimitSet) reserve(now time.Time) (time.Duration, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	wait, err := s.waitLocked(now)
+	if err != nil || wait > 0 {
+		return wait, err
+	}
+	s.consumeLocked(now)
+	return 0, nil
+}
+
+func (s *rateLimitSet) waitLocked(now time.Time) (time.Duration, error) {
 	var wait time.Duration
 	if s.blockedUntil.After(now) {
 		wait = s.blockedUntil.Sub(now)
@@ -157,10 +507,13 @@ func (s *rateLimitSet) reserve(now time.Time) (time.Duration, error) {
 	if wait > 0 {
 		return wait, nil
 	}
+	return 0, nil
+}
+
+func (s *rateLimitSet) consumeLocked(now time.Time) {
 	for _, budget := range s.budgets {
 		budget.consume(now, budget.defaultCost())
 	}
-	return 0, nil
 }
 
 func (s *rateLimitSet) observe(now time.Time, observation connsdk.RateLimitObservation) {

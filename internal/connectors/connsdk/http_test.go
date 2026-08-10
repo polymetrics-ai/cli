@@ -233,6 +233,83 @@ func (f rateLimitObserverFunc) Observe(ctx context.Context, observation RateLimi
 	f(ctx, observation)
 }
 
+type rateLimitLeaseAdmissionFunc struct {
+	admit  func(context.Context, RateLimitRequest) (RateBudgetLease, error)
+	finish func(context.Context, RateBudgetLease, CompletionObservation) error
+}
+
+func (f rateLimitLeaseAdmissionFunc) Admit(ctx context.Context, request RateLimitRequest) (RateBudgetLease, error) {
+	return f.admit(ctx, request)
+}
+
+func (f rateLimitLeaseAdmissionFunc) Finish(ctx context.Context, lease RateBudgetLease, observation CompletionObservation) error {
+	return f.finish(ctx, lease, observation)
+}
+
+func TestRequesterLeaseAdmissionFinishesCompletedSend(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("RateLimit-Remaining", "7")
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	var admissions []RateLimitRequest
+	var completions []CompletionObservation
+	r := &Requester{
+		BaseURL: srv.URL,
+		LeaseAdmission: rateLimitLeaseAdmissionFunc{
+			admit: func(_ context.Context, request RateLimitRequest) (RateBudgetLease, error) {
+				admissions = append(admissions, request)
+				return RateBudgetLease("opaque-test-lease"), nil
+			},
+			finish: func(_ context.Context, lease RateBudgetLease, observation CompletionObservation) error {
+				if lease != RateBudgetLease("opaque-test-lease") {
+					t.Fatalf("finish lease = %q", lease)
+				}
+				completions = append(completions, observation)
+				return nil
+			},
+		},
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/lease", nil, nil); err != nil {
+		t.Fatalf("Do: %v", err)
+	}
+	if got, want := admissions, []RateLimitRequest{{Method: http.MethodGet, Attempt: 1}}; !slices.Equal(got, want) {
+		t.Fatalf("admissions = %+v, want %+v", got, want)
+	}
+	if got := len(completions); got != 1 {
+		t.Fatalf("completion count = %d, want 1", got)
+	}
+	if completion := completions[0]; !completion.Attempted || completion.Status != http.StatusOK || !completion.HasRemaining || completion.Remaining != 7 {
+		t.Fatalf("completion = %+v, want typed response observation", completion)
+	}
+}
+
+func TestRequesterLeaseAdmissionFinishesIndeterminateTransportSend(t *testing.T) {
+	var completion CompletionObservation
+	r := &Requester{
+		BaseURL: "https://example.test",
+		Client: &http.Client{Transport: roundTripperFunc(func(*http.Request) (*http.Response, error) {
+			return nil, errors.New("injected transport failure")
+		})},
+		LeaseAdmission: rateLimitLeaseAdmissionFunc{
+			admit: func(context.Context, RateLimitRequest) (RateBudgetLease, error) {
+				return RateBudgetLease("opaque-test-lease"), nil
+			},
+			finish: func(_ context.Context, _ RateBudgetLease, observation CompletionObservation) error {
+				completion = observation
+				return nil
+			},
+		},
+	}
+	if _, err := r.Do(context.Background(), http.MethodGet, "/lease", nil, nil); err == nil {
+		t.Fatal("Do succeeded after an injected transport failure")
+	}
+	if !completion.Attempted {
+		t.Fatalf("transport completion = %+v, want attempted indeterminate finish", completion)
+	}
+}
+
 func TestRequesterFallbackRetryUsesBoundedFullJitter(t *testing.T) {
 	var calls int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

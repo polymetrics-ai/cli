@@ -28,8 +28,19 @@ func TestUnixRateBudgetCoordinatorMultiProcessTinyBudget(t *testing.T) {
 	if err != nil {
 		t.Fatalf("start shared coordinator: %v", err)
 	}
+	t.Cleanup(func() { _ = owner.Close() })
 	runDir := owner.runDir
 	socketPath := owner.socketPath
+	if info, err := os.Stat(runDir); err != nil {
+		t.Fatalf("stat shared coordinator run directory: %v", err)
+	} else if got := info.Mode().Perm(); got != 0o700 {
+		t.Fatalf("shared coordinator run directory mode = %o, want 700", got)
+	}
+	if info, err := os.Stat(socketPath); err != nil {
+		t.Fatalf("stat shared coordinator socket: %v", err)
+	} else if got := info.Mode().Perm(); got != 0o600 {
+		t.Fatalf("shared coordinator socket mode = %o, want 600", got)
+	}
 
 	shared := runRateBudgetHelpers(t, rateBudgetHelperConfig{
 		mode:       "shared",

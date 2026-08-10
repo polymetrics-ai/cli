@@ -16,6 +16,7 @@ import (
 	"sync"
 	"time"
 
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/warehouse"
 )
@@ -237,11 +238,18 @@ type RuntimeConfig struct {
 	Secrets    map[string]string `json:"-"`
 	// CoordinationIdentity carries opaque auth/rate inputs only. It has no
 	// credential, binding, provider, profile, or approval-revision preimage.
-	CoordinationIdentity  CoordinationIdentity `json:"-"`
-	CredentialRevision    string               `json:"-"`
-	ConfigurationDigest   string               `json:"-"`
-	WriteApprovalScope    string               `json:"-"`
-	ApprovedPayloadSHA256 map[string]string    `json:"-"`
+	CoordinationIdentity CoordinationIdentity `json:"-"`
+	// RateBudgetBackend selects the dependency-free process-local coordinator
+	// or an injected same-host coordinator. RequireShared is fail-closed: a nil
+	// or lost coordinator never falls back to the local registry.
+	RateBudgetBackend connsdk.RateBudgetBackendMode `json:"-"`
+	// BudgetCoordinator is intentionally injected and process-scoped. It has no
+	// persisted endpoint, run epoch, credential, URL, or raw scope data.
+	BudgetCoordinator     connsdk.BudgetCoordinator `json:"-"`
+	CredentialRevision    string                    `json:"-"`
+	ConfigurationDigest   string                    `json:"-"`
+	WriteApprovalScope    string                    `json:"-"`
+	ApprovedPayloadSHA256 map[string]string         `json:"-"`
 	// ForceCatalogRefresh bypasses an in-process discovery cache. App-level
 	// `pm catalog refresh` sets it deliberately; it is never persisted or
 	// inferred from credentials.

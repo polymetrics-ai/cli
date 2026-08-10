@@ -84,7 +84,6 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 	if strictWrite {
 		baseClient = noReplayClient(baseClient)
 	}
-	client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt)
 
 	attempts := r.maxRetries() + 1
 	var lastErr error
@@ -111,12 +110,15 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 		if r.DisableRetries {
 			disableTransportReplay(req, strictWrite)
 		}
-		if err := r.admitRequesterSend(ctx, method, &requesterAttempt); err != nil {
+		leases := newRateLimitLeaseTracker(r.LeaseAdmission)
+		if err := r.admitRequesterSend(ctx, method, &requesterAttempt, leases); err != nil {
 			return nil, err
 		}
+		client := r.clientWithRateLimitAdmission(baseClient, &requesterAttempt, leases)
 
 		resp, err := client.Do(req)
 		if err != nil {
+			leases.finish(CompletionObservation{Attempted: true})
 			lastErr = fmt.Errorf("send request: %w", err)
 			if isRateLimitAdmissionError(err) {
 				return nil, lastErr
@@ -130,6 +132,7 @@ func (r *Requester) DoStream(ctx context.Context, method, path string, query url
 			return nil, lastErr
 		}
 		observation := r.observeRateLimit(ctx, resp.StatusCode, resp.Header, requesterAttempt)
+		leases.finish(observation)
 
 		if r.shouldRetry(resp.StatusCode) && attempt < attempts-1 {
 			// Discard this attempt's body entirely; nothing from a failed
