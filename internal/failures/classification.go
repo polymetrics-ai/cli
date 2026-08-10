@@ -227,6 +227,9 @@ func (c *Classification) UnmarshalJSON(raw []byte) error {
 	if c == nil {
 		return fmt.Errorf("unmarshal failure classification into nil receiver")
 	}
+	if !utf8.Valid(raw) {
+		return fmt.Errorf("decode failure classification: JSON is not valid UTF-8")
+	}
 	decoder := json.NewDecoder(bytes.NewReader(raw))
 	decoder.DisallowUnknownFields()
 	var wire classificationJSON
