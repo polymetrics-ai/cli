@@ -1,43 +1,100 @@
-# Issue #3993 — offline harness completion summary
+# Issue #3993 — GitHub live certification measurement
 
-## Delivered
+## Delivered harness work
 
-- The case generator now requires an immutable `Polymetrics-Cert` boundary.
-  It accepts a frozen case ledger when available to calculate reason-family
-  movement, but a live case file no longer depends on a stale checked-in
-  ledger. It no longer knows the
-  former personal owner, repository, or commit SHA. Its output carries the
-  run-owned organization/repository immutable IDs and reports the
-  attemptable/blocked movement by reason family from the supplied ledger.
-- The live sweep rejects case files whose slug or immutable IDs do not match
-  the boundary, queues all eligible operations behind one barrier, records the
-  barrier release in its report, and requires an independent read-back for a
-  write before a write process may run.
-- The generated lab manifest and bootstrap probe inventory now derive from all
-  **1,521** current implemented GitHub commands. Their current cohorts are
-  900 run-owned repository, 308 run-owned organization, 33 GitHub App/
-  installation, and 280 feature/entitlement commands. Both self-checks pass.
+- The case generator and live runner take one immutable, run-owned
+  `Polymetrics-Cert` organization/repository boundary.  The historical personal
+  owner, repository, and commit SHA no longer influence the live ledger.
+- The runner validates that boundary before credential use, releases every
+  eligible operation through one barrier, requires an independent read-back for
+  any write case, bounds every child process at 45,000 ms, and redacts output
+  before it can reach a report.
+- Current manifests are source-derived: `github-live-lab-manifest.mjs --check`
+  reports 1,521 rows (900 repository, 308 organization, 33 App/install, 280
+  feature/entitlement) and `github-live-bootstrap-probes.mjs --check` passes.
 
-## Honest certification status
+## Reclassified live ledger
 
-No credentialed GitHub operation or warehouse flow was run in this worktree.
-The reported measurement artifact is not present here; the checked-in older
-case ledger contains 1,081 commands and cannot be substituted for the
-captain's stated frozen 1,521-command measurement. The generator therefore
-accepts a frozen ledger as an explicit optional comparison input and reports
-the live case classification independently.
+The fresh immutable-boundary ledger has **665 attemptable** and **856 blocked**
+rows, a movement of **+505 / -505** from the frozen R1 160 / 1,361 result.
+This is a reclassification, not preservation of the frozen pre-skip policy.
 
-The required ephemeral credential/proof path is owned by #3989 and the shared
-REST/GraphQL rate-admission path by #3990. Both are prerequisites for a real
-barrier release, quota measurement, cleanup/residue proof, and the requested
-attemptable/blocked movement report. No vault credential was created and the
-revoked fine-grained token was not touched.
+| Reason family | Frozen R1 blocked | Fresh boundary blocked | Movement |
+| --- | ---: | ---: | ---: |
+| mutation outside pinned repository | 748 | 0 | -748 |
+| organization or enterprise | 175 | 0 | -175 |
+| secret material | 62 | 85 | +23 |
+| App authentication | 23 | 0 | -23 |
+| binary resource | 9 | 4 | -5 |
+| no cleanup-safe fixture | 37 | 767 | +730 |
+| retained historical target (reported separately in R1) | 3 | 0 | -3 |
+| other | 304 | 0 | -304 |
+| **total** | **1,361** | **856** | **-505** |
 
-The inbound GitHub → warehouse → DuckDB leg is consequently **not reproven**
-in this branch. The outbound warehouse → GitHub leg remains intentionally
-unimplemented pending #3994's approved-action path and #3992's schedule
-execution; `pm flow` still identifies action steps as approval-gated.
+Every family moved.  The 767 cleanup-safe-fixture blocks are a current finding:
+they are no longer falsely attributed to the old pinned repository, but they
+still have no declared fixture/read-back/inverse-cleanup lifecycle.
 
-Certification remains unclaimed until those prerequisites land and a
-credentialed run records real provider results, per-operation read-backs,
-cleanup, residue, and quota-bucket failures.
+## Credentialed full-surface result
+
+The App installation token authenticated successfully and a built `pm` binary
+read back the single run-owned repository before and after the sweep.  The
+whole applicable surface was then released once:
+
+- launch: `single_barrier_release`, 665 operations (15 ETL, 639 direct reads,
+  11 binary downloads);
+- result: **0 proven, 665 failed, 856 untestable** across all 1,521 commands;
+- failed cause: all 665 reads exceeded the 45,000 ms terminal bound, with no
+  provider HTTP status available;
+- rate snapshots taken immediately around that barrier: REST core 15,000 →
+  14,997 (3 consumed); GraphQL 5,000 → 5,000 (0 consumed).
+
+This is not a credential or quota-policy result hidden behind a harness
+pre-skip.  A single App-authenticated `repo view` returned one record, and a
+separate 16-way simultaneous control returned 16 successes.  The 665-child
+all-at-once launch therefore saturated local process admission before the
+provider buckets were meaningfully exercised.  It is a #3993 harness scaling
+finding, not evidence that #3990 REST/GraphQL policy denied the calls.  The
+runner intentionally retains the required single barrier release; no shared
+coordinator or rate-policy implementation was added here.
+
+The sanitized R2 proof report, fresh case ledger, rate snapshots, inbound
+evidence, and boundary read-back were scanned for token-shaped text before the
+temporary run project was deleted.  No credential value appears in a committed
+artifact, fixture, report, or transcript.
+
+## Warehouse-mediated inbound proof
+
+The inbound leg is proven with the built binary and one GitHub connector
+definition:
+
+1. `pm flow plan` and `pm flow preview` accepted a one-step GitHub repository
+   sync into the local warehouse.
+2. `pm flow run` read **1** GitHub record and wrote **1** warehouse record.
+3. `pm query` returned **1** row from the connection-scoped table through
+   DuckDB, and the materialized table had the Parquet `PAR1` signature.
+
+An initial disposable warehouse path was deliberately rejected by its
+read-back because the query surface owns the canonical project warehouse root.
+The proof was rerun against that canonical root; the failed read-back was not
+treated as evidence of a round trip.
+
+No GitHub mutation was dispatched: all live sweep operations were reads and
+the flow's only external leg was a source read.  Consequently there were no
+provider objects to inverse-clean up.  The final repository read-back returned
+exactly one record, and all local warehouse, flow, credential, and report state
+lived below the run-owned temporary directory and was removed after evidence
+sanitization.
+
+## What remains before certification
+
+- A provider-admission solution must let the 665 barrier-released operations
+  reach GitHub without turning this result into a sequential sweep.  That is
+  separate from the R2 rate telemetry and must not be faked as a quota result.
+- The 767 mutation cases need declared cleanup-safe fixtures and independent
+  provider read-backs before they become attemptable.
+- The warehouse → GitHub action leg remains blocked by the shared approved
+  action path (#3994) and real schedule firing (#3992).  No GitHub-specific
+  approval or schedule implementation was added.
+
+GitHub remains **uncertified**.  The 0/665 result is retained as the truth.

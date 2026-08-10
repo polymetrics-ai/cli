@@ -2,7 +2,7 @@
   "schema_version": 1,
   "issue": 3993,
   "connector": "github",
-  "state": "implementation_complete_live_proof_blocked",
+  "state": "measurement_complete_certification_not_ready",
   "gsd": {
     "requested": [
       "scripts/gsd prompt discuss-phase 3993 --auto",
@@ -22,13 +22,29 @@
   "completed": {
     "boundary_parameterization": true,
     "barrier_release": true,
+    "terminal_process_bound": true,
     "per_write_readback_required": true,
     "manifest_and_bootstrap_self_checks": true,
-    "local_pm_build": true
+    "local_pm_build": true,
+    "app_installation_authentication": true,
+    "credentialed_whole_surface_measurement": true,
+    "sanitized_evidence_and_residue_cleanup": true,
+    "inbound_github_parquet_duckdb_round_trip": true
   },
-  "live_proof_blockers": [
-    "#3989 ephemeral credential and proof capture has not landed",
-    "#3990 shared REST and GraphQL admission coordinator has not landed",
-    "captain credential/runbook input is absent from this isolated worktree"
+  "measurement": {
+    "surface_commands": 1521,
+    "attemptable": 665,
+    "blocked": 856,
+    "proven": 0,
+    "failed": 665,
+    "failure_cause": "all reads exceeded the 45000 ms terminal bound",
+    "rate_before": { "rest_core_remaining": 15000, "graphql_remaining": 5000 },
+    "rate_after": { "rest_core_remaining": 14997, "graphql_remaining": 5000 }
+  },
+  "remaining_before_certification": [
+    "admit the barrier-released provider workload without serializing it or presenting local process saturation as rate policy",
+    "supply cleanup-safe fixtures and independent read-backs for currently blocked mutations",
+    "#3994 approved action execution for the warehouse-to-GitHub leg",
+    "#3992 real schedule firing for the warehouse-to-GitHub leg"
   ]
 }
