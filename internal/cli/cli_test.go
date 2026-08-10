@@ -382,7 +382,7 @@ func TestDockerHubAccessTokenOutputRequiresExplicitShowToken(t *testing.T) {
 		"--json",
 	})
 
-	newPlan := func(label string) app.ReversePlan {
+	newPlan := func(label string) (string, string) {
 		t.Helper()
 		stdout, _ := runCLI(t, []string{
 			"dockerhub", "access-tokens", "create",
@@ -391,32 +391,28 @@ func TestDockerHubAccessTokenOutputRequiresExplicitShowToken(t *testing.T) {
 			"--scopes", "repo:read",
 			"--preview",
 			"--root", root,
-			"--json",
 		})
-		var envelope struct {
-			Plan struct {
-				ID string `json:"id"`
-			} `json:"plan"`
-		}
-		if err := json.Unmarshal([]byte(stdout), &envelope); err != nil {
-			t.Fatalf("decode plan output: %v", err)
-		}
+		planID := extractReverseField(t, stdout, `Created connector command plan (\S+)`)
+		approvalToken := extractReverseField(t, stdout, `Approval token: (\S+)`)
 		instance, err := app.Open(root)
 		if err != nil {
 			t.Fatalf("Open: %v", err)
 		}
-		plan, err := instance.GetReversePlan(envelope.Plan.ID)
+		plan, err := instance.GetReversePlan(planID)
 		if err != nil {
 			t.Fatalf("GetReversePlan: %v", err)
 		}
-		return plan
+		if plan.ApprovalToken != "" {
+			t.Fatal("stored plan retained its approval token")
+		}
+		return planID, approvalToken
 	}
 
-	defaultPlan := newPlan("default-token")
+	defaultPlanID, defaultApprovalToken := newPlan("default-token")
 	defaultOut, _ := runCLI(t, []string{
 		"dockerhub", "access-tokens", "create",
-		"--plan", defaultPlan.ID,
-		"--approve", defaultPlan.ApprovalToken,
+		"--plan", defaultPlanID,
+		"--approve", defaultApprovalToken,
 		"--root", root,
 		"--json",
 	})
@@ -424,11 +420,11 @@ func TestDockerHubAccessTokenOutputRequiresExplicitShowToken(t *testing.T) {
 		t.Fatal("default Docker Hub access-token execution printed the provider token")
 	}
 
-	showPlan := newPlan("shown-token")
+	showPlanID, showApprovalToken := newPlan("shown-token")
 	showOut, _ := runCLI(t, []string{
 		"dockerhub", "access-tokens", "create",
-		"--plan", showPlan.ID,
-		"--approve", showPlan.ApprovalToken,
+		"--plan", showPlanID,
+		"--approve", showApprovalToken,
 		"--show-token",
 		"--root", root,
 		"--json",
@@ -437,12 +433,12 @@ func TestDockerHubAccessTokenOutputRequiresExplicitShowToken(t *testing.T) {
 		t.Fatal("--show-token did not return the immediate provider token")
 	}
 
-	failurePlan := newPlan("failure-token")
+	failurePlanID, failureApprovalToken := newPlan("failure-token")
 	var failureOut, failureErr bytes.Buffer
 	failureCode := cli.Run([]string{
 		"dockerhub", "access-tokens", "create",
-		"--plan", failurePlan.ID,
-		"--approve", failurePlan.ApprovalToken,
+		"--plan", failurePlanID,
+		"--approve", failureApprovalToken,
 		"--root", root,
 		"--json",
 	}, &failureOut, &failureErr)

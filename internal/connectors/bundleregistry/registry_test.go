@@ -207,7 +207,8 @@ func TestDockerHubGuideExplainsSecretInputAndUnredactedTokenResponses(t *testing
 	manual := connectors.RenderConnectorManual(connector)
 	for _, want := range []string{
 		"For auth credential fields, prefer --from-env or --value-stdin over command-line flags; argv can be observed by other local processes and shell history.",
-		"The approved runtime returns Docker Hub response bodies unchanged, including a newly-created token; handle runtime output as secret material.",
+		"The approved runtime returns Docker Hub authentication-exchange response bodies unchanged; handle runtime output as secret material.",
+		"Access-token creation suppresses a raw token by default. Add --show-token only to an approved execution to display it immediately; terminal or JSON output cannot be redacted.",
 	} {
 		if !strings.Contains(manual, want) {
 			t.Fatalf("Docker Hub manual missing %q:\n%s", want, manual)

@@ -1,7 +1,7 @@
 # Overview
 
 Reads public Docker Hub repositories and image tags for a configured target user or organization via
-the Docker Hub registry API, and, when an optional Personal Access Token is configured, manages
+the Docker Hub API, and, when an optional Personal Access Token is configured, manages
 personal and organization access tokens, organizations, groups (teams), invites, audit logs,
 repositories, and (with a second, separately-configured SCIM token) SCIM-provisioned users.
 
@@ -11,9 +11,10 @@ Direct reads, status-only existence checks, reverse-ETL writes, and approved dir
 exchanges cover the 50 remaining documented Docker Hub operations: repositories,
 personal/organization access tokens, audit logs, groups (teams), invites, organization
 settings/members, SCIM, and authentication. Together with the four stream-backed reads, all 54
-documented Docker Hub API operations are modelled and implemented. Implementation is not a claim
-that every operation is certified against every Docker account tier; see the phase verification
-record for live-account coverage and provider-gated operations.
+documented Docker Hub API operations in the cited Hub artifact are modelled and implemented.
+This connector is not certified; implementation is not a claim that every operation is certified
+against every Docker account tier. See the phase verification record for live-account coverage and
+provider-gated operations.
 
 Service API documentation: https://docs.docker.com/docker-hub/api/latest/.
 
@@ -22,7 +23,7 @@ Service API documentation: https://docs.docker.com/docker-hub/api/latest/.
 Connection fields:
 
 - `base_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`; Docker Hub
-  registry API base URL override for tests or self-hosted proxies.
+  API base URL override for tests or self-hosted proxies.
 - `auth_url` (optional, string); default `https://hub.docker.com/v2`; format `uri`;
   Docker Hub authentication API base URL. It is intentionally independent of `base_url` so a
   data API proxy cannot receive Docker Hub credential-exchange requests; override it only for a
@@ -184,6 +185,13 @@ removal) additionally require typed destructive confirmation.
   pulls per window by Docker username; paid Registry profiles deliberately match no fixed budget.
   Docker's separate Hub API abuse limiter publishes no numeric budget, so no synthetic limiter is
   declared for it. A bare 429 still follows the shared requester's provider `Retry-After` backoff.
+- Docker documentation gives a 21,600-second Registry pull window, but an unauthenticated
+  `ratelimitpreview` HEAD probe observed `ratelimit-limit: 100;w=3600` and
+  `ratelimit-remaining: 100;w=3600` on 2026-08-08. The declaration deliberately retains the
+  documented 21,600-second window; the mismatch is an open provider question.
+- Product-surface gap: pm has no OCI Registry v2 image pull/push command or Registry
+  bearer-acquisition flow. Docker Hub API repository and tag operations do not supply either
+  capability; this is not a Docker Hub connector defect.
 - API coverage: all 54 documented Docker Hub operations are modelled and implemented (4
   stream-backed, 47 direct-read/status-check/reverse-write, and 3 approved direct credential
   exchanges). This is not certification: provider-plan, provider-permission, and Enterprise-only
