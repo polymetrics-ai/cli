@@ -96,3 +96,32 @@ report 25 real harness calls within the 25 ceiling and 92 real CLI invocations a
 The changed bound is justified by the recorded 6.57x endpoint-ledger growth versus 1.85x actual
 test-time growth, not by a change to coverage or invocation topology. Hosted Verify remains the
 final matrix confirmation after the committed push.
+
+## Existing command-surface preservation and redaction propagation (2026-08-10)
+
+**Red:** the focused materializer regression initially failed with an empty command
+`redact_fields` array, while the existing Amazon SQS and Google Search Console package tests failed
+on `--receipt-handle` and `site_url` respectively. This is not a certify-timing failure: the
+committed 8-minute timing gate passed in hosted CI in 5m53s.
+
+**Green:** `TestMaterializeCLISurfacePreservesExistingWriteContractAndPropagatesRedactions`,
+`TestCLIReverseExamplesContainRequiredFlags`, and `TestWriteCommandsCarryActionRedactions` pass.
+The materializer now retains every existing reverse-ETL command contract while refreshing its API
+references, then performs a sorted, de-duplicated union of command and write-action redactions.
+Amazon SQS's 16 reverse-ETL commands and Google Search Console's four commands were regenerated
+from their pre-sweep contracts; their established dashed flags, runnable examples, and action
+redactions are present again. `go test -timeout 20m -count=1 ./cmd/connectorgen`, the two focused
+connector package tests, `go vet ./cmd/connectorgen`, both real connector help paths, targeted
+bundle validation, and `go run ./cmd/connectorgen surface-sync --check` pass; the full sync scans
+all 552 connectors with zero changed fields.
+
+The read-only whole-corpus audit covered all 552 definition directories: 234 currently contain a
+CLI surface, of which 36 have a pre-sweep `f96a47e80` CLI baseline and 198 are newly materialized.
+After the two named repairs, six other connectors still have 270 changed flag spellings across 196
+existing reverse-ETL commands: Bitbucket (2), Chatwoot (26), Freshchat (8), Gorgias (17), Jira
+(210), and Lever Hiring (7). Current action-to-command redaction auditing finds 146 command gaps
+across six other connectors / 414 missing field pairs. Six gaps are materialization-introduced
+(Freshchat five and Stripe one); 88 were already present in main (Mailchimp 55, Recurly 28, Zendesk
+Support five); and 52 Xero commands have no comparable pre-sweep command for attribution. Those
+unrelated surfaces remain untouched pending captain sequencing. The next hosted PR matrix remains
+pending.

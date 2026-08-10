@@ -235,3 +235,18 @@
   timing figures, the sub-linear conclusion, and the 8m (+4m30s / 129%) decision. The local
   capped target passes at 292.016s package elapsed and 308.762s wall time, with 25/25 harness
   and 92/92 CLI real-invocation contracts intact.
+
+## Existing command-surface preservation and redaction propagation (2026-08-10)
+
+- **Red:** `TestCLIReverseExamplesContainRequiredFlags` proves the generated Amazon SQS surface
+  no longer exposes its established dashed write flags, and
+  `TestWriteCommandsCarryActionRedactions` proves Google Search Console drops a write-action
+  redaction from its generated command. Add a focused materializer regression that starts with an
+  existing dashed flag and existing command redaction, then fails while the materializer derives
+  an underscore name and omits the action redaction.
+- **Green:** an existing reverse-ETL command is retained whole while its API-surface references
+  refresh, preserving its dashed names, optional fields, runnable examples, approval metadata, and
+  current user contract. Command redaction is a sorted de-duplicated union of that retained command
+  and action fields. The focused generator test, both original connector regressions, a
+  552-bundle read-only audit, and generated-surface checks must pass. No test, cap, provider check,
+  or credential requirement is weakened.

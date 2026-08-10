@@ -75,25 +75,35 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "change_message_visibility",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "receipt_handle",
+          "name": "receipt-handle",
           "type": "string",
-          "summary": "Required receipt handle record field.",
+          "summary": "Receipt handle from ReceiveMessage.",
           "maps_to": "record.receipt_handle",
-          "required": true
+          "required": true,
+          "allow_empty": false
         },
         {
-          "name": "visibility_timeout",
+          "name": "visibility-timeout",
           "type": "integer",
-          "summary": "Required visibility timeout record field.",
+          "summary": "New visibility timeout in seconds.",
           "maps_to": "record.visibility_timeout",
           "required": true
         }
       ],
       "examples": [
-        "pm amazon-sqs change message visibility apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs message change-visibility --credential sqs-prod --receipt-handle receipt-handle-placeholder --visibility-timeout 30 --preview"
+      ],
+      "risk": "changes the visibility timeout for one in-flight message",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -101,8 +111,7 @@
           "path": "SQS.ChangeMessageVisibility"
         }
       ],
-      "risk": "changes the visibility timeout for one in-flight message",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "message change-visibility-batch",
@@ -110,25 +119,42 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "change_message_visibility_batch",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "receipt_handle",
+          "name": "id",
           "type": "string",
-          "summary": "Required receipt handle record field.",
-          "maps_to": "record.receipt_handle",
-          "required": true
+          "summary": "Optional batch entry id.",
+          "maps_to": "record.id",
+          "allow_empty": false
         },
         {
-          "name": "visibility_timeout",
+          "name": "receipt-handle",
+          "type": "string",
+          "summary": "Receipt handle from ReceiveMessage.",
+          "maps_to": "record.receipt_handle",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "visibility-timeout",
           "type": "integer",
-          "summary": "Required visibility timeout record field.",
+          "summary": "New visibility timeout in seconds.",
           "maps_to": "record.visibility_timeout",
           "required": true
         }
       ],
       "examples": [
-        "pm amazon-sqs change message visibility batch apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs message change-visibility-batch --credential sqs-prod --receipt-handle receipt-handle-placeholder --visibility-timeout 30 --preview"
+      ],
+      "risk": "changes visibility timeout for up to 10 in-flight messages per SQS batch request",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -136,8 +162,7 @@
           "path": "SQS.ChangeMessageVisibilityBatch"
         }
       ],
-      "risk": "changes visibility timeout for up to 10 in-flight messages per SQS batch request",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "message delete",
@@ -145,18 +170,28 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_message",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "receipt_handle",
+          "name": "receipt-handle",
           "type": "string",
-          "summary": "Required receipt handle record field.",
+          "summary": "Receipt handle from ReceiveMessage.",
           "maps_to": "record.receipt_handle",
-          "required": true
+          "required": true,
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm amazon-sqs delete message apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs message delete --credential sqs-prod --receipt-handle receipt-handle-placeholder --preview"
+      ],
+      "risk": "deletes one received message by receipt handle",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -164,8 +199,7 @@
           "path": "SQS.DeleteMessage"
         }
       ],
-      "risk": "deletes one received message by receipt handle",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "message delete-batch",
@@ -173,18 +207,35 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_message_batch",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "receipt_handle",
+          "name": "id",
           "type": "string",
-          "summary": "Required receipt handle record field.",
+          "summary": "Optional batch entry id.",
+          "maps_to": "record.id",
+          "allow_empty": false
+        },
+        {
+          "name": "receipt-handle",
+          "type": "string",
+          "summary": "Receipt handle from ReceiveMessage.",
           "maps_to": "record.receipt_handle",
-          "required": true
+          "required": true,
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm amazon-sqs delete message batch apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs message delete-batch --credential sqs-prod --receipt-handle receipt-handle-placeholder --preview"
+      ],
+      "risk": "deletes up to 10 received messages per SQS batch request",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -192,8 +243,7 @@
           "path": "SQS.DeleteMessageBatch"
         }
       ],
-      "risk": "deletes up to 10 received messages per SQS batch request",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "message send",
@@ -201,18 +251,48 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "send_message",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "message_body",
+          "name": "message-body",
           "type": "string",
-          "summary": "Required message body record field.",
+          "summary": "Message body string.",
           "maps_to": "record.message_body",
-          "required": true
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "delay-seconds",
+          "type": "integer",
+          "summary": "Optional per-message delay seconds.",
+          "maps_to": "record.delay_seconds"
+        },
+        {
+          "name": "message-deduplication-id",
+          "type": "string",
+          "summary": "FIFO deduplication id.",
+          "maps_to": "record.message_deduplication_id",
+          "allow_empty": false
+        },
+        {
+          "name": "message-group-id",
+          "type": "string",
+          "summary": "FIFO message group id.",
+          "maps_to": "record.message_group_id",
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm amazon-sqs send message apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs message send --credential sqs-prod --message-body fixture-message --preview"
+      ],
+      "risk": "sends one message to the configured queue; FIFO queues may use message_deduplication_id for provider-supported idempotency",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -220,8 +300,7 @@
           "path": "SQS.SendMessage"
         }
       ],
-      "risk": "sends one message to the configured queue; FIFO queues may use message_deduplication_id for provider-supported idempotency",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "message send-batch",
@@ -229,18 +308,55 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "send_message_batch",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "message_body",
+          "name": "id",
           "type": "string",
-          "summary": "Required message body record field.",
+          "summary": "Optional batch entry id.",
+          "maps_to": "record.id",
+          "allow_empty": false
+        },
+        {
+          "name": "message-body",
+          "type": "string",
+          "summary": "Message body string.",
           "maps_to": "record.message_body",
-          "required": true
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "delay-seconds",
+          "type": "integer",
+          "summary": "Optional per-message delay seconds.",
+          "maps_to": "record.delay_seconds"
+        },
+        {
+          "name": "message-deduplication-id",
+          "type": "string",
+          "summary": "FIFO deduplication id.",
+          "maps_to": "record.message_deduplication_id",
+          "allow_empty": false
+        },
+        {
+          "name": "message-group-id",
+          "type": "string",
+          "summary": "FIFO message group id.",
+          "maps_to": "record.message_group_id",
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm amazon-sqs send message batch apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs message send-batch --credential sqs-prod --message-body fixture-message --preview"
+      ],
+      "risk": "sends up to 10 messages per SQS batch request; FIFO queues may use message_deduplication_id for provider-supported idempotency",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -248,8 +364,7 @@
           "path": "SQS.SendMessageBatch"
         }
       ],
-      "risk": "sends up to 10 messages per SQS batch request; FIFO queues may use message_deduplication_id for provider-supported idempotency",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "message-move-task cancel",
@@ -257,18 +372,28 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "cancel_message_move_task",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "task_handle",
+          "name": "task-handle",
           "type": "string",
-          "summary": "Required task handle record field.",
+          "summary": "Task handle returned by StartMessageMoveTask/ListMessageMoveTasks.",
           "maps_to": "record.task_handle",
-          "required": true
+          "required": true,
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm amazon-sqs cancel message move task apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs message-move-task cancel --credential sqs-prod --task-handle task-handle-placeholder --preview"
+      ],
+      "risk": "cancels an in-flight dead-letter-queue message move task",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -276,8 +401,7 @@
           "path": "SQS.CancelMessageMoveTask"
         }
       ],
-      "risk": "cancels an in-flight dead-letter-queue message move task",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "message-move-task start",
@@ -285,18 +409,41 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "start_message_move_task",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "source_arn",
+          "name": "source-arn",
           "type": "string",
-          "summary": "Required source arn record field.",
+          "summary": "Source dead-letter queue ARN.",
           "maps_to": "record.source_arn",
-          "required": true
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "destination-arn",
+          "type": "string",
+          "summary": "Optional destination queue ARN.",
+          "maps_to": "record.destination_arn",
+          "allow_empty": false
+        },
+        {
+          "name": "max-number-of-messages-per-second",
+          "type": "integer",
+          "summary": "Optional move rate limit.",
+          "maps_to": "record.max_number_of_messages_per_second"
         }
       ],
       "examples": [
-        "pm amazon-sqs start message move task apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs message-move-task start --credential sqs-prod --source-arn arn:aws:sqs:us-east-1:000000000000:fixture-dlq --preview"
+      ],
+      "risk": "starts an SQS dead-letter queue redrive message move task",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -304,8 +451,7 @@
           "path": "SQS.StartMessageMoveTask"
         }
       ],
-      "risk": "starts an SQS dead-letter queue redrive message move task",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "message-move-tasks list",
@@ -372,32 +518,42 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_permission",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "actions",
-          "type": "string_array",
-          "summary": "Required actions record field.",
-          "maps_to": "record.actions",
-          "required": true
+          "name": "label",
+          "type": "string",
+          "summary": "Permission statement label.",
+          "maps_to": "record.label",
+          "required": true,
+          "allow_empty": false
         },
         {
-          "name": "aws_account_ids",
+          "name": "aws-account-ids",
           "type": "string_array",
-          "summary": "Required aws account ids record field.",
+          "summary": "AWS account ids to grant.",
           "maps_to": "record.aws_account_ids",
           "required": true
         },
         {
-          "name": "label",
-          "type": "string",
-          "summary": "Required label record field.",
-          "maps_to": "record.label",
+          "name": "actions",
+          "type": "string_array",
+          "summary": "SQS action names to allow.",
+          "maps_to": "record.actions",
           "required": true
         }
       ],
       "examples": [
-        "pm amazon-sqs add permission apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs permission add --credential sqs-prod --label fixture-permission --aws-account-ids 000000000000 --actions SendMessage --preview"
+      ],
+      "risk": "adds an SQS queue resource policy permission statement for listed AWS account ids",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -405,8 +561,7 @@
           "path": "SQS.AddPermission"
         }
       ],
-      "risk": "adds an SQS queue resource policy permission statement for listed AWS account ids",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "permission remove",
@@ -414,18 +569,28 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_permission",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
           "name": "label",
           "type": "string",
-          "summary": "Required label record field.",
+          "summary": "Permission statement label to remove.",
           "maps_to": "record.label",
-          "required": true
+          "required": true,
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm amazon-sqs remove permission apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs permission remove --credential sqs-prod --label fixture-permission --preview"
+      ],
+      "risk": "removes an SQS queue resource policy permission statement",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -433,8 +598,7 @@
           "path": "SQS.RemovePermission"
         }
       ],
-      "risk": "removes an SQS queue resource policy permission statement",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "queue attributes",
@@ -472,18 +636,28 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_queue",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "queue_name",
+          "name": "queue-name",
           "type": "string",
-          "summary": "Required queue name record field.",
+          "summary": "Queue name to create.",
           "maps_to": "record.queue_name",
-          "required": true
+          "required": true,
+          "allow_empty": false
         }
       ],
       "examples": [
-        "pm amazon-sqs create queue apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs queue create --credential sqs-prod --queue-name fixture-queue --preview"
+      ],
+      "risk": "creates an SQS queue; SQS returns an existing queue URL when name and attributes match",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -491,8 +665,7 @@
           "path": "SQS.CreateQueue"
         }
       ],
-      "risk": "creates an SQS queue; SQS returns an existing queue URL when name and attributes match",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "queue delete",
@@ -500,9 +673,18 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_queue",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "examples": [
-        "pm amazon-sqs delete queue apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs queue delete --credential sqs-prod --preview"
+      ],
+      "risk": "deletes the configured SQS queue",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -510,8 +692,7 @@
           "path": "SQS.DeleteQueue"
         }
       ],
-      "risk": "deletes the configured SQS queue",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "queue purge",
@@ -519,9 +700,18 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "purge_queue",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "examples": [
-        "pm amazon-sqs purge queue apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs queue purge --credential sqs-prod --preview"
+      ],
+      "risk": "purges all available messages from the configured queue",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -529,8 +719,7 @@
           "path": "SQS.PurgeQueue"
         }
       ],
-      "risk": "purges all available messages from the configured queue",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "queue set-attributes",
@@ -538,9 +727,37 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "set_queue_attributes",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "examples": [
-        "pm amazon-sqs set queue attributes apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs queue set-attributes --credential sqs-prod --attribute-name VisibilityTimeout --attribute-value 30 --preview"
+      ],
+      "risk": "sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attribute_value",
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
+      ],
+      "flags": [
+        {
+          "name": "attribute-name",
+          "type": "string",
+          "summary": "Queue attribute name to set, for example VisibilityTimeout or Policy.",
+          "maps_to": "record.attribute_name",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "attribute-value",
+          "type": "string",
+          "summary": "Queue attribute value. Sensitive values are redacted in previews/errors.",
+          "maps_to": "record.attribute_value",
+          "required": true,
+          "allow_empty": false
+        }
       ],
       "api_surface": [
         {
@@ -548,8 +765,7 @@
           "path": "SQS.SetQueueAttributes"
         }
       ],
-      "risk": "sets typed SQS queue attributes such as policy, redrive, encryption, retention, and visibility settings",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "queue tag",
@@ -557,9 +773,36 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "tag_queue",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "examples": [
-        "pm amazon-sqs tag queue apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs queue tag --credential sqs-prod --tag-key environment --tag-value fixture --preview"
+      ],
+      "risk": "adds or updates tags on the configured SQS queue",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
+      ],
+      "flags": [
+        {
+          "name": "tag-key",
+          "type": "string",
+          "summary": "Tag key to add or update.",
+          "maps_to": "record.tag_key",
+          "required": true,
+          "allow_empty": false
+        },
+        {
+          "name": "tag-value",
+          "type": "string",
+          "summary": "Tag value to add or update.",
+          "maps_to": "record.tag_value",
+          "required": true,
+          "allow_empty": false
+        }
       ],
       "api_surface": [
         {
@@ -567,8 +810,7 @@
           "path": "SQS.TagQueue"
         }
       ],
-      "risk": "adds or updates tags on the configured SQS queue",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "queue tags",
@@ -598,18 +840,27 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "untag_queue",
-      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
       "flags": [
         {
-          "name": "tag_keys",
+          "name": "tag-keys",
           "type": "string_array",
-          "summary": "Required tag keys record field.",
+          "summary": "Tag keys to remove.",
           "maps_to": "record.tag_keys",
           "required": true
         }
       ],
       "examples": [
-        "pm amazon-sqs untag queue apply --plan \u003cplan-name\u003e"
+        "pm amazon-sqs queue untag --credential sqs-prod --tag-keys environment --preview"
+      ],
+      "risk": "removes tags from the configured SQS queue",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
+      "redact_fields": [
+        "attributes",
+        "message_attributes",
+        "message_body",
+        "message_system_attributes",
+        "receipt_handle",
+        "task_handle"
       ],
       "api_surface": [
         {
@@ -617,8 +868,7 @@
           "path": "SQS.UntagQueue"
         }
       ],
-      "risk": "removes tags from the configured SQS queue",
-      "approval": "requires plan, preview, approval, and execute"
+      "source_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html"
     },
     {
       "path": "queue url",

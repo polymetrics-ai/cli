@@ -3111,49 +3111,47 @@ func materializeCLISurface(bundle engine.Bundle, surface engine.APISurface, cand
 		if len(refs) == 0 {
 			return engine.CLISurface{}, fmt.Errorf("write action %q has no materialized api_surface reference", action.Name)
 		}
-		flags, representable, err := materializedWriteFlags(action)
-		if err != nil {
-			return engine.CLISurface{}, fmt.Errorf("write action %q flags: %w", action.Name, err)
-		}
-		path := materializedCommandPath(action.Name, "apply")
-		command := engine.CLICommand{
-			Path:         path,
-			Summary:      fmt.Sprintf("Plan and execute the %s reverse-ETL action", strings.ReplaceAll(action.Name, "_", " ")),
-			Intent:       "reverse_etl",
-			Availability: "implemented",
-			Write:        action.Name,
-			SourceURL:    candidate.Artifact.URL,
-			APISurface:   refs,
-			Flags:        flags,
-			Risk:         action.Risk,
-			Approval:     "requires plan, preview, approval, and execute",
-			Examples:     []string{fmt.Sprintf("pm %s %s --plan <plan-name>", bundle.Name, path)},
-		}
-		if !representable {
-			command.Availability = materializeAvailabilityNotImplemented
-			command.Notes = materializedNamedDependencyNote("engine.reverse_etl_scalar_flag_contract", "the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags")
-		}
+		var command engine.CLICommand
 		if existing, ok := existingWriteCommands[action.Name]; ok {
-			if existing.Availability == "partial" {
-				// A partial command has an intentional connector-owned runtime
-				// contract. Keep that full contract while refreshing its cited
-				// provider endpoints.
-				command = existing
-				command.APISurface = refs
-				if command.SourceURL == "" {
-					command.SourceURL = candidate.Artifact.URL
-				}
-			} else {
-				// Implemented command flags are derived from the current write
-				// schema. Preserve its registered path, but do not carry stale
-				// requiredness or field mappings across a materialization.
-				command.Path = existing.Path
-				command.SourceCLIPath = existing.SourceCLIPath
-				if existing.Summary != "" {
-					command.Summary = existing.Summary
-				}
+			// An existing reverse-ETL command is an executable public contract,
+			// including its flag spelling, optional fields, and runnable example.
+			// Materialization refreshes only the cited provider endpoints; it must
+			// not re-derive that contract from a record schema and silently break
+			// a working command such as --receipt-handle.
+			command = existing
+			command.APISurface = refs
+			if command.SourceURL == "" {
+				command.SourceURL = candidate.Artifact.URL
+			}
+		} else {
+			flags, representable, err := materializedWriteFlags(action)
+			if err != nil {
+				return engine.CLISurface{}, fmt.Errorf("write action %q flags: %w", action.Name, err)
+			}
+			path := materializedCommandPath(action.Name, "apply")
+			command = engine.CLICommand{
+				Path:         path,
+				Summary:      fmt.Sprintf("Plan and execute the %s reverse-ETL action", strings.ReplaceAll(action.Name, "_", " ")),
+				Intent:       "reverse_etl",
+				Availability: "implemented",
+				Write:        action.Name,
+				SourceURL:    candidate.Artifact.URL,
+				APISurface:   refs,
+				Flags:        flags,
+				Risk:         action.Risk,
+				Approval:     "requires plan, preview, approval, and execute",
+				Examples:     []string{fmt.Sprintf("pm %s %s --plan <plan-name>", bundle.Name, path)},
+			}
+			if !representable {
+				command.Availability = materializeAvailabilityNotImplemented
+				command.Notes = materializedNamedDependencyNote("engine.reverse_etl_scalar_flag_contract", "the reverse-ETL command surface cannot faithfully expose this action's required object or array record fields as scalar flags")
 			}
 		}
+		// A write declaration is authoritative for fields that must not be
+		// echoed in its command surface. Retain any command-specific fields
+		// too: a materialization must never make an already-redacted field
+		// visible again merely because it is absent from writes.json.
+		command.RedactFields = materializedRedactFields(command.RedactFields, action.RedactFields)
 		if usedPaths[command.Path] {
 			return engine.CLISurface{}, fmt.Errorf("write command %q conflicts with another retained or generated command", command.Path)
 		}
@@ -3375,6 +3373,23 @@ func materializedWriteFlags(action engine.WriteAction) ([]engine.CLIFlag, bool, 
 		flags = append(flags, flag)
 	}
 	return flags, true, nil
+}
+
+func materializedRedactFields(existing, declared []string) []string {
+	fields := make(map[string]bool, len(existing)+len(declared))
+	for _, values := range [][]string{existing, declared} {
+		for _, field := range values {
+			if field = strings.TrimSpace(field); field != "" {
+				fields[field] = true
+			}
+		}
+	}
+	result := make([]string, 0, len(fields))
+	for field := range fields {
+		result = append(result, field)
+	}
+	sort.Strings(result)
+	return result
 }
 
 func materializedWriteFlag(schema *cliRecordSchemaNode, path string) (engine.CLIFlag, bool, error) {

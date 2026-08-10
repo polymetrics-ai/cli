@@ -27,3 +27,15 @@ certify test elapsed time grew from 159.268s to 295.117s (1.85x). This is strong
 raising the budget does not conceal a performance regression. The approved bound is 8m rather
 than 3m30s, and the exact figures plus rationale must be included in PR #3957's body. No product
 or connector-runtime decision is open.
+
+## Existing command-surface preservation and redaction decision (2026-08-10)
+
+The captain confirmed that Amazon SQS's underscored generated reverse-ETL flags and Google Search
+Console's missing command redactions are real regressions and that this slice must not damage an
+already working connector. The implementation choice is therefore fixed: an existing reverse-ETL
+command is retained as its complete executable public contract while materialization refreshes only
+its cited provider endpoints; action `redact_fields` are then unioned into the retained command
+surface. This covers flag spelling, optional fields, examples, approval metadata, and secrets
+rather than addressing only the two visible artifacts. A read-only corpus audit must report any
+remaining spelling or redaction drift before merge; it does not authorize mutating those other
+connectors in this narrow repair.

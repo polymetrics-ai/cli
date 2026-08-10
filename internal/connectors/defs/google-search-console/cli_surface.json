@@ -23,105 +23,14 @@
       "id": "write",
       "title": "Reverse ETL writes",
       "commands": [
-        "add site apply",
-        "delete site apply",
-        "delete sitemap apply",
-        "submit sitemap apply"
+        "sitemaps delete",
+        "sitemaps submit",
+        "sites add",
+        "sites delete"
       ]
     }
   ],
   "commands": [
-    {
-      "path": "add site apply",
-      "summary": "Plan and execute the add site reverse-ETL action",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "add_site",
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
-      "flags": [
-        {
-          "name": "site_url",
-          "type": "string",
-          "summary": "Required site url record field.",
-          "maps_to": "record.site_url",
-          "required": true
-        }
-      ],
-      "examples": [
-        "pm google-search-console add site apply --plan \u003cplan-name\u003e"
-      ],
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/webmasters/v3/sites/{siteUrl}"
-        }
-      ],
-      "risk": "adds a site property to the authenticated Search Console account",
-      "approval": "requires plan, preview, approval, and execute"
-    },
-    {
-      "path": "delete site apply",
-      "summary": "Plan and execute the delete site reverse-ETL action",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_site",
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
-      "flags": [
-        {
-          "name": "site_url",
-          "type": "string",
-          "summary": "Required site url record field.",
-          "maps_to": "record.site_url",
-          "required": true
-        }
-      ],
-      "examples": [
-        "pm google-search-console delete site apply --plan \u003cplan-name\u003e"
-      ],
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/webmasters/v3/sites/{siteUrl}"
-        }
-      ],
-      "risk": "removes a site property from the authenticated Search Console account",
-      "approval": "requires plan, preview, approval, and execute"
-    },
-    {
-      "path": "delete sitemap apply",
-      "summary": "Plan and execute the delete sitemap reverse-ETL action",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "delete_sitemap",
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
-      "flags": [
-        {
-          "name": "feedpath",
-          "type": "string",
-          "summary": "Required feedpath record field.",
-          "maps_to": "record.feedpath",
-          "required": true
-        },
-        {
-          "name": "site_url",
-          "type": "string",
-          "summary": "Required site url record field.",
-          "maps_to": "record.site_url",
-          "required": true
-        }
-      ],
-      "examples": [
-        "pm google-search-console delete sitemap apply --plan \u003cplan-name\u003e"
-      ],
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"
-        }
-      ],
-      "risk": "deletes a sitemap from a Search Console site property",
-      "approval": "requires plan, preview, approval, and execute"
-    },
     {
       "path": "direct mobile-friendly-test run",
       "summary": "Run the official Mobile Friendly Test operation as a typed bounded direct read.",
@@ -328,6 +237,45 @@
       ]
     },
     {
+      "path": "sitemaps delete",
+      "summary": "Plan deleting a sitemap URL from a Search Console site property through destructive reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_sitemap",
+      "flags": [
+        {
+          "name": "site-url",
+          "type": "string",
+          "summary": "Search Console site property URL or sc-domain property.",
+          "maps_to": "record.site_url",
+          "allow_empty": false
+        },
+        {
+          "name": "feedpath",
+          "type": "string",
+          "summary": "Sitemap feed URL/path to delete.",
+          "maps_to": "record.feedpath",
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "feedpath",
+        "site_url"
+      ],
+      "risk": "high: deletes a sitemap from a Search Console site property; requires reverse ETL plan, approval, and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e typed destructive confirmation -\u003e execute. Missing provider records are idempotent for HTTP 404.",
+      "examples": [
+        "pm google-search-console sitemaps delete --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"
+        }
+      ],
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1"
+    },
+    {
       "path": "sitemaps list",
       "summary": "Run the sitemaps ETL stream",
       "intent": "etl",
@@ -345,6 +293,107 @@
       ]
     },
     {
+      "path": "sitemaps submit",
+      "summary": "Plan submitting a sitemap URL for a Search Console site property.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "submit_sitemap",
+      "flags": [
+        {
+          "name": "site-url",
+          "type": "string",
+          "summary": "Search Console site property URL or sc-domain property.",
+          "maps_to": "record.site_url",
+          "allow_empty": false
+        },
+        {
+          "name": "feedpath",
+          "type": "string",
+          "summary": "Sitemap feed URL/path to submit.",
+          "maps_to": "record.feedpath",
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "feedpath",
+        "site_url"
+      ],
+      "risk": "medium: submits a sitemap URL for a Search Console site property; requires reverse ETL plan and approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. No raw HTTP body is accepted; the record must match writes.json.",
+      "examples": [
+        "pm google-search-console sitemaps submit --credential gsc-prod --site-url https://example.com/ --feedpath https://example.com/sitemap.xml --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"
+        }
+      ],
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1"
+    },
+    {
+      "path": "sites add",
+      "summary": "Plan adding a Search Console site property through reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "add_site",
+      "flags": [
+        {
+          "name": "site-url",
+          "type": "string",
+          "summary": "Search Console site property URL or sc-domain property.",
+          "maps_to": "record.site_url",
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "site_url"
+      ],
+      "risk": "medium: adds a site property to the authenticated Search Console account; requires reverse ETL plan and approval",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e execute. No raw HTTP body is accepted; the record must match writes.json.",
+      "examples": [
+        "pm google-search-console sites add --credential gsc-prod --site-url https://example.com/ --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/webmasters/v3/sites/{siteUrl}"
+        }
+      ],
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1"
+    },
+    {
+      "path": "sites delete",
+      "summary": "Plan deleting a Search Console site property through destructive reverse ETL.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "delete_site",
+      "flags": [
+        {
+          "name": "site-url",
+          "type": "string",
+          "summary": "Search Console site property URL or sc-domain property.",
+          "maps_to": "record.site_url",
+          "allow_empty": false
+        }
+      ],
+      "redact_fields": [
+        "site_url"
+      ],
+      "risk": "high: removes a site property from the authenticated Search Console account; requires reverse ETL plan, approval, and destructive confirmation",
+      "approval": "Use reverse ETL plan -\u003e preview -\u003e approval -\u003e typed destructive confirmation -\u003e execute. Missing provider records are idempotent for HTTP 404.",
+      "examples": [
+        "pm google-search-console sites delete --credential gsc-prod --site-url https://example.com/ --preview --json"
+      ],
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/webmasters/v3/sites/{siteUrl}"
+        }
+      ],
+      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1"
+    },
+    {
       "path": "sites list",
       "summary": "Run the sites ETL stream",
       "intent": "etl",
@@ -360,41 +409,6 @@
           "path": "/webmasters/v3/sites"
         }
       ]
-    },
-    {
-      "path": "submit sitemap apply",
-      "summary": "Plan and execute the submit sitemap reverse-ETL action",
-      "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "submit_sitemap",
-      "source_url": "https://searchconsole.googleapis.com/$discovery/rest?version=v1",
-      "flags": [
-        {
-          "name": "feedpath",
-          "type": "string",
-          "summary": "Required feedpath record field.",
-          "maps_to": "record.feedpath",
-          "required": true
-        },
-        {
-          "name": "site_url",
-          "type": "string",
-          "summary": "Required site url record field.",
-          "maps_to": "record.site_url",
-          "required": true
-        }
-      ],
-      "examples": [
-        "pm google-search-console submit sitemap apply --plan \u003cplan-name\u003e"
-      ],
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/webmasters/v3/sites/{siteUrl}/sitemaps/{feedpath}"
-        }
-      ],
-      "risk": "submits a sitemap URL for a Search Console site property",
-      "approval": "requires plan, preview, approval, and execute"
     }
   ]
 }

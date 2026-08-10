@@ -142,3 +142,39 @@ are used, while compatible isolated GSD roles are unavailable and this lane must
 Required skills used for this CI/test-performance slice are `golang-how-to`,
 `golang-continuous-integration`, `golang-testing`, and `golang-benchmark`. CLI help/manual/website
 parity is not applicable because no CLI surface, help, docs, or generated catalog changes.
+
+## Existing command-surface preservation and redaction propagation (2026-08-10)
+
+Captain scope is deliberately limited to the two named regression classes: preserve the established
+spelling of flags on existing implemented reverse-ETL commands, and propagate every write action's
+`redact_fields` into the corresponding generated command surface. Xero's independent direct-read
+ledger inconsistency is not changed in this slice.
+
+**Red:** `materializeCLISurface` regenerates `CLIFlag.Name` directly from `record_schema` field
+paths (for example `receipt_handle`) and, for an existing implemented command, retains only its
+path/source path/summary. That silently changes Amazon SQS's shipped `--receipt-handle` contract.
+It also drops `WriteAction.RedactFields` while building the command, leaving Google Search
+Console's `add site apply` without its action-declared `site_url` redaction. The hosted Verify
+regressions reproduce both without credentials or provider I/O.
+
+**Green plan:** add focused materializer regressions before the implementation. An existing
+reverse-ETL command is an executable public contract, so materialization retains its complete
+registered command (path, flags, optional fields, examples, approval metadata, and redactions) and
+refreshes only the cited API-surface references. It must never re-derive a shipped flag spelling
+from a record schema. The generated command's `redact_fields` is a deterministic union of the
+retained command declarations and the action declaration. Regenerate only the affected Amazon SQS
+and Google Search Console command surfaces, then scan all 552 bundles for (a) a
+pre-materialization existing command whose flag spelling changed and (b) any action redaction
+absent from its write command. The two counts are reported rather than hidden. The scan is
+read-only and contains no live provider or credential use.
+
+CLI parity applies to generated connector surfaces: verify bare namespace/help for Amazon SQS and
+Google Search Console, generated command/website artifacts if the repository's generator reports
+them, and `surface-sync --check`. Hand-authored docs are not applicable when the command path and
+semantics are retained; the regression covers spelling, redaction propagation, and runtime
+surface loading. This uses the required inline/manual GSD fallback after resolving
+`discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review`; compatible
+isolated GSD roles are unavailable in this single-worker recovery lane. Required skills:
+`golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`,
+`golang-safety`, `golang-documentation`, `golang-design-patterns`, and
+`golang-structs-interfaces`.

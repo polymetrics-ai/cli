@@ -1866,6 +1866,67 @@ func TestMaterializeCLISurfaceUsesPluralWriteCoverage(t *testing.T) {
 	}
 }
 
+func TestMaterializeCLISurfacePreservesExistingWriteContractAndPropagatesRedactions(t *testing.T) {
+	bundle := engine.Bundle{
+		Name: "acme",
+		Writes: []engine.WriteAction{{
+			Name: "change_visibility",
+			RecordSchema: json.RawMessage(`{
+				"type": "object",
+				"required": ["receipt_handle", "visibility_timeout"],
+				"properties": {
+					"receipt_handle": {"type": "string"},
+					"visibility_timeout": {"type": "integer"}
+				}
+			}`),
+			RedactFields: []string{"action_secret", "receipt_handle"},
+		}},
+		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path:         "message change-visibility",
+			Intent:       "reverse_etl",
+			Availability: "implemented",
+			Write:        "change_visibility",
+			Flags: []engine.CLIFlag{
+				{Name: "receipt-handle", Type: "string", MapsTo: "record.receipt_handle", Required: true},
+				{Name: "visibility-timeout", Type: "integer", MapsTo: "record.visibility_timeout", Required: true},
+				{Name: "legacy-only", Type: "string", MapsTo: "record.legacy_only"},
+			},
+			RedactFields: []string{"existing_secret", "receipt_handle"},
+			Examples:     []string{"pm acme message change-visibility --receipt-handle receipt --visibility-timeout 30 --legacy-only value --preview"},
+		}}},
+	}
+	surface := engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+		Method:    http.MethodPost,
+		Path:      "/messages/visibility",
+		CoveredBy: &engine.SurfaceCoverage{Write: "change_visibility"},
+	}}}
+
+	cli, err := materializeCLISurface(bundle, surface, BatchManifestConnector{Connector: "acme", Artifact: BatchArtifact{URL: "https://provider.example/openapi.json"}}, nil)
+	if err != nil {
+		t.Fatalf("materializeCLISurface: %v", err)
+	}
+	if len(cli.Commands) != 1 {
+		t.Fatalf("materialized commands = %+v, want one write command", cli.Commands)
+	}
+	command := cli.Commands[0]
+	if command.Path != "message change-visibility" {
+		t.Fatalf("command path = %q, want retained existing path", command.Path)
+	}
+	if got, want := command.RedactFields, []string{"action_secret", "existing_secret", "receipt_handle"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("command redact_fields = %v, want %v", got, want)
+	}
+	if got, want := command.Flags, []engine.CLIFlag{
+		{Name: "receipt-handle", Type: "string", MapsTo: "record.receipt_handle", Required: true},
+		{Name: "visibility-timeout", Type: "integer", MapsTo: "record.visibility_timeout", Required: true},
+		{Name: "legacy-only", Type: "string", MapsTo: "record.legacy_only"},
+	}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("command flags = %+v, want retained executable contract %+v", got, want)
+	}
+	if got, want := command.Examples, []string{"pm acme message change-visibility --receipt-handle receipt --visibility-timeout 30 --legacy-only value --preview"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("command examples = %v, want retained runnable example %v", got, want)
+	}
+}
+
 func TestParseBatchOpenAPIArtifactResolvesLocalPathItemReferencesAndTrace(t *testing.T) {
 	artifact := []byte(`{
 		"openapi": "3.1.0",
