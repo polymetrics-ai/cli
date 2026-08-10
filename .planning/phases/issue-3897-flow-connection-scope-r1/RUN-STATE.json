@@ -1,0 +1,38 @@
+{
+  "issue": 3897,
+  "parent_issue": 3988,
+  "branch": "feat/3897-flow-connection-scope",
+  "base": "feat/3988-github-certification",
+  "status": "planned",
+  "manual_gsd_fallback": {
+    "used": true,
+    "reason": "The active ROADMAP.md intentionally has no numbered phases and directs issue work to .planning/phases/<issue-or-phase>/; GSD phase-op cannot register issue-3897-flow-connection-scope-r1.",
+    "adapter_verified": true,
+    "inline_execution": true,
+    "delegation": "forbidden by canonical delivery contract"
+  },
+  "skills": [
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-stretchr-testify",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-context",
+    "golang-documentation",
+    "golang-lint",
+    "no-mistakes"
+  ],
+  "tdd": {
+    "red": "pending",
+    "green": "pending",
+    "refactor": "pending"
+  },
+  "correction_rounds": 0,
+  "verification": [],
+  "cleanup": {
+    "temporary_roots": [],
+    "residue": "pending"
+  }
+}
