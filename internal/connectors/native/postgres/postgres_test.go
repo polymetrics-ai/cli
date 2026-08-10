@@ -45,6 +45,42 @@ func TestNameAndMetadata(t *testing.T) {
 	}
 }
 
+func TestManifestProjectsBundleCredentials(t *testing.T) {
+	manifest := connectors.ManifestOf(native.New())
+	configFields := make(map[string]bool, len(manifest.ConfigFields))
+	for _, field := range manifest.ConfigFields {
+		configFields[field.Name] = true
+	}
+	wantConfigFields := []string{
+		"cdc_publication",
+		"cursor_field",
+		"database",
+		"host",
+		"mode",
+		"port",
+		"read_limit",
+		"schema",
+		"sslmode",
+		"sslrootcert",
+		"sslservername",
+		"username",
+	}
+	if len(configFields) != len(wantConfigFields) {
+		t.Fatalf("manifest config fields = %#v, want %#v", configFields, wantConfigFields)
+	}
+	for _, name := range wantConfigFields {
+		if !configFields[name] {
+			t.Fatalf("manifest config fields = %#v, missing %q", configFields, name)
+		}
+	}
+	if len(manifest.SecretFields) != 1 || manifest.SecretFields[0].Name != "password" {
+		t.Fatalf("manifest secret fields = %#v, want password", manifest.SecretFields)
+	}
+	if manifest.Metadata.Capabilities.CDC {
+		t.Fatal("PostgreSQL manifest must keep CDC fail-closed")
+	}
+}
+
 // TestNoInitRegistration is the required grep-guard (T-17): the native
 // package must NOT call RegisterFactory from anywhere in
 // its own source. The registration flip (wiring native/postgres into the
