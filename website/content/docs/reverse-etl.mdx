@@ -9,8 +9,8 @@ Reverse ETL in pm follows a strict four-step gate: **plan, preview, approve, run
 
 ```bash
 pm reverse plan <name> [flags]                       # generate a typed plan
-pm reverse preview <plan-id> [--<withheld-flag> <value>...]   # inspect; destructive plans issue their token here
-pm reverse run <plan-id> --approve <token> [--confirm destructive] [--<withheld-flag> <value>...] [--json]
+pm reverse preview <plan-id> [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]...   # inspect; destructive plans issue their token here
+pm reverse run <plan-id> --approve <token> [--confirm destructive] [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
 ```
 
 <Callout type="warn">
@@ -88,11 +88,18 @@ A connector-command plan (`pm <connector> <command>`, or a plan of that mode pre
   Withholding binds to the **write action or operation**, not to the command. A `redact_fields` list declared on the command entry itself is compatibility metadata and withholds nothing, so `pm connectors inspect <name> --json` can show a redact list that no plan acts on. Read the write action's or operation's declaration when you need the binding one.
 </Callout>
 
-Preview and run therefore need those values back, passed as the connector command's own flags on the same invocation:
+Preview and run therefore need those values back on the same invocation. Ordinary withheld fields use the connector command's own flags:
 
 ```bash
 pm reverse preview plan_abc123 --access-token "$PM_OAUTH_TOKEN"
 pm reverse run plan_abc123 --approve tk_xyz789 --access-token "$PM_OAUTH_TOKEN"
+```
+
+A field declared `env_only` must instead be read from the environment. Name the field and environment variable—not the sensitive value—with `--from-env <flag>=ENV`:
+
+```bash
+pm reverse preview plan_abc123 --from-env input=GITHUB_MIGRATION_INPUT
+pm reverse run plan_abc123 --approve tk_xyz789 --from-env input=GITHUB_MIGRATION_INPUT
 ```
 
 Only fields the plan actually removed are requested — a declared sensitive field you never supplied was never stored and is never demanded back. Where a declared field covers a subtree that several flags fill, those flags re-supply it between them. A re-supplied value that differs from the one the plan was built from fails the plan-hash check before anything is dispatched, and nothing is written back to the state file at preview or run.
@@ -139,7 +146,7 @@ Returns all plans and their associated runs.
 | **Destructive tokens follow preview** | DELETE and declared destructive operations receive no token until a no-network preview digest is persisted. |
 | **Preview identity is revalidated** | The app recomputes the digest immediately before dispatch; the shared engine gate compares it again. |
 | **Confirmation is closed and typed** | Destructive execution accepts `--confirm destructive`, not caller-defined confirmation text. |
-| **Declared sensitive fields are not stored** | A connector-command plan removes every field its write action declares in `redact_fields`, or its `direct_write` operation declares in `sensitive_policy.redact_fields`, before persisting, and re-persists none of them at preview or run. They are re-supplied per invocation with the connector command's own flags. A `redact_fields` list on the command entry itself is compatibility metadata and is not a withholding guarantee. |
+| **Declared sensitive fields are not stored** | A connector-command plan removes every field its write action declares in `redact_fields`, or its `direct_write` operation declares in `sensitive_policy.redact_fields`, before persisting, and re-persists none of them at preview or run. Ordinary fields are re-supplied per invocation with the connector command's own `--<flag> <value>` form; fields declared `env_only` must use `--from-env <flag>=ENV` so their values never enter argv. A `redact_fields` list on the command entry itself is compatibility metadata and is not a withholding guarantee. |
 | **Engine content boundary** | DryRunWrite engine preview warnings preserve the resolved execution request, including fields declared in `redact_fields`; stored source-table samples and write errors still apply those declarations. Engine direct-read, operation-direct-read, and binary-download executors preserve bounded HTTP URL/query/body diagnostics before downstream rendering. These engine-level guarantees do not establish complete `pm` CLI output. Credential storage remains encrypted at rest. |
 | **Agents get a diff first** | An agent can run `plan` and `preview` autonomously; it must present an approval token for `run`. |
 

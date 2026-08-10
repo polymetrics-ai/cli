@@ -731,9 +731,10 @@ SYNOPSIS
 USAGE
   pm reverse list [--json]
   pm reverse plan <name> --source-table <table> [--connection name] --destination connector:credential --map source:dest [--json]
-  pm reverse preview <plan-id> [--<withheld-flag> <value>...] [--json]
+  pm reverse preview <plan-id> [--<withheld-flag> <value>...]
+    [--from-env <env-only-flag>=ENV]... [--json]
   pm reverse run <plan-id> --approve <token> [--confirm <challenge>]
-    [--<withheld-flag> <value>...] [--json]
+    [--<withheld-flag> <value>...] [--from-env <env-only-flag>=ENV]... [--json]
   pm reverse status <run-id> [--json]
 
 DESCRIPTION
@@ -763,9 +764,11 @@ DESCRIPTION
   inspect <name> --json shows every declaration, not only the binding one.
   Withheld keys are removed outright rather than stored as a placeholder, so they
   never reach the project state file. Preview and run therefore need those values
-  re-supplied on the same command, using the connector command's own flags: pm
-  reverse preview <plan-id> --<flag> <value>, and the same flags again on pm
-  reverse run.
+  re-supplied on the same command. Ordinary withheld fields use the connector
+  command's own --<flag> <value> form. A field declared env_only must instead
+  use --from-env <flag>=ENV, which reads the value from the named environment
+  variable without placing it in argv. For example: pm reverse preview <plan-id>
+  --from-env input=ENV, and use the same form again on pm reverse run.
   Where a declared field covers a subtree that several flags fill, those flags
   re-supply it. Only fields the plan actually removed are asked for, so a
   declared field you never supplied is never demanded back. A re-supplied value
@@ -820,16 +823,18 @@ COMMANDS
     output. JSON omits the token. DryRunWrite engine preview warnings preserve
     the resolved execution request, including fields declared in redact_fields;
     that preview is what the digest binds before dispatch. A connector-command
-    plan that withheld declared sensitive fields needs them re-supplied here
-    with the connector command's own flags; the error names each missing flag.
+    plan that withheld declared sensitive fields needs them re-supplied here:
+    --from-env <flag>=ENV for an env_only field, or --<flag> <value> otherwise.
+    The error names each missing flag.
 
   run
     Execute a stored plan only when --approve is supplied with the approval
     token from human-readable plan or preview output. Destructive plans require
     a matching persisted preview and the closed --confirm destructive value. A
     connector-command plan that withheld declared sensitive fields needs the
-    same re-supply flags it needed at preview. A failed dispatch is recorded;
-    pm does not automatically retry a failed dispatch.
+    same re-supply form: --from-env <flag>=ENV for an env_only field, or
+    --<flag> <value> otherwise. A failed dispatch is recorded; pm does not
+    automatically retry a failed dispatch.
 
   status
     Show a completed or failed reverse ETL run by run ID.
@@ -844,8 +849,10 @@ FLAGS
   --limit n                    maximum source rows to include in the plan
   --approve token              approval token required by run
   --confirm challenge          typed confirmation required by gated plans
-  --<withheld-flag> value      re-supply a field the plan withheld; the flag is
-                               the connector command's own, never persisted
+  --<withheld-flag> value      re-supply a non-env_only field the plan withheld;
+                               the flag is connector-owned, never persisted
+  --from-env flag=ENV          re-supply a declared env_only field from ENV;
+                               its value never enters argv or project state
   --json                       render machine-readable JSON
   --root path                  project root containing .polymetrics
 

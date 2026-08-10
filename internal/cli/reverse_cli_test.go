@@ -556,6 +556,25 @@ func TestReverseManualExplainsConnectorCommandContentPolicy(t *testing.T) {
 	}
 }
 
+func TestReverseManualDistinguishesEnvironmentOnlyWithheldFields(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"reverse"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("reverse manual code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{
+		"--<withheld-flag> <value>",
+		"--from-env <flag>=ENV",
+		"A field declared env_only must instead",
+		"without placing it in argv",
+	} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("reverse manual missing %q:\n%s", want, out)
+		}
+	}
+}
+
 func setupReverseCLIProject(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()
